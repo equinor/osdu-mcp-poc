@@ -1,0 +1,394 @@
+{
+  "x-osdu-license": "Copyright 2023, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "$id": "https://schema.osdu.opengroup.org/json/work-product-component/DataQuality.2.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:work-product-component--DataQuality:2.0.0",
+  "title": "DataQuality",
+  "description": "This is used to store the result from a run of a Data Quality Metric Evaluation engine. Captures summary information, such as which rule-set(s) and rule(s) have been used, when this was run and by whom. Detailed results may be associated with a dataset.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "Previously called ResourceID or SRN which identifies this OSDU resource object without version.",
+      "title": "Entity ID",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-DataQuality:[\\w\\-\\.\\:\\%]+$",
+      "example": "namespace:work-product-component--DataQuality:0f6fea0c-3acd-518a-b7bf-31672312a269"
+    },
+    "kind": {
+      "description": "The schema identification for the OSDU resource object following the pattern {Namespace}:{Source}:{Type}:{VersionMajor}.{VersionMinor}.{VersionPatch}. The versioning scheme follows the semantic versioning, https://semver.org/.",
+      "title": "Entity Kind",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:[\\w\\-\\.]+:[\\w\\-\\.]+:[0-9]+.[0-9]+.[0-9]+$",
+      "example": "osdu:wks:work-product-component--DataQuality:2.0.0"
+    },
+    "version": {
+      "description": "The version number of this OSDU resource; set by the framework.",
+      "title": "Version Number",
+      "type": "integer",
+      "format": "int64",
+      "example": 1562066009929332
+    },
+    "acl": {
+      "description": "The access control tags associated with this entity.",
+      "title": "Access Control List",
+      "$ref": "../abstract/AbstractAccessControlList.1.0.0.json"
+    },
+    "legal": {
+      "description": "The entity's legal tags and compliance status. The actual contents associated with the legal tags is managed by the Compliance Service.",
+      "title": "Legal Tags",
+      "$ref": "../abstract/AbstractLegalTags.1.0.0.json"
+    },
+    "tags": {
+      "title": "Tag Dictionary",
+      "description": "A generic dictionary of string keys mapping to string value. Only strings are permitted as keys and values.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "example": {
+        "NameOfKey": "String value"
+      }
+    },
+    "createTime": {
+      "description": "Timestamp of the time at which initial version of this OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:46:20.163Z"
+    },
+    "createUser": {
+      "title": "Resource Object Creation User Reference",
+      "description": "The user reference, which created the first version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "modifyTime": {
+      "description": "Timestamp of the time at which this version of the OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Version Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:52:24.477Z"
+    },
+    "modifyUser": {
+      "title": "Resource Object Version Creation User Reference",
+      "description": "The user reference, which created this version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "ancestry": {
+      "description": "The links to data, which constitute the inputs, from which this record instance is derived.",
+      "title": "Ancestry",
+      "$ref": "../abstract/AbstractLegalParentList.1.0.0.json"
+    },
+    "meta": {
+      "description": "The Frame of Reference meta data section linking the named properties to self-contained definitions.",
+      "title": "Frame of Reference Meta Data",
+      "type": "array",
+      "items": {
+        "$ref": "../abstract/AbstractMetaItem.1.0.0.json"
+      }
+    },
+    "data": {
+      "allOf": [
+        {
+          "$ref": "../abstract/AbstractCommonResources.1.0.0.json"
+        },
+        {
+          "$ref": "../abstract/AbstractWPCGroupType.1.2.0.json"
+        },
+        {
+          "$ref": "../abstract/AbstractWorkProductComponent.1.1.0.json"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "EvaluatedRecordID": {
+              "type": "string",
+              "title": "Evaluated Record ID",
+              "description": "The reference to the evaluated data record. The record version number is required.",
+              "pattern": "^[\\w\\-\\.]+:(master-data\\-\\-[\\w\\-\\.]+|reference-data\\-\\-[\\w\\-\\.]+|work-product-component\\-\\-[\\w\\-\\.]+|work-product\\-\\-[\\w\\-\\.]+|dataset\\-\\-[\\w\\-\\.]+):[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data"
+                },
+                {
+                  "GroupType": "reference-data"
+                },
+                {
+                  "GroupType": "work-product-component"
+                },
+                {
+                  "GroupType": "work-product"
+                },
+                {
+                  "GroupType": "dataset"
+                }
+              ]
+            },
+            "EvaluatedDDMSDatasets": {
+              "type": "array",
+              "title": "Evaluated DDMS Datasets",
+              "description": "If the quality assessment dealt with dataset content, then this array of URIs will contain the references to the optimized DDMS content used in the assessment. The reference is expected to be a member of the EvaluatedRecordID's data.DDMSDatasets[] list of URIs.",
+              "example": [
+                "urn://wddms-3/uuid:20840361-adc0-4842-999b-5639bd07bb38"
+              ],
+              "items": {
+                "pattern": "^(([^:/?#]+):)(\\/\\/([^/?#]+))(\\/[^?#]+)(\\?([^#]*))?(#(.*))?",
+                "type": "string"
+              }
+            },
+            "EvaluatedKind": {
+              "type": "string",
+              "title": "Evaluated Kind",
+              "description": "The EvaluatedRecordID's kind.",
+              "example": "osdu:wks:group-type--EntityType:2",
+              "pattern": "^[\\w\\-\\.]+:[\\w\\-\\.]+:[\\w\\-\\.]+:([0-9]+)?(\\.)?([0-9]+)?(\\.)?([0-9]+)?$"
+            },
+            "DataQualityRuleSetID": {
+              "type": "string",
+              "title": "Data Quality Rule Set ID",
+              "description": "The DataQualityRuleSet aggregating other rule sets and/or individual DataQualityRule instances, individually weighted in the context of the DataQualityRuleSet.",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-DataQualityRuleSet:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "DataQualityRuleSet"
+                }
+              ]
+            },
+            "StartDateTime": {
+              "type": "string",
+              "title": "Start Date Time",
+              "description": "The date-time at which the quality assessment started.",
+              "format": "date-time"
+            },
+            "DataRules": {
+              "type": "array",
+              "title": "Data Rules",
+              "description": "The data rules part of this assessment.",
+              "x-osdu-indexing": {
+                "type": "nested"
+              },
+              "items": {
+                "type": "object",
+                "title": "DataRule",
+                "description": "The DataQualityRule and the DataQualityRule properties captured at the time of assessment.",
+                "properties": {
+                  "DataQualityRuleID": {
+                    "type": "string",
+                    "title": "Data Quality Rule ID",
+                    "description": "The reference to the individual DataQualityRule record ID. This is a mandatory property value.",
+                    "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-DataQualityRule:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "reference-data",
+                        "EntityType": "DataQualityRule"
+                      }
+                    ]
+                  },
+                  "DataRulePurposeTypeID": {
+                    "type": "string",
+                    "title": "Data Rule Purpose Type ID",
+                    "description": "The rule's purpose in the context of this DataQualityRule as captured during the assessment.",
+                    "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-DataRulePurposeType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "reference-data",
+                        "EntityType": "DataRulePurposeType"
+                      }
+                    ]
+                  },
+                  "DataRuleStatement": {
+                    "type": "string",
+                    "title": "Data Rule Statement",
+                    "description": "The rule's statement in natural language as captured during the assessment."
+                  },
+                  "Weight": {
+                    "type": "number",
+                    "title": "Weight",
+                    "description": "The rule's weight in the context of the DataQualityRuleSet as captured during the assessment."
+                  },
+                  "DataRuleDimensionTypeID": {
+                    "type": "string",
+                    "title": "Data Rule Dimension Type ID",
+                    "description": "The rule's dimension type reference as captured during the assessment.",
+                    "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-DataRuleDimensionType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "reference-data",
+                        "EntityType": "DataRuleDimensionType"
+                      }
+                    ]
+                  },
+                  "DataQualityRuleStatusID": {
+                    "type": "string",
+                    "title": "Data Quality Rule Status ID",
+                    "description": "The rule's evaluation status, e.g., Active, Inactive, Development.",
+                    "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-DataQualityRuleStatus:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "reference-data",
+                        "EntityType": "DataQualityRuleStatus"
+                      }
+                    ]
+                  },
+                  "ExecutionTime": {
+                    "type": "number",
+                    "title": "Execution Time",
+                    "description": "The time it took to perform the assessment of this rule.",
+                    "example": "23 ms",
+                    "x-osdu-frame-of-reference": "UOM:time"
+                  },
+                  "AssessmentResults": {
+                    "type": "array",
+                    "title": "Assessment Results",
+                    "description": "The assessment results for this this rule.",
+                    "x-osdu-indexing": {
+                      "type": "flattened"
+                    },
+                    "items": {
+                      "type": "object",
+                      "title": "AssessmentResult",
+                      "description": "The assessment of an executed QualityDataRule.",
+                      "properties": {
+                        "QualityAssessmentStateID": {
+                          "type": "string",
+                          "title": "Quality Assessment State ID",
+                          "description": "The assessment state for this rule.",
+                          "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-QualityAssessmentState:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                          "x-osdu-relationship": [
+                            {
+                              "GroupType": "reference-data",
+                              "EntityType": "QualityAssessmentState"
+                            }
+                          ]
+                        },
+                        "AssessedPartID": {
+                          "type": "string",
+                          "title": "Assessed Part ID",
+                          "description": "The unique identifier of an assessment result in the AssessmentResults[] array. This identifier becomes relevant if the assessments run over arrays of objects. Typically the 'local object identifier' of the assessed object will be used. Example: WellLog has Curves[], then Curves[].CurveID would be used as AssessedPartID."
+                        },
+                        "ExtensionProperties": {
+                          "type": "object",
+                          "title": "Extension Properties",
+                          "description": "An extension point to add properties, which are not searchable."
+                        }
+                      }
+                    }
+                  }
+                },
+                "required": [
+                  "DataQualityRuleID"
+                ]
+              }
+            },
+            "MethodID": {
+              "type": "string",
+              "title": "Method ID",
+              "description": "The reference to the assessment calculation method.",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-QualityAssessmentMethod:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "QualityAssessmentMethod"
+                }
+              ]
+            },
+            "TotalScore": {
+              "type": "number",
+              "title": "Total Score",
+              "description": "The assessment score in % aggregated for all dimension types."
+            },
+            "DimensionMetrics": {
+              "type": "array",
+              "title": "Dimension Metrics",
+              "description": "The individual scores per dimension.",
+              "x-osdu-indexing": {
+                "type": "nested"
+              },
+              "items": {
+                "type": "object",
+                "title": "DimensionMetric",
+                "description": "The assessment score per data rule dimension type and its weight.",
+                "properties": {
+                  "DataRuleDimensionTypeID": {
+                    "type": "string",
+                    "title": "Data Rule Dimension Type ID",
+                    "description": "The reference to the DataRuleDimensionType, to which score and weight are associated.",
+                    "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-DataRuleDimensionType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "reference-data",
+                        "EntityType": "DataRuleDimensionType"
+                      }
+                    ]
+                  },
+                  "Score": {
+                    "type": "number",
+                    "title": "Score",
+                    "description": "The assessment score in % aggregated for this dimension type."
+                  },
+                  "Weight": {
+                    "type": "number",
+                    "title": "Weight",
+                    "description": "The weight factor for this score for the overall score."
+                  }
+                },
+                "required": [
+                  "DataRuleDimensionTypeID"
+                ]
+              }
+            }
+          },
+          "required": [
+            "DataRules"
+          ],
+          "title": "IndividualProperties"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "ExtensionProperties": {
+              "type": "object"
+            }
+          },
+          "title": "ExtensionProperties"
+        }
+      ]
+    }
+  },
+  "required": [
+    "kind",
+    "acl",
+    "legal"
+  ],
+  "additionalProperties": false,
+  "x-osdu-review-status": "Accepted",
+  "x-osdu-virtual-properties": {
+    "data.VirtualProperties.DefaultLocation": {
+      "type": "object",
+      "priority": [
+        {
+          "path": "data.SpatialArea"
+        },
+        {
+          "path": "data.SpatialPoint"
+        }
+      ]
+    },
+    "data.VirtualProperties.DefaultName": {
+      "type": "string",
+      "priority": [
+        {
+          "path": "data.Name"
+        }
+      ]
+    }
+  },
+  "x-osdu-inheriting-from-kind": [
+    {
+      "name": "WorkProductComponent",
+      "kind": "osdu:wks:AbstractWPCGroupType:1.2.0"
+    }
+  ]
+}

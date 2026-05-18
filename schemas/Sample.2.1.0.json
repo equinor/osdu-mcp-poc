@@ -1,0 +1,1094 @@
+{
+  "x-osdu-license": "Copyright 2024, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "$id": "https://schema.osdu.opengroup.org/json/master-data/Sample.2.1.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:master-data--Sample:2.1.0",
+  "title": "Sample",
+  "description": "This object captures attributes of a sample/ specimen (rock or fluid) acquired either through an original acquisition event, sub-sampling event, generated from recombination of other samples /specimens or derived through the application of some laboratory process on the parent sample.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "Previously called ResourceID or SRN which identifies this OSDU resource object without version.",
+      "title": "Entity ID",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Sample:[\\w\\-\\.\\:\\%]+$",
+      "example": "namespace:master-data--Sample:65c972cf-c10a-595f-820d-c7944c8d655c"
+    },
+    "kind": {
+      "description": "The schema identification for the OSDU resource object following the pattern {Namespace}:{Source}:{Type}:{VersionMajor}.{VersionMinor}.{VersionPatch}. The versioning scheme follows the semantic versioning, https://semver.org/.",
+      "title": "Entity Kind",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:[\\w\\-\\.]+:[\\w\\-\\.]+:[0-9]+.[0-9]+.[0-9]+$",
+      "example": "osdu:wks:master-data--Sample:2.1.0"
+    },
+    "version": {
+      "description": "The version number of this OSDU resource; set by the framework.",
+      "title": "Version Number",
+      "type": "integer",
+      "format": "int64",
+      "example": 1562066009929332
+    },
+    "acl": {
+      "description": "The access control tags associated with this entity.",
+      "title": "Access Control List",
+      "$ref": "../abstract/AbstractAccessControlList.1.0.0.json"
+    },
+    "legal": {
+      "description": "The entity's legal tags and compliance status. The actual contents associated with the legal tags is managed by the Compliance Service.",
+      "title": "Legal Tags",
+      "$ref": "../abstract/AbstractLegalTags.1.0.0.json"
+    },
+    "tags": {
+      "title": "Tag Dictionary",
+      "description": "A generic dictionary of string keys mapping to string value. Only strings are permitted as keys and values.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "example": {
+        "NameOfKey": "String value"
+      }
+    },
+    "createTime": {
+      "description": "Timestamp of the time at which initial version of this OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:46:20.163Z"
+    },
+    "createUser": {
+      "title": "Resource Object Creation User Reference",
+      "description": "The user reference, which created the first version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "modifyTime": {
+      "description": "Timestamp of the time at which this version of the OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Version Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:52:24.477Z"
+    },
+    "modifyUser": {
+      "title": "Resource Object Version Creation User Reference",
+      "description": "The user reference, which created this version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "ancestry": {
+      "description": "The links to data, which constitute the inputs, from which this record instance is derived.",
+      "title": "Ancestry",
+      "$ref": "../abstract/AbstractLegalParentList.1.0.0.json"
+    },
+    "meta": {
+      "description": "The Frame of Reference meta data section linking the named properties to self-contained definitions.",
+      "title": "Frame of Reference Meta Data",
+      "type": "array",
+      "items": {
+        "$ref": "../abstract/AbstractMetaItem.1.0.0.json"
+      }
+    },
+    "data": {
+      "allOf": [
+        {
+          "$ref": "../abstract/AbstractCommonResources.1.0.0.json"
+        },
+        {
+          "$ref": "../abstract/AbstractMaster.1.2.0.json"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "SampleIdentifier": {
+              "type": "string",
+              "title": "Sample Identifier",
+              "description": "Identifier from a Master Data Management System or other trusted source external to OSDU - stored here in order to allow for multi-system connection and synchronization. If used, the \"Source\" property in AbstractCommonResources schema should identify that source system. i.e. this item is optional.",
+              "example": "sample1A",
+              "x-osdu-attribution-authority": "OpenGroup",
+              "x-osdu-attribution-publication": "OSDU",
+              "x-osdu-attribution-revision": "Evergreen"
+            },
+            "SampleName": {
+              "type": "string",
+              "title": "Sample Name",
+              "description": "This provides the name of the sample. If there are other names that need to be stored , leverage the Aliases available in the Abstract objects.",
+              "example": "sampleA",
+              "x-osdu-attribution-authority": "OpenGroup",
+              "x-osdu-attribution-publication": "OSDU",
+              "x-osdu-attribution-revision": "Evergreen"
+            },
+            "SampleOriginTypeID": {
+              "type": "string",
+              "title": "Sample Origin Type ID",
+              "description": "This provides information about the type of the origin of the sample. It can be used to determine if the sample was acquired from an original source location, result of recombination, subsampling or derived from some laboratory process.",
+              "example": "namespace:reference-data--SampleOriginType:Synthetic:",
+              "x-osdu-attribution-authority": "OpenGroup",
+              "x-osdu-attribution-publication": "OSDU",
+              "x-osdu-attribution-revision": "Evergreen",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-SampleOriginType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "SampleOriginType"
+                }
+              ]
+            },
+            "SampleTypeID": {
+              "type": "string",
+              "title": "Sample Type ID",
+              "description": "This is the OSDU record ID from the reference list of the type of rock or fluid sample e.g. Fluid, Core, Cuttings, Core Slab, Core Plug, Core Chip, Slides.",
+              "example": "namespace:reference-data--SampleType:Fluid:",
+              "x-osdu-attribution-authority": "OpenGroup",
+              "x-osdu-attribution-publication": "OSDU",
+              "x-osdu-attribution-revision": "Evergreen",
+              "pattern": "^[\\w\\-\\.]+:(reference-data\\-\\-SampleType|reference-data\\-\\-ConventionalCoreType|reference-data\\-\\-SidewallCoreType|reference-data\\-\\-RockSampleType):[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "SampleType"
+                },
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "ConventionalCoreType"
+                },
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "SidewallCoreType"
+                },
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "RockSampleType"
+                }
+              ]
+            },
+            "SampleDisposalInstructionID": {
+              "type": "string",
+              "title": "Sample Disposition Instruction ID",
+              "description": "This is an OSDU Record ID referencing a document that contains instructions on how the sample should be disposed.",
+              "example": "namespace:work-product-component--Document:0e6a8fdb-0a0a-56db-955a-c62204c42cb0:",
+              "x-osdu-attribution-authority": "OpenGroup",
+              "x-osdu-attribution-publication": "OSDU",
+              "x-osdu-attribution-revision": "Evergreen",
+              "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-Document:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "work-product-component",
+                  "EntityType": "Document"
+                }
+              ]
+            },
+            "SampleAcquisition": {
+              "type": "object",
+              "title": "Sample Acquisition",
+              "description": "This captures the acquisition parameters obtained during  the sample acquisition event associated with this sample. Note that this attribute should only be used when associating the sample with an acquisition event from its original source and not for sub-sampling or derivative sources.",
+              "x-osdu-attribution-authority": "OpenGroup",
+              "x-osdu-attribution-publication": "OSDU",
+              "x-osdu-attribution-revision": "Evergreen",
+              "properties": {
+                "SampleAcquisitionJobID": {
+                  "type": "string",
+                  "title": "Sample Acquisition Job ID",
+                  "description": "A reference to the parent record, which can group this sample acquisition event record with other sample acquisition event records, collected as part of the same job.",
+                  "example": "namespace:master-data--SampleAcquisitionJob:dr23383830303032991154:",
+                  "x-osdu-attribution-authority": "OpenGroup",
+                  "x-osdu-attribution-publication": "OSDU",
+                  "x-osdu-attribution-revision": "Evergreen",
+                  "pattern": "^[\\w\\-\\.]+:master-data\\-\\-SampleAcquisitionJob:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                  "x-osdu-relationship": [
+                    {
+                      "GroupType": "master-data",
+                      "EntityType": "SampleAcquisitionJob"
+                    }
+                  ]
+                },
+                "SampleAcquisitionDetail": {
+                  "type": "object",
+                  "title": "Sample Acquisition Detail",
+                  "description": "This attribute provides information about the acquisition parameters and process used in acquiring the target sample. Other information about the sample itself can be found in the Sample object.",
+                  "x-osdu-attribution-authority": "OpenGroup",
+                  "x-osdu-attribution-publication": "OSDU",
+                  "x-osdu-attribution-revision": "Evergreen",
+                  "properties": {
+                    "VerticalMeasurement": {
+                      "$ref": "../abstract/AbstractFacilityVerticalMeasurement.1.0.0.json",
+                      "title": "Vertical Measurement",
+                      "description": "Information on the list of all depths and elevations pertaining to the target wellbore involved in the Sample Acquisition event, like, plug back measured depth, total measured depth, KB elevation. The property is always used except with WellheadSampleAcquisition, SeparatorSampleAcquisition, FacilitySampleAcquisition",
+                      "example": {
+                        "EffectiveDateTime": "2020-02-13T09:13:15.55Z",
+                        "VerticalMeasurement": 12345.6,
+                        "TerminationDateTime": "2020-02-13T09:13:15.55Z",
+                        "VerticalMeasurementTypeID": "namespace:reference-data--VerticalMeasurementType:ArbitraryPoint:",
+                        "VerticalMeasurementPathID": "namespace:reference-data--VerticalMeasurementPath:MD:",
+                        "VerticalMeasurementSourceID": "namespace:reference-data--VerticalMeasurementSource:DRL:",
+                        "WellboreTVDTrajectoryID": "namespace:work-product-component--WellboreTrajectory:WellboreTrajectory-911bb71f-06ab-4deb-8e68-b8c9229dc76b:",
+                        "VerticalMeasurementUnitOfMeasureID": "namespace:reference-data--UnitOfMeasure:m:",
+                        "VerticalCRSID": "namespace:reference-data--CoordinateReferenceSystem:BoundProjected:EPSG::32021_EPSG::15851:",
+                        "VerticalReferenceID": "Example VerticalReferenceID",
+                        "VerticalReferenceEntityID": "namespace:master-data--Rig:SomeUniqueRigID:",
+                        "VerticalMeasurementDescription": "Example VerticalMeasurementDescription"
+                      },
+                      "x-osdu-attribution-authority": "OpenGroup",
+                      "x-osdu-attribution-publication": "OSDU",
+                      "x-osdu-attribution-revision": "Evergreen"
+                    },
+                    "TopDepth": {
+                      "type": "number",
+                      "title": "Top Depth",
+                      "description": "The depth of the top of the target interval from which the sample was acquired. The reference and kind of depth (e.g. driller's depth versus logger's depth) is described in data.VerticalMeasurement. The property is always used except with WellheadSampleAcquisition, SeparatorSampleAcquisition, FacilitySampleAcquisition.\nNote: As an example, if ingesting data formatted using PRODML, this is typically  mapped as seen below:\nTopDepth=PRODML:2.1:FluidSampleAcquisitionJob.FluidSampleAcquisition<DownholeSampleAcquisition | FormationTestSampleAcquisition>[].Item.TopMD",
+                      "example": "10000 ft",
+                      "x-osdu-frame-of-reference": "UOM:length",
+                      "x-osdu-attribution-authority": "OpenGroup",
+                      "x-osdu-attribution-publication": "OSDU",
+                      "x-osdu-attribution-revision": "Evergreen"
+                    },
+                    "BaseDepth": {
+                      "type": "number",
+                      "title": "Base Depth",
+                      "description": "The depth of the base of the target interval from which the sample was acquired. The reference and kind of depth (e.g. driller's depth versus logger's depth) is described in data.VerticalMeasurement.  The property is always used except with WellheadSampleAcquisition, SeparatorSampleAcquisition, FacilitySampleAcquisition.\nNote: As an example, If ingesting data formatted using PRODML, this is typically  mapped as seen below:\nTopDepth=PRODML:2.1:FluidSampleAcquisitionJob.FluidSampleAcquisition<DownholeSampleAcquisition | FormationTestSampleAcquisition>[].Item.BaseMD",
+                      "example": 20000,
+                      "x-osdu-frame-of-reference": "UOM:length",
+                      "x-osdu-attribution-authority": "OpenGroup",
+                      "x-osdu-attribution-publication": "OSDU",
+                      "x-osdu-attribution-revision": "Evergreen"
+                    },
+                    "ToolKind": {
+                      "type": "string",
+                      "title": "Tool Kind",
+                      "description": "This references the kind of tool used in acquiring the sample. The property is always used except with WellheadSampleAcquisition, SeparatorSampleAcquisition, FormationTestSampleAcquisition, FacilitySampleAcquisition.\nNote: As an example, If ingesting data formatted using PRODML, this is typically  mapped as seen below:\nToolKind=PRODML:2.1:FluidSampleAcquisitionJob.FluidSampleAcquisition<DownholeSampleAcquisition>[].Item.ToolKind.",
+                      "example": "Wireline Formation Tester",
+                      "x-osdu-attribution-authority": "OpenGroup",
+                      "x-osdu-attribution-publication": "PRODML",
+                      "x-osdu-attribution-revision": 2.2
+                    },
+                    "RunNumber": {
+                      "type": "string",
+                      "title": "Run Number",
+                      "description": "This refers to the different runs performed during the sample acquisition event and is typically identified using integers. It mostly applies to acquisition events acquired from the subsurface like downhole, coring, etc. The property is always used except with WellheadSampleAcquisition, SeparatorSampleAcquisition, FormationTestSampleAcquisition, FacilitySampleAcquisition",
+                      "example": 22,
+                      "x-osdu-attribution-authority": "OpenGroup",
+                      "x-osdu-attribution-publication": "PRODML",
+                      "x-osdu-attribution-revision": 2.2
+                    },
+                    "WellboreID": {
+                      "type": "string",
+                      "title": "Wellbore ID",
+                      "description": "This refers to the OSDU record ID of the wellbore object from which the sample was acquired. It typically applies in scenarios where the acquisition event only pertains to a single wellbore object. The property is always used except with FacilitySampleAcquisition, Outcrop, SeparatorSampleAcquisition\nNote: If ingesting data formatted using PRODML, this is typically  mapped as seen below:\nWellboreID= PRODML:2.1:FluidSampleAcquisitionJob.FluidSampleAcquisition<DownholeSampleAcquisition | WellheadSampleAcquisition>[].Item.Wellbore",
+                      "example": "namespace:master-data--Wellbore:cz2334t678900d53844-4:",
+                      "x-osdu-attribution-authority": "OpenGroup",
+                      "x-osdu-attribution-publication": "OSDU",
+                      "x-osdu-attribution-revision": "Evergreen",
+                      "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Wellbore:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                      "x-osdu-relationship": [
+                        {
+                          "GroupType": "master-data",
+                          "EntityType": "Wellbore"
+                        }
+                      ]
+                    },
+                    "WellheadOperatingCondition": {
+                      "$ref": "../abstract/AbstractPTCondition.1.0.0.json",
+                      "title": "Wellhead Operating Condition",
+                      "description": "This captures the operating conditions (prevailing pressure and temperatures) on the target facility or equipment (in this case wellhead) during the sample acquisition event.  This attribute is provided in the event that the acquisition pressure and temperature recorded at the flow port or sampling point from which the sample is acquired is different from the operating P&T at the wellhead. The property is only used in conjunction with WellheadSampleAcquisition.\nNote:As an example, If ingesting data formatted using PRODML, this is typically  mapped as seen below:\nwellheadOperatingCondition.Pressure=PRODML:2.1:FluidSampleAcquisitionJob.FluidSampleAcquisition<WellheadSampleAcquisition>[].Item.wellheadPressure\nwellheadOperatingCondition.Temperature=PRODML:2.1:FluidSampleAcquisitionJob.FluidSampleAcquisition<WellheadSampleAcquisition>[].Item.wellheadTemperature",
+                      "x-osdu-attribution-authority": "OpenGroup",
+                      "x-osdu-attribution-publication": "OSDU",
+                      "x-osdu-attribution-revision": "Evergreen"
+                    },
+                    "ContributingWellboreOpeningIDs": {
+                      "type": "array",
+                      "title": "Contributing Wellbore Opening IDs",
+                      "description": "This refers to an array of OSDU record IDs for the wellbore completion objects (perforated or open hole interval) that contributed to the stream used in acquiring the sample. It can be used for one wellbore opening or multiple opening in the case of commingled flow. This is typically related to acquisition events from downhole where samples are comingled from multiple completions. The property is only used in conjunction with WellheadSampleAcquisition, SeparatorSampleAcquisition, DownholeSampleAcquisition.\nNote:As an example, If ingesting data formatted using PRODML, this is typically  mapped as seen below:\nWellboreOpeningIDs[0]=PRODML:2.1:FluidSampleAcquisitionJob.FluidSampleAcquisition<WellheadSampleAcquisition | SeparatorSampleAcquisition>[].Item.WellboreCompletion",
+                      "x-osdu-attribution-authority": "OpenGroup",
+                      "x-osdu-attribution-publication": "OSDU",
+                      "x-osdu-attribution-revision": "Evergreen",
+                      "items": {
+                        "type": "string",
+                        "pattern": "^[\\w\\-\\.]+:master-data\\-\\-WellboreOpening:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                        "x-osdu-relationship": [
+                          {
+                            "GroupType": "master-data",
+                            "EntityType": "WellboreOpening"
+                          }
+                        ]
+                      }
+                    },
+                    "SeparatorOperatingCondition": {
+                      "$ref": "../abstract/AbstractPTCondition.1.0.0.json",
+                      "title": "Separator Operating Condition",
+                      "description": "This captures the operating conditions (prevailing pressure and temperatures) on the target facility or equipment (in this case separator) during the sample acquisition event.  This attribute is provided in the event that the acquisition pressure and temperature recorded at the flow port or sampling point from which the sample is acquired is different from the operating P&T for the separator. The property is only used in conjunction with SeparatorSampleAcquisition\nNote:As an example, If ingesting data formatted using PRODML, this is typically  mapped as seen below:\nSeparatorOperatingCondition.Pressure=PRODML:2.1:FluidSampleAcquisitionJob.FluidSampleAcquisition<SeparatorSampleAcquisition>[].Item.SeparatorPressure\nSeparatorOperatingCondition.Temperature=PRODML:2.1:FluidSampleAcquisitionJob.FluidSampleAcquisition<SeparatorSampleAcquisition>[].Item.SeparatorTemperature",
+                      "x-osdu-attribution-authority": "OpenGroup",
+                      "x-osdu-attribution-publication": "OSDU",
+                      "x-osdu-attribution-revision": "Evergreen"
+                    },
+                    "SamplingPoint": {
+                      "type": "object",
+                      "title": "Sampling Point",
+                      "description": "A free-form reference to the flow port on the Facility where this sample was acquired. The property is only used in conjunction with WellheadSampleAcquisition, SeparatorSampleAcquisition, FacilitySampleAcquisition.\nNote:As an example, If ingesting data formatted using PRODML, this is typically  mapped as seen below:\nSamplingPoint= [ PRODML:2.1:FluidSampleAcquisitionJob.FluidSampleAcquisition<SeparatorSampleAcquisition | FacilitySampleAcquisition | SeparatorSampleAcquisition>[].Item.SamplingPoint",
+                      "x-osdu-attribution-authority": "OpenGroup",
+                      "x-osdu-attribution-publication": "OSDU",
+                      "x-osdu-attribution-revision": "Evergreen",
+                      "properties": {
+                        "SamplingPointTypeID": {
+                          "type": "string",
+                          "title": "Sampling Point Type ID",
+                          "description": "This is the OSDU record ID from a reference list containing the different types of sampling points.",
+                          "example": "namespace:reference-data--SamplingPointType:FlowPort:",
+                          "x-osdu-attribution-authority": "OpenGroup",
+                          "x-osdu-attribution-publication": "OSDU",
+                          "x-osdu-attribution-revision": "Evergreen",
+                          "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-SamplingPointType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                          "x-osdu-relationship": [
+                            {
+                              "GroupType": "reference-data",
+                              "EntityType": "SamplingPointType"
+                            }
+                          ]
+                        },
+                        "SamplingPointName": {
+                          "type": "string",
+                          "title": "Sampling Point Name",
+                          "description": "This is a description of the name of the  component or equipment used in capturing the sample. It can be used in storing the P & ID of the equipment or its component as defined within the Organisations Facility SOR / Repository.",
+                          "example": "VALVE:1723RR-01",
+                          "x-osdu-attribution-authority": "OpenGroup",
+                          "x-osdu-attribution-publication": "OSDU",
+                          "x-osdu-attribution-revision": "Evergreen"
+                        }
+                      }
+                    },
+                    "CorrectedOilRate": {
+                      "type": "number",
+                      "title": "Corrected Oil Rate",
+                      "description": "The value accounts for the application of correction procedures to the oil flow rate observed / measured during the sample acquisition event. The property is typically only used in conjunction with SeparatorSampleAcquisition\nNote:As an example, If ingesting data formatted using PRODML, this is typically  mapped as seen below:\nCorrectedOilRate=PRODML:2.1:FluidSampleAcquisitionJob.FluidSampleAcquisition<SeparatorSampleAcquisition>[].Item.CorrectedOilRate",
+                      "x-osdu-frame-of-reference": "UOM:volume per time",
+                      "x-osdu-attribution-authority": "OpenGroup",
+                      "x-osdu-attribution-publication": "PRODML",
+                      "x-osdu-attribution-revision": 2.2
+                    },
+                    "CorrectedGasRate": {
+                      "type": "number",
+                      "title": "Corrected Gas Rate",
+                      "description": "The value accounts for the application of correction procedures to the gas flow rate observed / measured during the sample acquisition event. The property is typically only used in conjunction with SeparatorSampleAcquisition.\nNote:As an example, If ingesting data formatted using PRODML, this is typically  mapped as seen below:\nCorrectedGasRate=PRODML:2.1:FluidSampleAcquisitionJob.FluidSampleAcquisition<SeparatorSampleAcquisition>[].Item.CorrectedGasRate",
+                      "x-osdu-frame-of-reference": "UOM:volume per time",
+                      "x-osdu-attribution-authority": "OpenGroup",
+                      "x-osdu-attribution-publication": "PRODML",
+                      "x-osdu-attribution-revision": 2.2
+                    },
+                    "CorrectedWaterRate": {
+                      "type": "number",
+                      "title": "Corrected Water Rate",
+                      "description": "The value accounts for the application of correction procedures to the water flow rate observed / measured during the sample acquisition event. The property is typically only used in conjunction with SeparatorSampleAcquisition.\nNote:As an example, If ingesting data formatted using PRODML, this is typically  mapped as seen below:\nCorrectedWaterRate=PRODML:2.1:FluidSampleAcquisitionJob.FluidSampleAcquisition<SeparatorSampleAcquisition>[].Item.CorrectedWaterRate",
+                      "x-osdu-frame-of-reference": "UOM:volume per time",
+                      "x-osdu-attribution-authority": "OpenGroup",
+                      "x-osdu-attribution-publication": "PRODML",
+                      "x-osdu-attribution-revision": 2.2
+                    },
+                    "MeasuredOilRate": {
+                      "type": "number",
+                      "title": "Measured Oil Rate",
+                      "description": "This is the  observed/ measured oil rate for this sample acquisition event. The property is only used in conjunction with SeparatorSampleAcquisition\nNote:As an example, If ingesting data formatted using PRODML, this is typically  mapped as seen below:\nMeasuredOilRate=PRODML:2.1:FluidSampleAcquisitionJob.FluidSampleAcquisition<SeparatorSampleAcquisition>[].Item.MeasuredOilRate",
+                      "x-osdu-frame-of-reference": "UOM:volume per time",
+                      "x-osdu-attribution-authority": "OpenGroup",
+                      "x-osdu-attribution-publication": "PRODML",
+                      "x-osdu-attribution-revision": 2.2
+                    },
+                    "MeasuredGasRate": {
+                      "type": "number",
+                      "title": "Measured Gas Rate",
+                      "description": "This is the observed/ measured gas rate for this sample acquisition event. The property is only used in conjunction with SeparatorSampleAcquisition\nNote:As an example, If ingesting data formatted using PRODML, this is typically  mapped as seen below:\nMeasuredGasRate=PRODML:2.1:FluidSampleAcquisitionJob.FluidSampleAcquisition<SeparatorSampleAcquisition>[].Item.MeasuredGasRate",
+                      "x-osdu-frame-of-reference": "UOM:volume per time",
+                      "x-osdu-attribution-authority": "OpenGroup",
+                      "x-osdu-attribution-publication": "PRODML",
+                      "x-osdu-attribution-revision": 2.2
+                    },
+                    "MeasuredWaterRate": {
+                      "type": "number",
+                      "title": "Measured Water Rate",
+                      "description": "This is the observed/ measured water rate for this sample acquisition event. The property is only used in conjunction with SeparatorSampleAcquisition\nNote:As an example, If ingesting data formatted using PRODML, this is typically  mapped as seen below:\nMeasuredWaterRate=PRODML:2.1:FluidSampleAcquisitionJob.FluidSampleAcquisition<SeparatorSampleAcquisition>[].Item.MeasuredWaterRate",
+                      "x-osdu-frame-of-reference": "UOM:volume per time",
+                      "x-osdu-attribution-authority": "OpenGroup",
+                      "x-osdu-attribution-publication": "PRODML",
+                      "x-osdu-attribution-revision": 2.2
+                    },
+                    "FormationCondition": {
+                      "$ref": "../abstract/AbstractPTCondition.1.0.0.json",
+                      "title": "Formation Condition",
+                      "description": "This captures the operating conditions (prevailing pressure and temperatures) on the target formation during the sample acquisition event.  This attribute is provided in the event that the acquisition pressure and temperature recorded at the downhole sampling location is different from the Formation's P&T. The property is used in conjunction with all the acquisition event types except FacilitySampleAcquisition, Cuttings and  WellheadSampleAcquisition.\nNote:As an example, If ingesting data formatted using PRODML, this is typically  mapped as seen below:\nFormationCondition.Pressure=PRODML:2.1:FluidSampleAcquisitionJob.FluidSampleAcquisition<WellheadSampleAcquisition>[].Item.FormationPressure\nFormationCondition.Temperature=PRODML:2.1:FluidSampleAcquisitionJob.FluidSampleAcquisition<WellheadSampleAcquisition>[].Item.FormationTemperature",
+                      "example": {
+                        "Pressure": 120,
+                        "Temperature": 60
+                      },
+                      "x-osdu-attribution-authority": "OpenGroup",
+                      "x-osdu-attribution-publication": "OSDU",
+                      "x-osdu-attribution-revision": "Evergreen"
+                    },
+                    "CorrectionRemarks": {
+                      "$ref": "../abstract/AbstractRemark.1.0.0.json",
+                      "title": "Correction Remarks",
+                      "description": "This is used to capture information regarding the methodology used in correcting rates acquired during the sample acquisition event. The property is only used in conjunction with SeparatorSampleAcquisition",
+                      "x-osdu-attribution-authority": "OpenGroup",
+                      "x-osdu-attribution-publication": "OSDU",
+                      "x-osdu-attribution-revision": "Evergreen"
+                    },
+                    "SampleCarrierSlotName": {
+                      "type": "string",
+                      "title": "Sample Carrier Slot Name",
+                      "description": "The name or identifier for the slot in the sample carrier where the sample was acquired. The property is only used in conjunction with FormationTestSampleAcquisition\nNote:As an example, If ingesting data formatted using PRODML, this is typically  mapped as seen below:\nSampleCarrierSlotName=PRODML:2.1:FluidSampleAcquisitionJob.FluidSampleAcquisition<FormationTestSampleAcquisition>[].Item.SampleCarrierSlotName",
+                      "x-osdu-attribution-authority": "OpenGroup",
+                      "x-osdu-attribution-publication": "PRODML",
+                      "x-osdu-attribution-revision": 2.2
+                    },
+                    "ToolSectionName": {
+                      "type": "string",
+                      "title": "Tool Section Name",
+                      "description": "The name of the formation tester tool section that was used in acquiring the sample. The property is only used in conjunction with FormationTestSampleAcquisition, ConventionalCore, Sidewall Core, Cuttings\nNote:As an example, If ingesting data formatted using PRODML, this is typically  mapped as seen below:\nToolSectionName=PRODML:2.1:FluidSampleAcquisitionJob.FluidSampleAcquisition<FormationTestSampleAcquisition>[].Item.ToolSectionName",
+                      "x-osdu-attribution-authority": "OpenGroup",
+                      "x-osdu-attribution-publication": "PRODML",
+                      "x-osdu-attribution-revision": 2.2
+                    },
+                    "SampleContainerCushionPressure": {
+                      "type": "number",
+                      "title": "Cushion Pressure",
+                      "description": "The pressure used in charging the sample container. The property is only used in conjunction with FormationTestSampleAcquisition\nNote: As an example, If ingesting data formatted using PRODML, this is typically  mapped as seen below:\nSampleContainerCushionPressure=PRODML:2.1:FluidSampleAcquisitionJob.FluidSampleAcquisition<FormationTestSampleAcquisition>[].Item.CushionPressure",
+                      "x-osdu-frame-of-reference": "UOM:pressure",
+                      "x-osdu-attribution-authority": "OpenGroup",
+                      "x-osdu-attribution-publication": "PRODML",
+                      "x-osdu-attribution-revision": 2.2
+                    },
+                    "GrossFluidKindID": {
+                      "type": "string",
+                      "title": "Gross Fluid Kind",
+                      "description": "This is the OSDU record ID for the predominant fluid kind obtained from the formation during the acquisition event. The property is only used in conjunction with FormationTestSampleAcquisition\nNote:As an example, If ingesting data formatted using PRODML, this is typically  mapped as seen below: \nGrossFluidKind=PRODML:2.1:FluidSampleAcquisitionJob.FluidSampleAcquisition<FormationTestSampleAcquisition>[].Item.GrossFluidKind",
+                      "x-osdu-attribution-authority": "OpenGroup",
+                      "x-osdu-attribution-publication": "OSDU",
+                      "x-osdu-attribution-revision": "Evergreen",
+                      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-WellProductType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                      "x-osdu-relationship": [
+                        {
+                          "GroupType": "reference-data",
+                          "EntityType": "WellProductType"
+                        }
+                      ]
+                    },
+                    "FacilityEquipmentOperatingCondition": {
+                      "$ref": "../abstract/AbstractPTCondition.1.0.0.json",
+                      "title": "Facility Equipment operating Condition",
+                      "description": "This captures the operating conditions (prevailing pressure and temperatures) on the target equipment used on Topside Facilities (exclusive of wells or separators) during the sample acquisition event.  This attribute is provided in the event that the acquisition pressure and temperature recorded at the flow port or sampling point from which the sample is acquired is different from the operating P&T for the target facility or equipment. The property is only used in conjunction with FacilitySampleAcquisition\nNote:As an example, If ingesting data formatted using PRODML, this is typically  mapped as seen below:\nFacilityOperatingCondition.Pressure=PRODML:2.1:FluidSampleAcquisitionJob.FluidSampleAcquisition<FacilitySampleAcquisition>[].Item.FacilityPressure\nFacilityOperatingCondition.Temperature=PRODML:2.1:FluidSampleAcquisitionJob.FluidSampleAcquisition<FacilitySampleAcquisition>[].Item.FacilityTemperature",
+                      "x-osdu-attribution-authority": "OpenGroup",
+                      "x-osdu-attribution-publication": "OSDU",
+                      "x-osdu-attribution-revision": "Evergreen"
+                    },
+                    "SiteID": {
+                      "type": "string",
+                      "title": "Site ID",
+                      "description": "This is the OSDU ID for the Site where the the sample acquisition event occurred.",
+                      "x-osdu-attribution-authority": "OpenGroup",
+                      "x-osdu-attribution-publication": "OSDU",
+                      "x-osdu-attribution-revision": "Evergreen",
+                      "pattern": "^[\\w\\-\\.]+:(master-data\\-\\-GenericFacility|master-data\\-\\-GenericSite):[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                      "x-osdu-relationship": [
+                        {
+                          "GroupType": "master-data",
+                          "EntityType": "GenericFacility"
+                        },
+                        {
+                          "GroupType": "master-data",
+                          "EntityType": "GenericSite"
+                        }
+                      ]
+                    },
+                    "SampleRecoveredLengthActual": {
+                      "type": "number",
+                      "title": "Sample Recovered Length Actual",
+                      "description": "Actual length of recovered sample, usually a core The property is only used in conjunction with ConventionalCore, Sidewall Core, Outcrop",
+                      "x-osdu-frame-of-reference": "UOM:length"
+                    },
+                    "PreservationTypeID": {
+                      "type": "string",
+                      "title": "Preservation Type ID",
+                      "description": "The kind of preservation applied to this sample if applied at the time of acquisition. The property is only used in conjunction with ConventionalCore, Sidewall Core, Cuttings, Outcrop, Core Plugs",
+                      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-CorePreservationType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                      "x-osdu-relationship": [
+                        {
+                          "GroupType": "reference-data",
+                          "EntityType": "CorePreservationType"
+                        }
+                      ]
+                    },
+                    "SampleRecoveredLengthPlanned": {
+                      "type": "number",
+                      "title": "Sample Recovered Length Planned",
+                      "description": "Planned length of sample to be recovered, usually a core The property is only used in conjunction with ConventionalCore, Sidewall Core, Cuttings, Outcrop",
+                      "x-osdu-frame-of-reference": "UOM:length"
+                    },
+                    "AcquisitionCondition": {
+                      "$ref": "../abstract/AbstractPTCondition.1.0.0.json",
+                      "title": "Acquisition Condition",
+                      "description": "This captures the prevailing pressure and temperature recorded at the sampling point during the sample acquisition event. The property applies to ALL sampling acquisition events.\nNote:As an example, If ingesting data formatted using PRODML, this is typically  mapped as seen below:\nAcquisitionCondition.Pressure=PRODML:2.1:FluidSampleAcquisitionJob.FluidSampleAcquisition<FacilitySampleAcquisition|DownholeSampleAcquisition | FormationSampleAcquisition | SeparatorSampleAcquisition | WellheadSampleAcquisition >[].Item.AcquisitionPressure\nAcquisitionCondition.Temperature=PRODML:2.1:FluidSampleAcquisitionJob.FluidSampleAcquisition<FacilitySampleAcquisition|DownholeSampleAcquisition | FormationSampleAcquisition | SeparatorSampleAcquisition | WellheadSampleAcquisition >[].Item.AcquisitionTemperature",
+                      "example": {
+                        "Pressure": 120,
+                        "Temperature": 60
+                      },
+                      "x-osdu-attribution-authority": "OpenGroup",
+                      "x-osdu-attribution-publication": "OSDU",
+                      "x-osdu-attribution-revision": "Evergreen"
+                    },
+                    "AcquisitionGOR": {
+                      "type": "number",
+                      "title": "Acquisition GOR",
+                      "description": "This captures the gas oil ratio (GOR) for the sample acquired during the sample acquisition event. The property applies to ALL FLUID sampling acquisition events.\nNote:As an example, If ingesting data formatted using PRODML, this is typically  mapped as seen below:\nAcquisitionGOR=PRODML:2.1:FluidSampleAcquisitionJob.FluidSampleAcquisition<FacilitySampleAcquisition|DownholeSampleAcquisition | FormationSampleAcquisition | SeparatorSampleAcquisition | WellheadSampleAcquisition >[].Item.AcquisitionGOR",
+                      "example": 340,
+                      "x-osdu-frame-of-reference": "UOM:volume per volume"
+                    },
+                    "MudBaseTypeID": {
+                      "type": "string",
+                      "title": "Mud Base Type ID",
+                      "description": "This is the OSDU record ID for the type of mud base used  during the acquisition event or present in the sample required. The property is always used except with Outcrop",
+                      "x-osdu-attribution-authority": "OpenGroup",
+                      "x-osdu-attribution-publication": "OSDU",
+                      "x-osdu-attribution-revision": "Evergreen",
+                      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-MudBaseType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                      "x-osdu-relationship": [
+                        {
+                          "GroupType": "reference-data",
+                          "EntityType": "MudBaseType"
+                        }
+                      ]
+                    },
+                    "MudTracerTypeID": {
+                      "type": "string",
+                      "title": "Mud Tracer Type ID",
+                      "description": "This property is used in capturing the type of tracer used during the sample acquisition event.The property is always used except with Outcrop",
+                      "x-osdu-attribution-authority": "OpenGroup",
+                      "x-osdu-attribution-publication": "OSDU",
+                      "x-osdu-attribution-revision": "Evergreen",
+                      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-MudTracerType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                      "x-osdu-relationship": [
+                        {
+                          "GroupType": "reference-data",
+                          "EntityType": "MudTracerType"
+                        }
+                      ]
+                    }
+                  }
+                },
+                "SampleAcquisitionTypeID": {
+                  "type": "string",
+                  "title": "Sample Acquisition Type ID",
+                  "description": "This is a reference list of the different types of sample acquisition events used in acquiring samples. i.e. downhole sample acquisition type, outcrop, coring, non-facility site, etc",
+                  "example": "namespace:reference-data--SampleAcquisitionType:DownholeSampleAcquisition:",
+                  "x-osdu-attribution-authority": "OpenGroup",
+                  "x-osdu-attribution-publication": "OSDU",
+                  "x-osdu-attribution-revision": "Evergreen",
+                  "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-SampleAcquisitionType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                  "x-osdu-relationship": [
+                    {
+                      "GroupType": "reference-data",
+                      "EntityType": "SampleAcquisitionType"
+                    }
+                  ]
+                },
+                "SampleAcquisitionContainerID": {
+                  "type": "string",
+                  "title": "Sample Acquisition Container ID",
+                  "description": "This is the OSDU Record ID for the original sample container used in the acquired sample. This is only for the initial sample acquisition. Only populate this for the original sample.",
+                  "example": "namespace:master-data--SampleContainer:dr23383830303032991154:",
+                  "x-osdu-attribution-authority": "OpenGroup",
+                  "x-osdu-attribution-publication": "OSDU",
+                  "x-osdu-attribution-revision": "Evergreen",
+                  "pattern": "^[\\w\\-\\.]+:master-data\\-\\-SampleContainer:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                  "x-osdu-relationship": [
+                    {
+                      "GroupType": "master-data",
+                      "EntityType": "SampleContainer"
+                    }
+                  ]
+                },
+                "AcquisitionStartDate": {
+                  "type": "string",
+                  "title": "Acquisition Start Date",
+                  "description": "The start date and time of the acquisition event.",
+                  "format": "date-time",
+                  "example": "2023-01-01T12:00:00Z",
+                  "x-osdu-frame-of-reference": "DateTime",
+                  "x-osdu-attribution-authority": "OpenGroup",
+                  "x-osdu-attribution-publication": "OSDU",
+                  "x-osdu-attribution-revision": "Evergreen"
+                },
+                "AcquisitionEndDate": {
+                  "type": "string",
+                  "title": "Acquisition End Date",
+                  "description": "The end date and time of the acquisition event.",
+                  "format": "date-time",
+                  "example": "2023-01-01T12:00:00Z",
+                  "x-osdu-frame-of-reference": "DateTime",
+                  "x-osdu-attribution-authority": "OpenGroup",
+                  "x-osdu-attribution-publication": "OSDU",
+                  "x-osdu-attribution-revision": "Evergreen"
+                },
+                "Remarks": {
+                  "type": "array",
+                  "title": "Remarks",
+                  "description": "A remark object, pairing a remark text with a source, e.g. an author, and a date, which is typically included in an array.",
+                  "x-osdu-attribution-authority": "OpenGroup",
+                  "x-osdu-attribution-publication": "OSDU",
+                  "x-osdu-attribution-revision": "Evergreen",
+                  "items": {
+                    "$ref": "../abstract/AbstractRemark.1.0.0.json"
+                  }
+                },
+                "CollectionServiceCompanyID": {
+                  "type": "string",
+                  "title": "Collection Service Company ID",
+                  "description": "The company that managed the collection of the sample from its original / source environment.",
+                  "example": "namespace:master-data--Organisation:fg67383830303032991126:",
+                  "x-osdu-attribution-authority": "OpenGroup",
+                  "x-osdu-attribution-publication": "OSDU",
+                  "x-osdu-attribution-revision": "Evergreen",
+                  "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Organisation:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                  "x-osdu-relationship": [
+                    {
+                      "GroupType": "master-data",
+                      "EntityType": "Organisation"
+                    }
+                  ]
+                },
+                "HandlingServiceCompanyID": {
+                  "type": "string",
+                  "title": "Handling Service Company ID",
+                  "description": "The company that handled the sample on site after the it was collected/extracted. For example, the company that applied field preservation methods, and prepared the sample for shipping.",
+                  "example": "namespace:master-data--Organisation:fg67383830303032991126:",
+                  "x-osdu-attribution-authority": "OpenGroup",
+                  "x-osdu-attribution-publication": "OSDU",
+                  "x-osdu-attribution-revision": "Evergreen",
+                  "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Organisation:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                  "x-osdu-relationship": [
+                    {
+                      "GroupType": "master-data",
+                      "EntityType": "Organisation"
+                    }
+                  ]
+                }
+              }
+            },
+            "SampleProperties": {
+              "$ref": "../abstract/AbstractSampleProperties.1.1.0.json",
+              "title": "Sample Properties",
+              "description": "This captures information pertaining to the observed physical properties of the sample.",
+              "x-osdu-attribution-authority": "OpenGroup",
+              "x-osdu-attribution-publication": "OSDU",
+              "x-osdu-attribution-revision": "Evergreen"
+            },
+            "Remarks": {
+              "type": "array",
+              "title": "Remarks",
+              "description": "An array containing operational or quality comments about the sample.",
+              "example": [
+                {
+                  "Remark": "Shaker not functioning properly.",
+                  "RemarkSource": "Mud Logger"
+                }
+              ],
+              "x-osdu-attribution-authority": "OpenGroup",
+              "x-osdu-attribution-publication": "OSDU",
+              "x-osdu-attribution-revision": "Evergreen",
+              "items": {
+                "$ref": "../abstract/AbstractRemark.1.0.0.json"
+              }
+            },
+            "RecombinationSpecification": {
+              "type": "object",
+              "title": "Recombination Specification",
+              "description": "For a sample that has been recombined from separate samples, e.g. liquid sample and vapor sample, this object records the specified: recombination conditions (pressure and temperature), recombination ratio, the saturation pressure and  target recombined sample composition, whichever of these are appropriate for this recombination effort.",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "ProdML",
+              "x-osdu-attribution-revision": 2.2,
+              "properties": {
+                "RecombinationCondition": {
+                  "$ref": "../abstract/AbstractPTCondition.1.0.0.json",
+                  "title": "Recombination Condition",
+                  "description": "The prevailing operating conditions (Pressure and Temperature)  for the recombination operation.",
+                  "example": {
+                    "Pressure": 120,
+                    "Temperature": 60
+                  },
+                  "x-osdu-attribution-authority": "OpenGroup",
+                  "x-osdu-attribution-publication": "OSDU",
+                  "x-osdu-attribution-revision": "Evergreen"
+                },
+                "RecombinationGasOilRatio": {
+                  "type": "object",
+                  "title": "Recombination Gas Oil Ratio",
+                  "description": "The gas-oil ratio recorded for this sample recombination process as well as the volumetric reference conditions for both the oil and gas phases. This is typically required for fluid sample types.",
+                  "example": {
+                    "GasOilRatio": 34567,
+                    "VolumeReferenceConditionGas": {
+                      "Pressure": 14.7,
+                      "Temperature": 60
+                    },
+                    "VolumeReferenceConditionOil": {
+                      "Pressure": 200,
+                      "Temperature": 69
+                    }
+                  },
+                  "x-osdu-attribution-authority": "OpenGroup",
+                  "x-osdu-attribution-publication": "OSDU",
+                  "x-osdu-attribution-revision": "Evergreen",
+                  "properties": {
+                    "GasOilRatio": {
+                      "type": "number",
+                      "description": "The Gas Oil Ratio calculated at the reference conditions specified for each stream (Oil or Gas)",
+                      "example": 3456,
+                      "x-osdu-frame-of-reference": "UOM:volume per volume",
+                      "x-osdu-attribution-authority": "OSDU",
+                      "x-osdu-attribution-publication": "Evergreen",
+                      "x-osdu-attribution-revision": "1.0.0"
+                    },
+                    "VolumeReferenceConditionGas": {
+                      "$ref": "../abstract/AbstractPTCondition.1.0.0.json",
+                      "description": "The pressure and temperature reference values for the gas stream.",
+                      "example": {
+                        "Pressure": 14.7,
+                        "Temperature": 60
+                      },
+                      "x-osdu-attribution-authority": "OSDU",
+                      "x-osdu-attribution-publication": "Evergreen",
+                      "x-osdu-attribution-revision": "1.0.0"
+                    },
+                    "VolumeReferenceConditionOil": {
+                      "$ref": "../abstract/AbstractPTCondition.1.0.0.json",
+                      "description": "The pressure and temperature reference values for the oil stream.",
+                      "example": {
+                        "Pressure": 200,
+                        "Temperature": 69
+                      },
+                      "x-osdu-attribution-authority": "OSDU",
+                      "x-osdu-attribution-publication": "Evergreen",
+                      "x-osdu-attribution-revision": "1.0.0"
+                    }
+                  },
+                  "required": [
+                    "GasOilRatio",
+                    "VolumeReferenceConditionGas",
+                    "VolumeReferenceConditionOil"
+                  ]
+                },
+                "RecombinationSaturationPressure": {
+                  "type": "number",
+                  "title": "Recombination Saturation Pressure",
+                  "description": "The observed saturation pressure for this sample recombination process. Mostly applies to fluid samples.",
+                  "example": 120,
+                  "x-osdu-frame-of-reference": "UOM:pressure",
+                  "x-osdu-attribution-authority": "OpenGroup",
+                  "x-osdu-attribution-publication": "ProdML",
+                  "x-osdu-attribution-revision": 2.2
+                },
+                "TargetSampleComposition": {
+                  "type": "array",
+                  "title": "Target Sample Composition",
+                  "description": "This provides an array of components and their fraction contribution to the overall expected composition of the  sample generated by the recombination process. This is typically required for fluid sample types.",
+                  "example": [
+                    {
+                      "SampleCompositionComponentID": "namespace:reference-data--SampleCompositionComponent:ETHANE:",
+                      "MassFraction": 0.2,
+                      "MoleFraction": 0.1
+                    },
+                    {
+                      "SampleCompositionComponentID": "namespace:reference-data--SampleCompositionComponent:PENTANE:",
+                      "MassFraction": 0.4,
+                      "MoleFraction": 0.4
+                    },
+                    {
+                      "SampleCompositionComponentID": "namespace:reference-data--SampleCompositionComponent:PENTANEPLUS:",
+                      "MassFraction": 0.4,
+                      "MoleFraction": 0.5
+                    }
+                  ],
+                  "x-osdu-attribution-authority": "OpenGroup",
+                  "x-osdu-attribution-publication": "ProdML",
+                  "x-osdu-attribution-revision": 2.2,
+                  "items": {
+                    "type": "object",
+                    "title": "Component Fraction",
+                    "description": "This object holds information about a sample or component of a sample and its contribution to a target sample created through the recombination process.",
+                    "properties": {
+                      "SampleCompositionComponentID": {
+                        "type": "string",
+                        "title": "Sample Composition Component ID",
+                        "description": "This is the OSDU Record ID of an item in the list of  sample components. This attribute references the components that make up a sample.",
+                        "x-osdu-attribution-authority": "OpenGroup",
+                        "x-osdu-attribution-publication": "ProdML",
+                        "x-osdu-attribution-revision": 2.2,
+                        "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-SampleCompositionComponent:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                        "x-osdu-relationship": [
+                          {
+                            "GroupType": "reference-data",
+                            "EntityType": "SampleCompositionComponent"
+                          }
+                        ]
+                      },
+                      "VolumeFraction": {
+                        "type": "number",
+                        "title": "Volume Fraction",
+                        "description": "The volume fraction contribution of this component to the sample composition.",
+                        "example": 0.2,
+                        "x-osdu-frame-of-reference": "UOM:volume per volume",
+                        "x-osdu-attribution-authority": "OpenGroup",
+                        "x-osdu-attribution-publication": "ProdML",
+                        "x-osdu-attribution-revision": 2.2
+                      },
+                      "MassFraction": {
+                        "type": "number",
+                        "title": "Mass Fraction",
+                        "description": "The mass fraction contribution of this component to the sample composition.",
+                        "example": 0.03,
+                        "x-osdu-frame-of-reference": "UOM:mass per mass",
+                        "x-osdu-attribution-authority": "OpenGroup",
+                        "x-osdu-attribution-publication": "ProdML",
+                        "x-osdu-attribution-revision": 2.2
+                      },
+                      "MoleFraction": {
+                        "type": "number",
+                        "title": "Mole Fraction",
+                        "description": "The mole fraction contribution of this component to the sample composition.",
+                        "example": 0.5,
+                        "x-osdu-frame-of-reference": "UOM:amount of substance per amount of substance",
+                        "x-osdu-attribution-authority": "OpenGroup",
+                        "x-osdu-attribution-publication": "ProdML",
+                        "x-osdu-attribution-revision": 2.2
+                      }
+                    },
+                    "required": [
+                      "SampleCompositionComponentID"
+                    ]
+                  }
+                },
+                "Remarks": {
+                  "type": "array",
+                  "title": "Remarks",
+                  "description": "Pertinent information about the sample recombination specification stored alongside the other attributes.",
+                  "example": [
+                    {
+                      "Remark": "Shaker not functioning properly.",
+                      "RemarkSource": "Mud Logger"
+                    }
+                  ],
+                  "x-osdu-attribution-authority": "OpenGroup",
+                  "x-osdu-attribution-publication": "OSDU",
+                  "x-osdu-attribution-revision": "Evergreen",
+                  "items": {
+                    "$ref": "../abstract/AbstractRemark.1.0.0.json"
+                  }
+                },
+                "RecombinedSampleFraction": {
+                  "type": "array",
+                  "title": "Recombined Sample Fraction",
+                  "description": "Object capturing the mixture and contributions from multiple samples.",
+                  "x-osdu-attribution-authority": "OpenGroup",
+                  "x-osdu-attribution-publication": "ProdML",
+                  "x-osdu-attribution-revision": 2.2,
+                  "items": {
+                    "type": "object",
+                    "title": "Component Fraction",
+                    "description": "This object holds information about a sample or component of a sample and its contribution to a target sample created through the recombination process.",
+                    "properties": {
+                      "SampleCompositionComponentID": {
+                        "type": "string",
+                        "title": "Sample Composition Component ID",
+                        "description": "This is the OSDU Record ID of an item in the list of  sample components. This attribute references the components that make up a sample.",
+                        "x-osdu-attribution-authority": "OpenGroup",
+                        "x-osdu-attribution-publication": "ProdML",
+                        "x-osdu-attribution-revision": 2.2,
+                        "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-SampleCompositionComponent:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                        "x-osdu-relationship": [
+                          {
+                            "GroupType": "reference-data",
+                            "EntityType": "SampleCompositionComponent"
+                          }
+                        ]
+                      },
+                      "VolumeFraction": {
+                        "type": "number",
+                        "title": "Volume Fraction",
+                        "description": "The volume fraction contribution of this component to the sample composition.",
+                        "example": 0.2,
+                        "x-osdu-frame-of-reference": "UOM:volume per volume",
+                        "x-osdu-attribution-authority": "OpenGroup",
+                        "x-osdu-attribution-publication": "ProdML",
+                        "x-osdu-attribution-revision": 2.2
+                      },
+                      "MassFraction": {
+                        "type": "number",
+                        "title": "Mass Fraction",
+                        "description": "The mass fraction contribution of this component to the sample composition.",
+                        "example": 0.03,
+                        "x-osdu-frame-of-reference": "UOM:mass per mass",
+                        "x-osdu-attribution-authority": "OpenGroup",
+                        "x-osdu-attribution-publication": "ProdML",
+                        "x-osdu-attribution-revision": 2.2
+                      },
+                      "MoleFraction": {
+                        "type": "number",
+                        "title": "Mole Fraction",
+                        "description": "The mole fraction contribution of this component to the sample composition.",
+                        "example": 0.5,
+                        "x-osdu-frame-of-reference": "UOM:amount of substance per amount of substance",
+                        "x-osdu-attribution-authority": "OpenGroup",
+                        "x-osdu-attribution-publication": "ProdML",
+                        "x-osdu-attribution-revision": 2.2
+                      }
+                    },
+                    "required": [
+                      "SampleCompositionComponentID"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "RecombinationCondition",
+                "RecombinedSampleFraction"
+              ]
+            },
+            "ParentSampleIDs": {
+              "type": "array",
+              "title": "Parent Sample IDs",
+              "description": "This attribute stores the array of OSDU record IDs for the parent samples used in creating this sample. Creation of this sample could be achieved through through extractions, sub sampling, derived sampling or recombination.",
+              "example": [
+                "namespace:master-data--Sample:b7d3735f-b720-5db2-88c9-771d396d8a4e:",
+                "namespace:master-data--Sample:c7d3735f-b720-5db2-88c9-771d396d8a4e:"
+              ],
+              "x-osdu-attribution-authority": "OpenGroup",
+              "x-osdu-attribution-publication": "OSDU",
+              "x-osdu-attribution-revision": "Evergreen",
+              "items": {
+                "type": "string",
+                "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Sample:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                "x-osdu-relationship": [
+                  {
+                    "GroupType": "master-data",
+                    "EntityType": "Sample"
+                  }
+                ]
+              }
+            },
+            "SamplePreparation": {
+              "type": "array",
+              "title": "Sample Preparation",
+              "description": "This captures information about the preparation process executed after the sample acquisition event.",
+              "items": {
+                "type": "object",
+                "title": "Sample Preparation",
+                "description": "This captures information about the preparation process executed after the sample acquisition event.",
+                "properties": {
+                  "SamplePreparationTypeID": {
+                    "type": "string",
+                    "title": "Sample Preparation Type IDs",
+                    "description": "Provides extra details on any processes applied after the sample has been acquired",
+                    "x-osdu-attribution-authority": "OpenGroup",
+                    "x-osdu-attribution-publication": "OSDU",
+                    "x-osdu-attribution-revision": "Evergreen",
+                    "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-SamplePreparationType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "reference-data",
+                        "EntityType": "SamplePreparationType"
+                      }
+                    ]
+                  },
+                  "SamplePreparationMethodID": {
+                    "type": "string",
+                    "title": "Sample Preparation Method IDs",
+                    "description": "Provide additional details on which industrial/lab method used to conduct the sample preparation",
+                    "x-osdu-attribution-authority": "OpenGroup",
+                    "x-osdu-attribution-publication": "OSDU",
+                    "x-osdu-attribution-revision": "Evergreen",
+                    "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-SamplePreparationMethod:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "reference-data",
+                        "EntityType": "SamplePreparationMethod"
+                      }
+                    ]
+                  },
+                  "SamplePreparationCondition": {
+                    "$ref": "../abstract/AbstractPTCondition.1.0.0.json",
+                    "title": "Sample Preparation Condition",
+                    "description": "Used to describe the pressure and temperature conditions at which the sample preparation took place",
+                    "x-osdu-attribution-authority": "OpenGroup",
+                    "x-osdu-attribution-publication": "OSDU",
+                    "x-osdu-attribution-revision": "Evergreen"
+                  },
+                  "SamplePreparationStartDate": {
+                    "type": "string",
+                    "title": "Sample Preparation Start Date",
+                    "description": "This represents the start date for the sample preparation process.",
+                    "format": "date-time",
+                    "x-osdu-frame-of-reference": "DateTime",
+                    "x-osdu-attribution-authority": "OpenGroup",
+                    "x-osdu-attribution-publication": "OSDU",
+                    "x-osdu-attribution-revision": "Evergreen"
+                  },
+                  "SamplePreparationEndDate": {
+                    "type": "string",
+                    "title": "Sample Preparation End Date",
+                    "description": "This represents the end date for the sample preparation process.",
+                    "format": "date-time",
+                    "x-osdu-frame-of-reference": "DateTime",
+                    "x-osdu-attribution-authority": "OpenGroup",
+                    "x-osdu-attribution-publication": "OSDU",
+                    "x-osdu-attribution-revision": "Evergreen"
+                  },
+                  "Remarks": {
+                    "type": "array",
+                    "title": "Remarks",
+                    "description": "This captures other pertinent information regarding the sample preparation process.",
+                    "x-osdu-attribution-authority": "OpenGroup",
+                    "x-osdu-attribution-publication": "OSDU",
+                    "x-osdu-attribution-revision": "Evergreen",
+                    "items": {
+                      "$ref": "../abstract/AbstractRemark.1.0.0.json"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "title": "IndividualProperties"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "ExtensionProperties": {
+              "type": "object"
+            }
+          },
+          "title": "ExtensionProperties"
+        }
+      ]
+    }
+  },
+  "required": [
+    "kind",
+    "acl",
+    "legal"
+  ],
+  "additionalProperties": false,
+  "x-osdu-review-status": "Accepted",
+  "x-osdu-virtual-properties": {
+    "data.VirtualProperties.DefaultName": {
+      "type": "string",
+      "priority": [
+        {
+          "path": "data.SampleName"
+        }
+      ]
+    },
+    "data.VirtualProperties.DefaultLocation": {
+      "type": "object",
+      "priority": [
+        {
+          "path": "data.SpatialLocation"
+        }
+      ]
+    }
+  },
+  "x-osdu-inheriting-from-kind": []
+}

@@ -1,0 +1,256 @@
+{
+  "x-osdu-license": "Copyright 2025, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "$id": "https://schema.osdu.opengroup.org/json/dataset/File.TabularData.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:dataset--File.TabularData:1.0.0",
+  "title": "File.TabularData",
+  "description": "A dataset record representing tabular data. The actual format is defined via data.DatasetProperties.FileSourceInfo.EncodingFormatTypeID. Each data row contains all columns. Column metadata are",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "Previously called ResourceID or SRN which identifies this OSDU resource object without version.",
+      "title": "Entity ID",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:dataset\\-\\-File.TabularData:[\\w\\-\\.\\:\\%]+$",
+      "example": "namespace:dataset--File.TabularData:b46a87c0-5dce-5f6c-9977-b6b179fea56c"
+    },
+    "kind": {
+      "description": "The schema identification for the OSDU resource object following the pattern {Namespace}:{Source}:{Type}:{VersionMajor}.{VersionMinor}.{VersionPatch}. The versioning scheme follows the semantic versioning, https://semver.org/.",
+      "title": "Entity Kind",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:[\\w\\-\\.]+:[\\w\\-\\.]+:[0-9]+.[0-9]+.[0-9]+$",
+      "example": "osdu:wks:dataset--File.TabularData:1.0.0"
+    },
+    "version": {
+      "description": "The version number of this OSDU resource; set by the framework.",
+      "title": "Version Number",
+      "type": "integer",
+      "format": "int64",
+      "example": 1562066009929332
+    },
+    "acl": {
+      "description": "The access control tags associated with this entity.",
+      "title": "Access Control List",
+      "$ref": "../abstract/AbstractAccessControlList.1.0.0.json"
+    },
+    "legal": {
+      "description": "The entity's legal tags and compliance status. The actual contents associated with the legal tags is managed by the Compliance Service.",
+      "title": "Legal Tags",
+      "$ref": "../abstract/AbstractLegalTags.1.0.0.json"
+    },
+    "tags": {
+      "title": "Tag Dictionary",
+      "description": "A generic dictionary of string keys mapping to string value. Only strings are permitted as keys and values.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "example": {
+        "NameOfKey": "String value"
+      }
+    },
+    "createTime": {
+      "description": "Timestamp of the time at which initial version of this OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:46:20.163Z"
+    },
+    "createUser": {
+      "title": "Resource Object Creation User Reference",
+      "description": "The user reference, which created the first version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "modifyTime": {
+      "description": "Timestamp of the time at which this version of the OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Version Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:52:24.477Z"
+    },
+    "modifyUser": {
+      "title": "Resource Object Version Creation User Reference",
+      "description": "The user reference, which created this version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "ancestry": {
+      "description": "The links to data, which constitute the inputs, from which this record instance is derived.",
+      "title": "Ancestry",
+      "$ref": "../abstract/AbstractLegalParentList.1.0.0.json"
+    },
+    "meta": {
+      "description": "The Frame of Reference meta data section linking the named properties to self-contained definitions.",
+      "title": "Frame of Reference Meta Data",
+      "type": "array",
+      "items": {
+        "$ref": "../abstract/AbstractMetaItem.1.0.0.json"
+      }
+    },
+    "data": {
+      "allOf": [
+        {
+          "$ref": "../abstract/AbstractCommonResources.1.0.1.json"
+        },
+        {
+          "$ref": "../abstract/AbstractDataset.1.0.1.json"
+        },
+        {
+          "$ref": "../abstract/AbstractFile.1.0.1.json"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "ColumnBasedTableTemplateID": {
+              "type": "string",
+              "title": "ID of the column based table template used",
+              "description": "Optional relationship to a ColumnBasedTableTemplate record, which defines the KeyColumn and Column definitions. Some columns defined in the template may be omitted if not contained in the ColumnValues, but the ones used must be exactly identical to the template's column definitions. If the ColumnBasedTableTemplateID is populated, the ColumnBasedTableType is expected to be ColumnBasedTableTemplateControlled.",
+              "pattern": "^[\\w\\-\\.]+:master-data\\-\\-ColumnBasedTableTemplate:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "ColumnBasedTableTemplate"
+                }
+              ]
+            },
+            "ColumnBasedTableTypeID": {
+              "type": "string",
+              "title": "Column based Table Type ID",
+              "description": "Quickly indicate the type of the column based table (KrPc, PVT, Facies, ...) and its standard columns definition. It is supposed to be used when you don't use KeyColumns neither Columns as attributes of this WPC.",
+              "example": "namespace:reference-data--ColumnBasedTableType:ColumnBasedTableTemplateControlled:",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-ColumnBasedTableType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "ColumnBasedTableType"
+                }
+              ]
+            },
+            "KeyColumns": {
+              "type": "array",
+              "title": "Key columns",
+              "description": "A column whose values are considered as keys/indices. Do not use this attribute if you want to follow a given ColumnBasedTableType.",
+              "items": {
+                "$ref": "../abstract/AbstractReferencePropertyType.1.2.1.json"
+              }
+            },
+            "Columns": {
+              "type": "array",
+              "title": "Common columns",
+              "description": "A common column storing values of a particular property kind. Do not use this attribute if you want to follow a given ColumnBasedTableType.",
+              "items": {
+                "$ref": "../abstract/AbstractReferencePropertyType.1.2.1.json"
+              }
+            },
+            "ColumnNamesInFirstRow": {
+              "type": "boolean",
+              "title": "Column Names In First Row",
+              "description": "If set to true, the first data row contains the ColumnName values or labels for the purpose of checking/constraining the ColumnName in Columns[]/KeyColumns[].",
+              "example": false
+            },
+            "ColumnSpecifications": {
+              "type": "array",
+              "title": "Column Specifications",
+              "description": "The column specifications in the order they appear in the data file. ColumnSpecifications[].ColumnName is the key, which matches and links to the Columns[].ColumnName metadata. ColumnSpecifications contain format hints and absent value definitions.",
+              "items": {
+                "type": "object",
+                "title": "ColumnSpecification",
+                "description": "Selection criteria to define a subset of a text file row in order to represent the row value in the table column indentified by ColumnName.",
+                "properties": {
+                  "ColumnName": {
+                    "type": "string",
+                    "title": "Column Name",
+                    "description": "The unique name of the column as defined in the column metadata, e.g. dataset--TabularData record. ColumnName is mandatory."
+                  },
+                  "ColumnFormat": {
+                    "type": "string",
+                    "title": "Column Format",
+                    "description": "The fixed format code, I for integer, A for string, F for floating point numbers, followed by a n integer number describing the field length. For floating point numbers (F), the number of decimals is indicated after the decimal point, i.e., F9.2 meaning field length 9 characters including sign and 2 characters behind the decimal point. The value type is defined in the column  metadata.",
+                    "example": "F10.2",
+                    "pattern": "^F\\d+.\\d+$|^A\\d+$|^I\\d+$"
+                  },
+                  "ColumnByteCount": {
+                    "type": "integer",
+                    "title": "Column Byte Count",
+                    "description": "Only used for fixed format parsing, i.e., when ColumnFormat is populated. It described the length (in bytes) of the column in the table row.",
+                    "example": 10
+                  },
+                  "ColumnStartByte": {
+                    "type": "integer",
+                    "title": "Column Start Byte",
+                    "description": "Only used for fixed format parsing, i.e., when ColumnFormat is populated. It defined the start byte (starting with 0) to read the table cell value from.",
+                    "example": 10
+                  },
+                  "AbsentValue": {
+                    "type": "string",
+                    "title": "Absent Value",
+                    "description": "The value representing an absent value or null value. For fixed format cell values this string value must be compatible with the CellFormat.",
+                    "example": -999.25
+                  }
+                },
+                "required": [
+                  "ColumnName"
+                ]
+              }
+            },
+            "ColumnSeparator": {
+              "type": "string",
+              "title": "Column Separator",
+              "description": "If specified, a cells of a record row are separated by this character, e.g., ',' for comma separated columns. For fixed format record rows the property is left absent or the value as empty string \"\".",
+              "example": ","
+            },
+            "NumberOfRowsToSkip": {
+              "type": "integer",
+              "title": "Number of Rows to skip",
+              "description": "Sometimes the data file contains header records, which do not contain row data. NumberOfRowsToSkip avoids parsing header rows as data rows. If absent, the default value is 0."
+            },
+            "CommentIndicator": {
+              "type": "string",
+              "title": "Comment Indicator",
+              "description": "The start of a comment line, which should be skipped.",
+              "example": "#"
+            }
+          },
+          "title": "IndividualProperties"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "ExtensionProperties": {
+              "type": "object"
+            }
+          },
+          "title": "ExtensionProperties"
+        }
+      ]
+    }
+  },
+  "required": [
+    "kind",
+    "acl",
+    "legal"
+  ],
+  "additionalProperties": false,
+  "x-osdu-review-status": "Accepted",
+  "x-osdu-virtual-properties": {
+    "data.VirtualProperties.DefaultName": {
+      "type": "string",
+      "priority": [
+        {
+          "path": "data.Name"
+        }
+      ]
+    }
+  },
+  "x-osdu-inheriting-from-kind": [
+    {
+      "name": "Dataset",
+      "kind": "osdu:wks:AbstractDataset:1.0.1"
+    },
+    {
+      "name": "File",
+      "kind": "osdu:wks:AbstractFile:1.0.1"
+    }
+  ]
+}

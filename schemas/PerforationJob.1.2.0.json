@@ -1,0 +1,487 @@
+{
+  "x-osdu-license": "Copyright 2023, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "$id": "https://schema.osdu.opengroup.org/json/master-data/PerforationJob.1.2.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:master-data--PerforationJob:1.2.0",
+  "title": "PerforationJob",
+  "description": "A Perforation Job describes an activity performed on a well for the purpose of firing perforation guns or puncher inside Casing, Liner or Tubing to create a flow path between the reservoir outside the pipe and the production annulus within the pipe. A Squeeze job is a remedial effort performed to create a temporary flow path to allow cement to be pumped outside the casing to repair the annular seal. Perf Intervals result in the creation of equivalent Wellbore Openings where they are managed as part of the Completion. A Squeeze job would not result in creation of Wellbore Openings as these are temporary to better seal that interval.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "Previously called ResourceID or SRN which identifies this OSDU resource object without version.",
+      "title": "Entity ID",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:master-data\\-\\-PerforationJob:[\\w\\-\\.\\:\\%]+$",
+      "example": "namespace:master-data--PerforationJob:91b34e6e-4d1c-5a0a-a4f6-3b04b1279889"
+    },
+    "kind": {
+      "description": "The schema identification for the OSDU resource object following the pattern {Namespace}:{Source}:{Type}:{VersionMajor}.{VersionMinor}.{VersionPatch}. The versioning scheme follows the semantic versioning, https://semver.org/.",
+      "title": "Entity Kind",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:[\\w\\-\\.]+:[\\w\\-\\.]+:[0-9]+.[0-9]+.[0-9]+$",
+      "example": "osdu:wks:master-data--PerforationJob:1.2.0"
+    },
+    "version": {
+      "description": "The version number of this OSDU resource; set by the framework.",
+      "title": "Version Number",
+      "type": "integer",
+      "format": "int64",
+      "example": 1562066009929332
+    },
+    "acl": {
+      "description": "The access control tags associated with this entity.",
+      "title": "Access Control List",
+      "$ref": "../abstract/AbstractAccessControlList.1.0.0.json"
+    },
+    "legal": {
+      "description": "The entity's legal tags and compliance status. The actual contents associated with the legal tags is managed by the Compliance Service.",
+      "title": "Legal Tags",
+      "$ref": "../abstract/AbstractLegalTags.1.0.0.json"
+    },
+    "tags": {
+      "title": "Tag Dictionary",
+      "description": "A generic dictionary of string keys mapping to string value. Only strings are permitted as keys and values.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "example": {
+        "NameOfKey": "String value"
+      }
+    },
+    "createTime": {
+      "description": "Timestamp of the time at which initial version of this OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:46:20.163Z"
+    },
+    "createUser": {
+      "title": "Resource Object Creation User Reference",
+      "description": "The user reference, which created the first version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "modifyTime": {
+      "description": "Timestamp of the time at which this version of the OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Version Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:52:24.477Z"
+    },
+    "modifyUser": {
+      "title": "Resource Object Version Creation User Reference",
+      "description": "The user reference, which created this version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "ancestry": {
+      "description": "The links to data, which constitute the inputs, from which this record instance is derived.",
+      "title": "Ancestry",
+      "$ref": "../abstract/AbstractLegalParentList.1.0.0.json"
+    },
+    "meta": {
+      "description": "The Frame of Reference meta data section linking the named properties to self-contained definitions.",
+      "title": "Frame of Reference Meta Data",
+      "type": "array",
+      "items": {
+        "$ref": "../abstract/AbstractMetaItem.1.0.0.json"
+      }
+    },
+    "data": {
+      "allOf": [
+        {
+          "$ref": "../abstract/AbstractCommonResources.1.0.0.json"
+        },
+        {
+          "$ref": "../abstract/AbstractMaster.1.2.0.json"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "WellboreID": {
+              "type": "string",
+              "title": "Wellbore",
+              "description": "Business natural key or code of the parent Wellbore to which this record belongs",
+              "x-osdu-existing-standard": "Y",
+              "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Wellbore:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "Wellbore"
+                }
+              ]
+            },
+            "VerticalMeasurement": {
+              "$ref": "../abstract/AbstractFacilityVerticalMeasurement.1.0.0.json",
+              "title": "Depth Reference Elevation",
+              "description": "ID to the Zero Depth Point elevation for depths contained in the perf job incl intervals, depth correction used to correlate MDs to original drilling rig MD. References an entry in the Vertical Measurement array for the Well parented by the wellbore via WellboreID.",
+              "x-osdu-existing-standard": "Y"
+            },
+            "WellboreTubularID": {
+              "type": "string",
+              "title": "Perforated Tubular Assembly",
+              "description": "Casing/Liner/Tubing assembly through which guns are fired.",
+              "example": "namespace:master-data--TubularAssembly:9_58ProdCasing:",
+              "x-osdu-existing-standard": "Y",
+              "pattern": "^[\\w\\-\\.]+:(master-data\\-\\-TubularAssembly|work-product-component\\-\\-TubularAssembly):[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "TubularAssembly"
+                },
+                {
+                  "GroupType": "work-product-component",
+                  "EntityType": "TubularAssembly"
+                }
+              ]
+            },
+            "ContractorID": {
+              "type": "string",
+              "title": "Contractor",
+              "description": "Name of company performing the perf job",
+              "example": "namespace:master-data--Organisation:Halliburton:",
+              "x-osdu-existing-standard": "Y",
+              "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Organisation:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "Organisation"
+                }
+              ]
+            },
+            "ContractorSupervisor": {
+              "type": "string",
+              "title": "Contractor Supervisor",
+              "description": "Name of contractor supervisor overseeing the job",
+              "example": "Joe Bloggs",
+              "x-osdu-existing-standard": "N"
+            },
+            "MethodID": {
+              "type": "string",
+              "title": "Perforation Method",
+              "description": "Perforation job method, often the brand name of the service offered by the contractor",
+              "x-osdu-existing-standard": "N",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-PerforationIntervalType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "PerforationIntervalType"
+                }
+              ]
+            },
+            "ConveyedMethodID": {
+              "type": "string",
+              "title": "Conveyed Method",
+              "description": "How guns are conveyed",
+              "example": "namespace:reference-data--PerforationConveyedMethod:ElecLine:",
+              "x-osdu-existing-standard": "N",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-PerforationConveyedMethod:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "PerforationConveyedMethod"
+                }
+              ]
+            },
+            "IsTractorUsed": {
+              "type": "boolean",
+              "title": "Tractor Used",
+              "description": "Is a tractor used during the job to help convey guns",
+              "x-osdu-existing-standard": "N"
+            },
+            "JobStartDateTime": {
+              "type": "string",
+              "title": "Job Start Date/Time",
+              "description": "Job Start Date/time",
+              "format": "date-time",
+              "example": "2022-04-18",
+              "x-osdu-frame-of-reference": "DateTime",
+              "x-osdu-existing-standard": "N"
+            },
+            "JobEndDateTime": {
+              "type": "string",
+              "title": "Job End Date/Time",
+              "description": "Job End Date/time",
+              "format": "date-time",
+              "example": "2022-04-19",
+              "x-osdu-frame-of-reference": "DateTime",
+              "x-osdu-existing-standard": "N"
+            },
+            "BottomHoleTemperature": {
+              "type": "number",
+              "title": "Bottom Hole Temperature",
+              "description": "Downhole temperature at mid-point of perforation intervals",
+              "example": 218,
+              "x-osdu-frame-of-reference": "UOM:thermodynamic temperature",
+              "x-osdu-existing-standard": "N"
+            },
+            "SurfacePressureInitial": {
+              "type": "number",
+              "title": "Initial Surface Pressure",
+              "description": "Pressure at Surface at start of Job",
+              "example": 14.5,
+              "x-osdu-frame-of-reference": "UOM:pressure",
+              "x-osdu-existing-standard": "N"
+            },
+            "ReservoirTVD": {
+              "type": "number",
+              "title": "Reservoir True Vertical Depth",
+              "description": "TVD at top of Reservoir/perforated intervals used to calculate pressure using annular fluid density.",
+              "example": 4500,
+              "x-osdu-frame-of-reference": "UOM:length",
+              "x-osdu-existing-standard": "N"
+            },
+            "ReservoirPressureEstimated": {
+              "type": "number",
+              "title": "Estimated Reservoir Pressure",
+              "description": "Estimated Pressure at top of Reservoir/perforated intervals",
+              "example": 2300,
+              "x-osdu-frame-of-reference": "UOM:pressure",
+              "x-osdu-existing-standard": "N"
+            },
+            "AnticipatedReservoirPressure": {
+              "type": "number",
+              "title": "Hydrostatic Pressure at Reservoir",
+              "description": "Hydrostatic pressure at Reservoir / perforated intervals top",
+              "x-osdu-frame-of-reference": "UOM:pressure",
+              "x-osdu-existing-standard": "N"
+            },
+            "AnnulusFluidTypeID": {
+              "type": "string",
+              "title": "Annulus Fluid Type",
+              "description": "Annulus Fluid Type",
+              "example": "namespace:reference-data--AnnularFluidType:Mud:",
+              "x-osdu-existing-standard": "N",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-AnnularFluidType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "AnnularFluidType"
+                }
+              ]
+            },
+            "AnnulusFluidDensity": {
+              "type": "number",
+              "title": "Annulus Fluid Density",
+              "description": "Annulus Fluid Density used to calculate hydrostatic pressure",
+              "example": 9.8,
+              "x-osdu-frame-of-reference": "UOM:mass per volume",
+              "x-osdu-existing-standard": "N"
+            },
+            "AnnulusFluidTopTVD": {
+              "type": "number",
+              "title": "Annulus Fluid Top TVD",
+              "description": "TVD of annulus fluid top used to calculate Hydrostatic pressure prior to first gun run",
+              "example": 200,
+              "x-osdu-frame-of-reference": "UOM:length",
+              "x-osdu-existing-standard": "N"
+            },
+            "Underbalanced": {
+              "type": "boolean",
+              "title": "Is Underbalanced?",
+              "description": "Underbalance indicator",
+              "example": false,
+              "x-osdu-existing-standard": "N"
+            },
+            "HydrostaticReservoirPressureDifference": {
+              "type": "number",
+              "title": "Hydrostatic Reservoir Pressure Difference",
+              "description": "Difference between Reservoir Pressure and Hydrostatic pressure. Negative number indicates underbalanced",
+              "example": 200,
+              "x-osdu-frame-of-reference": "UOM:pressure",
+              "x-osdu-existing-standard": "N"
+            },
+            "FinalSurfacePressure": {
+              "type": "number",
+              "title": "Final Surface Pressure",
+              "description": "Pressure at Surface at end of Job",
+              "x-osdu-frame-of-reference": "UOM:pressure",
+              "x-osdu-existing-standard": "N"
+            },
+            "SurfacePressureFinalDateTime": {
+              "type": "string",
+              "title": "Final Surface Pressure Date/Time",
+              "description": "Date/time when final surface pressure measured",
+              "format": "date-time",
+              "x-osdu-existing-standard": "N"
+            },
+            "AfterPillFluidLossRate": {
+              "type": "number",
+              "title": "Fluid Loss Rate After Pills",
+              "description": "Post pill fluid loss rate",
+              "x-osdu-frame-of-reference": "UOM:volume per time",
+              "x-osdu-existing-standard": "N"
+            },
+            "PostJobFluidLossRate": {
+              "type": "number",
+              "title": "Fluid Loss Rate After Perf Job",
+              "description": "Post job fluid loss rate",
+              "x-osdu-frame-of-reference": "UOM:volume per time",
+              "x-osdu-existing-standard": "N"
+            },
+            "PillVolume": {
+              "type": "number",
+              "title": "Pill Volume",
+              "description": "Pill volume",
+              "example": 10,
+              "x-osdu-frame-of-reference": "UOM:volume",
+              "x-osdu-existing-standard": "N"
+            },
+            "PillTypeID": {
+              "type": "string",
+              "title": "Pill Type",
+              "description": "Pill type",
+              "x-osdu-existing-standard": "N",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-PerforationPillType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "PerforationPillType"
+                }
+              ]
+            },
+            "ReferenceLogDate": {
+              "type": "string",
+              "title": "Reference Log Date",
+              "description": "Date when Reference Log run",
+              "format": "date-time",
+              "x-osdu-frame-of-reference": "DateTime",
+              "x-osdu-existing-standard": "N"
+            },
+            "ReferenceLogID": {
+              "type": "string",
+              "title": "Reference Log Identifier",
+              "description": "SRN to Wireline log run",
+              "x-osdu-existing-standard": "N",
+              "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-WellLog:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "work-product-component",
+                  "EntityType": "WellLog"
+                }
+              ]
+            },
+            "ReferenceLogDescription": {
+              "type": "string",
+              "title": "Reference Log Description",
+              "description": "Reference Log description/name",
+              "x-osdu-existing-standard": "N"
+            },
+            "PerfJobMDTop": {
+              "type": "number",
+              "title": "Job Top MD",
+              "description": "Top Measured Depth of all perfed intervals",
+              "x-osdu-frame-of-reference": "UOM:length",
+              "x-osdu-existing-standard": "N"
+            },
+            "PerfJobMDBase": {
+              "type": "number",
+              "title": "Job Base MD",
+              "description": "Base Measured Depth of all perfed intervals",
+              "x-osdu-frame-of-reference": "UOM:length",
+              "x-osdu-existing-standard": "N"
+            },
+            "PerfGrossIntervalLength": {
+              "type": "number",
+              "title": "Gross Perf Length Interval",
+              "description": "Gross perforated interval length (Job Top - Job Base)",
+              "x-osdu-frame-of-reference": "UOM:length",
+              "x-osdu-existing-standard": "N"
+            },
+            "PerfNetIntervalLength": {
+              "type": "number",
+              "title": "Net Perf Length Interval",
+              "description": "Net perforated interval length (calculated from sum of individual intervals)",
+              "x-osdu-frame-of-reference": "UOM:length",
+              "x-osdu-existing-standard": "N"
+            },
+            "NoIntervals": {
+              "type": "integer",
+              "title": "Number of Intervals",
+              "description": "Number of intervals (calculated from intervals)",
+              "x-osdu-existing-standard": "N"
+            },
+            "TotalShots": {
+              "type": "integer",
+              "title": "Total Shots",
+              "description": "Total number of shots fired (calculated from intervals) - Total Shots = {SP/ (shot/ft) x [Interval length]} + Additional Shot - Misfires",
+              "x-osdu-existing-standard": "N"
+            },
+            "ShotDensityAverage": {
+              "type": "number",
+              "title": "Average Shot Density",
+              "description": "Average shot density (Average Shot Density = Total Shots / Net Perforation Interval)",
+              "x-osdu-frame-of-reference": "UOM:reciprocal length",
+              "x-osdu-existing-standard": "N"
+            },
+            "CentralizationMethodID": {
+              "type": "string",
+              "title": "Centralization Method",
+              "description": "Centralization Method",
+              "x-osdu-existing-standard": "N",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-PerforationCentralizationMethodType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "PerforationCentralizationMethodType"
+                }
+              ]
+            },
+            "Comment": {
+              "type": "string",
+              "title": "Job Comments",
+              "description": "Perforation job comments",
+              "x-osdu-existing-standard": "N"
+            },
+            "Name": {
+              "type": "string",
+              "title": "Name",
+              "description": "The name under which this perforation job is known."
+            }
+          },
+          "required": [
+            "WellboreID",
+            "WellboreTubularID"
+          ],
+          "title": "IndividualProperties"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "ExtensionProperties": {
+              "type": "object"
+            }
+          },
+          "title": "ExtensionProperties"
+        }
+      ]
+    }
+  },
+  "required": [
+    "kind",
+    "acl",
+    "legal"
+  ],
+  "additionalProperties": false,
+  "x-osdu-review-status": "Accepted",
+  "x-osdu-virtual-properties": {
+    "data.VirtualProperties.DefaultName": {
+      "type": "string",
+      "priority": [
+        {
+          "path": "data.Name"
+        }
+      ]
+    },
+    "data.VirtualProperties.DefaultLocation": {
+      "type": "object",
+      "priority": [
+        {
+          "path": "data.SpatialLocation"
+        }
+      ]
+    }
+  },
+  "x-osdu-inheriting-from-kind": []
+}

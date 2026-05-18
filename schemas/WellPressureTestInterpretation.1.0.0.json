@@ -1,0 +1,522 @@
+{
+  "x-osdu-license": "Copyright 2025, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "$id": "https://schema.osdu.opengroup.org/json/work-product-component/WellPressureTestInterpretation.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:work-product-component--WellPressureTestInterpretation:1.0.0",
+  "title": "WellPressureTestInterpretation",
+  "description": "Entity aiming to capture the results of interpretations carried out on the results of a well test activity. Intended to be partnered with a WellPressureTestRawMeasurement WPC that captures raw measurements before any kind of processing, composing, interpretation or analysis",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "Previously called ResourceID or SRN which identifies this OSDU resource object without version.",
+      "title": "Entity ID",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-WellPressureTestInterpretation:[\\w\\-\\.\\:\\%]+$",
+      "example": "namespace:work-product-component--WellPressureTestInterpretation:79f7a9d5-2384-5709-b391-129870c1a6da"
+    },
+    "kind": {
+      "description": "The schema identification for the OSDU resource object following the pattern {Namespace}:{Source}:{Type}:{VersionMajor}.{VersionMinor}.{VersionPatch}. The versioning scheme follows the semantic versioning, https://semver.org/.",
+      "title": "Entity Kind",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:[\\w\\-\\.]+:[\\w\\-\\.]+:[0-9]+.[0-9]+.[0-9]+$",
+      "example": "osdu:wks:work-product-component--WellPressureTestInterpretation:1.0.0"
+    },
+    "version": {
+      "description": "The version number of this OSDU resource; set by the framework.",
+      "title": "Version Number",
+      "type": "integer",
+      "format": "int64",
+      "example": 1562066009929332
+    },
+    "acl": {
+      "description": "The access control tags associated with this entity.",
+      "title": "Access Control List",
+      "$ref": "../abstract/AbstractAccessControlList.1.0.0.json"
+    },
+    "legal": {
+      "description": "The entity's legal tags and compliance status. The actual contents associated with the legal tags is managed by the Compliance Service.",
+      "title": "Legal Tags",
+      "$ref": "../abstract/AbstractLegalTags.1.0.0.json"
+    },
+    "tags": {
+      "title": "Tag Dictionary",
+      "description": "A generic dictionary of string keys mapping to string value. Only strings are permitted as keys and values.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "example": {
+        "NameOfKey": "String value"
+      }
+    },
+    "createTime": {
+      "description": "Timestamp of the time at which initial version of this OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:46:20.163Z"
+    },
+    "createUser": {
+      "title": "Resource Object Creation User Reference",
+      "description": "The user reference, which created the first version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "modifyTime": {
+      "description": "Timestamp of the time at which this version of the OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Version Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:52:24.477Z"
+    },
+    "modifyUser": {
+      "title": "Resource Object Version Creation User Reference",
+      "description": "The user reference, which created this version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "ancestry": {
+      "description": "The links to data, which constitute the inputs, from which this record instance is derived.",
+      "title": "Ancestry",
+      "$ref": "../abstract/AbstractLegalParentList.1.0.0.json"
+    },
+    "meta": {
+      "description": "The Frame of Reference meta data section linking the named properties to self-contained definitions.",
+      "title": "Frame of Reference Meta Data",
+      "type": "array",
+      "items": {
+        "$ref": "../abstract/AbstractMetaItem.1.0.0.json"
+      }
+    },
+    "data": {
+      "allOf": [
+        {
+          "$ref": "../abstract/AbstractCommonResources.1.0.1.json"
+        },
+        {
+          "$ref": "../abstract/AbstractWPCGroupType.1.2.0.json"
+        },
+        {
+          "$ref": "../abstract/AbstractWorkProductComponent.1.1.0.json"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "WellPressureTestRawMeasurementID": {
+              "type": "string",
+              "title": "Well Pressure Test Raw Measurement ID",
+              "description": "Identifier of the related Well Pressure Test Raw Measurement Work Product Component",
+              "example": "namespace:work-product-component--WellPressureTestRawMeasurement:PressureTest1:",
+              "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-WellPressureTestRawMeasurement:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "work-product-component",
+                  "EntityType": "WellPressureTestRawMeasurement"
+                }
+              ]
+            },
+            "WellPressureTestRawMeasurementTestIdentifier": {
+              "type": "integer",
+              "title": "Well Pressure Test Raw Measurement Test Identifier",
+              "description": "Optional Identifier of the Test Number that is most representative of the overall interpretation within the related Well Pressure Test Raw Measurement Work Product Component"
+            },
+            "WellPressureTestRawMeasurementTestPeriodIdentifier": {
+              "type": "integer",
+              "title": "Well Pressure Test Raw Measurement Test Period Identifier",
+              "description": "Optional Identifier of the Test Measurement Period Number that is most representative of the overall interpretation within the related Well Pressure Test Raw Measurement Work Product Component"
+            },
+            "PressureTestInterpretationDateTime": {
+              "type": "string",
+              "title": "Pressure Test Interpretation Date Time",
+              "description": "The date (and time) on which the interpretation was performed",
+              "format": "date-time",
+              "x-osdu-frame-of-reference": "DateTime"
+            },
+            "InterpretationSubjectiveClassificationRatingID": {
+              "type": "string",
+              "title": "Interpretation Subjective Classification Rating ID",
+              "description": "The subjective quality classification of the analysis (interpretation) and its conclusions. E.g. Excellent, Good, Poor etc. A Confidence classification could also be used here if there is an issue with the certainty of the interpretation.",
+              "example": "namespace:reference-data--SubjectiveClassificationRating:Quality.Excellent:",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-SubjectiveClassificationRating:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "SubjectiveClassificationRating"
+                }
+              ]
+            },
+            "IsPreferred": {
+              "type": "boolean",
+              "title": "Is Preferred",
+              "description": "Boolean indicating where this Interpretation is the preferred record where multiple interpretations may have been performed over time e.g. re-interpretation"
+            },
+            "InterpretationAnalysts": {
+              "type": "array",
+              "title": "Interpretation Analysts",
+              "description": "The details of the individual(s) responsible for performing the interpretation activity",
+              "items": {
+                "$ref": "../abstract/AbstractContact.1.1.0.json"
+              }
+            },
+            "Remarks": {
+              "type": "array",
+              "title": "Remarks",
+              "description": "Time stamped remarks associated with the interpretation activity",
+              "x-osdu-indexing": {
+                "type": "flattened"
+              },
+              "items": {
+                "$ref": "../abstract/AbstractRemark.1.0.0.json"
+              }
+            },
+            "InterpretationResults": {
+              "type": "array",
+              "title": "Interpretation Results",
+              "description": "Array of detailed results of the interpretation activity",
+              "x-osdu-indexing": {
+                "type": "nested"
+              },
+              "items": {
+                "type": "object",
+                "title": "Interpretation Result",
+                "description": "Contains the reservoir specific results of interpretations carried out on the results of well tests. Also contains the parameter values needed to calculate the pressure at reservoir datum.",
+                "properties": {
+                  "WellPressureTestInterpretationNumber": {
+                    "type": "integer",
+                    "title": "Well Pressure Test Interpretation Number",
+                    "description": "The unique number of the result array member in the data.InterpretationResults[] array.",
+                    "example": 1
+                  },
+                  "WellPressureTestAcquisitionStationIdentifier": {
+                    "type": "integer",
+                    "title": "Well Pressure Test Acquisition Station Identifier",
+                    "description": "Optional Identifier of the Station Number that is most closely associated with this result within the related Well Pressure Test Raw Measurement Work Product Component"
+                  },
+                  "WellPressureTestRawMeasurementTestIdentifier": {
+                    "type": "integer",
+                    "title": "Well Pressure Test Raw Measurement Test Identifier",
+                    "description": "Optional Identifier of the Test Number that is most closely associated with this interpretation array element within the related Well Pressure Test Raw Measurement Work Product Component"
+                  },
+                  "WellPressureTestRawMeasurementTestPeriodIdentifier": {
+                    "type": "integer",
+                    "title": "Well Pressure Test Raw Measurement Test Period Identifier",
+                    "description": "Optional Identifier of the Test Period Number that is most closely associated with this interpretation array element within the related Well Pressure Test Raw Measurement Work Product Component"
+                  },
+                  "IsPreferred": {
+                    "type": "boolean",
+                    "title": "Is Preferred",
+                    "description": "Boolean indicating where this Interpretation result is the preferred where multiple interpretation results are present"
+                  },
+                  "InterpretationInput": {
+                    "type": "object",
+                    "title": "Interpretation Input",
+                    "description": "Segment that contains important reference elements used to support the interpretation activity",
+                    "x-osdu-indexing": {
+                      "type": "nested"
+                    },
+                    "properties": {
+                      "WellboreMarkerSetID": {
+                        "type": "string",
+                        "title": "Wellbore Marker Set ID",
+                        "description": "Optional reference to the WellboreMarkerSet containing the fluid contacts used for pressure test interpretation",
+                        "example": "namespace:work-product-component--WellboreMarkerSet:15-3-7-SingleRank-:",
+                        "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-WellboreMarkerSet:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                        "x-osdu-relationship": [
+                          {
+                            "GroupType": "work-product-component",
+                            "EntityType": "WellboreMarkerSet"
+                          }
+                        ]
+                      },
+                      "GeoLabelSetID": {
+                        "type": "string",
+                        "title": "Geo Label Set ID",
+                        "description": "Optional reference to the GeoLabelSet containing information related to the Reservoir or ReservoirSegment",
+                        "example": "namespace:work-product-component--GeoLabelSet:15-3-7-Labels-:",
+                        "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-GeoLabelSet:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                        "x-osdu-relationship": [
+                          {
+                            "GroupType": "work-product-component",
+                            "EntityType": "GeoLabelSet"
+                          }
+                        ]
+                      },
+                      "PressureGradients": {
+                        "type": "array",
+                        "title": "Pressure Gradients",
+                        "description": "This contains the accepted fluid pressure gradients used in well test interpretation for the reservoir element. Fluid context is applied by the use of Facets e.g. what+Gas, what+Oil, qualifier+Total",
+                        "items": {
+                          "type": "object",
+                          "title": "Pressure Gradient",
+                          "description": "This contains the accepted fluid pressure gradients used in well test interpretation for the reservoir element. Fluid context is applied by the use of Facets e.g. what+Gas, what+Oil, qualifier+Total",
+                          "properties": {
+                            "PressureGradientValue": {
+                              "type": "number",
+                              "title": "Pressure Gradient Value",
+                              "description": "The gradient (change in pressure per unit length) value in the borehole, of the element defined by the FacetID, used for calculating the pressure in the perforated interval from pressure at sensor depth.",
+                              "x-osdu-frame-of-reference": "UOM_via_property:GradientsUOMID"
+                            },
+                            "PressureGradientPositiveVerticalDeltaValue": {
+                              "type": "number",
+                              "title": "Pressure Gradient Positive Vertical Delta Value",
+                              "description": "The pressure gradient that represents the depth vertically above that marks the limit of the high confidence range for the fluid marker.",
+                              "x-osdu-frame-of-reference": "UOM_via_property:GradientsUOMID"
+                            },
+                            "PressureGradientNegativeVerticalDeltaValue": {
+                              "type": "number",
+                              "title": "Pressure Gradient Negative Vertical Delta Value",
+                              "description": "The pressure gradient that represents the depth vertically below that marks the limit of the high confidence range for the fluid marker",
+                              "x-osdu-frame-of-reference": "UOM_via_property:GradientsUOMID"
+                            },
+                            "PressureGradientCalculationMethodID": {
+                              "type": "string",
+                              "title": "Pressure Gradient Calculation Method ID",
+                              "description": "The method that was used to calculate the Pressure Gradient Value including the uncertainty range",
+                              "example": "namespace:reference-data--PressureGradientCalculationMethod:TrendAnalysis:",
+                              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-PressureGradientCalculationMethod:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                              "x-osdu-relationship": [
+                                {
+                                  "GroupType": "reference-data",
+                                  "EntityType": "PressureGradientCalculationMethod"
+                                }
+                              ]
+                            },
+                            "PropertyType": {
+                              "$ref": "../abstract/AbstractPropertyType.1.0.0.json",
+                              "title": "Property Type",
+                              "description": "It holds the PropertyType associated with this reference property type, further defining the semantics of the value. It contains a relationship to PropertyType record and its (de-normalized) name. String or number values can represent e.g. A date or a time by referring to the respective PropertyType record id."
+                            },
+                            "FacetIDs": {
+                              "type": "array",
+                              "title": "Facet Ids",
+                              "description": "Unique Nested Ordered Array with: FacetType, FacetRole, both calling specific references\n\nFacetType: Enumerations of the type of additional context about the nature of a property type (it may include conditions, direction, qualifiers, or statistics). \n\nFacetRole: Additional context about the nature of a property type. The purpose of such attribute is to minimize the need to create specialized property types by mutualizing some well known qualifiers such as \"maximum\", \"minimum\" which apply to a lot of different property types.",
+                              "x-osdu-attribution-authority": "Energistics",
+                              "x-osdu-attribution-publication": "The OSDU Data Platform",
+                              "x-osdu-existing-standard": "RESQML",
+                              "items": {
+                                "$ref": "../abstract/AbstractFacet.1.0.0.json"
+                              }
+                            },
+                            "GradientsUOMID": {
+                              "type": "string",
+                              "title": "Gradients Unit of Measure ID",
+                              "description": "Unit of Measure used to capture Pressure Gradients - as not covered by Energistics Standard Units of Measure System",
+                              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-UnitOfMeasure:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                              "x-osdu-relationship": [
+                                {
+                                  "GroupType": "reference-data",
+                                  "EntityType": "UnitOfMeasure"
+                                }
+                              ]
+                            }
+                          }
+                        }
+                      },
+                      "Parameters": {
+                        "type": "array",
+                        "title": "Parameters",
+                        "description": "Provides an array of general parameter values used in the Well Test Interpretation activity.",
+                        "x-osdu-indexing": {
+                          "type": "nested"
+                        },
+                        "items": {
+                          "$ref": "../abstract/AbstractActivityParameter.1.1.0.json"
+                        }
+                      },
+                      "Remarks": {
+                        "type": "array",
+                        "title": "Remarks",
+                        "description": "Time stamped remarks associated with the input information used in the interpretation activity",
+                        "x-osdu-indexing": {
+                          "type": "flattened"
+                        },
+                        "items": {
+                          "$ref": "../abstract/AbstractRemark.1.0.0.json"
+                        }
+                      }
+                    }
+                  },
+                  "DominantReservoirEntityID": {
+                    "type": "string",
+                    "title": "Parent Reservoir Entity Id",
+                    "description": "Identifier linking to the dominant parent reservoir entity (It could be either a Reservoir or ReservoirSegment). This is the entity whose characteristics such as Reservoir Pressure are interpreted",
+                    "pattern": "^[\\w\\-\\.]+:(master-data\\-\\-Reservoir|master-data\\-\\-ReservoirSegment):[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "master-data",
+                        "EntityType": "Reservoir"
+                      },
+                      {
+                        "GroupType": "master-data",
+                        "EntityType": "ReservoirSegment"
+                      }
+                    ]
+                  },
+                  "CommingledReservoirEntityIDs": {
+                    "type": "array",
+                    "title": "Commingled Reservoir Entity IDs",
+                    "description": "Array of optional commingled Reservoirs or Reservoir Segments that contributed to the well test outcome.",
+                    "items": {
+                      "type": "string",
+                      "pattern": "^[\\w\\-\\.]+:(master-data\\-\\-Reservoir|master-data\\-\\-ReservoirSegment):[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                      "x-osdu-relationship": [
+                        {
+                          "GroupType": "master-data",
+                          "EntityType": "Reservoir"
+                        },
+                        {
+                          "GroupType": "master-data",
+                          "EntityType": "ReservoirSegment"
+                        }
+                      ]
+                    }
+                  },
+                  "GeologicUnitInterpretationIDs": {
+                    "type": "array",
+                    "title": "Geologic Unit Interpretation Ids",
+                    "description": "An array of StratigraphicUnitInterpretation, GeobodyInterpretation or RockFluidUnitInterpretation record Ids evaluated by the interpretation activity",
+                    "items": {
+                      "type": "string",
+                      "pattern": "^[\\w\\-\\.]+:(work-product-component\\-\\-StratigraphicUnitInterpretation|work-product-component\\-\\-GeobodyInterpretation|work-product-component\\-\\-RockFluidUnitInterpretation):[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                      "x-osdu-relationship": [
+                        {
+                          "GroupType": "work-product-component",
+                          "EntityType": "StratigraphicUnitInterpretation"
+                        },
+                        {
+                          "GroupType": "work-product-component",
+                          "EntityType": "GeobodyInterpretation"
+                        },
+                        {
+                          "GroupType": "work-product-component",
+                          "EntityType": "RockFluidUnitInterpretation"
+                        }
+                      ]
+                    }
+                  },
+                  "ReservoirDatumTrueVerticalDepth": {
+                    "type": "number",
+                    "title": "Reservoir Datum True Vertical Depth",
+                    "description": "The true vertical depth value for the reservoir pressure datum used in the analysis for calculation of the reservoir pressure. Note that this may vary from the reference depth record in the master-data Reservoir|ReservoirSegment as can change over the lifecycle of the Reservoir.",
+                    "x-osdu-frame-of-reference": "UOM:length"
+                  },
+                  "ReservoirDatumCalculationSubjectiveClassificationRatingID": {
+                    "type": "string",
+                    "title": "Reservoir Datum Calculation Subjective Classification Rating ID",
+                    "description": "The subjective quality classification of the datum calculation. E.g. Excellent, Good, Poor etc. A Confidence classification could also be used here if there is an issue with the certainty of the interpretation.",
+                    "example": "namespace:reference-data--SubjectiveClassificationRating:Quality.Good:",
+                    "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-SubjectiveClassificationRating:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "reference-data",
+                        "EntityType": "SubjectiveClassificationRating"
+                      }
+                    ]
+                  },
+                  "AppliedPressureCorrections": {
+                    "type": "array",
+                    "title": "Applied Pressure Corrections",
+                    "description": "An array of pressure correction(s) applied when interpreting pressure from the gauge depth to the reservoir pressure datum.",
+                    "x-osdu-indexing": {
+                      "type": "nested"
+                    },
+                    "items": {
+                      "type": "object",
+                      "title": "Applied Pressure Correction",
+                      "description": "Pressure correction(s) applied when interpreting pressure from the gauge depth to the reservoir pressure datum. Further context can be applied to the Pressure Correction by the use of Facets e.g. what+Gas, what+Oil, qualifier+Total",
+                      "properties": {
+                        "PressureCorrectionValue": {
+                          "type": "number",
+                          "title": "Pressure Correction Value",
+                          "description": "The pressure correction value applied when interpreting pressure from the gauge depth to the reservoir pressure datum.",
+                          "x-osdu-frame-of-reference": "UOM:pressure"
+                        },
+                        "FacetIDs": {
+                          "type": "array",
+                          "title": "Facet Ids",
+                          "description": "Unique Ordered Nested Array with: FacetType, FacetRole, both calling specific references\n\nFacetType: Enumerations of the type of additional context about the nature of a property type (it may include conditions, direction, qualifiers, or statistics). \n\nFacetRole: Additional context about the nature of a property type. The purpose of such attribute is to minimize the need to create specialized property types by mutualizing some well known qualifiers such as \"maximum\", \"minimum\" which apply to a lot of different property types.",
+                          "x-osdu-attribution-authority": "Energistics",
+                          "x-osdu-attribution-publication": "The OSDU Data Platform",
+                          "x-osdu-existing-standard": "RESQML",
+                          "items": {
+                            "$ref": "../abstract/AbstractFacet.1.0.0.json"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "ReservoirPressureAtDatumDepth": {
+                    "type": "number",
+                    "title": "Reservoir Pressure At Datum Depth",
+                    "description": "The interpreted reservoir pressure at the reservoir datum depth",
+                    "x-osdu-frame-of-reference": "UOM:length"
+                  },
+                  "Remarks": {
+                    "type": "array",
+                    "title": "Remarks",
+                    "description": "Time stamped remarks associated with the reservoir properties calculation activity",
+                    "x-osdu-indexing": {
+                      "type": "flattened"
+                    },
+                    "items": {
+                      "$ref": "../abstract/AbstractRemark.1.0.0.json"
+                    }
+                  }
+                }
+              }
+            },
+            "InterpretationResultProperties": {
+              "$ref": "../abstract/AbstractColumnBasedTable.1.2.0.json",
+              "title": "Interpretation Result Property Values",
+              "description": "An embedded ColumnBasedTable with the properties including their values associated to the results in data.InterpretationResults[]. The association is done by array index.\nThis usage can be also manage through dataset with file or DDMS contents."
+            }
+          },
+          "required": [
+            "WellPressureTestRawMeasurementID"
+          ],
+          "title": "IndividualProperties"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "ExtensionProperties": {
+              "type": "object"
+            }
+          },
+          "title": "ExtensionProperties"
+        }
+      ]
+    }
+  },
+  "required": [
+    "kind",
+    "acl",
+    "legal"
+  ],
+  "additionalProperties": false,
+  "x-osdu-review-status": "Accepted",
+  "x-osdu-virtual-properties": {
+    "data.VirtualProperties.DefaultName": {
+      "type": "string",
+      "priority": [
+        {
+          "path": "data.Name"
+        }
+      ]
+    },
+    "data.VirtualProperties.DefaultLocation": {
+      "type": "object",
+      "priority": [
+        {
+          "path": "data.SpatialLocation"
+        }
+      ]
+    }
+  },
+  "x-osdu-inheriting-from-kind": [
+    {
+      "name": "WorkProductComponent",
+      "kind": "osdu:wks:AbstractWPCGroupType:1.2.0"
+    }
+  ]
+}

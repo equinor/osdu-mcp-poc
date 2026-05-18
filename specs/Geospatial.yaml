@@ -1,0 +1,1717 @@
+openapi: 3.0.1
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+- url: https://osdu.dev1.osdu-cimpl.opengroup.org/gcz/transformer
+  description: Generated server url
+security:
+- bearerAuth: []
+tags:
+- name: Version Info
+  description: API for viewing GCZ Transformer Version Info
+- name: 1. Transformer Service Configuration
+  description: API for managing the Transformer configuration
+- name: 2. Transformer Caches configuration
+  description: API for managing kind cache configurations
+- name: 3. Transformer Caches insights
+  description: Browse and query data from the cache
+- name: 4. Provider Service configuration
+  description: API for managing the Provider configuration reset
+- name: 5. Provider Layer definitions
+  description: API for managing layer definitions in the cache
+- name: 6. Logging GCZ services and processes
+  description: API for managing and accessing GCZ services and processes logs
+- name: 7. Load Session History
+  description: Browse history of ingestion attempts per cache
+paths:
+  /admin/transformerConfig:
+    get:
+      tags:
+      - 1. Transformer Service Configuration
+      summary: Get transformer configuration
+      description: Retrieve the current transformer configuration
+      operationId: getTransformerConfiguration
+      parameters:
+      - name: includeKinds
+        in: query
+        description: Include Kind Cache Definitions in the configuration
+        required: false
+        schema:
+          type: boolean
+          default: false
+      - name: Accept
+        in: header
+        required: false
+        schema:
+          type: string
+          default: application/json
+      - in: header
+        $ref: '#/components/parameters/dataPartitionId'
+      responses:
+        "404":
+          description: Configuration not found
+          content:
+            '*/*':
+              schema:
+                type: object
+        "500":
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                type: object
+        "200":
+          description: Successful retrieval
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransformerConfiguration'
+    put:
+      tags:
+      - 1. Transformer Service Configuration
+      summary: Update transformer configuration
+      description: Update the transformer configuration
+      operationId: upsertTransformerConfiguration
+      parameters:
+      - in: header
+        $ref: '#/components/parameters/dataPartitionId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransformerConfiguration'
+        required: true
+      responses:
+        "500":
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                type: object
+        "200":
+          description: Configuration updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+    patch:
+      tags:
+      - 1. Transformer Service Configuration
+      summary: Patch transformer configuration
+      description: Partially update the transformer configuration
+      operationId: patchTransformerConfiguration
+      parameters:
+      - in: header
+        $ref: '#/components/parameters/dataPartitionId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransformerConfigurationPatchDTO'
+        required: true
+      responses:
+        "400":
+          description: Invalid update request
+          content:
+            '*/*':
+              schema:
+                type: object
+        "200":
+          description: Configuration updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        "500":
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                type: object
+  /admin/providerConfig:
+    get:
+      tags:
+      - 4. Provider Service configuration
+      summary: Get Provider Configuration
+      description: "Retrieves the current Provider configuration, optionally including\
+        \ Layer Definitions."
+      operationId: getProviderConfiguration
+      parameters:
+      - name: includeLayerDefinitions
+        in: query
+        description: Include Layer Definitions in the configuration
+        required: false
+        schema:
+          type: boolean
+          default: false
+      - in: header
+        $ref: '#/components/parameters/dataPartitionId'
+      responses:
+        "200":
+          description: Provider configuration retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderConfiguration'
+        "500":
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                type: object
+        "404":
+          description: Provider configuration not found
+          content:
+            '*/*':
+              schema:
+                type: object
+    put:
+      tags:
+      - 4. Provider Service configuration
+      summary: Update provider configuration
+      description: Update the provider configuration
+      operationId: upsertProviderConfiguration
+      parameters:
+      - in: header
+        $ref: '#/components/parameters/dataPartitionId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProviderConfiguration'
+        required: true
+      responses:
+        "500":
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                type: object
+        "200":
+          description: Configuration updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+    patch:
+      tags:
+      - 4. Provider Service configuration
+      summary: Patch provider configuration
+      description: Partially update the provider configuration
+      operationId: patchProviderConfiguration
+      parameters:
+      - in: header
+        $ref: '#/components/parameters/dataPartitionId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProviderConfigurationPatchDTO'
+        required: true
+      responses:
+        "400":
+          description: Invalid update request
+          content:
+            '*/*':
+              schema:
+                type: object
+        "200":
+          description: Configuration updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        "500":
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                type: object
+  /admin/layerDefinitions:
+    get:
+      tags:
+      - 5. Provider Layer definitions
+      summary: Get all layer definitions
+      description: Retrieve all layer definitions from the cache
+      operationId: getAllLayerDefinitions
+      parameters:
+      - in: header
+        $ref: '#/components/parameters/dataPartitionId'
+      responses:
+        "200":
+          description: Successful retrieval
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LayerDefinitionWithId'
+        "500":
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                type: object
+    put:
+      tags:
+      - 5. Provider Layer definitions
+      summary: Upsert a layer definition
+      description: Create or update a layer definition
+      operationId: upsertLayerDefinition
+      parameters:
+      - in: header
+        $ref: '#/components/parameters/dataPartitionId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LayerDefinitionWithId'
+        required: true
+      responses:
+        "500":
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                type: object
+        "201":
+          description: Layer definition created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        "200":
+          description: Layer definition updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+  /admin/kindCacheConfigs:
+    get:
+      tags:
+      - 2. Transformer Caches configuration
+      summary: Get kind cache configurations
+      description: "Retrieve kind cache configurations, optionally filtered by kind\
+        \ name"
+      operationId: getKindCacheConfigs
+      parameters:
+      - name: kind
+        in: query
+        required: false
+        schema:
+          type: string
+      - in: header
+        $ref: '#/components/parameters/dataPartitionId'
+      responses:
+        "404":
+          description: Configurations not found
+          content:
+            '*/*':
+              schema:
+                type: object
+        "500":
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                type: object
+        "200":
+          description: Successful retrieval
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Kind'
+    put:
+      tags:
+      - 2. Transformer Caches configuration
+      summary: Upsert a kind cache configuration
+      description: Create or update a kind cache configuration
+      operationId: upsertKindCacheConfiguration
+      parameters:
+      - in: header
+        $ref: '#/components/parameters/dataPartitionId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Kind'
+        required: true
+      responses:
+        "201":
+          description: Configuration created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        "500":
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                type: object
+        "200":
+          description: Configuration updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+  /admin/updateCacheForList:
+    post:
+      tags:
+      - 3. Transformer Caches insights
+      summary: Update multiple caches
+      description: "This endpoint initiates updates for a list of caches. The operation\
+        \ is queued for asynchronous processing. The response contains two arrays:\
+        \ one for caches that were successfully queued for updates, and another for\
+        \ caches that failed with corresponding reasons. Success means the operation\
+        \ for each cache was queued, but the actual result of the update will be determined\
+        \ asynchronously."
+      operationId: updateCacheForList
+      parameters:
+      - name: incremental
+        in: query
+        description: The incremental update activation flag
+        required: false
+        schema:
+          type: boolean
+          default: false
+      - in: header
+        $ref: '#/components/parameters/dataPartitionId'
+      requestBody:
+        description: "An array of cache names to be updated. Each cache name must\
+          \ be a valid cache that exists in the system. If any cache doesn't exist,\
+          \ it will be reported in the response."
+        content:
+          application/json:
+            schema:
+              type: array
+              example:
+              - cache1
+              - cache2
+              - cache3
+        required: true
+      responses:
+        "200":
+          description: Cache update requests processed
+          content:
+            application/json: {}
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CacheBulkUpdateResponse'
+  /admin/transformerConfig/reset:
+    post:
+      tags:
+      - 1. Transformer Service Configuration
+      summary: Reset Transformer Configuration
+      description: "Resets the transformer configuration to its initial values from\
+        \ the application configuration or applies new provided configuration content.\
+        \ Supported formats include JSON, YAML, and properties."
+      operationId: resetTransformerConfig
+      parameters:
+      - name: Content-Type
+        in: header
+        required: false
+        schema:
+          type: string
+      - in: header
+        $ref: '#/components/parameters/dataPartitionId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+          application/x-yaml:
+            schema:
+              type: string
+          text/plain:
+            schema:
+              type: string
+      responses:
+        "200":
+          description: Transformer configuration reset successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+        "400":
+          description: Validation or bad request error
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+  /admin/resetLostPartitions:
+    post:
+      tags:
+      - 3. Transformer Caches insights
+      summary: Force a reset of Ignite lost partitions
+      description: "See Ignite documentation for Partition Loss Policy: https://ignite.apache.org/docs/latest/configuring-caches/partition-loss-policy#handling-partition-loss\
+        \ After recovering a partition loss from a backup, we need to trigger a reset\
+        \ lost partition command to continue working with the data"
+      operationId: resetLostPartitions
+      parameters:
+      - in: header
+        $ref: '#/components/parameters/dataPartitionId'
+      responses:
+        "200":
+          description: Reset partition processed
+          content:
+            application/json: {}
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: string
+  /admin/providerConfig/reset:
+    post:
+      tags:
+      - 4. Provider Service configuration
+      summary: Reset Provider Configuration
+      description: "Resets the Provider configuration using the provided JSON content,\
+        \ which includes both the ProviderConfiguration and LayerDefinitions."
+      operationId: resetProviderConfig
+      parameters:
+      - in: header
+        $ref: '#/components/parameters/dataPartitionId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProviderConfigurationResetDTO'
+        required: true
+      responses:
+        "200":
+          description: Provider configuration reset successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+        "400":
+          description: Validation or bad request error
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+  /admin/cache/{cacheName}/data:
+    post:
+      tags:
+      - 3. Transformer Caches insights
+      summary: Browse cache data
+      description: "Retrieve paginated data from a specific cache, with optional sorting\
+        \ and filtering."
+      operationId: browseCacheData
+      parameters:
+      - name: cacheName
+        in: path
+        required: true
+        schema:
+          type: string
+      - in: header
+        $ref: '#/components/parameters/dataPartitionId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CacheDataRequest'
+        required: true
+      responses:
+        "200":
+          description: Data retrieved successfully (may return empty list if cache
+            has no data)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CacheDataResponse'
+        "400":
+          description: Invalid cache name or query parameters
+        "500":
+          description: Internal server error
+  /admin/updateCache:
+    get:
+      tags:
+      - 3. Transformer Caches insights
+      summary: Update caches for a kind
+      description: "This endpoint initiates an update for all caches associated with\
+        \ the provided kind. The operation is queued for asynchronous processing.\
+        \ Success means the update operation was queued, but the actual result will\
+        \ be determined asynchronously."
+      operationId: updateCache
+      parameters:
+      - name: kind
+        in: query
+        description: The kind name whose associated caches should be updated
+        required: true
+        schema:
+          type: string
+      - name: incremental
+        in: query
+        description: The incremental update activation flag
+        required: false
+        schema:
+          type: boolean
+          default: false
+      - in: header
+        $ref: '#/components/parameters/dataPartitionId'
+      responses:
+        "200":
+          description: Cache update successfully queued
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateCacheResponse'
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CacheBulkUpdateResponse'
+  /admin/updateCacheForSingle:
+    get:
+      tags:
+      - 3. Transformer Caches insights
+      summary: Update a single cache
+      description: "This endpoint initiates an update for a specific cache. The operation\
+        \ is queued for asynchronous processing. Success means the update operation\
+        \ was queued successfully, but the actual result will be determined later\
+        \ when the process completes asynchronously."
+      operationId: updateCacheForSingle
+      parameters:
+      - name: cacheName
+        in: query
+        description: The name of the cache to be updated
+        required: true
+        schema:
+          type: string
+      - name: incremental
+        in: query
+        description: The incremental update activation flag
+        required: false
+        schema:
+          type: boolean
+          default: false
+      - in: header
+        $ref: '#/components/parameters/dataPartitionId'
+      responses:
+        "200":
+          description: Cache update was successfully queued
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateCacheResponse'
+        "400":
+          description: Invalid cache name - cache does not exist
+        "409":
+          description: Conflict - a load session is already running for this cache
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateCacheResponse'
+  /admin/logs/{logStream}:
+    get:
+      tags:
+      - 6. Logging GCZ services and processes
+      summary: Get paginated logs
+      description: Retrieves log records from the specified log stream with optional
+        filters by date and keyword.
+      operationId: getLogs
+      parameters:
+      - name: logStream
+        in: path
+        description: "The log stream identifier (e.g., 'main app log', 'data transformer\
+          \ log')."
+        required: true
+        schema:
+          type: string
+      - name: fromDate
+        in: query
+        description: Start date-time filter for the logs (optional).
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: toDate
+        in: query
+        description: End date-time filter for the logs (optional).
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: keyword
+        in: query
+        description: Keyword to search within the log messages (optional).
+        required: false
+        schema:
+          type: string
+      - name: thread
+        in: query
+        description: Thread name filter for the logs (optional).
+        required: false
+        schema:
+          type: string
+      - name: logger
+        in: query
+        description: Logger name to search within the log messages (optional).
+        required: false
+        schema:
+          type: string
+      - name: sessionId
+        in: query
+        description: Load session ID (optional).
+        required: false
+        schema:
+          type: integer
+          format: int64
+      - name: pageNumber
+        in: query
+        description: "Page number for pagination (default: 0)."
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - name: pageSize
+        in: query
+        description: "Number of logs per page (default: 10)."
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 10
+      - in: header
+        $ref: '#/components/parameters/dataPartitionId'
+      responses:
+        "200":
+          description: Successfully retrieved log records
+        "400":
+          description: Invalid input parameters
+        "500":
+          description: Internal server error
+  /admin/logs/streams:
+    get:
+      tags:
+      - 6. Logging GCZ services and processes
+      summary: Get available log streams
+      description: Retrieves the available log streams and their descriptions.
+      operationId: getAvailableLogStreams
+      parameters:
+      - in: header
+        $ref: '#/components/parameters/dataPartitionId'
+      responses:
+        "200":
+          description: Successfully retrieved available log streams
+  /admin/loadStatus:
+    get:
+      tags:
+      - 3. Transformer Caches insights
+      summary: Get all transformer load statuses
+      description: Retrieve the load statuses for all caches
+      operationId: getAllTransformerLoadStatuses
+      parameters:
+      - in: header
+        $ref: '#/components/parameters/dataPartitionId'
+      responses:
+        "500":
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                type: object
+        "200":
+          description: Successful retrieval
+          content:
+            application/json:
+              schema:
+                type: array
+  /admin/loadStatus/{cacheName}:
+    get:
+      tags:
+      - 3. Transformer Caches insights
+      summary: Get transformer load status
+      description: Retrieve the load status for a specific cache
+      operationId: getTransformerLoadStatus
+      parameters:
+      - name: cacheName
+        in: path
+        description: The name of the cache
+        required: true
+        schema:
+          type: string
+      - in: header
+        $ref: '#/components/parameters/dataPartitionId'
+      responses:
+        "404":
+          description: Cache exists but no load status found
+          content:
+            '*/*':
+              schema:
+                type: object
+        "200":
+          description: Successful retrieval
+          content:
+            application/json:
+              schema:
+                type: object
+        "500":
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                type: object
+        "400":
+          description: Invalid cache name - cache does not exist
+  /admin/loadSessions:
+    get:
+      tags:
+      - 7. Load Session History
+      summary: Retrieve load sessions with optional filters
+      description: "Get load sessions with filters for cache name, date range, session\
+        \ type, status, and sorting order."
+      operationId: getSessions
+      parameters:
+      - name: cacheName
+        in: query
+        description: Name of the cache to filter sessions
+        required: false
+        schema:
+          type: string
+      - name: startTimeFrom
+        in: query
+        description: Filter sessions starting from this time
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: startTimeTo
+        in: query
+        description: Filter sessions ending at this time
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: incremental
+        in: query
+        description: "Filter by session type: true for incremental, false for complete"
+        required: false
+        schema:
+          type: boolean
+      - name: status
+        in: query
+        description: Filter by session status (supports multiple values)
+        required: false
+        schema:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+            enum:
+            - STARTED
+            - SUCCEEDED
+            - FAILED
+            - INTERRUPTED
+            - NEVER_STARTED
+      - name: sortAscending
+        in: query
+        description: Sort results in ascending order by start time if true
+        required: false
+        schema:
+          type: boolean
+          default: false
+      - in: header
+        $ref: '#/components/parameters/dataPartitionId'
+      responses:
+        "200":
+          description: Successful retrieval
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoadSession'
+        "500":
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LoadSession'
+  /admin/loadSessions/lastSessionForCache:
+    get:
+      tags:
+      - 7. Load Session History
+      summary: Get the latest session for a specific cache
+      description: |-
+        Retrieve the latest load session for a specified cache, with optional filters for session type
+        (incremental or complete) and status. If no status filter is provided, the latest session of
+        any status will be returned. Multiple statuses can be specified for an OR-filtered search.
+      operationId: getLastSessionForCache
+      parameters:
+      - name: cacheName
+        in: query
+        description: The name of the cache
+        required: true
+        schema:
+          type: string
+        example: AAA
+      - name: incremental
+        in: query
+        description: "Specify session type: true for incremental, false for complete,\
+          \ or omit for any type"
+        required: false
+        schema:
+          type: boolean
+      - name: status
+        in: query
+        description: Filter by session status (supports multiple values)
+        required: false
+        schema:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+            enum:
+            - STARTED
+            - SUCCEEDED
+            - FAILED
+            - INTERRUPTED
+            - NEVER_STARTED
+        example:
+        - SUCCEEDED
+        - FAILED
+      - in: header
+        $ref: '#/components/parameters/dataPartitionId'
+      responses:
+        "200":
+          description: Successfully retrieved the last session for the specified cache
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoadSession'
+        "404":
+          description: No session found for the specified cache
+          content:
+            '*/*':
+              schema:
+                type: object
+        "500":
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                type: object
+  /admin/layerDefinitions/{id}:
+    get:
+      tags:
+      - 5. Provider Layer definitions
+      summary: Get a layer definition
+      description: Retrieve a specific layer definition by ID
+      operationId: getLayerDefinition
+      parameters:
+      - name: id
+        in: path
+        description: Layer definition ID
+        required: true
+        schema:
+          type: string
+      - in: header
+        $ref: '#/components/parameters/dataPartitionId'
+      responses:
+        "500":
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                type: object
+        "200":
+          description: Layer definition found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LayerDefinitionWithId'
+        "404":
+          description: Layer definition not found
+          content:
+            '*/*':
+              schema:
+                type: object
+    delete:
+      tags:
+      - 5. Provider Layer definitions
+      summary: Delete a layer definition
+      description: Delete a layer definition by ID
+      operationId: deleteLayerDefinition
+      parameters:
+      - name: id
+        in: path
+        description: Layer definition ID
+        required: true
+        schema:
+          type: string
+      - in: header
+        $ref: '#/components/parameters/dataPartitionId'
+      responses:
+        "404":
+          description: Layer definition not found or could not be deleted
+          content:
+            '*/*':
+              schema:
+                type: object
+        "200":
+          description: Layer definition deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        "500":
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                type: object
+  /admin/kindCacheConfigs/{cacheName}:
+    get:
+      tags:
+      - 2. Transformer Caches configuration
+      summary: Get specific kind cache configuration
+      description: Retrieve a specific kind cache configuration by cache name
+      operationId: getKindCacheConfiguration
+      parameters:
+      - name: cacheName
+        in: path
+        description: Cache name
+        required: true
+        schema:
+          type: string
+      - in: header
+        $ref: '#/components/parameters/dataPartitionId'
+      responses:
+        "404":
+          description: Configuration not found
+          content:
+            '*/*':
+              schema:
+                type: object
+        "200":
+          description: Configuration found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Kind'
+        "500":
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                type: object
+    delete:
+      tags:
+      - 2. Transformer Caches configuration
+      summary: Delete a kind cache configuration
+      description: Delete a kind cache configuration by kind and cache name
+      operationId: deleteKindCacheConfiguration
+      parameters:
+      - name: cacheName
+        in: path
+        description: Cache name
+        required: true
+        schema:
+          type: string
+      - in: header
+        $ref: '#/components/parameters/dataPartitionId'
+      responses:
+        "200":
+          description: Configuration deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        "500":
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                type: object
+        "404":
+          description: Configuration not found or could not be deleted
+          content:
+            '*/*':
+              schema:
+                type: object
+  /admin/info:
+    get:
+      tags:
+      - Version Info
+      operationId: getInfo
+      parameters:
+      - in: header
+        $ref: '#/components/parameters/dataPartitionId'
+      responses:
+        "500":
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                type: object
+        "200":
+          description: Successful retrieval
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VersionInfo'
+  /admin/getKindFields:
+    get:
+      tags:
+      - 3. Transformer Caches insights
+      summary: Get fields for a kind
+      description: Retrieve fields for a specific kind or all kinds
+      operationId: getKindFields
+      parameters:
+      - name: kindName
+        in: query
+        description: Kind name
+        required: false
+        schema:
+          type: string
+      - in: header
+        $ref: '#/components/parameters/dataPartitionId'
+      responses:
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KindsFieldsResponse'
+        "200":
+          description: Kind fields retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KindsFieldsResponse'
+  /admin/getAvailableKinds:
+    get:
+      tags:
+      - 3. Transformer Caches insights
+      summary: Get available kinds
+      description: "Retrieve a list of available kinds, optionally limiting to registered\
+        \ schemas"
+      operationId: getAvailableKinds
+      parameters:
+      - name: limitToRegisteredSchemas
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: true
+      - in: header
+        $ref: '#/components/parameters/dataPartitionId'
+      responses:
+        "200":
+          description: Available kinds retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AvailableKindsResponse'
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AvailableKindsResponse'
+  /admin/generateKoopConfig:
+    get:
+      tags:
+      - 4. Provider Service configuration
+      summary: Generate Koop Configuration
+      description: |+
+        This endpoint generates the Koop configuration file based on parameters.
+
+        ### Usage:
+        - To **download the Koop config file**, set the `download=true` query parameter.
+        - To **store the file on the backend's file system**, set the `download=false` query parameter (default).
+
+      operationId: generateKoopConfig
+      parameters:
+      - name: useLatestVersionOnly
+        in: query
+        description: Flag to use only the latest version of kind
+        required: false
+        schema:
+          type: boolean
+      - name: preserveFields
+        in: query
+        description: Flag to preserve fields in the generated config
+        required: false
+        schema:
+          type: boolean
+      - name: download
+        in: query
+        description: "Set to true to download the file, false to store it on the backend"
+        required: false
+        schema:
+          type: boolean
+          default: false
+      - name: runtimeResetCompatible
+        in: query
+        description: Set to true to generate a constrained JSON subset compatible
+          with the Provider reset API
+        required: false
+        schema:
+          type: boolean
+          default: true
+      - in: header
+        $ref: '#/components/parameters/dataPartitionId'
+      responses:
+        "200":
+          description: Koop configuration generated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConfigResponse'
+        "500":
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                type: object
+  /admin/generateAppYaml:
+    get:
+      tags:
+      - 1. Transformer Service Configuration
+      summary: Generate Application YAML
+      description: |+
+        This endpoint generates the application's YAML configuration file.
+
+        ### Usage:
+        - To **download the YAML file**, set the `download=true` query parameter.
+        - To **store the file on the backend's file system**, set the `download=false` query parameter (default).
+
+      operationId: generateAppYaml
+      parameters:
+      - name: useLatestVersionOnly
+        in: query
+        description: Flag to use only the latest version of kind
+        required: false
+        schema:
+          type: boolean
+      - name: download
+        in: query
+        description: "Set to true to download the file, false to store it on the backend"
+        required: false
+        schema:
+          type: boolean
+          default: false
+      - name: runtimeResetCompatible
+        in: query
+        description: Set to true to generate a constrained YAML subset compatible
+          with the Transformer reset API
+        required: false
+        schema:
+          type: boolean
+          default: true
+      - in: header
+        $ref: '#/components/parameters/dataPartitionId'
+      responses:
+        "500":
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                type: object
+        "200":
+          description: YAML generated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConfigResponse'
+  /admin/cacheSize:
+    get:
+      tags:
+      - 3. Transformer Caches insights
+      summary: Get cache size
+      description: Retrieve the size of the cache for a specific kind or all kinds
+        if no kind is specified
+      operationId: getStatus
+      parameters:
+      - name: kind
+        in: query
+        description: Kind name
+        required: false
+        schema:
+          type: string
+      - in: header
+        $ref: '#/components/parameters/dataPartitionId'
+      responses:
+        "200":
+          description: Cache size retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCacheStatusResponse'
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCacheStatusResponse'
+components:
+  schemas:
+    TransformerConfiguration:
+      required:
+      - batchSize
+      - dataPartitionId
+      - loadInBatch
+      - supportedDataTypes
+      type: object
+      properties:
+        dataPartitionId:
+          pattern: "[\\w-]+$"
+          type: string
+          description: Data partition ID
+        batchSize:
+          type: integer
+          description: Batch size for processing
+          format: int32
+        loadInBatch:
+          type: boolean
+          description: Flag to indicate if loading in batch mode
+        supportedDataTypes:
+          type: array
+          description: List of supported data types
+          items:
+            pattern: "^[\\w-]+--[\\w-]+$"
+            type: string
+            description: List of supported data types
+      description: Configuration for the Transformer
+    MessageResponse:
+      type: object
+      properties:
+        message:
+          type: string
+    ProviderConfiguration:
+      required:
+      - description
+      - hasAttachments
+      - hasStaticData
+      - maxRecordCount
+      type: object
+      properties:
+        description:
+          maxLength: 255
+          minLength: 0
+          type: string
+          description: Description
+        maxRecordCount:
+          type: integer
+          description: Max Record Count
+          format: int32
+        hasStaticData:
+          type: boolean
+          description: Has Static Data
+        hasAttachments:
+          type: boolean
+          description: Has Attachments
+      description: Provider configuration
+    Field:
+      required:
+      - name
+      - type
+      type: object
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+        alias:
+          type: string
+    GeometryType:
+      required:
+      - default
+      - esri
+      type: object
+      properties:
+        esri:
+          type: string
+        default:
+          type: string
+    LayerDefinitionWithId:
+      required:
+      - cacheName
+      - fields
+      - geometryType
+      - id
+      - igniteSchema
+      - layerName
+      - layerNumber
+      type: object
+      properties:
+        layerName:
+          type: string
+        layerDescription:
+          type: string
+        layerNumber:
+          type: integer
+          format: int32
+        maxRecordCount:
+          type: integer
+          format: int32
+        igniteSchema:
+          type: string
+        cacheName:
+          type: string
+        geometryType:
+          $ref: '#/components/schemas/GeometryType'
+        fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/Field'
+        disabled:
+          type: boolean
+        hasZ:
+          type: boolean
+        id:
+          type: string
+    Kind:
+      required:
+      - cacheName
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+        cacheName:
+          type: string
+        cacheTemplateName:
+          type: string
+        chronExpr:
+          type: string
+        geometryLocation:
+          type: string
+        spatialSourceID:
+          type: string
+        spatialSourceKind:
+          type: string
+        spatialSourceGeometryLocation:
+          type: string
+        completeTrajectory:
+          type: boolean
+        trajectoryWellboreKind:
+          type: string
+        wellboreKind:
+          type: string
+        batchSize:
+          type: integer
+          format: int32
+        wellLogStep:
+          type: integer
+          format: int32
+        description:
+          type: string
+        disabled:
+          type: boolean
+        convertTrajectoryMethod:
+          type: string
+        interpolate:
+          type: boolean
+        interpolationMdIntervalInMeters:
+          type: number
+        createSticks:
+          type: boolean
+        validationFilters:
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidationFilter'
+        trajectoryStationPropertyKind:
+          type: string
+    ValidationFilter:
+      type: object
+      properties:
+        filterExpression:
+          type: string
+    CacheBulkUpdateResponse:
+      type: object
+      properties:
+        succeeded:
+          type: array
+          items:
+            $ref: '#/components/schemas/CacheUpdateInfo'
+        failed:
+          type: array
+          items:
+            $ref: '#/components/schemas/CacheUpdateInfo'
+    CacheUpdateInfo:
+      type: object
+      properties:
+        cacheName:
+          type: string
+        reason:
+          type: string
+    LayerDefinition:
+      required:
+      - cacheName
+      - fields
+      - geometryType
+      - igniteSchema
+      - layerName
+      - layerNumber
+      type: object
+      properties:
+        layerName:
+          type: string
+        layerDescription:
+          type: string
+        layerNumber:
+          type: integer
+          format: int32
+        maxRecordCount:
+          type: integer
+          format: int32
+        igniteSchema:
+          type: string
+        cacheName:
+          type: string
+        geometryType:
+          $ref: '#/components/schemas/GeometryType'
+        fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/Field'
+        disabled:
+          type: boolean
+        hasZ:
+          type: boolean
+    ProviderConfigurationResetDTO:
+      required:
+      - layerDefinitions
+      - serviceDefinition
+      type: object
+      properties:
+        layerDefinitions:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/LayerDefinition'
+        serviceDefinition:
+          $ref: '#/components/schemas/ProviderConfiguration'
+    CacheDataRequest:
+      type: object
+      properties:
+        page:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        sort:
+          type: object
+          additionalProperties:
+            type: string
+            enum:
+            - ASC
+            - DESC
+        filter:
+          type: string
+        includedFields:
+          type: array
+          items:
+            type: string
+        excludedFields:
+          type: array
+          items:
+            type: string
+    CacheDataResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: object
+        page:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int64
+    TransformerConfigurationPatchDTO:
+      type: object
+      properties:
+        dataPartitionId:
+          type: string
+        batchSize:
+          type: integer
+          format: int32
+        loadInBatch:
+          type: boolean
+        supportedDataTypes:
+          type: array
+          items:
+            type: string
+    ProviderConfigurationPatchDTO:
+      type: object
+      properties:
+        description:
+          type: string
+        maxRecordCount:
+          type: integer
+          format: int32
+        hasStaticData:
+          type: boolean
+        hasAttachments:
+          type: boolean
+    UpdateCacheResponse:
+      type: object
+      properties:
+        status:
+          type: string
+    LoadSession:
+      type: object
+      properties:
+        sessionId:
+          type: integer
+          format: int64
+        cacheName:
+          type: string
+        incremental:
+          type: boolean
+        startTime:
+          type: string
+          format: date-time
+        endTime:
+          type: string
+          format: date-time
+        status:
+          type: string
+          enum:
+          - STARTED
+          - SUCCEEDED
+          - FAILED
+          - INTERRUPTED
+          - NEVER_STARTED
+        recordsProcessed:
+          type: integer
+          format: int64
+        recordsSucceeded:
+          type: integer
+          format: int64
+        nodeConsistentId:
+          type: string
+    VersionInfo:
+      type: object
+      properties:
+        artifactId:
+          type: string
+          description: Artifact ID
+        version:
+          type: string
+          description: Version
+        buildTime:
+          type: string
+          description: Build time
+        branch:
+          type: string
+          description: Branch
+        commitId:
+          type: string
+          description: Commit ID
+      description: Build and Version info for the GCZ Transformer
+    FieldInfo:
+      type: object
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+        alias:
+          type: string
+    KindFieldInfo:
+      type: object
+      properties:
+        kindName:
+          type: string
+        fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldInfo'
+    KindsFieldsResponse:
+      type: object
+      properties:
+        kindFields:
+          type: array
+          items:
+            $ref: '#/components/schemas/KindFieldInfo'
+    AvailableKindsResponse:
+      type: object
+      properties:
+        Kinds:
+          type: array
+          items:
+            $ref: '#/components/schemas/KindInfo'
+    KindInfo:
+      type: object
+      properties:
+        kindName:
+          type: string
+        version:
+          type: string
+        recordCount:
+          type: integer
+          format: int64
+    ConfigResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        details:
+          type: string
+    GetCacheStatusResponse:
+      type: object
+      properties:
+        cacheSize:
+          type: object
+          properties:
+            empty:
+              type: boolean
+          additionalProperties:
+            type: object
+  parameters:
+    dataPartitionId:
+      name: data-partition-id
+      in: header
+      description: Data partition identifier
+      required: true
+      schema:
+        type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

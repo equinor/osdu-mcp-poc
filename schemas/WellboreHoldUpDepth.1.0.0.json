@@ -1,0 +1,381 @@
+{
+  "x-osdu-license": "Copyright 2026, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "$id": "https://schema.osdu.opengroup.org/json/master-data/WellboreHoldUpDepth.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:master-data--WellboreHoldUpDepth:1.0.0",
+  "title": "WellboreHoldUpDepth",
+  "description": "A depth or depth interval where damage to the outer casing / tubing or other material in the pipe or annulus prevents tool passage to the designed drift diameter.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "Previously called ResourceID or SRN which identifies this OSDU resource object without version.",
+      "title": "Entity ID",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:master-data\\-\\-WellboreHoldUpDepth:[\\w\\-\\.\\:\\%]+$",
+      "example": "namespace:master-data--WellboreHoldUpDepth:92606599-2d36-522c-8714-f918c4d24aa5"
+    },
+    "kind": {
+      "description": "The schema identification for the OSDU resource object following the pattern {Namespace}:{Source}:{Type}:{VersionMajor}.{VersionMinor}.{VersionPatch}. The versioning scheme follows the semantic versioning, https://semver.org/.",
+      "title": "Entity Kind",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:[\\w\\-\\.]+:[\\w\\-\\.]+:[0-9]+.[0-9]+.[0-9]+$",
+      "example": "osdu:wks:master-data--WellboreHoldUpDepth:1.0.0"
+    },
+    "version": {
+      "description": "The version number of this OSDU resource; set by the framework.",
+      "title": "Version Number",
+      "type": "integer",
+      "format": "int64",
+      "example": 1562066009929332
+    },
+    "acl": {
+      "description": "The access control tags associated with this entity.",
+      "title": "Access Control List",
+      "$ref": "../abstract/AbstractAccessControlList.1.0.0.json"
+    },
+    "legal": {
+      "description": "The entity's legal tags and compliance status. The actual contents associated with the legal tags is managed by the Compliance Service.",
+      "title": "Legal Tags",
+      "$ref": "../abstract/AbstractLegalTags.1.0.0.json"
+    },
+    "tags": {
+      "title": "Tag Dictionary",
+      "description": "A generic dictionary of string keys mapping to string value. Only strings are permitted as keys and values.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "example": {
+        "NameOfKey": "String value"
+      }
+    },
+    "createTime": {
+      "description": "Timestamp of the time at which initial version of this OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:46:20.163Z"
+    },
+    "createUser": {
+      "title": "Resource Object Creation User Reference",
+      "description": "The user reference, which created the first version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "modifyTime": {
+      "description": "Timestamp of the time at which this version of the OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Version Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:52:24.477Z"
+    },
+    "modifyUser": {
+      "title": "Resource Object Version Creation User Reference",
+      "description": "The user reference, which created this version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "ancestry": {
+      "description": "The links to data, which constitute the inputs, from which this record instance is derived.",
+      "title": "Ancestry",
+      "$ref": "../abstract/AbstractLegalParentList.1.0.0.json"
+    },
+    "meta": {
+      "description": "The Frame of Reference meta data section linking the named properties to self-contained definitions.",
+      "title": "Frame of Reference Meta Data",
+      "type": "array",
+      "items": {
+        "$ref": "../abstract/AbstractMetaItem.1.0.0.json"
+      }
+    },
+    "data": {
+      "allOf": [
+        {
+          "$ref": "../abstract/AbstractCommonResources.1.0.0.json"
+        },
+        {
+          "$ref": "../abstract/AbstractMaster.1.2.0.json"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "WellboreID": {
+              "type": "string",
+              "title": "Wellbore",
+              "description": "Business natural key or code of the Wellbore to which this record belongs",
+              "example": "namespace:master-data--Wellbore:99000011078601:",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-existing-standard": "Yes",
+              "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Wellbore:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "Wellbore"
+                }
+              ]
+            },
+            "Name": {
+              "type": "string",
+              "title": "Name",
+              "description": "Hold Up Depth interval name",
+              "example": "6.5\" BHA Stuck in Hole",
+              "x-osdu-attribution-authority": "OSDU"
+            },
+            "Description": {
+              "type": "string",
+              "title": "Description",
+              "description": "A remark, comment or generic description.",
+              "example": "6.5\" BHA Stuck in Hole @ 3900m during November 2025 drilling activity. Twist off @ 3500m",
+              "x-osdu-attribution-authority": "OSDU"
+            },
+            "HoldUpDepthStatesID": {
+              "type": "array",
+              "title": "Hold Up Depth States",
+              "description": "The life cycle state (status) history the Hold Up Depth has been through.",
+              "x-osdu-indexing": {
+                "type": "nested"
+              },
+              "x-osdu-attribution-authority": "OSDU",
+              "items": {
+                "type": "object",
+                "title": "Hold Up Depth State",
+                "description": "The lifecycle status history for a Hold Up Depth",
+                "properties": {
+                  "EffectiveDateTime": {
+                    "type": "string",
+                    "title": "Effective Date Time",
+                    "description": "The date and time at which the HoldUpDepth state becomes effective.",
+                    "format": "date-time",
+                    "x-osdu-frame-of-reference": "DateTime"
+                  },
+                  "TerminationDateTime": {
+                    "type": "string",
+                    "title": "Termination Date Time",
+                    "description": "The date and time at which the HoldUpDepth state is no longer in effect.",
+                    "format": "date-time",
+                    "x-osdu-frame-of-reference": "DateTime"
+                  },
+                  "HoldUpDepthStateTypeID": {
+                    "type": "string",
+                    "title": "Hold Up Depth State Type ID",
+                    "description": "Hold Up Depth State Type ID",
+                    "x-osdu-existing-standard": "Y",
+                    "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-TubularAssemblyStatusType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "reference-data",
+                        "EntityType": "TubularAssemblyStatusType"
+                      }
+                    ]
+                  },
+                  "Remark": {
+                    "type": "string",
+                    "title": "Remark",
+                    "description": "A comment or remark attributed to the Hold Up Depth state."
+                  }
+                }
+              }
+            },
+            "VerticalMeasurement": {
+              "$ref": "../abstract/AbstractFacilityVerticalMeasurement.1.0.0.json",
+              "title": "VerticalMeasurement",
+              "description": "The vertical measurement reference for the interval top and base. Either VerticalMeasurement with supplementing type properties or VerticalMeasurementID (an external vertical reference defined in the object VerticalReferenceEntityID) are populated.",
+              "example": {
+                "VerticalReferenceEntityID": "namespace:master-data--Well:99000011078601:",
+                "VerticalReferenceID": "DFE01"
+              },
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-existing-standard": "Yes"
+            },
+            "TubularAssemblyID": {
+              "type": "array",
+              "title": "Tubular Assembly ID",
+              "description": "ID of associated TubularAssembly(ies)",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-existing-standard": "Yes",
+              "items": {
+                "type": "string",
+                "pattern": "^[\\w\\-\\.]+:master-data\\-\\-TubularAssembly:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                "x-osdu-relationship": [
+                  {
+                    "GroupType": "master-data",
+                    "EntityType": "TubularAssembly"
+                  }
+                ]
+              }
+            },
+            "HoldUpDepthTypeID": {
+              "type": "string",
+              "title": "Hold Up Depth Type ID",
+              "description": "Type of Hold Up Depth",
+              "example": "namespace:reference-data--HoldUpDepthType:Stuck:",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-existing-standard": "No",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-HoldUpDepthType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "HoldUpDepthType"
+                }
+              ]
+            },
+            "HoldUpDepthCategoryID": {
+              "type": "string",
+              "title": "Hold Up Depth Category ID",
+              "description": "Hold Up Depth Category - HUD or Fish",
+              "example": "namespace:reference-data--HoldUpDepthCategory:Fish:",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-existing-standard": "No",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-HoldUpDepthCategory:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "HoldUpDepthCategory"
+                }
+              ]
+            },
+            "MeasuredDepthTop": {
+              "type": "number",
+              "title": "Measured Depth Top",
+              "description": "Top depth of the Hold Up interval. Should always been known.",
+              "example": "3500 m",
+              "x-osdu-frame-of-reference": "UOM:length",
+              "x-osdu-attribution-authority": "OSDU"
+            },
+            "MeasuredDepthBase": {
+              "type": "number",
+              "title": "Measured Depth Base",
+              "description": "Base depth of the Hold Up interval. May be NULL when only the Top depth is known.",
+              "example": "3900 m",
+              "x-osdu-frame-of-reference": "UOM:length",
+              "x-osdu-attribution-authority": "OSDU"
+            },
+            "HoldUpDateTime": {
+              "type": "string",
+              "title": "Hold Up Date/Time",
+              "description": "Date/time when hold up depth 1st detected/encountered/reported.",
+              "format": "date-time",
+              "example": "2025-11-11T11:00:00",
+              "x-osdu-attribution-authority": "OSDU"
+            },
+            "DepthMeasurementTypeID": {
+              "type": "string",
+              "title": "Depth Measurement Type ID",
+              "description": "Method used to measure depth of the hold up interval",
+              "example": "namespace:reference-data--DepthMeasurementType:LO:",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-existing-standard": "No",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-DepthMeasurementType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "DepthMeasurementType"
+                }
+              ]
+            },
+            "StuckMethodDescription": {
+              "type": "string",
+              "title": "Stuck method description",
+              "description": "Description of how pipe become stuck",
+              "example": "6.5\" BHA #1 stuck in hole. TOF @ 3500m",
+              "x-osdu-attribution-authority": "OSDU"
+            },
+            "TopOuterDiameter": {
+              "type": "number",
+              "title": "Top Outer Diameter",
+              "description": "Outer diameter (OD) of the top of the hold up depth",
+              "example": "5 in",
+              "x-osdu-frame-of-reference": "UOM:length",
+              "x-osdu-attribution-authority": "OSDU"
+            },
+            "TopInnerDiameter": {
+              "type": "number",
+              "title": "Top Inner Diameter",
+              "description": "Inner diameter (ID) of the top of the hold up depth",
+              "example": "4.276 in",
+              "x-osdu-frame-of-reference": "UOM:length",
+              "x-osdu-attribution-authority": "OSDU"
+            },
+            "IsFishingAttempted": {
+              "type": "boolean",
+              "title": "Is Fishing Attempted",
+              "description": "Has a Fishing activity been performed on the HUD",
+              "example": false,
+              "x-osdu-attribution-authority": "OSDU"
+            },
+            "FishNeckDescription": {
+              "type": "string",
+              "title": "Fish Neck Description",
+              "description": "Fishing Neck Description",
+              "example": "5\" E75 NC50 drill pipe connection",
+              "x-osdu-attribution-authority": "OSDU"
+            },
+            "NumFishingJobs": {
+              "type": "integer",
+              "title": "Num Fishing Jobs",
+              "description": "Number of Fishing Jobs Attempted",
+              "example": 0,
+              "x-osdu-attribution-authority": "OSDU"
+            },
+            "Remarks": {
+              "type": "array",
+              "title": "Remarks",
+              "description": "Other comments for the hold up depth",
+              "example": [
+                {
+                  "RemarkSequenceNumber": 1,
+                  "Remark": "BHA #11 stuck in hole",
+                  "RemarkSource": "Wells Engineer",
+                  "RemarkDate": "2025-11-11"
+                }
+              ],
+              "x-osdu-attribution-authority": "OSDU",
+              "items": {
+                "$ref": "../abstract/AbstractRemark.1.0.0.json"
+              }
+            }
+          },
+          "required": [
+            "WellboreID"
+          ],
+          "title": "IndividualProperties"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "ExtensionProperties": {
+              "type": "object"
+            }
+          },
+          "title": "ExtensionProperties"
+        }
+      ]
+    }
+  },
+  "required": [
+    "kind",
+    "acl",
+    "legal"
+  ],
+  "additionalProperties": false,
+  "x-osdu-review-status": "Accepted",
+  "x-osdu-virtual-properties": {
+    "data.VirtualProperties.DefaultName": {
+      "type": "string",
+      "priority": [
+        {
+          "path": "data.Name"
+        }
+      ]
+    },
+    "data.VirtualProperties.DefaultLocation": {
+      "type": "object",
+      "priority": [
+        {
+          "path": "data.SpatialLocation"
+        }
+      ]
+    }
+  },
+  "x-osdu-inheriting-from-kind": []
+}

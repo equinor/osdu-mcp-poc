@@ -1,0 +1,2108 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "CRS Conversion Service",
+    "description": "Provides conversion/transformation services from a source to a target CRS. A coordinate operation is a conversion if the source and target CRS share the same datum; the operation is called transformation if datum transformations are involved, i.e. source and target CRS do not share the same datum.",
+    "contact": {
+      "name": "OSDU Data Platform Team",
+      "email": "dps@OSDU.org"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "servers": [
+    {
+      "url": "/api/crs/converter/"
+    }
+  ],
+  "security": [
+    {
+      "Authorization": []
+    }
+  ],
+  "paths": {
+    "/v4/convert": {
+      "post": {
+        "tags": [
+          "crs-converter-api-v4"
+        ],
+        "summary": "Convert a list of points",
+        "description": "Convert a list of points",
+        "operationId": "convertPointV4",
+        "parameters": [
+          {
+            "name": "data-partition-id",
+            "in": "header",
+            "description": "Tenant Id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConvertPointsRequestV4"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Bad input format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unknown error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppError"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Conversion performed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConvertPointsResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "CRS-converter overloaded; try again later",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/v4/convertTrajectory": {
+      "post": {
+        "tags": [
+          "crs-converter-api-v4 (Experimental)"
+        ],
+        "summary": "Convert trajectory stations",
+        "description": "Convert a list of trajectory stations, given the unit and spatial context and a reference point in 3D where MD==0",
+        "operationId": "convertTrajectory",
+        "parameters": [
+          {
+            "name": "data-partition-id",
+            "in": "header",
+            "description": "Tenant Id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConvertTrajectoryRequestV4"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConvertTrajectoryResponseV4"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/v4/convertGeoJson": {
+      "post": {
+        "tags": [
+          "crs-converter-api-v4"
+        ],
+        "summary": "Convert a GeoJSON or AnyCrsGeoJson structure",
+        "description": "Convert a GeoJSON or AnyCrsGeoJson structure to a specified target CRS. GeoJSON is declared - by definition - to be in the context of WGS 84.",
+        "operationId": "convertGeoJsonV4",
+        "parameters": [
+          {
+            "name": "data-partition-id",
+            "in": "header",
+            "description": "Tenant Id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConvertGeoJsonRequestV4"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Bad input format",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unknown error.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppError"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Conversion performed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConvertGeoJsonResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "CRS-converter overloaded; try again later",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/v3/convert": {
+      "post": {
+        "tags": [
+          "crs-converter-api-v3"
+        ],
+        "summary": "Convert a list of points",
+        "description": "Convert a list of points",
+        "operationId": "convertPoint",
+        "parameters": [
+          {
+            "name": "data-partition-id",
+            "in": "header",
+            "description": "Tenant Id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConvertPointsRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Bad input format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unknown error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppError"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Conversion performed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConvertPointsResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "CRS-converter overloaded; try again later",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/v3/convertTrajectory": {
+      "post": {
+        "tags": [
+          "convert-trajectory-api-v3"
+        ],
+        "summary": "Convert trajectory stations",
+        "description": "Convert a list of trajectory stations, given the unit and spatial context and a reference point in 3D where MD==0. \n + Note: To get WGS 84 output the trajectoryCRS needs to be a BoundCRS (unless it is WGS 84 based)",
+        "operationId": "convertTrajectory_1",
+        "parameters": [
+          {
+            "name": "data-partition-id",
+            "in": "header",
+            "description": "Tenant Id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConvertTrajectoryRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Trajectory conversion performed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConvertTrajectoryResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad input format",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unknown error.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppError"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "CRS-converter overloaded; try again later",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/v3/convertGeoJson": {
+      "post": {
+        "tags": [
+          "crs-converter-api-v3"
+        ],
+        "summary": "Convert a GeoJSON or AnyCrsGeoJson structure",
+        "description": "Convert a GeoJSON or AnyCrsGeoJson structure to a specified target CRS. GeoJSON is declared - by definition - to be in the context of WGS 84.",
+        "operationId": "convertGeoJson",
+        "parameters": [
+          {
+            "name": "data-partition-id",
+            "in": "header",
+            "description": "Tenant Id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConvertGeoJsonRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Bad input format",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unknown error.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppError"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Conversion performed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConvertGeoJsonResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "CRS-converter overloaded; try again later",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/v3/convertBinGrid": {
+      "post": {
+        "tags": [
+          "crs-converter-api-v3"
+        ],
+        "summary": "CRS Convert service is an OSDU platform standard method for QC and conversion of Bin Grids, associated in particular with ingested seismic volumes, that describe the `real world` (Easting, Northing) of bin grid centers at (inline, crossline) local coordinates",
+        "description": "QC check of the `squareness` of a Bin Grid defined using 4 corner points.\n + Coordinate conversion of a Bin Grid to a new CRS and `square it up` (if target CRS is same as original CRS then conversion is omitted, and the squareness test is done in the original CRS).\n + Calculate derived P6 parameters from the input 4 corners.\n + Calculate WGS 84 coordinates at the corners\n + Returns converted Bin Grid and a QC of squareness of the bin grid",
+        "operationId": "convertBinGrid",
+        "parameters": [
+          {
+            "name": "data-partition-id",
+            "in": "header",
+            "description": "Tenant Id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConvertBinGridRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Bad input format",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unknown error.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppError"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "The response is essentially a measure of the computed \u201cnon-squareness\u201d (dI,dJ) of the input BinGrid, and an output BinGrid which is essentially a copy of the input, but augmented with the derived P6 parameters filled out, and optionally (if a toCrs was given in the request) converted global coordinates that are \u201csquared up\u201d in the new geometry (which can be used in applications that require a square grid in a project CRS geometry; if the \u201csquaring error\u201d is small enough",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConvertBinGridResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "CRS-converter overloaded; try again later",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/v2/convert": {
+      "post": {
+        "tags": [
+          "crs-converter-api-v2"
+        ],
+        "summary": "Convert a list of points",
+        "description": "Convert a list of points",
+        "operationId": "convertPoint_1",
+        "parameters": [
+          {
+            "name": "data-partition-id",
+            "in": "header",
+            "description": "Tenant Id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConvertPointsRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Bad input format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unknown error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppError"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Conversion performed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConvertPointsResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "CRS-converter overloaded; try again later",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/v2/convertTrajectory": {
+      "post": {
+        "tags": [
+          "convert-trajectory-api-v2"
+        ],
+        "summary": "Convert trajectory stations",
+        "description": "Convert a list of trajectory stations, given the unit and spatial context and a reference point in 3D where MD==0. \n + Note: To get WGS 84 output the trajectoryCRS needs to be a BoundCRS (unless it is WGS 84 based)",
+        "operationId": "convertTrajectory_2",
+        "parameters": [
+          {
+            "name": "data-partition-id",
+            "in": "header",
+            "description": "Tenant Id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConvertTrajectoryRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Trajectory conversion performed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConvertTrajectoryResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad input format",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unknown error.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppError"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "CRS-converter overloaded; try again later",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/v2/convertGeoJson": {
+      "post": {
+        "tags": [
+          "crs-converter-api-v2"
+        ],
+        "summary": "Convert a GeoJSON or AnyCrsGeoJson structure",
+        "description": "Convert a GeoJSON or AnyCrsGeoJson structure to a specified target CRS. GeoJSON is declared - by definition - to be in the context of WGS 84.",
+        "operationId": "convertGeoJson_1",
+        "parameters": [
+          {
+            "name": "data-partition-id",
+            "in": "header",
+            "description": "Tenant Id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConvertGeoJsonRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Bad input format",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unknown error.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppError"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Conversion performed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConvertGeoJsonResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "CRS-converter overloaded; try again later",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/v2/info": {
+      "get": {
+        "tags": [
+          "info-api"
+        ],
+        "summary": "info",
+        "description": "For deployment available public `/info` endpoint, which provides build and git related information.",
+        "operationId": "info",
+        "parameters": [
+          {
+            "name": "data-partition-id",
+            "in": "header",
+            "description": "Tenant Id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Version info.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VersionInfo"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v3/info": {
+      "get": {
+        "tags": [
+          "info-api"
+        ],
+        "summary": "info",
+        "description": "For deployment available public `/info` endpoint, which provides build and git related information.",
+        "operationId": "info_1",
+        "parameters": [
+          {
+            "name": "data-partition-id",
+            "in": "header",
+            "description": "Tenant Id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Version info.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VersionInfo"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/_ah/readiness_check": {
+      "get": {
+        "tags": [
+          "health-check-api"
+        ],
+        "summary": "Readiness Check endpoint",
+        "description": "For deployment available public `/readiness_check` endpoint, which provides `CRS Conversion Service is ready` message.",
+        "operationId": "readinessCheck",
+        "parameters": [
+          {
+            "name": "data-partition-id",
+            "in": "header",
+            "description": "Tenant Id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "CRS Conversion service is ready",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/_ah/readiness_check": {
+      "get": {
+        "tags": [
+          "health-check-api"
+        ],
+        "summary": "Readiness Check endpoint",
+        "description": "For deployment available public `/readiness_check` endpoint, which provides `CRS Conversion Service is ready` message.",
+        "operationId": "readinessCheck_1",
+        "parameters": [
+          {
+            "name": "data-partition-id",
+            "in": "header",
+            "description": "Tenant Id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "CRS Conversion service is ready",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v3/_ah/readiness_check": {
+      "get": {
+        "tags": [
+          "health-check-api"
+        ],
+        "summary": "Readiness Check endpoint",
+        "description": "For deployment available public `/readiness_check` endpoint, which provides `CRS Conversion Service is ready` message.",
+        "operationId": "readinessCheck_2",
+        "parameters": [
+          {
+            "name": "data-partition-id",
+            "in": "header",
+            "description": "Tenant Id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "CRS Conversion service is ready",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/_ah/liveness_check": {
+      "get": {
+        "tags": [
+          "health-check-api"
+        ],
+        "summary": "Liveness Check endpoint",
+        "description": "For deployment available public `/liveness_check` endpoint, which provides `CRS Conversion Service is alive` message.",
+        "operationId": "livenessCheck",
+        "parameters": [
+          {
+            "name": "data-partition-id",
+            "in": "header",
+            "description": "Tenant Id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "CRS Conversion service is alive",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v3/_ah/liveness_check": {
+      "get": {
+        "tags": [
+          "health-check-api"
+        ],
+        "summary": "Liveness Check endpoint",
+        "description": "For deployment available public `/liveness_check` endpoint, which provides `CRS Conversion Service is alive` message.",
+        "operationId": "livenessCheck_1",
+        "parameters": [
+          {
+            "name": "data-partition-id",
+            "in": "header",
+            "description": "Tenant Id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "CRS Conversion service is alive",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/_ah/liveness_check": {
+      "get": {
+        "tags": [
+          "health-check-api"
+        ],
+        "summary": "Liveness Check endpoint",
+        "description": "For deployment available public `/liveness_check` endpoint, which provides `CRS Conversion Service is alive` message.",
+        "operationId": "livenessCheck_2",
+        "parameters": [
+          {
+            "name": "data-partition-id",
+            "in": "header",
+            "description": "Tenant Id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "CRS Conversion service is alive",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ConvertPointsRequestV4": {
+        "required": [
+          "fromCRS",
+          "points",
+          "toCRS"
+        ],
+        "type": "object",
+        "properties": {
+          "fromCRS": {
+            "type": "string",
+            "description": "Source CRS as persistable reference string",
+            "example": "\"{\"lateBoundCRS\":{\"wkt\":\"GEOGCS[\\\"GCS_Provisional_S_American_1956\\\",DATUM[\\\"D_Provisional_S_American_1956\\\",SPHEROID[\\\"International_1924\\\",6378388.0,297.0]],PRIMEM[\\\"Greenwich\\\",0.0],UNIT[\\\"Degree\\\",0.0174532925199433],AUTHORITY[\\\"EPSG\\\",4248]]\",\"ver\":\"PE_10_3_1\",\"name\":\"GCS_Provisional_S_American_1956\",\"authCode\":{\"auth\":\"EPSG\",\"code\":\"4248\"},\"type\":\"LBC\"},\"singleCT\":{\"wkt\":\"GEOGTRAN[\\\"PSAD_1956_To_WGS_1984_9\\\",GEOGCS[\\\"GCS_Provisional_S_American_1956\\\",DATUM[\\\"D_Provisional_S_American_1956\\\",SPHEROID[\\\"International_1924\\\",6378388.0,297.0]],PRIMEM[\\\"Greenwich\\\",0.0],UNIT[\\\"Degree\\\",0.0174532925199433]],GEOGCS[\\\"GCS_WGS_1984\\\",DATUM[\\\"D_WGS_1984\\\",SPHEROID[\\\"WGS_1984\\\",6378137.0,298.257223563]],PRIMEM[\\\"Greenwich\\\",0.0],UNIT[\\\"Degree\\\",0.0174532925199433]],METHOD[\\\"Geocentric_Translation\\\"],PARAMETER[\\\"X_Axis_Translation\\\",-295.0],PARAMETER[\\\"Y_Axis_Translation\\\",173.0],PARAMETER[\\\"Z_Axis_Translation\\\",-371.0],AUTHORITY[\\\"EPSG\\\",1209]]\",\"ver\":\"PE_10_3_1\",\"name\":\"PSAD_1956_To_WGS_1984_9\",\"authCode\":{\"auth\":\"EPSG\",\"code\":\"1209\"},\"type\":\"ST\"},\"ver\":\"PE_10_3_1\",\"name\":\"PSAD56 * DMA-Ven [4248,1209]\",\"authCode\":{\"auth\":\"SLB\",\"code\":\"4248009\"},\"type\":\"EBC\"}\""
+          },
+          "toCRS": {
+            "type": "string",
+            "description": "Target CRS as persistable reference string",
+            "example": "\"{\"lateBoundCRS\":{\"wkt\":\"PROJCS[\\\"Trinidad_1903_Trinidad_Grid\\\",GEOGCS[\\\"GCS_Trinidad_1903\\\",DATUM[\\\"D_Trinidad_1903\\\",SPHEROID[\\\"Clarke_1858\\\",6378293.64520876,294.260676369]],PRIMEM[\\\"Greenwich\\\",0.0],UNIT[\\\"Degree\\\",0.0174532925199433]],PROJECTION[\\\"Cassini\\\"],PARAMETER[\\\"False_Easting\\\",430000.0],PARAMETER[\\\"False_Northing\\\",325000.0],PARAMETER[\\\"Central_Meridian\\\",-61.3333333333333],PARAMETER[\\\"Scale_Factor\\\",1.0],PARAMETER[\\\"Latitude_Of_Origin\\\",10.4416666666667],UNIT[\\\"Link_Clarke\\\",0.201166195164],AUTHORITY[\\\"EPSG\\\",30200]]\",\"ver\":\"PE_10_3_1\",\"name\":\"Trinidad_1903_Trinidad_Grid\",\"authCode\":{\"auth\":\"EPSG\",\"code\":\"30200\"},\"type\":\"LBC\"},\"singleCT\":{\"wkt\":\"GEOGTRAN[\\\"Trinidad_1903_To_WGS_1984_2\\\",GEOGCS[\\\"GCS_Trinidad_1903\\\",DATUM[\\\"D_Trinidad_1903\\\",SPHEROID[\\\"Clarke_1858\\\",6378293.64520876,294.260676369]],PRIMEM[\\\"Greenwich\\\",0.0],UNIT[\\\"Degree\\\",0.0174532925199433]],GEOGCS[\\\"GCS_WGS_1984\\\",DATUM[\\\"D_WGS_1984\\\",SPHEROID[\\\"WGS_1984\\\",6378137.0,298.257223563]],PRIMEM[\\\"Greenwich\\\",0.0],UNIT[\\\"Degree\\\",0.0174532925199433]],METHOD[\\\"Geocentric_Translation\\\"],PARAMETER[\\\"X_Axis_Translation\\\",-61.0],PARAMETER[\\\"Y_Axis_Translation\\\",285.2],PARAMETER[\\\"Z_Axis_Translation\\\",471.6],AUTHORITY[\\\"EPSG\\\",10085]]\",\"ver\":\"PE_10_3_1\",\"name\":\"Trinidad_1903_To_WGS_1984_2\",\"authCode\":{\"auth\":\"EPSG\",\"code\":\"10085\"},\"type\":\"ST\"},\"ver\":\"PE_10_3_1\",\"name\":\"Trinidad 1903 * EOG-Tto Trin / Trinidad Grid [30200,10085]\",\"authCode\":{\"auth\":\"SLB\",\"code\":\"30200002\"},\"type\":\"EBC\"}\""
+          },
+          "points": {
+            "type": "array",
+            "description": "List of points to be converted",
+            "example": [
+              {
+                "x": -61.04340628871454,
+                "y": 10.673103179456877,
+                "z": 0
+              }
+            ],
+            "items": {
+              "$ref": "#/components/schemas/Point"
+            }
+          },
+          "transformation": {
+            "type": "string",
+            "description": "CRS Transform",
+            "example": "\"{\"wkt\":\"GEOGTRAN[\\\"PSAD_1956_To_WGS_1984_9\\\",GEOGCS[\\\"GCS_Provisional_S_American_1956\\\",DATUM[\\\"D_Provisional_S_American_1956\\\",SPHEROID[\\\"International_1924\\\",6378388.0,297.0]],PRIMEM[\\\"Greenwich\\\",0.0],UNIT[\\\"Degree\\\",0.0174532925199433]],GEOGCS[\\\"GCS_WGS_1984\\\",DATUM[\\\"D_WGS_1984\\\",SPHEROID[\\\"WGS_1984\\\",6378137.0,298.257223563]],PRIMEM[\\\"Greenwich\\\",0.0],UNIT[\\\"Degree\\\",0.0174532925199433]],METHOD[\\\"Geocentric_Translation\\\"],PARAMETER[\\\"X_Axis_Translation\\\",-295.0],PARAMETER[\\\"Y_Axis_Translation\\\",173.0],PARAMETER[\\\"Z_Axis_Translation\\\",-371.0],AUTHORITY[\\\"EPSG\\\",1209]]\",\"ver\":\"PE_10_3_1\",\"name\":\"PSAD_1956_To_WGS_1984_9\",\"authCode\":{\"auth\":\"EPSG\",\"code\":\"1209\"},\"type\":\"ST\"}\""
+          }
+        },
+        "description": "Request to convert a set of points from a source CRS to a target CRS"
+      },
+      "Point": {
+        "required": [
+          "x",
+          "y",
+          "z"
+        ],
+        "type": "object",
+        "properties": {
+          "x": {
+            "type": "number",
+            "description": "x coordinate or longitude",
+            "format": "double",
+            "example": -61.04340628871454
+          },
+          "y": {
+            "type": "number",
+            "description": "y coordinate or latitude",
+            "format": "double",
+            "example": 10.673103179456877
+          },
+          "z": {
+            "type": "number",
+            "description": "z coordinate",
+            "format": "double",
+            "example": 0.0
+          }
+        },
+        "description": "Point representation for CRS operations"
+      },
+      "AppError": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "reason": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "ConvertPointsResponse": {
+        "type": "object",
+        "properties": {
+          "successCount": {
+            "type": "integer",
+            "description": "Number of points successfully converted. If the number is less than the request array length conversion/transformation failures occurred.",
+            "format": "int32"
+          },
+          "points": {
+            "type": "array",
+            "description": "Converted points; length and order of the array is the same as in the request. Points, which failed to convert, are returned as NaN.",
+            "items": {
+              "$ref": "#/components/schemas/Point"
+            }
+          },
+          "operationsApplied": {
+            "type": "array",
+            "description": "The list of operations performed on the points as a list of strings",
+            "items": {
+              "type": "string",
+              "description": "The list of operations performed on the points as a list of strings"
+            }
+          }
+        },
+        "description": "Response of a CRS conversion/transformation operation"
+      },
+      "ConvertTrajectoryRequestV4": {
+        "required": [
+          "inputStations",
+          "method",
+          "trajectoryCRS",
+          "unitZ"
+        ],
+        "type": "object",
+        "properties": {
+          "trajectoryCRS": {
+            "type": "string",
+            "description": "Coordinate reference system for the reference point; typically the CRS is a projected CRS; if a geographic CRS is provided, the unitXY must be defined and the azimuthReference must be TRUE_NORTH.",
+            "example": "\"{\"wkt\":\"PROJCS[\\\"WGS_1984_UTM_Zone_31N\\\",GEOGCS[\\\"GCS_WGS_1984\\\",DATUM[\\\"D_WGS_1984\\\",SPHEROID[\\\"WGS_1984\\\",6378137.0,298.257223563]],PRIMEM[\\\"Greenwich\\\",0.0],UNIT[\\\"Degree\\\",0.0174532925199433]],PROJECTION[\\\"Transverse_Mercator\\\"],PARAMETER[\\\"False_Easting\\\",500000.0],PARAMETER[\\\"False_Northing\\\",0.0],PARAMETER[\\\"Central_Meridian\\\",3.0],PARAMETER[\\\"Scale_Factor\\\",0.9996],PARAMETER[\\\"Latitude_Of_Origin\\\",0.0],UNIT[\\\"Meter\\\",1.0],AUTHORITY[\\\"EPSG\\\",32631]]\",\"ver\":\"PE_10_3_1\",\"name\":\"WGS_1984_UTM_Zone_31N\",\"authCode\":{\"auth\":\"EPSG\",\"code\":\"32631\"},\"type\":\"LBC\"}\""
+          },
+          "azimuthReference": {
+            "type": "string",
+            "description": "azimuth reference for the input trajectory station azimuth values (TRUE_NORTH or GridNorth)",
+            "example": "TRUE_NORTH"
+          },
+          "unitXY": {
+            "type": "string",
+            "description": "The horizontal unit of the dx, dy in the input trajectory stations; the unit must be a length unit in 'persistable model' format, see example.",
+            "example": "\"{\"scaleOffset\":{\"scale\":1.0,\"offset\":0.0},\"symbol\":\"m\",\"baseMeasurement\":{\"ancestry\":\"Length\",\"type\":\"UM\"},\"type\":\"USO\"}\""
+          },
+          "unitZ": {
+            "type": "string",
+            "description": "The vertical unit of the dz in the input trajectory stations; the unit must be a length unit in 'persistable model' format, see example.",
+            "example": "\"{\"scaleOffset\":{\"scale\":1.0,\"offset\":0.0},\"symbol\":\"m\",\"baseMeasurement\":{\"ancestry\":\"Length\",\"type\":\"UM\"},\"type\":\"USO\"}\""
+          },
+          "referencePoint": {
+            "$ref": "#/components/schemas/Point"
+          },
+          "inputStations": {
+            "type": "array",
+            "description": "The array of input trajectory stations",
+            "items": {
+              "$ref": "#/components/schemas/TrajectoryStationInV4"
+            }
+          },
+          "method": {
+            "type": "string",
+            "description": "The computation method - 'AzimuthalEquidistant' (default) or 'LMP' (Lee's modified proposal SPE96813)",
+            "example": "AzimuthalEquidistant"
+          },
+          "inputKind": {
+            "type": "string",
+            "description": "The kind of input; one of MD_Inclination_Azimuth (default), MD_X_Y_Z, MD_dX_dY_dZ, X_Y_Z, dX_dY_dZ. MD stands for measured depth; MD_X_Y_Z/X_Y_Z stand for absolute coordinates in the reference CRS, MD_dX_dY_dZ/dX_dY_dZ stand for deviations relative to the reference point.",
+            "example": "MD_Inclination_Azimuth"
+          },
+          "interpolate": {
+            "type": "boolean",
+            "description": "Perform trajectory interpolation on demand; default is true.",
+            "example": true
+          },
+          "MD_i": {
+            "$ref": "#/components/schemas/MinimumDepthInterval"
+          },
+          "unitMD": {
+            "type": "string"
+          }
+        }
+      },
+      "MinimumDepthInterval": {
+        "type": "object",
+        "properties": {
+          "md_i": {
+            "type": "array",
+            "description": "MD_I (measured depth)",
+            "example": 200,
+            "items": {
+              "type": "number",
+              "description": "MD_I (measured depth)",
+              "format": "double",
+              "example": 200
+            }
+          },
+          "md_interval": {
+            "type": "number",
+            "description": "MD_INTERVAL (measured depth interval)",
+            "format": "double",
+            "example": 1.0
+          }
+        },
+        "description": "Minimum depth interval record; context is provided by the container."
+      },
+      "TrajectoryStationInV4": {
+        "type": "object",
+        "properties": {
+          "md": {
+            "type": "number",
+            "description": "MD (measured depth) from vertical reference point in 'unitZ'.",
+            "format": "double",
+            "example": 2563.56
+          },
+          "inclination": {
+            "type": "number",
+            "description": "Inclination angle in degrees of arc, 0.0 is vertical, 90.0 is horizontal.",
+            "format": "double",
+            "example": 15.0
+          },
+          "azimuth": {
+            "type": "number",
+            "description": "Azimuth angle in degrees of arc, 0.0/360.0 is North; reference given by azimuthReference (TRUE_NORTH or GridNorth).",
+            "format": "double",
+            "example": 355.0
+          },
+          "dx": {
+            "type": "number",
+            "description": "E-W deviation in the local Cartesian engineering CRS from the well reference point; unit is given by container's 'unitXY' or projected 'trajectoryCRS'.",
+            "format": "double",
+            "example": 55.9
+          },
+          "dy": {
+            "type": "number",
+            "description": "N-S deviation in the local Cartesian engineering CRS from the well reference point; Y is aligned with azimuth reference (TRUE_NORTH or projected GridNorth); unit is given by container's 'unitXY' or projected 'trajectoryCRS'.",
+            "format": "double",
+            "example": -145.3
+          },
+          "dz": {
+            "type": "number",
+            "description": "True vertical deviation in the local Cartesian engineering CRS from the well reference point; unit is given by container's unitZ; downwards positive.",
+            "format": "double",
+            "example": 1965.6
+          }
+        },
+        "description": "Input trajectory station record; context is provided by the container."
+      },
+      "ConvertTrajectoryResponseV4": {
+        "required": [
+          "localCRS",
+          "method",
+          "stations",
+          "trajectoryCRS",
+          "unitDls",
+          "unitXY",
+          "unitZ"
+        ],
+        "type": "object",
+        "properties": {
+          "unitMD": {
+            "type": "string",
+            "description": "unitMD"
+          },
+          "trajectoryCRS": {
+            "type": "string",
+            "description": "Coordinate reference system for the reference point; typically the CRS is a projected CRS; if a geographic CRS is provided, the unitXY must be defined and the azimuthReference must be TRUE_NORTH.",
+            "example": "{\"authCode\":{\"auth\":\"SLB\",\"code\":\"30200002\"},\"lateBoundCRS\":{\"authCode\":{\"auth\":\"EPSG\",\"code\":\"30200\"},\"name\":\"Trinidad_1903_Trinidad_Grid\",\"type\":\"LBC\",\"ver\":\"PE_10_3_1\",\"wkt\":\"PROJCS[\\\"Trinidad_1903_Trinidad_Grid\\\",GEOGCS[\\\"GCS_Trinidad_1903\\\",DATUM[\\\"D_Trinidad_1903\\\",SPHEROID[\\\"Clarke_1858\\\",6378293.64520876,294.260676369]],PRIMEM[\\\"Greenwich\\\",0.0],UNIT[\\\"Degree\\\",0.0174532925199433]],PROJECTION[\\\"Cassini\\\"],PARAMETER[\\\"False_Easting\\\",430000.0],PARAMETER[\\\"False_Northing\\\",325000.0],PARAMETER[\\\"Central_Meridian\\\",-61.3333333333333],PARAMETER[\\\"Scale_Factor\\\",1.0],PARAMETER[\\\"Latitude_Of_Origin\\\",10.4416666666667],UNIT[\\\"Link_Clarke\\\",0.201166195164],AUTHORITY[\\\"EPSG\\\",30200]]\"},\"name\":\"Trinidad 1903 * EOG-Tto Trin / Trinidad Grid [30200,10085]\",\"singleCT\":{\"authCode\":{\"auth\":\"EPSG\",\"code\":\"10085\"},\"name\":\"Trinidad_1903_To_WGS_1984_2\",\"type\":\"ST\",\"ver\":\"PE_10_3_1\",\"wkt\":\"GEOGTRAN[\\\"Trinidad_1903_To_WGS_1984_2\\\",GEOGCS[\\\"GCS_Trinidad_1903\\\",DATUM[\\\"D_Trinidad_1903\\\",SPHEROID[\\\"Clarke_1858\\\",6378293.64520876,294.260676369]],PRIMEM[\\\"Greenwich\\\",0.0],UNIT[\\\"Degree\\\",0.0174532925199433]],GEOGCS[\\\"GCS_WGS_1984\\\",DATUM[\\\"D_WGS_1984\\\",SPHEROID[\\\"WGS_1984\\\",6378137.0,298.257223563]],PRIMEM[\\\"Greenwich\\\",0.0],UNIT[\\\"Degree\\\",0.0174532925199433]],METHOD[\\\"Geocentric_Translation\\\"],PARAMETER[\\\"X_Axis_Translation\\\",-61.0],PARAMETER[\\\"Y_Axis_Translation\\\",285.2],PARAMETER[\\\"Z_Axis_Translation\\\",471.6],AUTHORITY[\\\"EPSG\\\",10085]]\"},\"type\":\"EBC\",\"ver\":\"PE_10_3_1\"}"
+          },
+          "unitXY": {
+            "type": "string",
+            "description": "The horizontal unit of the dx, dy in the output trajectory stations.",
+            "example": "{\"scaleOffset\":{\"scale\":1.0,\"offset\":0.0},\"symbol\":\"m\",\"baseMeasurement\":{\"ancestry\":\"Length\",\"type\":\"UM\"},\"type\":\"USO\"}"
+          },
+          "unitZ": {
+            "type": "string",
+            "description": "The vertical unit of the dz in the output trajectory stations.",
+            "example": "{\"scaleOffset\":{\"scale\":1.0,\"offset\":0.0},\"symbol\":\"m\",\"baseMeasurement\":{\"ancestry\":\"Length\",\"type\":\"UM\"},\"type\":\"USO\"}"
+          },
+          "unitDls": {
+            "type": "string",
+            "description": "The unit of the dog leg severity (DLS) in the output trajectory stations.",
+            "example": "%7B%22ScaleOffset%22%3A%7B%22Scale%22%3A5.72614583987641E-4%2C%22Offset%22%3A0.0%7D%2C%22Symbol%22%3A%22deg%2F100ft%22%2C%22BaseMeasurement%22%3A%22%257B%2522Ancestry%2522%253A%2522Rotation_Per_Length%2522%257D%22%7D"
+          },
+          "stations": {
+            "type": "array",
+            "description": "Computed trajectory stations.",
+            "items": {
+              "$ref": "#/components/schemas/TrajectoryStationOut"
+            }
+          },
+          "localCRS": {
+            "type": "string",
+            "description": "Coordinate Reference System for the local, True North oriented, true distance, engineering CRS with origin at the well's surface location.",
+            "example": "{\"authCode\":{\"auth\":\"SLB\",\"code\":\"30200002\"},\"lateBoundCRS\":{\"authCode\":{\"auth\":\"EPSG\",\"code\":\"30200\"},\"name\":\"Trinidad_1903_Trinidad_Grid\",\"type\":\"LBC\",\"ver\":\"PE_10_3_1\",\"wkt\":\"PROJCS[\\\"Trinidad_1903_Trinidad_Grid\\\",GEOGCS[\\\"GCS_Trinidad_1903\\\",DATUM[\\\"D_Trinidad_1903\\\",SPHEROID[\\\"Clarke_1858\\\",6378293.64520876,294.260676369]],PRIMEM[\\\"Greenwich\\\",0.0],UNIT[\\\"Degree\\\",0.0174532925199433]],PROJECTION[\\\"Cassini\\\"],PARAMETER[\\\"False_Easting\\\",430000.0],PARAMETER[\\\"False_Northing\\\",325000.0],PARAMETER[\\\"Central_Meridian\\\",-61.3333333333333],PARAMETER[\\\"Scale_Factor\\\",1.0],PARAMETER[\\\"Latitude_Of_Origin\\\",10.4416666666667],UNIT[\\\"Link_Clarke\\\",0.201166195164],AUTHORITY[\\\"EPSG\\\",30200]]\"},\"name\":\"Trinidad 1903 * EOG-Tto Trin / Trinidad Grid [30200,10085]\",\"singleCT\":{\"authCode\":{\"auth\":\"EPSG\",\"code\":\"10085\"},\"name\":\"Trinidad_1903_To_WGS_1984_2\",\"type\":\"ST\",\"ver\":\"PE_10_3_1\",\"wkt\":\"GEOGTRAN[\\\"Trinidad_1903_To_WGS_1984_2\\\",GEOGCS[\\\"GCS_Trinidad_1903\\\",DATUM[\\\"D_Trinidad_1903\\\",SPHEROID[\\\"Clarke_1858\\\",6378293.64520876,294.260676369]],PRIMEM[\\\"Greenwich\\\",0.0],UNIT[\\\"Degree\\\",0.0174532925199433]],GEOGCS[\\\"GCS_WGS_1984\\\",DATUM[\\\"D_WGS_1984\\\",SPHEROID[\\\"WGS_1984\\\",6378137.0,298.257223563]],PRIMEM[\\\"Greenwich\\\",0.0],UNIT[\\\"Degree\\\",0.0174532925199433]],METHOD[\\\"Geocentric_Translation\\\"],PARAMETER[\\\"X_Axis_Translation\\\",-61.0],PARAMETER[\\\"Y_Axis_Translation\\\",285.2],PARAMETER[\\\"Z_Axis_Translation\\\",471.6],AUTHORITY[\\\"EPSG\\\",10085]]\"},\"type\":\"EBC\",\"ver\":\"PE_10_3_1\"}"
+          },
+          "method": {
+            "type": "string",
+            "description": "The computation method used - 'AzimuthalEquidistant' (default) or 'LMP' (Lee's modified proposal SPE96813).",
+            "example": "AzimuthalEquidistant"
+          },
+          "operationsApplied": {
+            "type": "array",
+            "description": "The list of operations performed on the points as a list of strings",
+            "items": {
+              "type": "string",
+              "description": "The list of operations performed on the points as a list of strings"
+            }
+          },
+          "stations_i": {
+            "type": "array",
+            "description": "Computed trajectory stations i.",
+            "items": {
+              "$ref": "#/components/schemas/TrajectoryStationOut"
+            }
+          },
+          "scaleConvergenceList": {
+            "type": "array",
+            "description": "scaleConvergence",
+            "items": {
+              "$ref": "#/components/schemas/ScaleConvergence"
+            }
+          },
+          "inputKind": {
+            "type": "string",
+            "description": "The kind of input; one of MD_Inclination_Azimuth (default), MD_X_Y_Z, MD_dX_dY_dZ, X_Y_Z, dX_dY_dZ. MD stands for measured depth; MD_X_Y_Z/X_Y_Z stand for absolute coordinates in the reference CRS, MD_dX_dY_dZ/dX_dY_dZ stand for deviations relative to the reference point.",
+            "example": "MD_Inclination_Azimuth"
+          }
+        },
+        "description": "Trajectory response data structure; contains the context (crs, units)."
+      },
+      "ScaleConvergence": {
+        "type": "object",
+        "properties": {
+          "scalefactor": {
+            "type": "number",
+            "description": "Scalefactor",
+            "format": "double"
+          },
+          "convergence": {
+            "type": "number",
+            "description": "convergence",
+            "format": "double"
+          },
+          "point": {
+            "type": "number",
+            "description": "Point representation for CRS operations",
+            "format": "double"
+          }
+        },
+        "description": "scaleConvergence"
+      },
+      "TrajectoryStationOut": {
+        "type": "object",
+        "properties": {
+          "md": {
+            "type": "number",
+            "description": "MD (measured depth) from vertical reference point in 'unitZ'.",
+            "format": "double",
+            "example": 2563.56
+          },
+          "inclination": {
+            "type": "number",
+            "description": "Inclination angle in degrees of arc, 0.0 is vertical, 90.0 is horizontal.",
+            "format": "double",
+            "example": 15.0
+          },
+          "azimuthTN": {
+            "type": "number",
+            "description": "True North azimuth angle in degrees of arc, 0.0/360.0 is North.",
+            "format": "double",
+            "example": 355.96
+          },
+          "azimuthGN": {
+            "type": "number",
+            "description": "Grid North azimuth angle in degrees of arc, 0.0/360.0 is North.",
+            "format": "double",
+            "example": 355.0
+          },
+          "dxTN": {
+            "type": "number",
+            "description": "True E-W deviation in the local Cartesian engineering CRS from the well reference point; unit is given by container's 'unitXY'.",
+            "format": "double",
+            "example": 55.9
+          },
+          "dyTN": {
+            "type": "number",
+            "description": "True N-S deviation in the local Cartesian engineering CRS from the well reference point; Y is aligned with TRUE_NORTH; unit is given by container's 'unitXY'.",
+            "format": "double",
+            "example": -145.3
+          },
+          "point": {
+            "type": "number",
+            "description": "Point representation for CRS operations",
+            "format": "double"
+          },
+          "wgs84Longitude": {
+            "type": "number",
+            "description": "WGS 84 longitude in dega",
+            "format": "double"
+          },
+          "wgs84Latitude": {
+            "type": "number",
+            "description": "WGS 84 latitude in dega",
+            "format": "double"
+          },
+          "dls": {
+            "type": "number",
+            "description": "Curvature, Dog Leg Severity, measured in 'unitDls'.",
+            "format": "double"
+          },
+          "original": {
+            "type": "number",
+            "description": "Original trajectory station if true, interpolated trajectory station if false.",
+            "format": "double"
+          },
+          "dz": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "description": "Output trajectory station record; context is provided by the container."
+      },
+      "ConvertGeoJsonRequestV4": {
+        "required": [
+          "featureCollection",
+          "toCRS"
+        ],
+        "type": "object",
+        "properties": {
+          "toCRS": {
+            "type": "string",
+            "description": "Target CRS as persistable reference string",
+            "example": "\"{\"authCode\":{\"auth\":\"EPSG\",\"code\":\"4326\"},\"name\":\"GCS_WGS_1984\",\"type\":\"LBC\",\"ver\":\"PE_10_3_1\",\"wkt\":\"GEOGCS[\\\"GCS_WGS_1984\\\",DATUM[\\\"D_WGS_1984\\\",SPHEROID[\\\"WGS_1984\\\",6378137.0,298.257223563]],PRIMEM[\\\"Greenwich\\\",0.0],UNIT[\\\"Degree\\\",0.0174532925199433],AUTHORITY[\\\"EPSG\\\",4326]]\"}\""
+          },
+          "toUnitZ": {
+            "type": "string",
+            "description": "Optional: the target Z-unit for the z-axis scaling.",
+            "example": "\"{\"baseMeasurement\":{\"ancestry\":\"Length\",\"type\":\"UM\"},\"scaleOffset\":{\"offset\":0.0,\"scale\":1.0},\"symbol\":\"m\",\"type\":\"USO\"}\""
+          },
+          "transformation": {
+            "type": "string",
+            "description": "Explicit Transformation as persistable reference string or record id, its optional and if given it will override Bound Transformation ",
+            "example": "osdu:reference-data--CoordinateTransformation:EPSG::15851:"
+          },
+          "featureCollection": {
+            "$ref": "#/components/schemas/GeoJsonFeatureCollection"
+          }
+        },
+        "description": "Request to convert a GeoJSON FeatureCollection or AnyCrsFeatureCollection from WGS 84 or 'AnyCrsFeatureCollection.persistableReferenceCrs to a target CRS.' to a target CRS"
+      },
+      "GeoJsonBase": {
+        "required": [
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "geoJsonVariantInternal": {
+            "type": "string",
+            "writeOnly": true,
+            "enum": [
+              "GEO_JSON",
+              "ANY_CRS_GEO_JSON"
+            ]
+          },
+          "type": {
+            "type": "string"
+          },
+          "bbox": {
+            "type": "array",
+            "items": {
+              "type": "number",
+              "format": "double"
+            }
+          }
+        },
+        "discriminator": {
+          "propertyName": "type"
+        }
+      },
+      "GeoJsonFeature": {
+        "required": [
+          "geometry",
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "geoJsonVariantInternal": {
+            "type": "string",
+            "writeOnly": true,
+            "enum": [
+              "GEO_JSON",
+              "ANY_CRS_GEO_JSON"
+            ]
+          },
+          "type": {
+            "type": "string"
+          },
+          "bbox": {
+            "type": "array",
+            "items": {
+              "type": "number",
+              "format": "double"
+            }
+          },
+          "geometry": {
+            "$ref": "#/components/schemas/GeoJsonBase"
+          },
+          "properties": {
+            "type": "object",
+            "additionalProperties": {}
+          }
+        }
+      },
+      "GeoJsonFeatureCollection": {
+        "required": [
+          "features",
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "geoJsonVariantInternal": {
+            "type": "string",
+            "writeOnly": true,
+            "enum": [
+              "GEO_JSON",
+              "ANY_CRS_GEO_JSON"
+            ]
+          },
+          "type": {
+            "type": "string"
+          },
+          "bbox": {
+            "type": "array",
+            "items": {
+              "type": "number",
+              "format": "double"
+            }
+          },
+          "features": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GeoJsonFeature"
+            }
+          },
+          "properties": {
+            "type": "object",
+            "additionalProperties": {}
+          },
+          "persistableReferenceCrs": {
+            "type": "string"
+          },
+          "CoordinateReferenceSystemID": {
+            "type": "string"
+          },
+          "VerticalUnitID": {
+            "type": "string"
+          },
+          "persistableReferenceUnitZ": {
+            "type": "string"
+          }
+        },
+        "description": "The converted GeoJSON FeatureCollection or AnyCrsFeatureCollection with 'toCRS' context; length and order of the structure is the same as in the request. Points, which failed to convert, are returned as NaN."
+      },
+      "ConvertGeoJsonResponse": {
+        "type": "object",
+        "properties": {
+          "successCount": {
+            "type": "integer",
+            "description": "The number of coordinates in the GeoJSON FeatureCollection or AnyCrsFeatureCollection successfully converted/transformed. If this number is less than totalCount then conversion/transformation errors have occurred.",
+            "format": "int32"
+          },
+          "totalCount": {
+            "type": "integer",
+            "description": "The total number of coordinates in the GeoJSON FeatureCollection or AnyCrsFeatureCollection.",
+            "format": "int32"
+          },
+          "featureCollection": {
+            "$ref": "#/components/schemas/GeoJsonFeatureCollection"
+          },
+          "operationsApplied": {
+            "type": "array",
+            "description": "The list of operations performed on the points as a list of strings",
+            "items": {
+              "type": "string",
+              "description": "The list of operations performed on the points as a list of strings"
+            }
+          }
+        },
+        "description": "Response of a CRS conversion/transformation operation involving GeoJSON FeatureCollection or AnyCrsFeatureCollection."
+      },
+      "ConvertPointsRequest": {
+        "required": [
+          "fromCRS",
+          "points",
+          "toCRS"
+        ],
+        "type": "object",
+        "properties": {
+          "fromCRS": {
+            "type": "string",
+            "description": "Source CRS as persistable reference string",
+            "example": "\"{\"lateBoundCRS\":{\"wkt\":\"GEOGCS[\\\"GCS_Provisional_S_American_1956\\\",DATUM[\\\"D_Provisional_S_American_1956\\\",SPHEROID[\\\"International_1924\\\",6378388.0,297.0]],PRIMEM[\\\"Greenwich\\\",0.0],UNIT[\\\"Degree\\\",0.0174532925199433],AUTHORITY[\\\"EPSG\\\",4248]]\",\"ver\":\"PE_10_3_1\",\"name\":\"GCS_Provisional_S_American_1956\",\"authCode\":{\"auth\":\"EPSG\",\"code\":\"4248\"},\"type\":\"LBC\"},\"singleCT\":{\"wkt\":\"GEOGTRAN[\\\"PSAD_1956_To_WGS_1984_9\\\",GEOGCS[\\\"GCS_Provisional_S_American_1956\\\",DATUM[\\\"D_Provisional_S_American_1956\\\",SPHEROID[\\\"International_1924\\\",6378388.0,297.0]],PRIMEM[\\\"Greenwich\\\",0.0],UNIT[\\\"Degree\\\",0.0174532925199433]],GEOGCS[\\\"GCS_WGS_1984\\\",DATUM[\\\"D_WGS_1984\\\",SPHEROID[\\\"WGS_1984\\\",6378137.0,298.257223563]],PRIMEM[\\\"Greenwich\\\",0.0],UNIT[\\\"Degree\\\",0.0174532925199433]],METHOD[\\\"Geocentric_Translation\\\"],PARAMETER[\\\"X_Axis_Translation\\\",-295.0],PARAMETER[\\\"Y_Axis_Translation\\\",173.0],PARAMETER[\\\"Z_Axis_Translation\\\",-371.0],AUTHORITY[\\\"EPSG\\\",1209]]\",\"ver\":\"PE_10_3_1\",\"name\":\"PSAD_1956_To_WGS_1984_9\",\"authCode\":{\"auth\":\"EPSG\",\"code\":\"1209\"},\"type\":\"ST\"},\"ver\":\"PE_10_3_1\",\"name\":\"PSAD56 * DMA-Ven [4248,1209]\",\"authCode\":{\"auth\":\"SLB\",\"code\":\"4248009\"},\"type\":\"EBC\"}\""
+          },
+          "toCRS": {
+            "type": "string",
+            "description": "Target CRS as persistable reference string",
+            "example": "\"{\"lateBoundCRS\":{\"wkt\":\"PROJCS[\\\"Trinidad_1903_Trinidad_Grid\\\",GEOGCS[\\\"GCS_Trinidad_1903\\\",DATUM[\\\"D_Trinidad_1903\\\",SPHEROID[\\\"Clarke_1858\\\",6378293.64520876,294.260676369]],PRIMEM[\\\"Greenwich\\\",0.0],UNIT[\\\"Degree\\\",0.0174532925199433]],PROJECTION[\\\"Cassini\\\"],PARAMETER[\\\"False_Easting\\\",430000.0],PARAMETER[\\\"False_Northing\\\",325000.0],PARAMETER[\\\"Central_Meridian\\\",-61.3333333333333],PARAMETER[\\\"Scale_Factor\\\",1.0],PARAMETER[\\\"Latitude_Of_Origin\\\",10.4416666666667],UNIT[\\\"Link_Clarke\\\",0.201166195164],AUTHORITY[\\\"EPSG\\\",30200]]\",\"ver\":\"PE_10_3_1\",\"name\":\"Trinidad_1903_Trinidad_Grid\",\"authCode\":{\"auth\":\"EPSG\",\"code\":\"30200\"},\"type\":\"LBC\"},\"singleCT\":{\"wkt\":\"GEOGTRAN[\\\"Trinidad_1903_To_WGS_1984_2\\\",GEOGCS[\\\"GCS_Trinidad_1903\\\",DATUM[\\\"D_Trinidad_1903\\\",SPHEROID[\\\"Clarke_1858\\\",6378293.64520876,294.260676369]],PRIMEM[\\\"Greenwich\\\",0.0],UNIT[\\\"Degree\\\",0.0174532925199433]],GEOGCS[\\\"GCS_WGS_1984\\\",DATUM[\\\"D_WGS_1984\\\",SPHEROID[\\\"WGS_1984\\\",6378137.0,298.257223563]],PRIMEM[\\\"Greenwich\\\",0.0],UNIT[\\\"Degree\\\",0.0174532925199433]],METHOD[\\\"Geocentric_Translation\\\"],PARAMETER[\\\"X_Axis_Translation\\\",-61.0],PARAMETER[\\\"Y_Axis_Translation\\\",285.2],PARAMETER[\\\"Z_Axis_Translation\\\",471.6],AUTHORITY[\\\"EPSG\\\",10085]]\",\"ver\":\"PE_10_3_1\",\"name\":\"Trinidad_1903_To_WGS_1984_2\",\"authCode\":{\"auth\":\"EPSG\",\"code\":\"10085\"},\"type\":\"ST\"},\"ver\":\"PE_10_3_1\",\"name\":\"Trinidad 1903 * EOG-Tto Trin / Trinidad Grid [30200,10085]\",\"authCode\":{\"auth\":\"SLB\",\"code\":\"30200002\"},\"type\":\"EBC\"}\""
+          },
+          "points": {
+            "type": "array",
+            "description": "List of points to be converted",
+            "example": [
+              {
+                "x": -61.04340628871454,
+                "y": 10.673103179456877,
+                "z": 0
+              }
+            ],
+            "items": {
+              "$ref": "#/components/schemas/Point"
+            }
+          }
+        },
+        "description": "Request to convert a set of points from a source CRS to a target CRS"
+      },
+      "ConvertTrajectoryRequest": {
+        "required": [
+          "azimuthReference",
+          "inputStations",
+          "method",
+          "trajectoryCRS",
+          "unitZ"
+        ],
+        "type": "object",
+        "properties": {
+          "trajectoryCRS": {
+            "type": "string",
+            "description": "Coordinate reference system for the reference point; typically the CRS is a projected CRS; if a geographic CRS is provided, the unitXY must be defined and the azimuthReference must be TRUE_NORTH.",
+            "example": "\"{\"wkt\":\"PROJCS[\\\"WGS_1984_UTM_Zone_31N\\\",GEOGCS[\\\"GCS_WGS_1984\\\",DATUM[\\\"D_WGS_1984\\\",SPHEROID[\\\"WGS_1984\\\",6378137.0,298.257223563]],PRIMEM[\\\"Greenwich\\\",0.0],UNIT[\\\"Degree\\\",0.0174532925199433]],PROJECTION[\\\"Transverse_Mercator\\\"],PARAMETER[\\\"False_Easting\\\",500000.0],PARAMETER[\\\"False_Northing\\\",0.0],PARAMETER[\\\"Central_Meridian\\\",3.0],PARAMETER[\\\"Scale_Factor\\\",0.9996],PARAMETER[\\\"Latitude_Of_Origin\\\",0.0],UNIT[\\\"Meter\\\",1.0],AUTHORITY[\\\"EPSG\\\",32631]]\",\"ver\":\"PE_10_3_1\",\"name\":\"WGS_1984_UTM_Zone_31N\",\"authCode\":{\"auth\":\"EPSG\",\"code\":\"32631\"},\"type\":\"LBC\"}\""
+          },
+          "azimuthReference": {
+            "type": "string",
+            "description": "azimuth reference for the input trajectory station azimuth values (TRUE_NORTH or GridNorth)",
+            "example": "TRUE_NORTH"
+          },
+          "unitXY": {
+            "type": "string",
+            "description": "The horizontal unit of the dx, dy in the input trajectory stations; the unit must be a length unit in 'persistable model' format, see example.",
+            "example": "\"{\"scaleOffset\":{\"scale\":1.0,\"offset\":0.0},\"symbol\":\"m\",\"baseMeasurement\":{\"ancestry\":\"Length\",\"type\":\"UM\"},\"type\":\"USO\"}\""
+          },
+          "unitZ": {
+            "type": "string",
+            "description": "The vertical unit of the dz in the input trajectory stations; the unit must be a length unit in 'persistable model' format, see example.",
+            "example": "\"{\"scaleOffset\":{\"scale\":1.0,\"offset\":0.0},\"symbol\":\"m\",\"baseMeasurement\":{\"ancestry\":\"Length\",\"type\":\"UM\"},\"type\":\"USO\"}\""
+          },
+          "referencePoint": {
+            "$ref": "#/components/schemas/Point"
+          },
+          "inputStations": {
+            "type": "string",
+            "description": "The array of input trajectory stations",
+            "example": "[{\"md\":0,\"inclination\":0,\"azimuth\":0},{\"md\":1000,\"inclination\":0,\"azimuth\":0},{\"md\":2000,\"inclination\":90,\"azimuth\":0},{\"md\":3000,\"inclination\":90,\"azimuth\":0},{\"md\":5000,\"inclination\":90,\"azimuth\":90},{\"md\":6000,\"inclination\":90,\"azimuth\":90}]"
+          },
+          "method": {
+            "type": "string",
+            "description": "The computation method - 'AzimuthalEquidistant' (default) or 'LMP' (Lee's modified proposal SPE96813)",
+            "example": "AzimuthalEquidistant"
+          },
+          "inputKind": {
+            "type": "string",
+            "description": "The kind of input; one of MD_Inclination_Azimuth (default), MD_X_Y_Z, MD_dX_dY_dZ, X_Y_Z, dX_dY_dZ. MD stands for measured depth; MD_X_Y_Z/X_Y_Z stand for absolute coordinates in the reference CRS, MD_dX_dY_dZ/dX_dY_dZ stand for deviations relative to the reference point.",
+            "example": "MD_Inclination_Azimuth"
+          },
+          "interpolate": {
+            "type": "boolean",
+            "description": "Perform trajectory interpolation on demand; default is true.",
+            "example": true
+          }
+        },
+        "description": "Input trajectory data structure; contains the context (crs, units, azimuth reference, method)"
+      },
+      "ConvertTrajectoryResponse": {
+        "required": [
+          "localCRS",
+          "method",
+          "stations",
+          "trajectoryCRS",
+          "unitDls",
+          "unitXY",
+          "unitZ"
+        ],
+        "type": "object",
+        "properties": {
+          "trajectoryCRS": {
+            "type": "string",
+            "description": "Coordinate reference system for the reference point; typically the CRS is a projected CRS; if a geographic CRS is provided, the unitXY must be defined and the azimuthReference must be TRUE_NORTH.",
+            "example": "{\"authCode\":{\"auth\":\"SLB\",\"code\":\"30200002\"},\"lateBoundCRS\":{\"authCode\":{\"auth\":\"EPSG\",\"code\":\"30200\"},\"name\":\"Trinidad_1903_Trinidad_Grid\",\"type\":\"LBC\",\"ver\":\"PE_10_3_1\",\"wkt\":\"PROJCS[\\\"Trinidad_1903_Trinidad_Grid\\\",GEOGCS[\\\"GCS_Trinidad_1903\\\",DATUM[\\\"D_Trinidad_1903\\\",SPHEROID[\\\"Clarke_1858\\\",6378293.64520876,294.260676369]],PRIMEM[\\\"Greenwich\\\",0.0],UNIT[\\\"Degree\\\",0.0174532925199433]],PROJECTION[\\\"Cassini\\\"],PARAMETER[\\\"False_Easting\\\",430000.0],PARAMETER[\\\"False_Northing\\\",325000.0],PARAMETER[\\\"Central_Meridian\\\",-61.3333333333333],PARAMETER[\\\"Scale_Factor\\\",1.0],PARAMETER[\\\"Latitude_Of_Origin\\\",10.4416666666667],UNIT[\\\"Link_Clarke\\\",0.201166195164],AUTHORITY[\\\"EPSG\\\",30200]]\"},\"name\":\"Trinidad 1903 * EOG-Tto Trin / Trinidad Grid [30200,10085]\",\"singleCT\":{\"authCode\":{\"auth\":\"EPSG\",\"code\":\"10085\"},\"name\":\"Trinidad_1903_To_WGS_1984_2\",\"type\":\"ST\",\"ver\":\"PE_10_3_1\",\"wkt\":\"GEOGTRAN[\\\"Trinidad_1903_To_WGS_1984_2\\\",GEOGCS[\\\"GCS_Trinidad_1903\\\",DATUM[\\\"D_Trinidad_1903\\\",SPHEROID[\\\"Clarke_1858\\\",6378293.64520876,294.260676369]],PRIMEM[\\\"Greenwich\\\",0.0],UNIT[\\\"Degree\\\",0.0174532925199433]],GEOGCS[\\\"GCS_WGS_1984\\\",DATUM[\\\"D_WGS_1984\\\",SPHEROID[\\\"WGS_1984\\\",6378137.0,298.257223563]],PRIMEM[\\\"Greenwich\\\",0.0],UNIT[\\\"Degree\\\",0.0174532925199433]],METHOD[\\\"Geocentric_Translation\\\"],PARAMETER[\\\"X_Axis_Translation\\\",-61.0],PARAMETER[\\\"Y_Axis_Translation\\\",285.2],PARAMETER[\\\"Z_Axis_Translation\\\",471.6],AUTHORITY[\\\"EPSG\\\",10085]]\"},\"type\":\"EBC\",\"ver\":\"PE_10_3_1\"}"
+          },
+          "unitXY": {
+            "type": "string",
+            "description": "The horizontal unit of the dx, dy in the output trajectory stations.",
+            "example": "{\"scaleOffset\":{\"scale\":1.0,\"offset\":0.0},\"symbol\":\"m\",\"baseMeasurement\":{\"ancestry\":\"Length\",\"type\":\"UM\"},\"type\":\"USO\"}"
+          },
+          "unitZ": {
+            "type": "string",
+            "description": "The vertical unit of the dz in the output trajectory stations.",
+            "example": "{\"scaleOffset\":{\"scale\":1.0,\"offset\":0.0},\"symbol\":\"m\",\"baseMeasurement\":{\"ancestry\":\"Length\",\"type\":\"UM\"},\"type\":\"USO\"}"
+          },
+          "unitDls": {
+            "type": "string",
+            "description": "The unit of the dog leg severity (DLS) in the output trajectory stations.",
+            "example": "%7B%22ScaleOffset%22%3A%7B%22Scale%22%3A5.72614583987641E-4%2C%22Offset%22%3A0.0%7D%2C%22Symbol%22%3A%22deg%2F100ft%22%2C%22BaseMeasurement%22%3A%22%257B%2522Ancestry%2522%253A%2522Rotation_Per_Length%2522%257D%22%7D"
+          },
+          "stations": {
+            "type": "array",
+            "description": "Computed trajectory stations.",
+            "items": {
+              "$ref": "#/components/schemas/TrajectoryStationOut"
+            }
+          },
+          "localCRS": {
+            "type": "string",
+            "description": "Coordinate Reference System for the local, True North oriented, true distance, engineering CRS with origin at the well's surface location.",
+            "example": "{\"authCode\":{\"auth\":\"SLB\",\"code\":\"30200002\"},\"lateBoundCRS\":{\"authCode\":{\"auth\":\"EPSG\",\"code\":\"30200\"},\"name\":\"Trinidad_1903_Trinidad_Grid\",\"type\":\"LBC\",\"ver\":\"PE_10_3_1\",\"wkt\":\"PROJCS[\\\"Trinidad_1903_Trinidad_Grid\\\",GEOGCS[\\\"GCS_Trinidad_1903\\\",DATUM[\\\"D_Trinidad_1903\\\",SPHEROID[\\\"Clarke_1858\\\",6378293.64520876,294.260676369]],PRIMEM[\\\"Greenwich\\\",0.0],UNIT[\\\"Degree\\\",0.0174532925199433]],PROJECTION[\\\"Cassini\\\"],PARAMETER[\\\"False_Easting\\\",430000.0],PARAMETER[\\\"False_Northing\\\",325000.0],PARAMETER[\\\"Central_Meridian\\\",-61.3333333333333],PARAMETER[\\\"Scale_Factor\\\",1.0],PARAMETER[\\\"Latitude_Of_Origin\\\",10.4416666666667],UNIT[\\\"Link_Clarke\\\",0.201166195164],AUTHORITY[\\\"EPSG\\\",30200]]\"},\"name\":\"Trinidad 1903 * EOG-Tto Trin / Trinidad Grid [30200,10085]\",\"singleCT\":{\"authCode\":{\"auth\":\"EPSG\",\"code\":\"10085\"},\"name\":\"Trinidad_1903_To_WGS_1984_2\",\"type\":\"ST\",\"ver\":\"PE_10_3_1\",\"wkt\":\"GEOGTRAN[\\\"Trinidad_1903_To_WGS_1984_2\\\",GEOGCS[\\\"GCS_Trinidad_1903\\\",DATUM[\\\"D_Trinidad_1903\\\",SPHEROID[\\\"Clarke_1858\\\",6378293.64520876,294.260676369]],PRIMEM[\\\"Greenwich\\\",0.0],UNIT[\\\"Degree\\\",0.0174532925199433]],GEOGCS[\\\"GCS_WGS_1984\\\",DATUM[\\\"D_WGS_1984\\\",SPHEROID[\\\"WGS_1984\\\",6378137.0,298.257223563]],PRIMEM[\\\"Greenwich\\\",0.0],UNIT[\\\"Degree\\\",0.0174532925199433]],METHOD[\\\"Geocentric_Translation\\\"],PARAMETER[\\\"X_Axis_Translation\\\",-61.0],PARAMETER[\\\"Y_Axis_Translation\\\",285.2],PARAMETER[\\\"Z_Axis_Translation\\\",471.6],AUTHORITY[\\\"EPSG\\\",10085]]\"},\"type\":\"EBC\",\"ver\":\"PE_10_3_1\"}"
+          },
+          "method": {
+            "type": "string",
+            "description": "The computation method used - 'AzimuthalEquidistant' (default) or 'LMP' (Lee's modified proposal SPE96813).",
+            "example": "AzimuthalEquidistant"
+          },
+          "operationsApplied": {
+            "type": "array",
+            "description": "The list of operations performed on the points as a list of strings",
+            "items": {
+              "type": "string",
+              "description": "The list of operations performed on the points as a list of strings"
+            }
+          },
+          "inputKind": {
+            "type": "string",
+            "description": "The kind of input; one of MD_Inclination_Azimuth (default), MD_X_Y_Z, MD_dX_dY_dZ, X_Y_Z, dX_dY_dZ. MD stands for measured depth; MD_X_Y_Z/X_Y_Z stand for absolute coordinates in the reference CRS, MD_dX_dY_dZ/dX_dY_dZ stand for deviations relative to the reference point.",
+            "example": "MD_Inclination_Azimuth"
+          }
+        },
+        "description": "Trajectory response data structure; contains the context (crs, units)."
+      },
+      "ConvertGeoJsonRequest": {
+        "required": [
+          "featureCollection",
+          "toCRS"
+        ],
+        "type": "object",
+        "properties": {
+          "toCRS": {
+            "type": "string",
+            "description": "Target CRS as persistable reference string",
+            "example": "\"{\"authCode\":{\"auth\":\"EPSG\",\"code\":\"4326\"},\"name\":\"GCS_WGS_1984\",\"type\":\"LBC\",\"ver\":\"PE_10_3_1\",\"wkt\":\"GEOGCS[\\\"GCS_WGS_1984\\\",DATUM[\\\"D_WGS_1984\\\",SPHEROID[\\\"WGS_1984\\\",6378137.0,298.257223563]],PRIMEM[\\\"Greenwich\\\",0.0],UNIT[\\\"Degree\\\",0.0174532925199433],AUTHORITY[\\\"EPSG\\\",4326]]\"}\""
+          },
+          "toUnitZ": {
+            "type": "string",
+            "description": "Optional: the target Z-unit for the z-axis scaling.",
+            "example": "\"{\"baseMeasurement\":{\"ancestry\":\"Length\",\"type\":\"UM\"},\"scaleOffset\":{\"offset\":0.0,\"scale\":1.0},\"symbol\":\"m\",\"type\":\"USO\"}\""
+          },
+          "featureCollection": {
+            "$ref": "#/components/schemas/GeoJsonFeatureCollection"
+          }
+        },
+        "description": "Request to convert a GeoJSON FeatureCollection or AnyCrsFeatureCollection from WGS 84 or 'AnyCrsFeatureCollection.persistableReferenceCrs to a target CRS.' to a target CRS"
+      },
+      "AbstractAnyCrsFeatureCollection": {
+        "type": "object",
+        "properties": {
+          "persistableReferenceCrs": {
+            "type": "string"
+          },
+          "CoordinateReferenceSystemID": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "features": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AbstractFeature"
+            }
+          }
+        }
+      },
+      "AbstractBinGrid": {
+        "type": "object",
+        "properties": {
+          "BinGridName": {
+            "type": "string"
+          },
+          "BinGridTypeID": {
+            "type": "string"
+          },
+          "SourceBinGridID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "SourceBinGridAppID": {
+            "type": "string"
+          },
+          "CoveragePercent": {
+            "type": "number",
+            "format": "double"
+          },
+          "BinGridDefinitionMethodTypeID": {
+            "type": "string"
+          },
+          "P6TransformationMethod": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "P6BinGridOriginI": {
+            "type": "number",
+            "format": "double"
+          },
+          "P6BinGridOriginJ": {
+            "type": "number",
+            "format": "double"
+          },
+          "P6BinGridOriginEasting": {
+            "type": "number",
+            "format": "double"
+          },
+          "P6BinGridOriginNorthing": {
+            "type": "number",
+            "format": "double"
+          },
+          "P6ScaleFactorOfBinGrid": {
+            "type": "number",
+            "format": "double"
+          },
+          "P6BinWidthOnIaxis": {
+            "type": "number",
+            "format": "double"
+          },
+          "P6BinWidthOnJaxis": {
+            "type": "number",
+            "format": "double"
+          },
+          "P6MapGridBearingOfBinGridJaxis": {
+            "type": "number",
+            "format": "double"
+          },
+          "P6BinNodeIncrementOnIaxis": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "P6BinNodeIncrementOnJaxis": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ABCDBinGridSpatialLocation": {
+            "$ref": "#/components/schemas/AbstractSpatialLocation"
+          }
+        }
+      },
+      "AbstractFeature": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "properties": {
+            "$ref": "#/components/schemas/PropertiesBinGridCorners"
+          },
+          "geometry": {
+            "$ref": "#/components/schemas/Geometry"
+          }
+        }
+      },
+      "AbstractFeatureCollection": {
+        "type": "object",
+        "properties": {
+          "features": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AbstractFeature"
+            }
+          },
+          "type": {
+            "type": "string"
+          }
+        }
+      },
+      "AbstractSpatialLocation": {
+        "type": "object",
+        "properties": {
+          "SpatialLocationCoordinatesDate": {
+            "type": "string"
+          },
+          "QuantitativeAccuracyBandID": {
+            "type": "string"
+          },
+          "QualitativeSpatialAccuracyTypeID": {
+            "type": "string"
+          },
+          "CoordinateQualityCheckPerformedBy": {
+            "type": "string"
+          },
+          "CoordinateQualityCheckDateTime": {
+            "type": "string"
+          },
+          "CoordinateQualityCheckRemarks": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "AppliedOperations": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "SpatialParameterTypeID": {
+            "type": "string"
+          },
+          "SpatialGeometryTypeID": {
+            "type": "string"
+          },
+          "AsIngestedCoordinates": {
+            "$ref": "#/components/schemas/AbstractAnyCrsFeatureCollection"
+          },
+          "Wgs84Coordinates": {
+            "$ref": "#/components/schemas/AbstractFeatureCollection"
+          }
+        }
+      },
+      "ConvertBinGridRequest": {
+        "type": "object",
+        "properties": {
+          "toCRS": {
+            "type": "string"
+          },
+          "inBinGrid": {
+            "$ref": "#/components/schemas/AbstractBinGrid"
+          }
+        }
+      },
+      "Geometry": {
+        "required": [
+          "coordinates",
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "coordinates": {
+            "type": "array",
+            "items": {
+              "type": "number",
+              "format": "double"
+            }
+          }
+        }
+      },
+      "PointProperties": {
+        "type": "object",
+        "properties": {
+          "Label": {
+            "type": "string"
+          },
+          "Inline": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Crossline": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "PropertiesBinGridCorners": {
+        "type": "object",
+        "properties": {
+          "Kind": {
+            "type": "string"
+          },
+          "PointProperties": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PointProperties"
+            }
+          }
+        }
+      },
+      "ConvertBinGridResponse": {
+        "type": "object",
+        "properties": {
+          "maxMisLocation": {
+            "$ref": "#/components/schemas/MaxMisLocation"
+          },
+          "outBinGrid": {
+            "$ref": "#/components/schemas/AbstractBinGrid"
+          },
+          "AppliedOperations": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "MaxMisLocation": {
+        "type": "object",
+        "properties": {
+          "dI": {
+            "type": "number",
+            "format": "double"
+          },
+          "dJ": {
+            "type": "number",
+            "format": "double"
+          }
+        }
+      },
+      "ConnectedOuterService": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          }
+        }
+      },
+      "VersionInfo": {
+        "type": "object",
+        "properties": {
+          "groupId": {
+            "type": "string"
+          },
+          "artifactId": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          },
+          "buildTime": {
+            "type": "string"
+          },
+          "branch": {
+            "type": "string"
+          },
+          "commitId": {
+            "type": "string"
+          },
+          "commitMessage": {
+            "type": "string"
+          },
+          "connectedOuterServices": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ConnectedOuterService"
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "Authorization": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "Authorization"
+      }
+    }
+  }
+}

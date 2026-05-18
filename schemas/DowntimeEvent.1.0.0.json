@@ -1,0 +1,322 @@
+{
+  "x-osdu-license": "Copyright 2024, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "$id": "https://schema.osdu.opengroup.org/json/work-product-component/DowntimeEvent.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:work-product-component--DowntimeEvent:1.0.0",
+  "title": "DowntimeEvent",
+  "description": "A downtime event is an event that spans a discrete period that negatively affects the production or processing of hydrocarbon products (e.g. produced oil, processed diesel, etc.) at different levels of the operations (e.g. well, facility, operating unit). The event  information includes a descriptions of the event, why it occurred, etc., and free format comments that further expand on the incident. An associated record recording deferred volumes due to the event may also exist referencing this event.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "Previously called ResourceID or SRN which identifies this OSDU resource object without version.",
+      "title": "Entity ID",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-DowntimeEvent:[\\w\\-\\.\\:\\%]+$",
+      "example": "namespace:work-product-component--DowntimeEvent:b1b85a4f-b601-56c4-99fc-aacab57ec449"
+    },
+    "kind": {
+      "description": "The schema identification for the OSDU resource object following the pattern {Namespace}:{Source}:{Type}:{VersionMajor}.{VersionMinor}.{VersionPatch}. The versioning scheme follows the semantic versioning, https://semver.org/.",
+      "title": "Entity Kind",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:[\\w\\-\\.]+:[\\w\\-\\.]+:[0-9]+.[0-9]+.[0-9]+$",
+      "example": "osdu:wks:work-product-component--DowntimeEvent:1.0.0"
+    },
+    "version": {
+      "description": "The version number of this OSDU resource; set by the framework.",
+      "title": "Version Number",
+      "type": "integer",
+      "format": "int64",
+      "example": 1562066009929332
+    },
+    "acl": {
+      "description": "The access control tags associated with this entity.",
+      "title": "Access Control List",
+      "$ref": "../abstract/AbstractAccessControlList.1.0.0.json"
+    },
+    "legal": {
+      "description": "The entity's legal tags and compliance status. The actual contents associated with the legal tags is managed by the Compliance Service.",
+      "title": "Legal Tags",
+      "$ref": "../abstract/AbstractLegalTags.1.0.0.json"
+    },
+    "tags": {
+      "title": "Tag Dictionary",
+      "description": "A generic dictionary of string keys mapping to string value. Only strings are permitted as keys and values.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "example": {
+        "NameOfKey": "String value"
+      }
+    },
+    "createTime": {
+      "description": "Timestamp of the time at which initial version of this OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:46:20.163Z"
+    },
+    "createUser": {
+      "title": "Resource Object Creation User Reference",
+      "description": "The user reference, which created the first version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "modifyTime": {
+      "description": "Timestamp of the time at which this version of the OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Version Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:52:24.477Z"
+    },
+    "modifyUser": {
+      "title": "Resource Object Version Creation User Reference",
+      "description": "The user reference, which created this version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "ancestry": {
+      "description": "The links to data, which constitute the inputs, from which this record instance is derived.",
+      "title": "Ancestry",
+      "$ref": "../abstract/AbstractLegalParentList.1.0.0.json"
+    },
+    "meta": {
+      "description": "The Frame of Reference meta data section linking the named properties to self-contained definitions.",
+      "title": "Frame of Reference Meta Data",
+      "type": "array",
+      "items": {
+        "$ref": "../abstract/AbstractMetaItem.1.0.0.json"
+      }
+    },
+    "data": {
+      "allOf": [
+        {
+          "$ref": "../abstract/AbstractCommonResources.1.0.0.json"
+        },
+        {
+          "$ref": "../abstract/AbstractWPCGroupType.1.2.0.json"
+        },
+        {
+          "$ref": "../abstract/AbstractWorkProductComponent.1.1.0.json"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "Name": {
+              "type": "string",
+              "title": "Name",
+              "description": "The name of this downtime event."
+            },
+            "ReportingEntityID": {
+              "type": "string",
+              "title": "Reporting Entity",
+              "description": "Reporting entity which provides the reference to the master entity the downtime event occurred at.",
+              "x-osdu-attribution-authority": "The Open Group",
+              "x-osdu-attribution-publication": "OSDU data platform",
+              "x-osdu-attribution-revision": "Evergreen",
+              "pattern": "^[\\w\\-\\.]+:(master-data\\-\\-Field|master-data\\-\\-Reservoir|master-data\\-\\-ReservoirSegment|master-data\\-\\-Well|master-data\\-\\-Wellbore|master-data\\-\\-IsolatedInterval|master-data\\-\\-WellboreOpening):[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "Field"
+                },
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "Reservoir"
+                },
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "ReservoirSegment"
+                },
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "Well"
+                },
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "Wellbore"
+                },
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "IsolatedInterval"
+                },
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "WellboreOpening"
+                }
+              ]
+            },
+            "EventStartTime": {
+              "type": "string",
+              "title": "Event Start Time",
+              "description": "The date and time the downtime event began",
+              "format": "date",
+              "x-osdu-frame-of-reference": "DateTime",
+              "x-osdu-attribution-authority": "The Open Group",
+              "x-osdu-attribution-publication": "OSDU data platform",
+              "x-osdu-attribution-revision": "Evergreen"
+            },
+            "EventEndTime": {
+              "type": "string",
+              "title": "Event End Time",
+              "description": "The date and time the downtime event ended",
+              "format": "date",
+              "x-osdu-frame-of-reference": "DateTime",
+              "x-osdu-attribution-authority": "The Open Group",
+              "x-osdu-attribution-publication": "OSDU data platform",
+              "x-osdu-attribution-revision": "Evergreen"
+            },
+            "DowntimeComponentID": {
+              "type": "string",
+              "title": "Downtime Component",
+              "description": "Identifies the \"Where\" condition of the downtime event; i.e. which component of the system was affected? The downtime component values are further sorted into Surface and Subsurface components",
+              "example": "namespace:reference-data--DowntimeComponentType:S_COMP_GAS:",
+              "x-osdu-attribution-authority": "The Open Group",
+              "x-osdu-attribution-publication": "OSDU data platform",
+              "x-osdu-attribution-revision": "Evergreen",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-DowntimeComponentType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "DowntimeComponentType"
+                }
+              ]
+            },
+            "DowntimeReasonID": {
+              "type": "string",
+              "title": "Downtime Reason",
+              "description": "Identifies the \"What\" condition of the downtime event; i.e. what general type of activity or issue was involved? The downtime reason codes are grouped into Planned and Unplanned categories",
+              "example": "namespace:reference-data--DowntimeReasonType:10_OPTIMIZE:",
+              "x-osdu-attribution-authority": "The Open Group",
+              "x-osdu-attribution-publication": "OSDU data platform",
+              "x-osdu-attribution-revision": "Evergreen",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-DowntimeReasonType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "DowntimeReasonType"
+                }
+              ]
+            },
+            "DowntimeReasonDetailID": {
+              "type": "string",
+              "title": "Downtime Reason Detail",
+              "description": "Identifies the \"Why\" condition of the downtime event; i.e. why did it occur? These are the basic reasons for, or causes of the event",
+              "example": "namespace:reference-data--DowntimeReasonDetailType:CAPACITY:",
+              "x-osdu-attribution-authority": "The Open Group",
+              "x-osdu-attribution-publication": "OSDU data platform",
+              "x-osdu-attribution-revision": "Evergreen",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-DowntimeReasonDetailType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "DowntimeReasonDetailType"
+                }
+              ]
+            },
+            "EquipmentIdentifier": {
+              "type": "string",
+              "title": "Equipment Identifier",
+              "description": "The identifier of the piece of equipment that caused the downtime. This is an identifier to an external system, not an OSDU resource.",
+              "x-osdu-attribution-authority": "The Open Group",
+              "x-osdu-attribution-publication": "OSDU data platform",
+              "x-osdu-attribution-revision": "Evergreen"
+            },
+            "WorkOrderIdentifier": {
+              "type": "string",
+              "title": "Work Order Identifier",
+              "description": "The identifier of a work order which is associated with an event caused by a piece of equipment. This is an identifier to an external system, not an OSDU resource.",
+              "x-osdu-attribution-authority": "The Open Group",
+              "x-osdu-attribution-publication": "OSDU data platform",
+              "x-osdu-attribution-revision": "Evergreen"
+            },
+            "ParentDowntimeEventID": {
+              "type": "string",
+              "title": "Parent Downtime Event",
+              "description": "If there is a parent downtime event which has caused this event (e.g. a production processing facility is down, causing downtime for connected wells), then this attribute specifies the unique identifier of the entity associated with the parent event. If there is no parent event then this value is null",
+              "x-osdu-attribution-authority": "The Open Group",
+              "x-osdu-attribution-publication": "OSDU data platform",
+              "x-osdu-attribution-revision": "Evergreen",
+              "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-DowntimeEvent:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "work-product-component",
+                  "EntityType": "DowntimeEvent"
+                }
+              ]
+            },
+            "DownTimeTypeID": {
+              "type": "string",
+              "title": "Down Time Type ID",
+              "description": "Identifier of the record that specifies the loss caused by this event, or the type of the down time event is Planned, Unplanned or External.",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-DownTimeType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "DownTimeType"
+                }
+              ]
+            },
+            "EventStatusID": {
+              "type": "string",
+              "title": "Event Status ID",
+              "description": "Identifier of the record that specifies the event status, such as is suspended'' or complete''.",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-DowntimeEventStatus:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "DowntimeEventStatus"
+                }
+              ]
+            }
+          },
+          "required": [
+            "ReportingEntityID",
+            "EventStartTime"
+          ],
+          "title": "IndividualProperties"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "ExtensionProperties": {
+              "type": "object"
+            }
+          },
+          "title": "ExtensionProperties"
+        }
+      ]
+    }
+  },
+  "required": [
+    "kind",
+    "acl",
+    "legal"
+  ],
+  "additionalProperties": false,
+  "x-osdu-review-status": "Accepted",
+  "x-osdu-virtual-properties": {
+    "data.VirtualProperties.DefaultName": {
+      "type": "string",
+      "priority": [
+        {
+          "path": "data.Name"
+        }
+      ]
+    },
+    "data.VirtualProperties.DefaultLocation": {
+      "type": "object",
+      "priority": [
+        {
+          "path": "data.SpatialLocation"
+        }
+      ]
+    }
+  },
+  "x-osdu-inheriting-from-kind": [
+    {
+      "name": "WorkProductComponent",
+      "kind": "osdu:wks:AbstractWPCGroupType:1.2.0"
+    }
+  ]
+}

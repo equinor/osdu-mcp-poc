@@ -1,0 +1,639 @@
+{
+  "x-osdu-license": "Copyright 2023, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "$id": "https://schema.osdu.opengroup.org/json/master-data/BusinessAssociate.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:master-data--BusinessAssociate:1.0.0",
+  "title": "BusinessAssociate",
+  "description": "A legal or administrative body, person, institution, or company, or any of its divisions.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "Previously called ResourceID or SRN which identifies this OSDU resource object without version.",
+      "title": "Entity ID",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:master-data\\-\\-BusinessAssociate:[\\w\\-\\.\\:\\%]+$",
+      "example": "namespace:master-data--BusinessAssociate:4d3bd6fe-5496-536b-a607-637e5b3aee16"
+    },
+    "kind": {
+      "description": "The schema identification for the OSDU resource object following the pattern {Namespace}:{Source}:{Type}:{VersionMajor}.{VersionMinor}.{VersionPatch}. The versioning scheme follows the semantic versioning, https://semver.org/.",
+      "title": "Entity Kind",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:[\\w\\-\\.]+:[\\w\\-\\.]+:[0-9]+.[0-9]+.[0-9]+$",
+      "example": "osdu:wks:master-data--BusinessAssociate:1.0.0"
+    },
+    "version": {
+      "description": "The version number of this OSDU resource; set by the framework.",
+      "title": "Version Number",
+      "type": "integer",
+      "format": "int64",
+      "example": 1562066009929332
+    },
+    "acl": {
+      "description": "The access control tags associated with this entity.",
+      "title": "Access Control List",
+      "$ref": "../abstract/AbstractAccessControlList.1.0.0.json"
+    },
+    "legal": {
+      "description": "The entity's legal tags and compliance status. The actual contents associated with the legal tags is managed by the Compliance Service.",
+      "title": "Legal Tags",
+      "$ref": "../abstract/AbstractLegalTags.1.0.0.json"
+    },
+    "tags": {
+      "title": "Tag Dictionary",
+      "description": "A generic dictionary of string keys mapping to string value. Only strings are permitted as keys and values.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "example": {
+        "NameOfKey": "String value"
+      }
+    },
+    "createTime": {
+      "description": "Timestamp of the time at which initial version of this OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:46:20.163Z"
+    },
+    "createUser": {
+      "title": "Resource Object Creation User Reference",
+      "description": "The user reference, which created the first version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "modifyTime": {
+      "description": "Timestamp of the time at which this version of the OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Version Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:52:24.477Z"
+    },
+    "modifyUser": {
+      "title": "Resource Object Version Creation User Reference",
+      "description": "The user reference, which created this version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "ancestry": {
+      "description": "The links to data, which constitute the inputs, from which this record instance is derived.",
+      "title": "Ancestry",
+      "$ref": "../abstract/AbstractLegalParentList.1.0.0.json"
+    },
+    "meta": {
+      "description": "The Frame of Reference meta data section linking the named properties to self-contained definitions.",
+      "title": "Frame of Reference Meta Data",
+      "type": "array",
+      "items": {
+        "$ref": "../abstract/AbstractMetaItem.1.0.0.json"
+      }
+    },
+    "data": {
+      "allOf": [
+        {
+          "$ref": "../abstract/AbstractCommonResources.1.0.0.json"
+        },
+        {
+          "$ref": "../abstract/AbstractMaster.1.2.0.json"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "BusinessAssociateID": {
+              "type": "string",
+              "title": "External Business Associate Identifier",
+              "description": "Native identifier from a Master Data Management System or other trusted source external to OSDU - stored here in order to allow for multi-system connection and synchronization. If used, the \"Source\" property should identify that source system."
+            },
+            "Name": {
+              "type": "string",
+              "title": "Name",
+              "description": "The name of the business associate."
+            },
+            "PurposeDescription": {
+              "type": "string",
+              "title": "Purpose Description",
+              "description": "The reason why the business associated was formed."
+            },
+            "Description": {
+              "type": "string",
+              "title": "Description",
+              "description": "Textual description of the nature of the organisation."
+            },
+            "EffectiveDate": {
+              "type": "string",
+              "title": "Effective Date",
+              "description": "The date and time at which a given business associate becomes effective.",
+              "format": "date"
+            },
+            "TerminationDate": {
+              "type": "string",
+              "title": "Termination Date",
+              "description": "The date and time at which a given business associate is no longer in effect.",
+              "format": "date"
+            },
+            "OrganisationTypeID": {
+              "type": "string",
+              "title": "Organisation Type ID",
+              "description": "Category the organisational structure fits into. Possible values - Operating Unit, Operating sub Unit, A Business, A Department, Government Agency, etc.",
+              "x-osdu-existing-standard": "PPDM R_BA_TYPE corresponds to OSDU OrganisationType",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-OrganisationType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "OrganisationType"
+                }
+              ]
+            },
+            "ParentBusinessAssociateID": {
+              "type": "string",
+              "title": "Parent Business Associate ID",
+              "description": "If populated, this is the parent business associate of the current business associate. In case of de-mergers/splits, this relationship identified the Business Associate, which was split up.",
+              "pattern": "^[\\w\\-\\.]+:master-data\\-\\-BusinessAssociate:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "BusinessAssociate"
+                }
+              ]
+            },
+            "CurrentStatus": {
+              "type": "object",
+              "title": "Current Business Associate Status",
+              "description": "The current status of the Business Associate, such as Active, In Receivership, Sold, Merged. Main sheet",
+              "x-osdu-attribution-authority": "PPDM",
+              "x-osdu-attribution-publication": "CURRENT_STATUS",
+              "x-osdu-attribution-revision": "3.9",
+              "properties": {
+                "StatusTypeID": {
+                  "type": "string",
+                  "title": "Status Type ID",
+                  "description": "The current status of the Business Associate, such as Active, In Receivership, Sold, Merged. Property #1",
+                  "x-osdu-attribution-authority": "PPDM",
+                  "x-osdu-attribution-publication": "CURRENT_STATUS",
+                  "x-osdu-attribution-revision": "3.9",
+                  "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-BusinessAssociateStatusType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                  "x-osdu-relationship": [
+                    {
+                      "GroupType": "reference-data",
+                      "EntityType": "BusinessAssociateStatusType"
+                    }
+                  ]
+                },
+                "EffectiveDate": {
+                  "type": "string",
+                  "title": "Effective Date",
+                  "description": "The date and time at which a given business associate status becomes effective.",
+                  "format": "date"
+                },
+                "TerminationDate": {
+                  "type": "string",
+                  "title": "Termination Date",
+                  "description": "The date and time at which a given business associate status is no longer in effect.",
+                  "format": "date"
+                },
+                "Remark": {
+                  "type": "string",
+                  "title": "Remark",
+                  "description": "A remark about the business associate status in time."
+                }
+              }
+            },
+            "PreviousStates": {
+              "type": "array",
+              "title": "Previous Business Associate States",
+              "description": "The array of historical business associate status together with the time interval of validity and a remark.",
+              "items": {
+                "type": "object",
+                "title": "BAStatus",
+                "description": "Describes a BusinessAssociate's status in time.",
+                "properties": {
+                  "StatusTypeID": {
+                    "type": "string",
+                    "title": "Status Type ID",
+                    "description": "The current status of the Business Associate, such as Active, In Receivership, Sold, Merged. Property #1",
+                    "x-osdu-attribution-authority": "PPDM",
+                    "x-osdu-attribution-publication": "CURRENT_STATUS",
+                    "x-osdu-attribution-revision": "3.9",
+                    "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-BusinessAssociateStatusType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "reference-data",
+                        "EntityType": "BusinessAssociateStatusType"
+                      }
+                    ]
+                  },
+                  "EffectiveDate": {
+                    "type": "string",
+                    "title": "Effective Date",
+                    "description": "The date and time at which a given business associate status becomes effective.",
+                    "format": "date"
+                  },
+                  "TerminationDate": {
+                    "type": "string",
+                    "title": "Termination Date",
+                    "description": "The date and time at which a given business associate status is no longer in effect.",
+                    "format": "date"
+                  },
+                  "Remark": {
+                    "type": "string",
+                    "title": "Remark",
+                    "description": "A remark about the business associate status in time."
+                  }
+                }
+              }
+            },
+            "Remark": {
+              "type": "string",
+              "title": "Remark",
+              "description": "Narrative remarks about this Business Associate.",
+              "x-osdu-attribution-authority": "PPDM",
+              "x-osdu-attribution-publication": "REMARK",
+              "x-osdu-attribution-revision": "3.9"
+            },
+            "OrganisationID": {
+              "type": "string",
+              "title": "Organization ID",
+              "description": "The relationship to an organisation.",
+              "x-osdu-attribution-authority": "OSDU",
+              "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Organisation:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "Organisation"
+                }
+              ]
+            },
+            "Addresses": {
+              "type": "array",
+              "title": "Organisation Addresses",
+              "description": "The Addresses array contains information on the address, phone numbers, primary contacts, and location of the business associate, allowing clients to have multiple addresses. For example, companies that have a headquarters and various satellite offices.",
+              "x-osdu-attribution-authority": "PPDM",
+              "x-osdu-attribution-publication": "BA::BA_ADDRESS",
+              "x-osdu-attribution-revision": "3.9",
+              "items": {
+                "type": "object",
+                "title": "Address",
+                "description": "An array of many addresses displayed as table. Organisation Address table contains information on the address, phone numbers, primary contacts, and location of the business associate, allowing clients to have multiple addresses. For example, compan ies that have a headquarters and various satellite offices.",
+                "properties": {
+                  "IsActive": {
+                    "type": "boolean",
+                    "title": "Is Active",
+                    "description": "A Y/N flag indicating whether this Organisation Address is currently either active / valid (Y) or inactive / invalid (N).",
+                    "x-osdu-attribution-authority": "PPDM",
+                    "x-osdu-attribution-publication": "ACTIVE_IND",
+                    "x-osdu-attribution-revision": "3.9"
+                  },
+                  "AddressTypeID": {
+                    "type": "string",
+                    "title": "Address Type ID",
+                    "description": "The type of business associate address. For example shipping, billing, sales...",
+                    "x-osdu-attribution-authority": "PPDM",
+                    "x-osdu-attribution-publication": "ADDRESS_TYPE",
+                    "x-osdu-attribution-revision": "3.9",
+                    "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-AddressType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "reference-data",
+                        "EntityType": "AddressType"
+                      }
+                    ]
+                  },
+                  "AddressLines": {
+                    "type": "array",
+                    "title": "Adress Lines",
+                    "description": "One or more lines of address for a business associate.",
+                    "x-osdu-attribution-authority": "PPDM",
+                    "x-osdu-attribution-publication": "FIRST_ADDRESS_LINE",
+                    "x-osdu-attribution-revision": "3.9",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "PostalCode": {
+                    "type": "string",
+                    "title": "Postal Code",
+                    "description": "Code number assigned by the postal service identifying a mail delivery zone.",
+                    "x-osdu-attribution-authority": "PPDM",
+                    "x-osdu-attribution-publication": "POSTAL_ZIP_CODE",
+                    "x-osdu-attribution-revision": "3.9"
+                  },
+                  "City": {
+                    "$ref": "../abstract/AbstractGeoPoliticalContext.1.0.0.json",
+                    "title": "City",
+                    "description": "City as GeoPoliticalContext.",
+                    "x-osdu-attribution-authority": "PPDM",
+                    "x-osdu-attribution-publication": "CITY_AREA_ID",
+                    "x-osdu-attribution-revision": "3.9"
+                  },
+                  "ProvinceState": {
+                    "$ref": "../abstract/AbstractGeoPoliticalContext.1.0.0.json",
+                    "title": "Province / State",
+                    "description": "Unique identifier for the area that is the Country Note that if you choose, you could use only the City relationship and derive the Country and StateProvince (or other subdivision). Alternatively, you may choose to populate all three relationships explicitly. For example states, provinces or other political subdivisions of countries.",
+                    "x-osdu-attribution-authority": "PPDM",
+                    "x-osdu-attribution-publication": "PROVINCE_STATE_AREA_ID",
+                    "x-osdu-attribution-revision": "3.9"
+                  },
+                  "Country": {
+                    "$ref": "../abstract/AbstractGeoPoliticalContext.1.0.0.json",
+                    "title": "Country",
+                    "description": "Unique identifier for the area that is the Country. Note that if you choose, you could use only the City relationship and derive the Country and StateProvince (or other subdivision). Alternatively, you may choose to populate all three relationships explicitly. For example Austria, Canada, United Kingdom, USA, Venezuela.",
+                    "x-osdu-attribution-authority": "PPDM",
+                    "x-osdu-attribution-publication": "COUNTRY_AREA_ID",
+                    "x-osdu-attribution-revision": "3.9"
+                  },
+                  "OfficeTypeID": {
+                    "type": "string",
+                    "title": "Office Type ID",
+                    "description": "The type of office, such as branch, lab facility, etc.",
+                    "x-osdu-attribution-authority": "PPDM",
+                    "x-osdu-attribution-publication": "OFFICE_TYPE",
+                    "x-osdu-attribution-revision": "3.9",
+                    "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-OfficeType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "reference-data",
+                        "EntityType": "OfficeType"
+                      }
+                    ]
+                  },
+                  "IsPreferred": {
+                    "type": "boolean",
+                    "title": "Is Preferred",
+                    "description": "A flag indicating this contact information is primary or preferred for the given AddressTypeID.",
+                    "x-osdu-attribution-authority": "PPDM",
+                    "x-osdu-attribution-publication": "PREFERRED_IND",
+                    "x-osdu-attribution-revision": "3.9"
+                  },
+                  "Remark": {
+                    "type": "string",
+                    "title": "Remark",
+                    "description": "Narrative remarks about this address.",
+                    "x-osdu-attribution-authority": "PPDM",
+                    "x-osdu-attribution-publication": "REMARK",
+                    "x-osdu-attribution-revision": "3.9"
+                  },
+                  "PrimaryContact": {
+                    "$ref": "../abstract/AbstractContactUserProfile.1.0.0.json",
+                    "title": "Primary Contact",
+                    "description": "The primary contact for this address."
+                  }
+                }
+              }
+            },
+            "Authorities": {
+              "type": "array",
+              "title": "Organisation Authorities",
+              "description": "Describes the set of authorities held by a business associate to make payments, sign contracts etc. Considered as business context.",
+              "x-osdu-attribution-authority": "PPDM",
+              "x-osdu-attribution-publication": "BA::BA-AUTHORITY",
+              "x-osdu-attribution-revision": "3.9",
+              "items": {
+                "type": "object",
+                "title": "OrganisationAuthority",
+                "description": "Describes the authority held by a business associate to make payments, sign contracts etc. Considered in a business context. Application or database authorities are held in ENTITLEMENTS.",
+                "properties": {
+                  "AuthorityID": {
+                    "type": "string",
+                    "title": "Authority Identified",
+                    "description": "Unique identifier for the row that describes the authority that a business associate has over business objects.",
+                    "x-osdu-attribution-authority": "PPDM",
+                    "x-osdu-attribution-publication": "AUTHORITY_ID",
+                    "x-osdu-attribution-revision": "3.9"
+                  },
+                  "IsActive": {
+                    "type": "boolean",
+                    "title": "Is Active",
+                    "description": "A flag indicating whether this data is currently either active / valid (True) or inactive / invalid (False).",
+                    "x-osdu-attribution-authority": "PPDM",
+                    "x-osdu-attribution-publication": "ACTIVE_IND",
+                    "x-osdu-attribution-revision": "3.9"
+                  },
+                  "AuthorityTypeID": {
+                    "type": "string",
+                    "title": "Authority Type ID",
+                    "description": "The type of authority given to a business associate, often an employee of a company. Authority may be extended for purchase authorizations, to sign contracts or to enter into negotiations etc.",
+                    "x-osdu-attribution-authority": "PPDM",
+                    "x-osdu-attribution-publication": "AUTHORITY_TYPE",
+                    "x-osdu-attribution-revision": "3.9",
+                    "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-AuthorityType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "reference-data",
+                        "EntityType": "AuthorityType"
+                      }
+                    ]
+                  },
+                  "AuthorisedByID": {
+                    "type": "string",
+                    "title": "Authorised By ID",
+                    "description": "The unique identifier of the BusinessAssociate who authorized this level of authority.",
+                    "x-osdu-attribution-authority": "PPDM",
+                    "x-osdu-attribution-publication": "AUTHORIZED_BY",
+                    "x-osdu-attribution-revision": "3.9",
+                    "pattern": "^[\\w\\-\\.]+:master-data\\-\\-BusinessAssociate:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "master-data",
+                        "EntityType": "BusinessAssociate"
+                      }
+                    ]
+                  },
+                  "EffectiveDate": {
+                    "type": "string",
+                    "title": "Effective Date",
+                    "description": "Date on which this Authority came into effect.",
+                    "format": "date",
+                    "x-osdu-frame-of-reference": "DateTime",
+                    "x-osdu-attribution-authority": "PPDM",
+                    "x-osdu-attribution-publication": "EFFECTIVE_DATE",
+                    "x-osdu-attribution-revision": "3.9"
+                  },
+                  "TerminationDate": {
+                    "type": "string",
+                    "title": "Termination Date",
+                    "description": "Date on which this Authority was no longer in effect.",
+                    "format": "date",
+                    "x-osdu-frame-of-reference": "DateTime",
+                    "x-osdu-attribution-authority": "PPDM",
+                    "x-osdu-attribution-publication": "EXPIRY_DATE",
+                    "x-osdu-attribution-revision": "3.9"
+                  },
+                  "Remark": {
+                    "type": "string",
+                    "title": "Remark",
+                    "description": "Narrative remarks about this BusinessAssociate Authority.",
+                    "x-osdu-attribution-authority": "PPDM",
+                    "x-osdu-attribution-publication": "REMARK",
+                    "x-osdu-attribution-revision": "3.9"
+                  },
+                  "RepresentedByID": {
+                    "type": "string",
+                    "title": "Represented By ID",
+                    "description": "The unique identifier of the BusinessAssociate who the authorized person represents for this authority. May be a subsidiary, a company etc.",
+                    "x-osdu-attribution-authority": "PPDM",
+                    "x-osdu-attribution-publication": "REPRESENTED_BA_ID",
+                    "x-osdu-attribution-revision": "3.9",
+                    "pattern": "^[\\w\\-\\.]+:master-data\\-\\-BusinessAssociate:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "master-data",
+                        "EntityType": "BusinessAssociate"
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            "Contacts": {
+              "type": "array",
+              "title": "Organisation Contacts",
+              "description": "Represents the contact information for a company. May be a phone number, fax number, EMail address, Web URL etc.",
+              "x-osdu-attribution-authority": "PPDM",
+              "x-osdu-attribution-publication": "Derived after BA_CONTACT_INFO",
+              "x-osdu-attribution-revision": "3.9",
+              "items": {
+                "$ref": "../abstract/AbstractContactUserProfile.1.0.0.json"
+              }
+            },
+            "Services": {
+              "type": "array",
+              "title": "Services",
+              "description": "Describes the set of primary services provided by a business associate. For example drilling contractor, logging com pany, seismic broker etc.",
+              "x-osdu-attribution-authority": "PPDM",
+              "x-osdu-attribution-publication": "BA::BA-SERVICE",
+              "x-osdu-attribution-revision": "3.9",
+              "items": {
+                "type": "object",
+                "title": "Service",
+                "description": "Describes the primary services provided by a business associate. For example drilling contractor, logging company, seismic broker etc.",
+                "properties": {
+                  "ServiceTypeID": {
+                    "type": "string",
+                    "title": "Service Type ID",
+                    "description": "The service that a business associate provides. For example well logging, drilling, application development.",
+                    "x-osdu-attribution-authority": "PPDM",
+                    "x-osdu-attribution-publication": "BA_SERVICE_TYPE",
+                    "x-osdu-attribution-revision": "3.9",
+                    "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-BusinessAssociateServiceType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "reference-data",
+                        "EntityType": "BusinessAssociateServiceType"
+                      }
+                    ]
+                  },
+                  "IsActive": {
+                    "type": "boolean",
+                    "title": "Is Active",
+                    "description": "A flag indicating whether this Service is currently either active/valid (True) or inactive/invalid (False).",
+                    "x-osdu-attribution-authority": "PPDM",
+                    "x-osdu-attribution-publication": "ACTIVE_IND",
+                    "x-osdu-attribution-revision": "3.9"
+                  },
+                  "EffectiveDate": {
+                    "type": "string",
+                    "title": "Effective Date",
+                    "description": "The date on which the service came into effect.",
+                    "format": "date",
+                    "x-osdu-frame-of-reference": "DateTime",
+                    "x-osdu-attribution-authority": "PPDM",
+                    "x-osdu-attribution-publication": "EFFECTIVE_DATE",
+                    "x-osdu-attribution-revision": "3.9"
+                  },
+                  "TerminationDate": {
+                    "type": "string",
+                    "title": "Termination Date",
+                    "description": "The date on which this service was no longer in effect.",
+                    "format": "date",
+                    "x-osdu-frame-of-reference": "DateTime",
+                    "x-osdu-attribution-authority": "PPDM",
+                    "x-osdu-attribution-publication": "EXPIRY_DATE",
+                    "x-osdu-attribution-revision": "3.9"
+                  },
+                  "Remark": {
+                    "type": "string",
+                    "title": "Remark",
+                    "description": "Narrative remarks about this service.",
+                    "x-osdu-attribution-authority": "PPDM",
+                    "x-osdu-attribution-publication": "REMARK",
+                    "x-osdu-attribution-revision": "3.9"
+                  },
+                  "ServiceQualityTypeID": {
+                    "type": "string",
+                    "title": "Service Quality Type ID",
+                    "description": "A code indicating the quality of service received from this service.",
+                    "x-osdu-attribution-authority": "PPDM",
+                    "x-osdu-attribution-publication": "SERVICE_QUALITY",
+                    "x-osdu-attribution-revision": "3.9",
+                    "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-BusinessAssociateServiceQualityType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "reference-data",
+                        "EntityType": "BusinessAssociateServiceQualityType"
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            "Person": {
+              "$ref": "../abstract/AbstractContactUserProfile.1.0.0.json",
+              "title": "Person",
+              "description": "Where the Business Associate is a person, this holds the contact information.",
+              "x-osdu-attribution-authority": "PPDM informed",
+              "x-osdu-attribution-publication": "replacing items 19, 20, 21"
+            },
+            "SuccessorID": {
+              "type": "string",
+              "title": "Successor ID",
+              "description": "The succeeding organisation/business associate in case of mergers and acquisitions.",
+              "pattern": "^[\\w\\-\\.]+:master-data\\-\\-BusinessAssociate:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "BusinessAssociate"
+                }
+              ]
+            }
+          },
+          "title": "IndividualProperties"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "ExtensionProperties": {
+              "type": "object"
+            }
+          },
+          "title": "ExtensionProperties"
+        }
+      ]
+    }
+  },
+  "required": [
+    "kind",
+    "acl",
+    "legal"
+  ],
+  "additionalProperties": false,
+  "x-osdu-review-status": "Accepted",
+  "x-osdu-virtual-properties": {
+    "data.VirtualProperties.DefaultLocation": {
+      "type": "object",
+      "priority": [
+        {
+          "path": "data.SpatialLocation"
+        }
+      ]
+    },
+    "data.VirtualProperties.DefaultName": {
+      "type": "string",
+      "priority": [
+        {
+          "path": "data.Name"
+        }
+      ]
+    }
+  },
+  "x-osdu-inheriting-from-kind": []
+}

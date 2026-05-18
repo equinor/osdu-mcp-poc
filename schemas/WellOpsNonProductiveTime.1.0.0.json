@@ -1,0 +1,965 @@
+{
+  "x-osdu-license": "Copyright 2025, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "$id": "https://schema.osdu.opengroup.org/json/work-product-component/WellOpsNonProductiveTime.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:work-product-component--WellOpsNonProductiveTime:1.0.0",
+  "title": "WellOpsNonProductiveTime",
+  "description": "Non Productive Time (NPT) during Well Operations is the time taken to perform all remedial activities that DO NOT continue to progress towards the planned objective(s). NPT will  include all subsequent time taken to reach the same stage in the work programme prior to the NPT event occurring e.g. reach the same depth before stuck pipe event and back-off etc. NPTs caused by an Equipment Failure may be associated to a DowntimeEvent. An NPT start must align to an Operations Report Activity; similarly, an NPT must end at the end of an Operations Report activity.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "Previously called ResourceID or SRN which identifies this OSDU resource object without version.",
+      "title": "Entity ID",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-WellOpsNonProductiveTime:[\\w\\-\\.\\:\\%]+$",
+      "example": "namespace:work-product-component--WellOpsNonProductiveTime:f9ced775-c8d9-52a5-b2f6-37bad929fd2e"
+    },
+    "kind": {
+      "description": "The schema identification for the OSDU resource object following the pattern {Namespace}:{Source}:{Type}:{VersionMajor}.{VersionMinor}.{VersionPatch}. The versioning scheme follows the semantic versioning, https://semver.org/.",
+      "title": "Entity Kind",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:[\\w\\-\\.]+:[\\w\\-\\.]+:[0-9]+.[0-9]+.[0-9]+$",
+      "example": "osdu:wks:work-product-component--WellOpsNonProductiveTime:1.0.0"
+    },
+    "version": {
+      "description": "The version number of this OSDU resource; set by the framework.",
+      "title": "Version Number",
+      "type": "integer",
+      "format": "int64",
+      "example": 1562066009929332
+    },
+    "acl": {
+      "description": "The access control tags associated with this entity.",
+      "title": "Access Control List",
+      "$ref": "../abstract/AbstractAccessControlList.1.0.0.json"
+    },
+    "legal": {
+      "description": "The entity's legal tags and compliance status. The actual contents associated with the legal tags is managed by the Compliance Service.",
+      "title": "Legal Tags",
+      "$ref": "../abstract/AbstractLegalTags.1.0.0.json"
+    },
+    "tags": {
+      "title": "Tag Dictionary",
+      "description": "A generic dictionary of string keys mapping to string value. Only strings are permitted as keys and values.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "example": {
+        "NameOfKey": "String value"
+      }
+    },
+    "createTime": {
+      "description": "Timestamp of the time at which initial version of this OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:46:20.163Z"
+    },
+    "createUser": {
+      "title": "Resource Object Creation User Reference",
+      "description": "The user reference, which created the first version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "modifyTime": {
+      "description": "Timestamp of the time at which this version of the OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Version Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:52:24.477Z"
+    },
+    "modifyUser": {
+      "title": "Resource Object Version Creation User Reference",
+      "description": "The user reference, which created this version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "ancestry": {
+      "description": "The links to data, which constitute the inputs, from which this record instance is derived.",
+      "title": "Ancestry",
+      "$ref": "../abstract/AbstractLegalParentList.1.0.0.json"
+    },
+    "meta": {
+      "description": "The Frame of Reference meta data section linking the named properties to self-contained definitions.",
+      "title": "Frame of Reference Meta Data",
+      "type": "array",
+      "items": {
+        "$ref": "../abstract/AbstractMetaItem.1.0.0.json"
+      }
+    },
+    "data": {
+      "allOf": [
+        {
+          "$ref": "../abstract/AbstractCommonResources.1.0.0.json"
+        },
+        {
+          "$ref": "../abstract/AbstractWPCGroupType.1.1.0.json"
+        },
+        {
+          "$ref": "../abstract/AbstractWorkProductComponent.1.1.0.json"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "WellboreID": {
+              "type": "string",
+              "title": "Wellbore ID",
+              "description": "Parent Wellbore Identifier",
+              "example": "namespace:master-data--Wellbore:11000091175501:",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-existing-standard": "Y",
+              "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Wellbore:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "Wellbore"
+                }
+              ]
+            },
+            "WellActivityID": {
+              "type": "string",
+              "title": "Well Activity ID",
+              "description": "Identifier of the Well Activity in which the NPT occurred",
+              "example": "namespace:master-data--WellActivity:110000911755DRO:",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-existing-standard": "Y",
+              "pattern": "^[\\w\\-\\.]+:master-data\\-\\-WellActivity:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "WellActivity"
+                }
+              ]
+            },
+            "RigID": {
+              "type": "string",
+              "title": "Rig ID",
+              "description": "Identifier of the Rig/Work Unit performing the activity at the time of the NPT",
+              "example": "namespace:master-data--Rig:Sedco711:",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-existing-standard": "Y",
+              "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Rig:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "Rig"
+                }
+              ]
+            },
+            "Name": {
+              "type": "string",
+              "title": "Name",
+              "description": "Human recognizable context/name of the NPT Event.",
+              "example": "20/4/2024 08:00 - Wait on Weather",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform"
+            },
+            "VerticalMeasurement": {
+              "$ref": "../abstract/AbstractFacilityVerticalMeasurement.1.0.0.json",
+              "title": "Vertical Measurement Reference",
+              "description": "References an entry in the VerticalMeasurements array for the Wellbore identified by WellboreID, or a standalone vertical reference elevation for all measured depths within the NPT record. If this is not populated, the VerticalMeasurement is derived from the Wellbore default Vertical Measure Elevation.",
+              "example": {
+                "VerticalReferenceEntityID": "namespace:master-data--Well:110000911755:",
+                "VerticalReferenceID": "5iePi"
+              },
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-existing-standard": "Y"
+            },
+            "Title": {
+              "type": "string",
+              "title": "Title",
+              "description": "Title, free text entry usually by Rigsite personnel",
+              "example": "WOW - Wait on Weather",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform"
+            },
+            "Description": {
+              "type": "string",
+              "title": "Description",
+              "description": "Description, free text entry usually by Rigsite personnel, but may be amended by Performance Engineer (NPT Coach)",
+              "example": "Wait on Storm Beatrice to subside before offloading from PSV Edda Fram",
+              "x-osdu-attribution-authority": "WITSML",
+              "x-osdu-attribution-publication": "DrillReport.EquipFailureInfo.DrillReportEquipFailureInfo.Description",
+              "x-osdu-attribution-revision": "V2.1"
+            },
+            "UnplannedEventTypeID": {
+              "type": "string",
+              "title": "Unplanned Event Type",
+              "description": "Unplanned Event Type classification (NPT w/ Equipment Failure, NPT w/out Equipment Failure, Equipment Failure (no NPT)",
+              "example": "namespace:reference-data--NPTUnplannedEventType:N:",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-existing-standard": "N",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-NPTUnplannedEventType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "NPTUnplannedEventType"
+                }
+              ]
+            },
+            "NPTCauseTypeID": {
+              "type": "string",
+              "title": "NPT Cause Type ID",
+              "description": "Major NPT Cause Type category",
+              "example": "namespace:reference-data--NPTCauseType:WOW:",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-existing-standard": "N",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-NPTCauseType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "NPTCauseType"
+                }
+              ]
+            },
+            "NPTCauseSubTypeID": {
+              "type": "string",
+              "title": "NPT Cause Sub TypeID",
+              "description": "Minor NPT Cause Type category",
+              "example": "namespace:reference-data--NPTCauseSubType:WIND:",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-existing-standard": "N",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-NPTCauseSubType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "NPTCauseSubType"
+                }
+              ]
+            },
+            "IsExcludeFromNPT": {
+              "type": "boolean",
+              "title": "Is Excluded as an NPT",
+              "description": "Used to flag NPT Events which were later classified as not NPT",
+              "example": false,
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform"
+            },
+            "EventStartTime": {
+              "type": "string",
+              "title": "Start Date/time",
+              "description": "Date/time the Unplanned event started",
+              "format": "date-time",
+              "example": "2024-04-20T08:00:00+0000",
+              "x-osdu-attribution-authority": "WITSML",
+              "x-osdu-attribution-publication": "DrillReport.EquipFailureInfo.DrillReportEquipFailureInfo.Dtim",
+              "x-osdu-attribution-revision": "V2.1"
+            },
+            "EventEndTime": {
+              "type": "string",
+              "title": "End Date/time",
+              "description": "Date/time the Unplanned event ended",
+              "format": "date-time",
+              "example": "2024-04-21T04:00:00+0000",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform"
+            },
+            "StartOperationsReportID": {
+              "type": "string",
+              "title": "Start Operations Report ID",
+              "description": "Start Operations Activity Daily Operations Report ID in which the NPT Event started.",
+              "example": "namespace:work-product-component--WellOperationsReport:712000184227.pVbNj.R4fNn::",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-WellOperationsReport:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "work-product-component",
+                  "EntityType": "WellOperationsReport"
+                }
+              ]
+            },
+            "StartOperationsActivityID": {
+              "type": "string",
+              "title": "Start Operations Activity Name",
+              "description": "Start Operations Activity Natural Identifier from Daily Operations Report. Requires that the relationship to WellOperationsReport is populated. ActivityName must match a member in the related WellOperationsReport data.OperationsActivity[].ActivityID.",
+              "example": "Activity1",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform"
+            },
+            "EndOperationsReportID": {
+              "type": "string",
+              "title": "Start Operations Report ID",
+              "description": "Start Operations Activity Daily Operations Report ID  in which the NPT Event ended.",
+              "example": "namespace:work-product-component--WellOperationsReport:712000184227.pVbNj.R4fNn::",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-WellOperationsReport:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "work-product-component",
+                  "EntityType": "WellOperationsReport"
+                }
+              ]
+            },
+            "EndOperationsActivityID": {
+              "type": "string",
+              "title": "End Operations Activity ID",
+              "description": "End Operations Activity Natural Identifier from Daily Operations Report. Requires that the relationship WellOperationsReport is populated. ActivityID must match a member in the related WellOperationsReport data.OperationsActivity[].ActivityID.",
+              "example": "Activity2",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform"
+            },
+            "NPTLevel": {
+              "type": "integer",
+              "title": "NPT Level",
+              "description": "NPT Level (nesting). 0 = Productive Time (not NPT), 1 = 1st Unplanned Activity, 2 = 2nd Unplanned activity occurring within 1st NPT, 3 = 3rd NPT occurring within 2nd NPT, tc.",
+              "example": 1,
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform"
+            },
+            "ParentNPTEventID": {
+              "type": "string",
+              "title": "Parent NPT Event ID",
+              "description": "Parent NPT Event Identifier (when nested)",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-WellOpsNonProductiveTime:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "work-product-component",
+                  "EntityType": "WellOpsNonProductiveTime"
+                }
+              ]
+            },
+            "NPTMeasuredDepth": {
+              "type": "number",
+              "title": "NPT Measured Depth",
+              "description": "Measured Depth at time when the NPT event started (when relevant) referenced from Vertical Measure Elevation",
+              "example": "5000 m",
+              "x-osdu-frame-of-reference": "UOM:length",
+              "x-osdu-attribution-authority": "WITSML",
+              "x-osdu-attribution-publication": "DrillReport.EquipFailureInfo.DrillReportEquipFailureInfo.Md",
+              "x-osdu-attribution-revision": "V2.1"
+            },
+            "NPTTrueVerticalDepth": {
+              "type": "number",
+              "title": "NPT True Vertical Depth",
+              "description": "True Vertical Depth at time when the NPT event started (when relevant) referenced from Vertical Measure Elevation",
+              "example": "3150 m",
+              "x-osdu-frame-of-reference": "UOM:length",
+              "x-osdu-attribution-authority": "WITSML",
+              "x-osdu-attribution-publication": "DrillReport.EquipFailureInfo.DrillReportEquipFailureInfo.Tvd",
+              "x-osdu-attribution-revision": "V2.1"
+            },
+            "NPTEndMeasuredDepth": {
+              "type": "number",
+              "title": "NPT End Measured Depth",
+              "description": "Measured Depth at time when the NPT event ended if different from start MD referenced from Vertical Measure Elevation",
+              "example": "5000 m",
+              "x-osdu-frame-of-reference": "UOM:length",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform"
+            },
+            "NPTEndTrueVerticalDepth": {
+              "type": "number",
+              "title": "NPT End True Vertical Depth",
+              "description": "True Vertical Depth at time when the NPT event end if different from start TVD referenced from Vertical Measure Elevation",
+              "example": "3150 m",
+              "x-osdu-frame-of-reference": "UOM:length",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform"
+            },
+            "WellboreMarkerSetID": {
+              "type": "string",
+              "title": "Wellbore Marker Set ID",
+              "description": "Association to Wellbore Marker Set (when relevant)",
+              "example": "namespace:work-product-component--WellboreMarkerSet:712000184227.MkrSet::",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-WellboreMarkerSet:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "work-product-component",
+                  "EntityType": "WellboreMarkerSet"
+                }
+              ]
+            },
+            "AccountableParty": {
+              "type": "string",
+              "title": "Accountable Party",
+              "description": "Name of the NPT Coach/Well Operations Performance Engineer who was responsible for shepherding the NPT through its lifecycle",
+              "example": "Joe Bloggs",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform"
+            },
+            "GrossDuration": {
+              "type": "number",
+              "title": "Gross Duration",
+              "description": "Gross Time Duration = NPT End Date/time - Start Date/time",
+              "example": "20 h",
+              "x-osdu-frame-of-reference": "UOM:time",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform"
+            },
+            "NestedDuration": {
+              "type": "number",
+              "title": "Nested Duration",
+              "description": "Nested Time duration - sum of Nested NPT Net Duration occurring within this NPT (can be calculated)",
+              "example": "0 h",
+              "x-osdu-frame-of-reference": "UOM:time",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform"
+            },
+            "ProductiveTimeAdjustment": {
+              "type": "number",
+              "title": "Productive Time Adjustment",
+              "description": "Productive Time Adjustment duration - time spent working towards Well objective(s) whilst  the NPT is ongoing. Productive time negates against NPT Net Time",
+              "example": "0 h",
+              "x-osdu-frame-of-reference": "UOM:time",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform"
+            },
+            "NetDuration": {
+              "type": "number",
+              "title": "Net Duration",
+              "description": "Net Duration = Gross Duration - Nested Duration - Productive Time Adjustment",
+              "example": "20 h",
+              "x-osdu-frame-of-reference": "UOM:time",
+              "x-osdu-attribution-authority": "WITSML",
+              "x-osdu-attribution-publication": "DrillReport.EquipFailureInfo.DrillReportEquipFailureInfo.ETimeMissProduction",
+              "x-osdu-attribution-revision": "V2.1"
+            },
+            "SeverityLevelID": {
+              "type": "string",
+              "title": "Severity Level ID",
+              "description": "Severity Level defined on Time and/or Cost impact/criteria",
+              "example": "namespace:reference-data--NPTSeverityLevel:3:",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-existing-standard": "N",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-NPTSeverityLevel:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "NPTSeverityLevel"
+                }
+              ]
+            },
+            "SafetyClassificationID": {
+              "type": "string",
+              "title": "Safety Classification ID",
+              "description": "NPT Safety Classification - High Potential Incident, Process Safety Incident, or both. NULL identifies NPT Events with no safety implications.",
+              "example": "namespace:reference-data--NPTSafetyClassificationType:HIPO:",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-existing-standard": "N",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-NPTSafetyClassificationType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "NPTSafetyClassificationType"
+                }
+              ]
+            },
+            "SafetyIncidentReferenceID": {
+              "type": "string",
+              "title": "Safety Incident Reference ID",
+              "description": "Safety Incident Reference to another system",
+              "example": "ExampleSafetyReferenceID",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform"
+            },
+            "WellControlEventClassificationID": {
+              "type": "string",
+              "title": "Well Control Event Classification ID",
+              "description": "Well Control Event Classification level",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-existing-standard": "N",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-WellControlEventClassification:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "WellControlEventClassification"
+                }
+              ]
+            },
+            "CostGroupID": {
+              "type": "string",
+              "title": "Cost Group",
+              "description": "Cost Group/Code (Activity Element)",
+              "example": "namespace:reference-data--CostCode:11:",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-existing-standard": "N",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-CostCode:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "CostCode"
+                }
+              ]
+            },
+            "RootCauseFailureTeamID": {
+              "type": "string",
+              "title": "Root Cause Failure Team ID",
+              "description": "Team assigned to investigate the NPT",
+              "example": "namespace:reference-data--NPTRootCauseFailureTeam:Blue:",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-existing-standard": "N",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-NPTRootCauseFailureTeam:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "NPTRootCauseFailureTeam"
+                }
+              ]
+            },
+            "RootCauseFailureReferenceID": {
+              "type": "string",
+              "title": "Root Cause Failure Reference Identifier",
+              "description": "NPT incident Reference/Identifier to other Root Cause Failure Analysis system",
+              "example": "ExampleRCFAID",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform"
+            },
+            "OperationsBurnRate": {
+              "type": "number",
+              "title": "Operations Burn Rate",
+              "description": "Ongoing operations burn rate cost (daily cost). Used to calculate Gross and Net Cost",
+              "example": "87000 USD%2Fd",
+              "x-osdu-frame-of-reference": "UOM:cost/T",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform"
+            },
+            "ContractorCost": {
+              "type": "number",
+              "title": "Contractor Cost",
+              "description": "Contractor Cost",
+              "example": "0 USD",
+              "x-osdu-frame-of-reference": "UOM:cost",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform"
+            },
+            "EquipmentCost": {
+              "type": "number",
+              "title": "Equipment Cost",
+              "description": "Equipment Cost",
+              "example": "0 USD",
+              "x-osdu-frame-of-reference": "UOM:cost",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform"
+            },
+            "OtherCost": {
+              "type": "number",
+              "title": "Other Cost",
+              "description": "Other Cost",
+              "example": "0 USD",
+              "x-osdu-frame-of-reference": "UOM:cost",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform"
+            },
+            "GrossCostTotal": {
+              "type": "number",
+              "title": "Gross Cost Total",
+              "description": "Calculated Gross Cost Total = (BurnRate * Gross Duration) + Contractor Cost + Equipment Cost + Other Cost",
+              "example": "72500 USD",
+              "x-osdu-frame-of-reference": "UOM:cost",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform"
+            },
+            "NetCostTotal": {
+              "type": "number",
+              "title": "Net Cost Total",
+              "description": "Calculated Net Cost Total = (Burn Rate * Net Duration) + Contractor Cost + Equipment Cost + Other Cost",
+              "example": "72500 USD",
+              "x-osdu-frame-of-reference": "UOM:cost",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform"
+            },
+            "ResponsibleCompanyID": {
+              "type": "string",
+              "title": "Responsible Company ID",
+              "description": "Responsible Company",
+              "example": "namespace:master-data--Organisation:Operator:",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Organisation:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "Organisation"
+                }
+              ]
+            },
+            "ResponsibleCompanyContact": {
+              "type": "string",
+              "title": "Responsible Company Contact",
+              "description": "Responsible Company Contact Name",
+              "example": "Joe Bloggs",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform"
+            },
+            "ResponsibleCompanyComments": {
+              "type": "string",
+              "title": "Responsible Company Comments",
+              "description": "Responsible Company Comments",
+              "example": "NE Force 8",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform"
+            },
+            "ResponsibleCompanyFindings": {
+              "type": "string",
+              "title": "Responsible Company Findings",
+              "description": "Responsible Company Findings",
+              "example": "Severe Storm Event",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform"
+            },
+            "ResponsibleCompanyResolutionDate": {
+              "type": "string",
+              "title": "Responsible Company Resolution Date",
+              "description": "Responsible Company Resolution Date",
+              "format": "date",
+              "example": "2024-04-21T04:00:00+0000",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform"
+            },
+            "DowntimeEventID": {
+              "type": "string",
+              "title": "Downtime Event ID",
+              "description": "Downtime Event Identifier, used when NPT Equipment failures also captured as downtime events",
+              "example": "namespace:work-product-component--DowntimeEvent:712000184227.DTEID:",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-existing-standard": "Y",
+              "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-DowntimeEvent:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "work-product-component",
+                  "EntityType": "DowntimeEvent"
+                }
+              ]
+            },
+            "EquipmentFailureTypeID": {
+              "type": "string",
+              "title": "Equipment Failure Type ID",
+              "description": "Equipment Failure Type Identifier",
+              "x-osdu-attribution-authority": "WITSML",
+              "x-osdu-attribution-publication": "DrillReport.EquipFailureInfo.DrillReportEquipFailureInfo.EquipClass",
+              "x-osdu-attribution-revision": "V2.1",
+              "x-osdu-existing-standard": "N",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-NPTEquipmentType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "NPTEquipmentType"
+                }
+              ]
+            },
+            "EquipmentModel": {
+              "type": "string",
+              "title": "Equipment Model",
+              "description": "Equipment Model Name/Number",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform"
+            },
+            "EquipmentSize": {
+              "type": "number",
+              "title": "Equipment Size",
+              "description": "Equipment Size / Diameter",
+              "x-osdu-frame-of-reference": "UOM:length",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform"
+            },
+            "EquipmentSerialNumber": {
+              "type": "string",
+              "title": "Equipment Serial Number",
+              "description": "Equipment Serial Number",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform"
+            },
+            "EquipmentPartNumber": {
+              "type": "string",
+              "title": "Equipment Part Number",
+              "description": "Equipment Part Number",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform"
+            },
+            "EquipmentManufacturerID": {
+              "type": "string",
+              "title": "Equipment Manufacturer ID",
+              "description": "Equipment Manufacturer",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-existing-standard": "Y",
+              "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Organisation:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "Organisation"
+                }
+              ]
+            },
+            "EquipmentLastInspectionDateTime": {
+              "type": "string",
+              "title": "Equipment Last Inspection Date/time",
+              "description": "Equipment Last Inspection Date/time",
+              "format": "date-time",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform"
+            },
+            "EquipmentFailureLocationDescription": {
+              "type": "string",
+              "title": "Equipment Failure Location Description",
+              "description": "Equipment Failure Location Description",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform"
+            },
+            "EquipmentFailureHoursBeforeFail": {
+              "type": "number",
+              "title": "Equipment Failure Hours Before Fail",
+              "description": "Equipment Failure Hours Before Fail",
+              "x-osdu-frame-of-reference": "UOM:time",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform"
+            },
+            "IsInvestigationWaived": {
+              "type": "boolean",
+              "title": "Is Investigation Waived",
+              "description": "Is Investigation Waived",
+              "example": true,
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform"
+            },
+            "InvestigationStatus": {
+              "type": "array",
+              "title": "Investigation Status",
+              "description": "Investigation Status History",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "items": {
+                "type": "object",
+                "title": "NPT Investigation Status",
+                "description": "Investigation Status history of the NPT event",
+                "properties": {
+                  "InvestigationStatusDateTime": {
+                    "type": "string",
+                    "title": "Status Date/time",
+                    "description": "Status Date/time",
+                    "format": "date-time",
+                    "example": "2024-06-09T09:00:00+0000"
+                  },
+                  "InvestigationStatusTypeID": {
+                    "type": "string",
+                    "title": "NPT Investigation Status Type ID",
+                    "description": "NPT Investigation Status Type ID",
+                    "example": "namespace:reference-data--NPTInvestigationStatusType:Completed:",
+                    "x-osdu-existing-standard": "N",
+                    "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-NPTInvestigationStatusType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "reference-data",
+                        "EntityType": "NPTInvestigationStatusType"
+                      }
+                    ]
+                  },
+                  "InvestigationTeamReviewer": {
+                    "type": "string",
+                    "title": "Investigation Team Reviewer",
+                    "description": "Investigation Team Reviewer",
+                    "example": "James Bloggs"
+                  },
+                  "InvestigationStatusRemarks": {
+                    "type": "string",
+                    "title": "Investigation Status Remarks",
+                    "description": "Investigation Status Remarks",
+                    "example": "Determined that Rig did not have an accurate forecast of upcoming weather forecast"
+                  }
+                }
+              }
+            },
+            "NPTActions": {
+              "type": "array",
+              "title": "NPT Actions",
+              "description": "NPT Actions",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "items": {
+                "type": "object",
+                "title": "Non Productive Time Action",
+                "description": "Individual Non Productive Time Action Description",
+                "properties": {
+                  "ActionTitle": {
+                    "type": "string",
+                    "title": "Action Title",
+                    "description": "Action Title",
+                    "format": "date-time",
+                    "example": "Obtain live weather forecast feed"
+                  },
+                  "ActionDescription": {
+                    "type": "string",
+                    "title": "Action Description",
+                    "description": "Action Description",
+                    "example": "Source weather forecast data feed and make available to all rigs",
+                    "x-osdu-existing-standard": "N"
+                  },
+                  "ActionOwner": {
+                    "type": "string",
+                    "title": "Action Owner",
+                    "description": "Action Owner name",
+                    "example": "Joe Bloggs"
+                  },
+                  "ActionCompletedDate": {
+                    "type": "string",
+                    "title": "Action Completed Date",
+                    "description": "Action Completed Date",
+                    "example": "2024-07-01T09:00:00+0000"
+                  },
+                  "ActionRemarks": {
+                    "type": "string",
+                    "title": "Action Remarks",
+                    "description": "Action Remarks",
+                    "example": "WeaatherForecasters feed obtain and now available in Rig Control Centres"
+                  }
+                }
+              }
+            },
+            "RiskAssessmentTypeID": {
+              "type": "string",
+              "title": "Risk Assessment Type ID",
+              "description": "Risk Assessment Type ID",
+              "example": "namespace:reference-data--NPTRiskAssessmentType:RR:",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-existing-standard": "N",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-NPTRiskAssessmentType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "NPTRiskAssessmentType"
+                }
+              ]
+            },
+            "RiskID": {
+              "type": "string",
+              "title": "Risk ID",
+              "description": "ID of specific risk associated to this NPT",
+              "example": "namespace:master-data--Risk:712000184227.Weather::",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Risk:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "Risk"
+                }
+              ]
+            },
+            "RootCauseTypeID": {
+              "type": "string",
+              "title": "Root Cause Type ID",
+              "description": "Root Cause Type ID",
+              "example": "namespace:reference-data--NPTRootCauseType:WEATHER:",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-existing-standard": "N",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-NPTRootCauseType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "NPTRootCauseType"
+                }
+              ]
+            },
+            "RootCauseDescription": {
+              "type": "string",
+              "title": "Root Cause Description",
+              "description": "Root Cause Description",
+              "example": "Storm Event",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform"
+            },
+            "PreventativeActions": {
+              "type": "string",
+              "title": "Preventative Actions",
+              "description": "Preventative Actions",
+              "example": "Schedule rig operations outside of known  Autumn storm period",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform"
+            },
+            "FieldRemediation": {
+              "type": "string",
+              "title": "Field Remediation",
+              "description": "Remedial actions taken by field/rig team when NPT occurred to address the NPT.",
+              "example": "Rig stopped operations for storm event",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform"
+            },
+            "Learnings": {
+              "type": "string",
+              "title": "Learnings",
+              "description": "Learnings arising from the NPT investigation",
+              "example": "Refer to Weather analytics to perform better assessment of severe storm likelihood",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform"
+            },
+            "Remarks": {
+              "type": "string",
+              "title": "Remarks",
+              "description": "Remarks",
+              "example": "20 hours WOW, wait for Wind to abate before resuming tripping operations",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform"
+            }
+          },
+          "required": [
+            "WellboreID",
+            "WellActivityID"
+          ],
+          "title": "IndividualProperties"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "ExtensionProperties": {
+              "type": "object"
+            }
+          },
+          "title": "ExtensionProperties"
+        }
+      ]
+    }
+  },
+  "required": [
+    "kind",
+    "acl",
+    "legal"
+  ],
+  "additionalProperties": false,
+  "x-osdu-review-status": "Accepted",
+  "x-osdu-virtual-properties": {
+    "data.VirtualProperties.DefaultLocation": {
+      "type": "object",
+      "priority": [
+        {
+          "path": "data.SpatialLocation"
+        }
+      ]
+    },
+    "data.VirtualProperties.DefaultName": {
+      "type": "string",
+      "priority": [
+        {
+          "path": "data.Name"
+        }
+      ]
+    }
+  },
+  "x-osdu-inheriting-from-kind": [
+    {
+      "name": "WorkProductComponent",
+      "kind": "osdu:wks:AbstractWPCGroupType:1.1.0"
+    }
+  ]
+}

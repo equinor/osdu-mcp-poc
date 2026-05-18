@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "osdu-discovery": {
+      "command": "/opt/homebrew/bin/uv",
+      "args": [
+        "run",
+        "--project",
+        "/path/to/osdu-mcp-poc",
+        "osdu-mcp",
+        "--db",
+        "/path/to/osdu-mcp-poc/chroma_db"
+      ]
+    }
+  }
+}

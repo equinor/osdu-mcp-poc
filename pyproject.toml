@@ -1,0 +1,25 @@
+[project]
+name = "osdu-discovery-poc"
+version = "0.1.0"
+description = "Semantic search over OSDU OpenAPI specs and schema files"
+requires-python = ">=3.11"
+dependencies = [
+    "chromadb>=0.5.0",
+    "pyyaml>=6.0",
+    "jsonschema>=4.0",
+    "rich>=13.0",
+    "mcp[cli]>=1.0",
+    "mcp[cli]>=1.27.1",
+]
+
+[project.scripts]
+osdu-index = "osdu_discovery.indexer:main"
+osdu-query = "osdu_discovery.query:main"
+osdu-mcp   = "osdu_discovery.mcp_server:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[build-system]
+requires = ["setuptools>=80.0.0"]
+build-backend = "setuptools.build_meta"

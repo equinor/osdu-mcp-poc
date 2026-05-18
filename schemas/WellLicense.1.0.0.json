@@ -1,0 +1,443 @@
+{
+  "x-osdu-license": "Copyright 2023, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "$id": "https://schema.osdu.opengroup.org/json/master-data/WellLicense.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:master-data--WellLicense:1.0.0",
+  "title": "WellLicense",
+  "description": "The relationship between a well license and the geographic or geopolitical areas that contain this license provides useful insight into which legislation may be relevant, what environmental controls may be in place, what citizens require notification and more.  This subset primarily provides a place to describe the intersections between the license and areas.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "Previously called ResourceID or SRN which identifies this OSDU resource object without version.",
+      "title": "Entity ID",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:master-data\\-\\-WellLicense:[\\w\\-\\.\\:\\%]+$",
+      "example": "namespace:master-data--WellLicense:c3147181-4f8d-52a9-936f-0d86b698a372"
+    },
+    "kind": {
+      "description": "The schema identification for the OSDU resource object following the pattern {Namespace}:{Source}:{Type}:{VersionMajor}.{VersionMinor}.{VersionPatch}. The versioning scheme follows the semantic versioning, https://semver.org/.",
+      "title": "Entity Kind",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:[\\w\\-\\.]+:[\\w\\-\\.]+:[0-9]+.[0-9]+.[0-9]+$",
+      "example": "osdu:wks:master-data--WellLicense:1.0.0"
+    },
+    "version": {
+      "description": "The version number of this OSDU resource; set by the framework.",
+      "title": "Version Number",
+      "type": "integer",
+      "format": "int64",
+      "example": 1562066009929332
+    },
+    "acl": {
+      "description": "The access control tags associated with this entity.",
+      "title": "Access Control List",
+      "$ref": "../abstract/AbstractAccessControlList.1.0.0.json"
+    },
+    "legal": {
+      "description": "The entity's legal tags and compliance status. The actual contents associated with the legal tags is managed by the Compliance Service.",
+      "title": "Legal Tags",
+      "$ref": "../abstract/AbstractLegalTags.1.0.0.json"
+    },
+    "tags": {
+      "title": "Tag Dictionary",
+      "description": "A generic dictionary of string keys mapping to string value. Only strings are permitted as keys and values.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "example": {
+        "NameOfKey": "String value"
+      }
+    },
+    "createTime": {
+      "description": "Timestamp of the time at which initial version of this OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:46:20.163Z"
+    },
+    "createUser": {
+      "title": "Resource Object Creation User Reference",
+      "description": "The user reference, which created the first version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "modifyTime": {
+      "description": "Timestamp of the time at which this version of the OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Version Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:52:24.477Z"
+    },
+    "modifyUser": {
+      "title": "Resource Object Version Creation User Reference",
+      "description": "The user reference, which created this version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "ancestry": {
+      "description": "The links to data, which constitute the inputs, from which this record instance is derived.",
+      "title": "Ancestry",
+      "$ref": "../abstract/AbstractLegalParentList.1.0.0.json"
+    },
+    "meta": {
+      "description": "The Frame of Reference meta data section linking the named properties to self-contained definitions.",
+      "title": "Frame of Reference Meta Data",
+      "type": "array",
+      "items": {
+        "$ref": "../abstract/AbstractMetaItem.1.0.0.json"
+      }
+    },
+    "data": {
+      "allOf": [
+        {
+          "$ref": "../abstract/AbstractCommonResources.1.0.0.json"
+        },
+        {
+          "$ref": "../abstract/AbstractMaster.1.2.0.json"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "IsActive": {
+              "type": "boolean",
+              "description": "A Y/N flag indicating whether this license is currently either active / valid (Y) or inactive / invalid (N)."
+            },
+            "ApprovedContractorID": {
+              "type": "string",
+              "description": "The validated contractor for this license, as approved.  The term contractor has variable interpretations globally, in this instance the contractor is generally meant to be the contractor who will conduct initial operations on the well for drilling to final TD.",
+              "pattern": "^[\\w\\-\\.]+:master-data\\-\\-BusinessAssociate:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "BusinessAssociate"
+                }
+              ]
+            },
+            "ApprovedDrillSlot": {
+              "type": "string",
+              "description": "Number for the approved drill slot on the offshore platform. Platforms have 24 to 32 slots in which to position derricks for drilling. Each slot may require a different license in some jurisdictions, while others approve all operations on a platform at the same time. If this property is absent, the license applies to all slots."
+            },
+            "ApprovedPurposeDescription": {
+              "type": "string",
+              "description": "The approved purpose for the well proposal in narrative form.  This often contains formation or depth information along with aggregated information from the Well Status and Classifications facets Business Intention, Play Type, Role, Product Type and Fluid Direction. The Well License Status subset allows this information to be decomposed into facets for better clarity."
+            },
+            "ApprovedRigID": {
+              "type": "string",
+              "description": "Sometimes specific rigs may be authorized by a license, particularly where environmental or access restrictions set specific requirements.  This attribute identifies the specific rig approved, where needed.",
+              "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Rig:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "Rig"
+                }
+              ]
+            },
+            "ApprovedRigSubstructureHeight": {
+              "type": "number",
+              "description": "The height of the foundation on which the derrick and engine sits.",
+              "x-osdu-frame-of-reference": "UOM:length"
+            },
+            "ApprovedRigTypeID": {
+              "type": "string",
+              "description": "The type of rig installation the license is approved for, where this is relevant. For example land, barge, submersible, platform, jackup, drillship, semisub, artificial island...",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-RigType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "RigType"
+                }
+              ]
+            },
+            "ApprovedSpudDate": {
+              "type": "string",
+              "description": "The approved spud date, can be the same as shown on the license application or may be changed as a result of the discussions involved in the approval process or changes to the circumstances surrounding the well plan.",
+              "format": "date"
+            },
+            "ApprovedSurveyorID": {
+              "type": "string",
+              "description": "Surveying is a specialized skill that requires certification before it can be practiced in most regions.  The name of the surveyor or surveying company provides evidence that a properly qualified individual will conduct the survey.",
+              "pattern": "^[\\w\\-\\.]+:master-data\\-\\-BusinessAssociate:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "BusinessAssociate"
+                }
+              ]
+            },
+            "ApprovedTargetObjectiveProductIDs": {
+              "type": "array",
+              "description": "The WellProductType(s) (e.g., fluid) that is/are approved for the well license.  In some regions, WellProductTypes are approved individually or as a group.  Similarly, in some regions, specific WellProductTypes may be excluded from the well license, particularly if the land right obtained does not include those WellProductTypes.",
+              "items": {
+                "type": "string",
+                "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-WellProductType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                "x-osdu-relationship": [
+                  {
+                    "GroupType": "reference-data",
+                    "EntityType": "WellProductType"
+                  }
+                ]
+              }
+            },
+            "ApprovedWellIDs": {
+              "type": "array",
+              "description": "A well license may be assigned to an entire planned well configuration at the time the license is granted. Other licenses may be assigned to specific well components.  Where the component is known, specific relationships are needed.",
+              "items": {
+                "type": "string",
+                "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Well:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                "x-osdu-relationship": [
+                  {
+                    "GroupType": "master-data",
+                    "EntityType": "Well"
+                  }
+                ]
+              }
+            },
+            "ApprovedWellCount": {
+              "type": "integer",
+              "description": "The number of wells that are approved under this license.  Not all regulators define wells the same way.  Some regulators may identify the number of wellbores, others the number of well origins. Refer to PPDM \"What is a Well\" for more information about well components."
+            },
+            "ApprovedWellboreIDs": {
+              "type": "array",
+              "description": "A well license may be assigned to one or more wellbores at the time the license is granted. Other licenses may be assigned to specific well components as defined in What is a Well.  Where the component is known, specific relationships are needed.",
+              "items": {
+                "type": "string",
+                "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Wellbore:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                "x-osdu-relationship": [
+                  {
+                    "GroupType": "master-data",
+                    "EntityType": "Wellbore"
+                  }
+                ]
+              }
+            },
+            "AuthorizedStratigraphicUnit": {
+              "type": "string",
+              "description": "The formation authorized for use. May not be the same as the projected formation at the final depth of a wellbore."
+            },
+            "AuthorizedStratigraphicUnitUseRoleID": {
+              "type": "string",
+              "description": "For the formation specified in the license, the use that this formation may be used for, such as production, injection, disposal, storage etc.",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-WellRole:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "WellRole"
+                }
+              ]
+            },
+            "BiddingRoundIdentifier": {
+              "type": "string",
+              "description": "Bidding round number for drilling rights that resulted in this license."
+            },
+            "IsDelayed": {
+              "type": "boolean",
+              "description": "When a license is delayed, set this flag to True.  Details about the application can be found in the application object."
+            },
+            "ExpiredDate": {
+              "type": "string",
+              "description": "The date on which a license has expired.  Note that this may be different than the due date, particularly where extensions are granted or specific conditions as stated in the license are met or not met.",
+              "format": "date"
+            },
+            "IsExpired": {
+              "type": "boolean",
+              "description": "When the license expires, set the expiry date to the appropriate date, and set this flag to True."
+            },
+            "ExpiryDueDate": {
+              "type": "string",
+              "description": "The date when the license has or is due to expire.  In many cases, the date when the license term will expire is stated in the license.  This date may therefore be a date in the future. There may be conditions under which the license can be extended.  Where this occurs, the extension should usually be captured as a new version of the license.",
+              "format": "date"
+            },
+            "GrantedByBusinessAssociateID": {
+              "type": "string",
+              "description": "Identify the business associate, most often a regulator or authorized agency, has granted the license.  In some cases, other authorities may grant licenses, attribute is not intended to be proscriptive.",
+              "pattern": "^[\\w\\-\\.]+:master-data\\-\\-BusinessAssociate:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "BusinessAssociate"
+                }
+              ]
+            },
+            "LicenseDate": {
+              "type": "string",
+              "description": "Date the well license was issued.  This date may not be the same as the date entered into the system.",
+              "format": "date"
+            },
+            "LicenseIssuedDate": {
+              "type": "string",
+              "description": "The date on which the license has been issued and comes into effect.  Normally, no operations that involve surface or subsurface disturbance may be started before this date.",
+              "format": "date"
+            },
+            "LicensePrimaryTerm": {
+              "type": "number",
+              "description": "The primary term of the license as set by the agency granting the license.",
+              "x-osdu-frame-of-reference": "UOM:time"
+            },
+            "LicenseReissueDate": {
+              "type": "string",
+              "description": "The date the permit or license was reissued. The regulatory approval normally expires after the primary term unless an extension is requested and granted.",
+              "format": "date"
+            },
+            "LicenseReissueTerm": {
+              "type": "number",
+              "description": "The secondary term of the license, often 6 - 12 months in duration.  These are granted by the regulatory authority after requests for renewal are submitted by the operator or the address for service."
+            },
+            "LicenseType": {
+              "type": "string",
+              "description": "The type of license granted is often based on codes and rules set out in legislation or regulation.  This license type attribute should indicate the exact type as specified in the license document."
+            },
+            "LicenseeID": {
+              "type": "string",
+              "description": "The licensee to whom this license has been granted.  Sometimes, the licensees may be an address for service, particularly for confidential operations. This is not necessarily the name of the operator or the owner of the well.",
+              "pattern": "^[\\w\\-\\.]+:master-data\\-\\-BusinessAssociate:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "BusinessAssociate"
+                }
+              ]
+            },
+            "LicenseeContactBusinessAssociateID": {
+              "type": "string",
+              "description": "The business associate who is the contact representing the licensee for this license.",
+              "pattern": "^[\\w\\-\\.]+:master-data\\-\\-BusinessAssociate:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "BusinessAssociate"
+                }
+              ]
+            },
+            "ProjectedMeasuredDepth": {
+              "type": "number",
+              "description": "Projected measured depth at which the drilling of the primary wellbore is planned to be terminated. When multiple wellbores are planned, this may be the depth of the deepest wellbore, depending on local rules.",
+              "x-osdu-frame-of-reference": "UOM:length"
+            },
+            "ProjectedStratigraphicUnitID": {
+              "type": "string",
+              "description": "The stratigraphic unit that is proposed for final completion and production (or injection). Note that this may not be the formation at the planned final depth of the wellbore. The stratigraphic unit should be part of the ProjectedStratigraphicColumn.",
+              "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-StratigraphicUnitInterpretation:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "work-product-component",
+                  "EntityType": "StratigraphicUnitInterpretation"
+                }
+              ]
+            },
+            "ProjectedTrueVerticalDepth": {
+              "type": "number",
+              "description": "Projected true vertical depth of the well determined during the permitting of the well.",
+              "x-osdu-frame-of-reference": "UOM:length"
+            },
+            "VerticalMeasurement": {
+              "$ref": "../abstract/AbstractFacilityVerticalMeasurement.1.0.0.json",
+              "description": "The measured elevation from a known reference datum to a permanent geodetic datum.  This measurement is the foundation for calculating and correlating depths from geodetic datums, which in turn allow depth correlation between wellbores."
+            },
+            "RegulationSection": {
+              "type": "string",
+              "description": "The section of  the regulation under which the license was granted. For Example, the type of permit (such as Rule 37 or Rule 38 in the State of Texas) that is given for the well."
+            },
+            "RigTypeID": {
+              "type": "string",
+              "description": "A reference table describing the overall structure of the rig with respect to the environment and function. For example land, barge, submersible, platform, jackup, drillship, semisub or artificial island.\n\nSometimes specific types of rigs may be authorized by a license, particularly where environmental or access restrictions set specific requirements.",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-RigType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "RigType"
+                }
+              ]
+            },
+            "StratigraphicColumnID": {
+              "type": "string",
+              "description": "The name of the set of formation names used for interpretations.  Different name sets may exist on a regional or basin basis, or may be developed by regulatory agencies, data vendors or operating companies.  Clarity about which name set is used is critical to ensuring that the name of the formation is not ambiguous.",
+              "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-StratigraphicColumn:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "work-product-component",
+                  "EntityType": "StratigraphicColumn"
+                }
+              ]
+            },
+            "OperatingEnvironmentID": {
+              "type": "string",
+              "description": "The reference to the operating environment of the well/wellbore this license applies to."
+            },
+            "LicenseConditions": {
+              "type": "array",
+              "description": "Details about conditions imposed on a license by an authority, a partner or other stakeholder.",
+              "items": {
+                "$ref": "../abstract/AbstractWellLicenseCondition.1.0.0.json"
+              }
+            },
+            "LicenseRemarks": {
+              "type": "array",
+              "description": "Remarks and narratives associated to the license.",
+              "items": {
+                "$ref": "../abstract/AbstractRemark.1.0.0.json"
+              }
+            },
+            "LicenseServices": {
+              "type": "array",
+              "description": "Services associated with the license.",
+              "items": {
+                "$ref": "../abstract/AbstractWellLicenseService.1.0.0.json"
+              }
+            },
+            "LicenseStates": {
+              "type": "array",
+              "description": "Details about LicenseStates, past and present.",
+              "items": {
+                "$ref": "../abstract/AbstractWellLicenseStatus.1.0.0.json"
+              }
+            },
+            "LicenseViolations": {
+              "type": "array",
+              "description": "Details about violations of conditions, past and present.",
+              "items": {
+                "$ref": "../abstract/AbstractWellLicenseViolation.1.0.0.json"
+              }
+            }
+          },
+          "title": "IndividualProperties"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "ExtensionProperties": {
+              "type": "object"
+            }
+          },
+          "title": "ExtensionProperties"
+        }
+      ]
+    }
+  },
+  "required": [
+    "kind",
+    "acl",
+    "legal"
+  ],
+  "additionalProperties": false,
+  "x-osdu-review-status": "Accepted",
+  "x-osdu-virtual-properties": {
+    "data.VirtualProperties.DefaultName": {
+      "type": "string",
+      "priority": [
+        {
+          "path": "data.Name"
+        }
+      ]
+    },
+    "data.VirtualProperties.DefaultLocation": {
+      "type": "object",
+      "priority": [
+        {
+          "path": "data.SpatialLocation"
+        }
+      ]
+    }
+  },
+  "x-osdu-inheriting-from-kind": []
+}

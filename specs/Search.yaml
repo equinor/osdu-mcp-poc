@@ -1,0 +1,821 @@
+openapi: 3.1.0
+info:
+  title: Search Service
+  description: Search service that provides a set of APIs to search records against
+    Elasticsearch
+  contact:
+    name: OSDU Data Platform Team
+    email: dps@OSDU.org
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  version: "2.0"
+servers:
+- url: /api/search/v2/
+security:
+- Authorization: []
+tags:
+- name: search-api
+  description: Service endpoints to search data in datalake
+- name: health-check-api
+  description: Health Check API
+- name: info
+  description: Version info endpoint
+paths:
+  /query_with_cursor:
+    post:
+      tags:
+      - search-api
+      summary: Queries the index using cursor for the input request criteria.
+      description: "The API supports full text search on string fields, range queries\
+        \ on date, numeric or string fields, along with geo-spatial search. \nRequired\
+        \ roles: `users.datalake.viewers` or `users.datalake.editors` or `users.datalake.admins`\
+        \ or `users.datalake.ops`. In addition, users must be a member of data groups\
+        \ to access the data. \nIt can be used to retrieve large numbers of results\
+        \ (or even all results) from a single search request, in much the same way\
+        \ as you would use a cursor on a traditional database."
+      operationId: queryWithCursor
+      parameters:
+      - name: search_after
+        in: query
+        description: "If true, use search-after pagination instead of scroll."
+        required: false
+        schema:
+          type: boolean
+          default: false
+      - name: data-partition-id
+        in: header
+        description: Tenant Id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CursorQueryRequest"
+        required: true
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CursorQueryResponse"
+        "400":
+          description: Invalid parameters were given on request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "403":
+          description: User not authorized to perform the action
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "502":
+          description: Search service scale-up is taking longer than expected. Wait
+            10 seconds and retry.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "503":
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AppError"
+      security:
+      - Authorization: []
+  /query:
+    post:
+      tags:
+      - search-api
+      summary: Queries the index for the input request criteria.
+      description: "The API supports full text search on string fields, range queries\
+        \ on date, numeric or string fields, along with geo-spatial search. \n Required\
+        \ roles: `users.datalake.viewers` or  `users.datalake.editors` or `users.datalake.admins`\
+        \ or `users.datalake.ops`. In addition, users must be a member of data groups\
+        \ to access the data."
+      operationId: queryRecords
+      parameters:
+      - name: data-partition-id
+        in: header
+        description: Tenant Id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/QueryRequest"
+        required: true
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QueryResponse"
+        "400":
+          description: Invalid parameters were given on request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "403":
+          description: User not authorized to perform the action
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "502":
+          description: Search service scale-up is taking longer than expected. Wait
+            10 seconds and retry.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "503":
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AppError"
+      security:
+      - Authorization: []
+  /readiness_check:
+    get:
+      tags:
+      - health-check-api
+      summary: Readiness Check endpoint
+      description: For deployment available public `/readiness_check` endpoint.
+      operationId: readinessCheck
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: string
+        "502":
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "503":
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AppError"
+  /liveness_check:
+    get:
+      tags:
+      - health-check-api
+      summary: Liveness Check endpoint
+      description: For deployment available public `/liveness_check` endpoint.
+      operationId: livenessCheck
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: string
+        "502":
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "503":
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AppError"
+  /info:
+    get:
+      tags:
+      - info
+      summary: Version info
+      description: "For deployment available public `/info` endpoint, which provides\
+        \ build and git related information."
+      operationId: info
+      responses:
+        "200":
+          description: Version info.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VersionInfo"
+  /query_with_cursor/{cursor}:
+    delete:
+      tags:
+      - search-api
+      summary: Closes a cursor-based pagination context.
+      description: "Releases server-side resources held by the cursor. \nRequired\
+        \ roles: `users.datalake.viewers` or `users.datalake.editors` or `users.datalake.admins`\
+        \ or `users.datalake.ops`."
+      operationId: closeCursor
+      parameters:
+      - name: cursor
+        in: path
+        description: Cursor value returned by a previous query_with_cursor response.
+        required: true
+        schema:
+          type: string
+      - name: search_after
+        in: query
+        description: "If true, close a search-after pagination context instead of\
+          \ a scroll context."
+        required: false
+        schema:
+          type: boolean
+          default: false
+      - name: data-partition-id
+        in: header
+        description: Tenant Id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CursorQueryResponse"
+        "400":
+          description: Invalid parameters were given on request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "403":
+          description: User not authorized to perform the action
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "502":
+          description: Search service scale-up is taking longer than expected. Wait
+            10 seconds and retry.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "503":
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AppError"
+      security:
+      - Authorization: []
+components:
+  schemas:
+    ByBoundingBox:
+      type: object
+      description: Bounding box filter defined by top-left and bottom-right coordinate
+        points.
+      properties:
+        topLeft:
+          $ref: "#/components/schemas/Point"
+          description: Top left corner of the bounding box.
+        bottomRight:
+          $ref: "#/components/schemas/Point"
+          description: Bottom right corner of the bounding box.
+      required:
+      - bottomRight
+      - topLeft
+    ByDistance:
+      type: object
+      description: Distance filter returning results within a given radius of a coordinate
+        point.
+      properties:
+        distance:
+          type: number
+          format: double
+          description: The radius of the circle centered on the specified location.
+            Points which fall into this circle are considered to be matches.
+          example: 1500
+          maximum: 9223372036854775807
+          minimum: 0
+        point:
+          $ref: "#/components/schemas/Point"
+          description: Center point of the query.
+      required:
+      - distance
+      - point
+    ByGeoPolygon:
+      type: object
+      description: Polygon filter returning results within the given geographic polygon.
+      properties:
+        points:
+          type: array
+          description: Polygon defined by a set of points.
+          items:
+            $ref: "#/components/schemas/Point"
+          minItems: 1
+      required:
+      - points
+    ByIntersection:
+      type: object
+      description: Intersection filter returning results whose geometry intersects
+        the given polygons.
+      properties:
+        polygons:
+          type: array
+          description: List of polygons each defined by a set of points.
+          items:
+            $ref: "#/components/schemas/Polygon"
+      required:
+      - polygons
+    ByWithinPolygon:
+      type: object
+      description: Within-polygon filter returning results contained within the given
+        polygon.
+      properties:
+        points:
+          type: array
+          description: Polygon defined by a set of points.
+          items:
+            $ref: "#/components/schemas/Point"
+      required:
+      - points
+    CursorQueryRequest:
+      type: object
+      description: Search query request using cursor-based pagination for retrieving
+        large result sets.
+      properties:
+        kind:
+          type: object
+          anyOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          description: "The type(s) of data to search. Accepts a single kind string\
+            \ or a list of kinds. Format: {Data-Partition-Id}:{source}:{type}:{version}.\
+            \ Wildcards are supported per segment, e.g. 'opendes:*:*:*'."
+          example: opendes:osdu:wellbore:1.0.0
+        limit:
+          type: integer
+          format: int32
+          description: "The maximum number of results to return from the given offset.\
+            \ If no limit is provided, then it will return 10 items. Max number of\
+            \ items which can be fetched by the query is 1000. (If you wish to fetch\
+            \ large set of items, please use query_with_cursor API)"
+          example: 30
+          minimum: 0
+        query:
+          type: string
+          description: The query string in Lucene query string syntax.
+          example: "data.country: \"US\""
+        suggestPhrase:
+          type: string
+          description: Part of the phrase for which search should return completions
+          example: wellb
+        highlightedFields:
+          type: array
+          description: The fields where matches should be highlighted.
+          example:
+          - data.wellName
+          items:
+            type: string
+        returnedFields:
+          type: array
+          description: The fields on which to project the results.
+          example:
+          - id
+          - kind
+          - data.wellName
+          items:
+            type: string
+        excludedFields:
+          type: array
+          description: The fields on which to exclude from the results.
+          example:
+          - data.rawData
+          items:
+            type: string
+        sort:
+          $ref: "#/components/schemas/SortQuery"
+          description: The fields and orders to return sorted results.
+        queryAsOwner:
+          type: boolean
+          description: The queryAsOwner switches between viewer and owner to return
+            results that you are entitled to view or results you are the owner of.
+          example: false
+        trackTotalCount:
+          type: boolean
+          description: "Tracks accurate record count matching the query if 'true',\
+            \ partial count otherwise. Partial count queries are more performant.\
+            \ Default is 'false' and returns 10000 if matching records are higher\
+            \ than 10000."
+          example: false
+        spatialFilter:
+          $ref: "#/components/schemas/SpatialFilter"
+          description: A spatial filter to apply.
+        cursor:
+          type: string
+          description: Search context to retrieve the next page of results. Null when
+            there are no more results.
+      required:
+      - kind
+    Point:
+      type: object
+      description: A geographic coordinate expressed as a latitude/longitude pair.
+      properties:
+        latitude:
+          type: number
+          format: double
+          description: Latitude of point.
+          example: "37.450727"
+          maximum: 90
+          minimum: -90
+        longitude:
+          type: number
+          format: double
+          description: Longitude of point.
+          example: "-122.174762"
+          maximum: 180
+          minimum: -180
+    Polygon:
+      type: object
+      description: A polygon defined by an ordered list of geographic coordinate points.
+      properties:
+        points:
+          type: array
+          description: List of points making up a polygon
+          items:
+            $ref: "#/components/schemas/Point"
+    SortQuery:
+      type: object
+      description: "Defines the sort criteria for search results, including field\
+        \ names, sort direction, and optional filters."
+      properties:
+        field:
+          type: array
+          description: The list of fields to sort the results.
+          example:
+          - data.wellName
+          - id
+          items:
+            type: string
+        order:
+          type: array
+          description: The list of orders to sort the results. The element must be
+            either ASC or DESC.
+          example:
+          - ASC
+          - DESC
+          items:
+            type: string
+            description: Sort direction for search results.
+            enum:
+            - ASC
+            - DESC
+        filter:
+          type: array
+          description: "Optional list of filter expressions applied per sort field,\
+            \ controlling how missing or unmapped values are treated."
+          items:
+            type: string
+    SpatialFilter:
+      type: object
+      description: A spatial filter constraining search results by geographic location.
+        Exactly one of the filter types should be specified.
+      properties:
+        field:
+          type: string
+          description: geo-point field in the index on which filtering will be performed.
+            Use GET schema API to find which fields supports spatial search.
+          example: data.SpatialLocation.Wgs84Coordinates
+        byBoundingBox:
+          $ref: "#/components/schemas/ByBoundingBox"
+          description: A query allowing to filter hits based on a point location within
+            a bounding box.
+        byDistance:
+          $ref: "#/components/schemas/ByDistance"
+          description: Filters documents that include only hits that exist within
+            a specific distance from a geo point.
+        byGeoPolygon:
+          $ref: "#/components/schemas/ByGeoPolygon"
+          description: A query allowing to filter hits that only fall within a polygon
+            of points.
+        byIntersection:
+          $ref: "#/components/schemas/ByIntersection"
+          description: A query allowing to filter documents by intersecting polygons
+        byWithinPolygon:
+          $ref: "#/components/schemas/ByWithinPolygon"
+          description: A query allowing to filter documents by checking if any points
+            are within polygon on document
+      required:
+      - field
+    CursorQueryResponse:
+      type: object
+      description: Cursor-based search query response for retrieving large result
+        sets incrementally.
+      properties:
+        cursor:
+          type: string
+          description: Search context to retrieve the next page of results. Null when
+            there are no more results.
+          example: AoE=
+        results:
+          type: array
+          description: "List of matched records, each represented as a map of field\
+            \ names to values."
+          items:
+            type: object
+            additionalProperties: true
+        totalCount:
+          type: integer
+          format: int64
+          description: Total number of records matching the query. Capped at 10000
+            unless trackTotalCount is true.
+          example: 1
+    AppError:
+      type: object
+      description: Standard error response returned by OSDU services.
+      properties:
+        code:
+          type: integer
+          format: int32
+          description: HTTP status code.
+          example: 400
+        reason:
+          type: string
+          description: Short error reason.
+          example: Bad Request
+        message:
+          type: string
+          description: Detailed error message.
+          example: Invalid record format.
+    QueryRequest:
+      type: object
+      description: Search query request with offset-based pagination.
+      properties:
+        kind:
+          type: object
+          anyOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          description: "The type(s) of data to search. Accepts a single kind string\
+            \ or a list of kinds. Format: {Data-Partition-Id}:{source}:{type}:{version}.\
+            \ Wildcards are supported per segment, e.g. 'opendes:*:*:*'."
+          example: opendes:osdu:wellbore:1.0.0
+        limit:
+          type: integer
+          format: int32
+          description: "The maximum number of results to return from the given offset.\
+            \ If no limit is provided, then it will return 10 items. Max number of\
+            \ items which can be fetched by the query is 1000. (If you wish to fetch\
+            \ large set of items, please use query_with_cursor API)"
+          example: 30
+          minimum: 0
+        query:
+          type: string
+          description: The query string in Lucene query string syntax.
+          example: "data.country: \"US\""
+        suggestPhrase:
+          type: string
+          description: Part of the phrase for which search should return completions
+          example: wellb
+        highlightedFields:
+          type: array
+          description: The fields where matches should be highlighted.
+          example:
+          - data.wellName
+          items:
+            type: string
+        returnedFields:
+          type: array
+          description: The fields on which to project the results.
+          example:
+          - id
+          - kind
+          - data.wellName
+          items:
+            type: string
+        excludedFields:
+          type: array
+          description: The fields on which to exclude from the results.
+          example:
+          - data.rawData
+          items:
+            type: string
+        sort:
+          $ref: "#/components/schemas/SortQuery"
+          description: The fields and orders to return sorted results.
+        queryAsOwner:
+          type: boolean
+          description: The queryAsOwner switches between viewer and owner to return
+            results that you are entitled to view or results you are the owner of.
+          example: false
+        trackTotalCount:
+          type: boolean
+          description: "Tracks accurate record count matching the query if 'true',\
+            \ partial count otherwise. Partial count queries are more performant.\
+            \ Default is 'false' and returns 10000 if matching records are higher\
+            \ than 10000."
+          example: false
+        spatialFilter:
+          $ref: "#/components/schemas/SpatialFilter"
+          description: A spatial filter to apply.
+        aggregateBy:
+          type: string
+          description: The aggregateBy field returns the distinct values of the given
+            field.
+          example: kind
+        offset:
+          type: integer
+          format: int32
+          description: The starting offset from which to return results.
+          example: 0
+          minimum: 0
+      required:
+      - kind
+    AggregationResponse:
+      type: object
+      properties:
+        key:
+          type: string
+        count:
+          type: integer
+          format: int64
+    QueryResponse:
+      type: object
+      description: Search query response containing matched records and associated
+        metadata.
+      properties:
+        results:
+          type: array
+          description: "List of matched records, each represented as a map of field\
+            \ names to values."
+          items:
+            type: object
+            additionalProperties: true
+        aggregations:
+          type: array
+          description: "Aggregation results keyed by field name, present only when\
+            \ aggregateBy is specified."
+          items:
+            $ref: "#/components/schemas/AggregationResponse"
+        phraseSuggestions:
+          type: array
+          description: Phrase completion suggestions returned when suggestPhrase is
+            specified.
+          items:
+            type: string
+        totalCount:
+          type: integer
+          format: int64
+          description: Total number of records matching the query. Capped at 10000
+            unless trackTotalCount is true.
+          example: 1
+    ConnectedOuterService:
+      type: object
+      description: Name and version of an external service that this OSDU service
+        connects to.
+      properties:
+        name:
+          type: string
+          description: Name of the connected external service.
+          example: storage
+        version:
+          type: string
+          description: Version of the connected external service.
+          example: 2.0.0
+    FeatureFlagState:
+      type: object
+      description: State of a feature flag for a given partition and source.
+      properties:
+        name:
+          type: string
+          description: Name of the feature flag.
+          example: collaborations-api
+        enabled:
+          type: boolean
+          description: Whether the feature flag is currently enabled.
+          example: true
+        partition:
+          type: string
+          description: Data partition this flag applies to.
+          example: opendes
+        source:
+          type: string
+          description: Source configuration that provided this flag state.
+          example: runtime
+    VersionInfo:
+      type: object
+      description: Version and build information for an OSDU service.
+      properties:
+        groupId:
+          type: string
+          description: Maven group ID of the service artifact.
+          example: org.opengroup.osdu
+        artifactId:
+          type: string
+          description: Maven artifact ID of the service.
+          example: os-search
+        version:
+          type: string
+          description: Semantic version of the deployed service.
+          example: 0.27.0
+        buildTime:
+          type: string
+          description: ISO 8601 timestamp of the build.
+          example: 2021-01-26T02:24:13.843Z
+        branch:
+          type: string
+          description: Source control branch from which the service was built.
+          example: main
+        commitId:
+          type: string
+          description: Short commit SHA of the build.
+          example: "7777777"
+        commitMessage:
+          type: string
+          description: Commit message of the build.
+          example: initial commit
+        connectedOuterServices:
+          type: array
+          description: List of external services this service depends on.
+          items:
+            $ref: "#/components/schemas/ConnectedOuterService"
+        featureFlagStates:
+          type: array
+          description: "Current feature flag states for this partition, if any."
+          items:
+            $ref: "#/components/schemas/FeatureFlagState"
+  securitySchemes:
+    Authorization:
+      type: http
+      name: Authorization
+      in: header
+      scheme: bearer
+      bearerFormat: Authorization

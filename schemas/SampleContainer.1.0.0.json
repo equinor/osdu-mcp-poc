@@ -1,0 +1,391 @@
+{
+  "x-osdu-license": "Copyright 2023, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "$id": "https://schema.osdu.opengroup.org/json/master-data/SampleContainer.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:master-data--SampleContainer:1.0.0",
+  "title": "SampleContainer",
+  "description": "Information on the sample container used in storing the sample.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "Previously called ResourceID or SRN which identifies this OSDU resource object without version.",
+      "title": "Entity ID",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:master-data\\-\\-SampleContainer:[\\w\\-\\.\\:\\%]+$",
+      "example": "namespace:master-data--SampleContainer:22bc1d42-94e7-52d4-9e12-66098d84ebab"
+    },
+    "kind": {
+      "description": "The schema identification for the OSDU resource object following the pattern {Namespace}:{Source}:{Type}:{VersionMajor}.{VersionMinor}.{VersionPatch}. The versioning scheme follows the semantic versioning, https://semver.org/.",
+      "title": "Entity Kind",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:[\\w\\-\\.]+:[\\w\\-\\.]+:[0-9]+.[0-9]+.[0-9]+$",
+      "example": "osdu:wks:master-data--SampleContainer:1.0.0"
+    },
+    "version": {
+      "description": "The version number of this OSDU resource; set by the framework.",
+      "title": "Version Number",
+      "type": "integer",
+      "format": "int64",
+      "example": 1562066009929332
+    },
+    "acl": {
+      "description": "The access control tags associated with this entity.",
+      "title": "Access Control List",
+      "$ref": "../abstract/AbstractAccessControlList.1.0.0.json"
+    },
+    "legal": {
+      "description": "The entity's legal tags and compliance status. The actual contents associated with the legal tags is managed by the Compliance Service.",
+      "title": "Legal Tags",
+      "$ref": "../abstract/AbstractLegalTags.1.0.0.json"
+    },
+    "tags": {
+      "title": "Tag Dictionary",
+      "description": "A generic dictionary of string keys mapping to string value. Only strings are permitted as keys and values.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "example": {
+        "NameOfKey": "String value"
+      }
+    },
+    "createTime": {
+      "description": "Timestamp of the time at which initial version of this OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:46:20.163Z"
+    },
+    "createUser": {
+      "title": "Resource Object Creation User Reference",
+      "description": "The user reference, which created the first version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "modifyTime": {
+      "description": "Timestamp of the time at which this version of the OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Version Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:52:24.477Z"
+    },
+    "modifyUser": {
+      "title": "Resource Object Version Creation User Reference",
+      "description": "The user reference, which created this version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "ancestry": {
+      "description": "The links to data, which constitute the inputs, from which this record instance is derived.",
+      "title": "Ancestry",
+      "$ref": "../abstract/AbstractLegalParentList.1.0.0.json"
+    },
+    "meta": {
+      "description": "The Frame of Reference meta data section linking the named properties to self-contained definitions.",
+      "title": "Frame of Reference Meta Data",
+      "type": "array",
+      "items": {
+        "$ref": "../abstract/AbstractMetaItem.1.0.0.json"
+      }
+    },
+    "data": {
+      "allOf": [
+        {
+          "$ref": "../abstract/AbstractCommonResources.1.0.0.json"
+        },
+        {
+          "$ref": "../abstract/AbstractMaster.1.2.0.json"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "Name": {
+              "type": "string",
+              "title": "Name",
+              "description": "The name of the container."
+            },
+            "ManufacturerID": {
+              "type": "string",
+              "title": "Manufacturer ID",
+              "description": "The make or manufacturer of the sample container.",
+              "example": "namespace:master-data--Organisation:7dd54874-46de-5ec1-a358-5a0d8abf5242:",
+              "x-osdu-attribution-authority": "OpenGroup",
+              "x-osdu-attribution-publication": "OSDU",
+              "x-osdu-attribution-revision": "Evergreen",
+              "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Organisation:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "Organisation"
+                }
+              ]
+            },
+            "Model": {
+              "type": "string",
+              "title": "Model",
+              "description": "The model of the sample container as defined by the manufacturer.",
+              "example": "PS100",
+              "x-osdu-attribution-authority": "OpenGroup",
+              "x-osdu-attribution-publication": "ProdML",
+              "x-osdu-attribution-revision": 2.1
+            },
+            "SerialNumber": {
+              "type": "string",
+              "title": "Serial Number",
+              "description": "Unique identifier given by manufacturer for the sample container.",
+              "example": "SN102334555",
+              "x-osdu-attribution-authority": "OpenGroup",
+              "x-osdu-attribution-publication": "ProdML",
+              "x-osdu-attribution-revision": 2.1
+            },
+            "ContainerIdentifier": {
+              "type": "string",
+              "title": "Container Identifier",
+              "description": "This refers to an alternate identifier for the sample container available in a system of record external to the OSDU platform and managed by the organization.",
+              "example": "BTL-12345",
+              "x-osdu-attribution-authority": "OpenGroup",
+              "x-osdu-attribution-publication": "OSDU",
+              "x-osdu-attribution-revision": "Evergreen"
+            },
+            "Capacity": {
+              "type": "number",
+              "title": "Capacity",
+              "description": "Volume of the sample container.",
+              "example": 200,
+              "x-osdu-frame-of-reference": "UOM:volume",
+              "x-osdu-attribution-authority": "OpenGroup",
+              "x-osdu-attribution-publication": "ProdML",
+              "x-osdu-attribution-revision": 2.1
+            },
+            "OwnerID": {
+              "type": "string",
+              "title": "Owner ID",
+              "description": "The OSDU Record ID for the organization obtained from a reference list.",
+              "example": "namespace:master-data--Organisation:7dd54874-46de-5ec1-a358-5a0d8abf5242:",
+              "x-osdu-attribution-authority": "OpenGroup",
+              "x-osdu-attribution-publication": "ProdML",
+              "x-osdu-attribution-revision": 2.1,
+              "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Organisation:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "Organisation"
+                }
+              ]
+            },
+            "MaterialConstruction": {
+              "type": "string",
+              "title": "Material Construction",
+              "description": "Material used in constructing the sample container.",
+              "example": "Stainless Steel, Aluminium Alloy, Glass.",
+              "x-osdu-attribution-authority": "OpenGroup",
+              "x-osdu-attribution-publication": "ProdML",
+              "x-osdu-attribution-revision": 2.1
+            },
+            "OperatingConditionRating": {
+              "$ref": "../abstract/AbstractPTCondition.1.0.0.json",
+              "title": "Operating Condition Rating",
+              "description": "This provides the recommended operating conditions (Pressure and Temperature) rating for the sample container.",
+              "example": {
+                "Pressure": 200,
+                "Temperature": 100
+              },
+              "x-osdu-attribution-authority": "OpenGroup",
+              "x-osdu-attribution-publication": "OSDU",
+              "x-osdu-attribution-revision": "Evergreen"
+            },
+            "ContainerCertifications": {
+              "type": "array",
+              "title": "Container Certifications",
+              "description": "List of certifications performed on the sample container over time.",
+              "example": [
+                {
+                  "InspectionDate": "2020-02-13T09:13:15.55Z",
+                  "NextInspectionDate": "2021-02-13T09:13:15.55Z",
+                  "ValidityPeriod": 24,
+                  "TransportCertificateDocumentID": "namespace:work-product-component--Document:0e6a8fdb-0a0a-56db-955a-c62204c42cb0:",
+                  "IsTransportable": true
+                },
+                {
+                  "InspectionDate": "2021-02-13T09:13:15.55Z",
+                  "NextInspectionDate": "2022-02-13T09:13:15.55Z",
+                  "ValidityPeriod": 24,
+                  "TransportCertificateDocumentID": "namespace:work-product-component--Document:0e6a8fdb-0a0a-56db-955a-c62204c42cb0:",
+                  "IsTransportable": true
+                }
+              ],
+              "x-osdu-attribution-authority": "OpenGroup",
+              "x-osdu-attribution-publication": "OSDU",
+              "x-osdu-attribution-revision": "Evergreen",
+              "items": {
+                "type": "object",
+                "title": "Container Certification",
+                "description": "This provides information pertaining to the certification process conducted on a fluid sample container object.",
+                "properties": {
+                  "InspectionDate": {
+                    "type": "string",
+                    "title": "Inspection Date",
+                    "description": "This is the date of the last inspection performed on the sample container.\nReference: \nInspectionDate=PRODML:2.1:FluidSampleContainer.Model.LastInspectionDate",
+                    "format": "date-time",
+                    "x-osdu-frame-of-reference": "DateTime",
+                    "x-osdu-attribution-authority": "Open Group",
+                    "x-osdu-attribution-publication": "OSDU",
+                    "x-osdu-attribution-revision": "Evergreen"
+                  },
+                  "NextInspectionDate": {
+                    "type": "string",
+                    "title": "Next Inspection Date",
+                    "description": "This is the proposed date for the next inspection to be performed on the sample container.",
+                    "format": "date-time",
+                    "x-osdu-frame-of-reference": "DateTime",
+                    "x-osdu-attribution-authority": "Open Group",
+                    "x-osdu-attribution-publication": "OSDU",
+                    "x-osdu-attribution-revision": "Evergreen"
+                  },
+                  "ValidityPeriod": {
+                    "type": "number",
+                    "title": "Validity Period",
+                    "description": "This is the period or amount of time for which the last inspection or certification process is valid.",
+                    "example": "3 years",
+                    "x-osdu-frame-of-reference": "UOM:time",
+                    "x-osdu-attribution-authority": "Open Group",
+                    "x-osdu-attribution-publication": "OSDU",
+                    "x-osdu-attribution-revision": "Evergreen"
+                  },
+                  "TransportCertificateDocumentID": {
+                    "type": "string",
+                    "title": "Transport Certificate Document ID",
+                    "description": "This is the OSDU object identifier for the file or document containing detailed information on the certification process performed ascertaining its viability for safe transportation of the sample.",
+                    "x-osdu-attribution-authority": "OpenGroup",
+                    "x-osdu-attribution-publication": "ProdML",
+                    "x-osdu-attribution-revision": 2.2,
+                    "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-Document:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "work-product-component",
+                        "EntityType": "Document"
+                      }
+                    ]
+                  },
+                  "IsTransportable": {
+                    "type": "boolean",
+                    "title": "Is Transportable",
+                    "description": "Indicator to determine if the sample container can be transported.",
+                    "x-osdu-attribution-authority": "Open Group",
+                    "x-osdu-attribution-publication": "OSDU",
+                    "x-osdu-attribution-revision": "Evergreen"
+                  }
+                }
+              }
+            },
+            "SampleContainerTypeID": {
+              "type": "string",
+              "title": "Container Type ID",
+              "description": "The type or kind of the sample container used.",
+              "example": "namespace:reference-data--SampleContainerType:PressurizedPressureCompensatedSample:",
+              "x-osdu-attribution-authority": "OpenGroup",
+              "x-osdu-attribution-publication": "OSDU",
+              "x-osdu-attribution-revision": "Evergreen",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-SampleContainerType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "SampleContainerType"
+                }
+              ]
+            },
+            "SampleContainerServiceTypeIDs": {
+              "type": "array",
+              "title": "Sample Container Service Type IDs",
+              "description": "The list of substances, certified by the manufacturer, that the sample container can hold.",
+              "x-osdu-attribution-authority": "OpenGroup",
+              "x-osdu-attribution-publication": "OSDU",
+              "x-osdu-attribution-revision": "Evergreen",
+              "items": {
+                "type": "string",
+                "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-SampleContainerServiceType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                "x-osdu-relationship": [
+                  {
+                    "GroupType": "reference-data",
+                    "EntityType": "SampleContainerServiceType"
+                  }
+                ]
+              }
+            },
+            "StartDate": {
+              "type": "string",
+              "title": "Start Date",
+              "description": "The date the sample container was commisioned and put in service.",
+              "format": "date-time",
+              "example": "2023-01-01T12:00:00Z",
+              "x-osdu-frame-of-reference": "DateTime",
+              "x-osdu-attribution-authority": "OpenGroup",
+              "x-osdu-attribution-publication": "OSDU",
+              "x-osdu-attribution-revision": "Evergreen"
+            },
+            "ExpirationDate": {
+              "type": "string",
+              "title": "Expiration Date",
+              "description": "The date the sample container reached end of life and should be taken out of commission.",
+              "format": "date-time",
+              "x-osdu-frame-of-reference": "DateTime",
+              "x-osdu-attribution-authority": "OpenGroup",
+              "x-osdu-attribution-publication": "OSDU",
+              "x-osdu-attribution-revision": "Evergreen"
+            },
+            "Remarks": {
+              "$ref": "../abstract/AbstractRemark.1.0.0.json",
+              "title": "Remarks",
+              "description": "Remarks or comments about this sample container.",
+              "x-osdu-attribution-authority": "OpenGroup",
+              "x-osdu-attribution-publication": "ProdML",
+              "x-osdu-attribution-revision": 2.1
+            }
+          },
+          "required": [
+            "ContainerIdentifier",
+            "Capacity",
+            "OperatingConditionRating",
+            "SampleContainerServiceTypeIDs"
+          ],
+          "title": "IndividualProperties"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "ExtensionProperties": {
+              "type": "object"
+            }
+          },
+          "title": "ExtensionProperties"
+        }
+      ]
+    }
+  },
+  "required": [
+    "kind",
+    "acl",
+    "legal"
+  ],
+  "additionalProperties": false,
+  "x-osdu-review-status": "Accepted",
+  "x-osdu-virtual-properties": {
+    "data.VirtualProperties.DefaultName": {
+      "type": "string",
+      "priority": [
+        {
+          "path": "data.Name"
+        }
+      ]
+    },
+    "data.VirtualProperties.DefaultLocation": {
+      "type": "object",
+      "priority": [
+        {
+          "path": "data.SpatialLocation"
+        }
+      ]
+    }
+  },
+  "x-osdu-inheriting-from-kind": []
+}

@@ -1,0 +1,266 @@
+{
+  "x-osdu-license": "Copyright 2022, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "$id": "https://schema.osdu.opengroup.org/json/reference-data/ExternalUnitOfMeasure.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:reference-data--ExternalUnitOfMeasure:1.0.0",
+  "title": "ExternalUnitOfMeasure",
+  "description": "A unit of measure description belonging to an external system, which is intended to be mapped or related to a platform-standard UnitOfMeasure record. Mappings can be exact or not. This is expressed by he MapStatus. MapStatus:identical means that the external unit reference can be swapped out by the platform standard reference. MapStatus:corrected indicates same concept but differences in the conversion parameters. Data must be treated or re-labeled; the decision can only be taken on a case by case basis. Finally  MapStatus:unsupported means that there is no equivalent platform standard reference. An ExternalUnitOfMeasure record can be seen as an 'alias' for the UnitOfMeasureID it refers to. Adding NameAliases to UnitOfMeasure is, however, not recommended because local overrides may be lost when new OSDU updates are shipped.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "Previously called ResourceID or SRN which identifies this OSDU resource object without version.",
+      "title": "Entity ID",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-ExternalUnitOfMeasure:[\\w\\-\\.\\:\\%]+$",
+      "example": "namespace:reference-data--ExternalUnitOfMeasure:91398c8a-8669-5a25-9a37-fc599434e484"
+    },
+    "kind": {
+      "description": "The schema identification for the OSDU resource object following the pattern {Namespace}:{Source}:{Type}:{VersionMajor}.{VersionMinor}.{VersionPatch}. The versioning scheme follows the semantic versioning, https://semver.org/.",
+      "title": "Entity Kind",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:[\\w\\-\\.]+:[\\w\\-\\.]+:[0-9]+.[0-9]+.[0-9]+$",
+      "example": "osdu:wks:reference-data--ExternalUnitOfMeasure:1.0.0"
+    },
+    "version": {
+      "description": "The version number of this OSDU resource; set by the framework.",
+      "title": "Version Number",
+      "type": "integer",
+      "format": "int64",
+      "example": 1562066009929332
+    },
+    "acl": {
+      "description": "The access control tags associated with this entity.",
+      "title": "Access Control List",
+      "$ref": "../abstract/AbstractAccessControlList.1.0.0.json"
+    },
+    "legal": {
+      "description": "The entity's legal tags and compliance status. The actual contents associated with the legal tags is managed by the Compliance Service.",
+      "title": "Legal Tags",
+      "$ref": "../abstract/AbstractLegalTags.1.0.0.json"
+    },
+    "tags": {
+      "title": "Tag Dictionary",
+      "description": "A generic dictionary of string keys mapping to string value. Only strings are permitted as keys and values.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "example": {
+        "NameOfKey": "String value"
+      }
+    },
+    "createTime": {
+      "description": "Timestamp of the time at which initial version of this OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:46:20.163Z"
+    },
+    "createUser": {
+      "title": "Resource Object Creation User Reference",
+      "description": "The user reference, which created the first version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "modifyTime": {
+      "description": "Timestamp of the time at which this version of the OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Version Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:52:24.477Z"
+    },
+    "modifyUser": {
+      "title": "Resource Object Version Creation User Reference",
+      "description": "The user reference, which created this version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "ancestry": {
+      "description": "The links to data, which constitute the inputs, from which this record instance is derived.",
+      "title": "Ancestry",
+      "$ref": "../abstract/AbstractLegalParentList.1.0.0.json"
+    },
+    "meta": {
+      "description": "The Frame of Reference meta data section linking the named properties to self-contained definitions.",
+      "title": "Frame of Reference Meta Data",
+      "type": "array",
+      "items": {
+        "$ref": "../abstract/AbstractMetaItem.1.0.0.json"
+      }
+    },
+    "data": {
+      "allOf": [
+        {
+          "$ref": "../abstract/AbstractCommonResources.1.0.0.json"
+        },
+        {
+          "$ref": "../abstract/AbstractReferenceType.1.0.0.json"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "NamespaceID": {
+              "type": "string",
+              "title": "Catalog Namespace ID",
+              "description": "A namespace reference grouping a list of records with the goal of providing unique look-ups by Name/Code. It is strongly recommended to make the NamespaceID's code part of the system property id.",
+              "example": "partition-id:reference-data--ExternalCatalogNamespace:LIS-LAS:",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-ExternalCatalogNamespace:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "ExternalCatalogNamespace"
+                }
+              ]
+            },
+            "MapStateID": {
+              "type": "string",
+              "title": "Map State ID",
+              "description": "The mapping status declaring whether the mapping is straight forward, direct (identical) or whether special treatment is required (corrected). Items, which are known not to be mappable are declared as unsupported. In the latter case the UnitOfMeasureID is not expected to be populated.",
+              "example": "partition-id:reference-data--CatalogMapStateType:identical:",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-CatalogMapStateType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "CatalogMapStateType"
+                }
+              ]
+            },
+            "CorrectToExternalUnitOfMeasureID": {
+              "type": "string",
+              "title": "Correct to External Unit of Measure ID",
+              "description": "For CatalogMapStateType:Corrected or CatalogMapStateType:Convert, use a conversion to this intermediate unit before swapping the reference to the platform standard UnitOfMeasure. Absent for other map states.",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-ExternalUnitOfMeasure:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "ExternalUnitOfMeasure"
+                }
+              ]
+            },
+            "UnitOfMeasureID": {
+              "type": "string",
+              "title": "Unit of Measure ID",
+              "description": "The platform standard UnitOfMeasure record, to which this ExternalUnitOfMeasure record is mapped. This record may be understood as an alias to the standard UnitOfMeasure.",
+              "example": "partition-id:reference-data--UnitOfMeasure:ft:",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-UnitOfMeasure:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "UnitOfMeasure"
+                }
+              ]
+            },
+            "ExternalUnitQuantityID": {
+              "type": "string",
+              "title": "External Unit Quantity ID",
+              "description": "The External Unit Quantity is a semantic description of the quantity this ExternalUnitOfMeasure is describing ('Length' for instance).",
+              "example": "partition-id:reference-data--ExternalUnitQuantity:Length:",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-ExternalUnitQuantity:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "ExternalUnitQuantity"
+                }
+              ]
+            },
+            "UnitQuantityID": {
+              "type": "string",
+              "title": "Unit Quantity ID",
+              "description": "De-normalized, mapped platform standard UnitQuantity, is the ExternalUnitQuantity was indeed mappable.",
+              "example": "partition-id:reference-data--UnitQuantity:length:",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-UnitQuantity:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "UnitQuantity"
+                }
+              ]
+            },
+            "UnitDimensionCode": {
+              "type": "string",
+              "title": "Unit Dimension Code",
+              "description": "The dimensionality using the symbols for dimension as defined in https://www.bipm.org/utils/common/documents/jcgm/JCGM_200_2012.pdf, i.e. L for length, M for mass, T for time, I for electric current, N for amount of substance, J for luminous intensity; except \u0398 for thermodynamic temperature, which is replaced by the symbol K, the additional symbol D for temperature difference and the additional symbol 0 for no dimension.",
+              "example": "L"
+            },
+            "IsBaseUnit": {
+              "type": "boolean",
+              "title": "Base Unit Flag",
+              "description": "True if the unit is a base unit for the unit quantity. If the property is absent, it means the unit is not a base unit.",
+              "example": false
+            },
+            "UnitDimensionName": {
+              "type": "string",
+              "title": "Unit Dimension Name",
+              "description": "The name of the unit dimension concept.",
+              "example": "Length"
+            },
+            "CoefficientA": {
+              "type": "number",
+              "title": "A",
+              "description": "The A parameter; formula: y = (A+B*x)/(C+D*x)",
+              "example": 0.0
+            },
+            "CoefficientB": {
+              "type": "number",
+              "title": "B",
+              "description": "The B parameter; formula: y = (A+B*x)/(C+D*x)",
+              "example": 0.3048
+            },
+            "CoefficientC": {
+              "type": "number",
+              "title": "C",
+              "description": "The C parameter; formula: y = (A+B*x)/(C+D*x)",
+              "example": 1.0
+            },
+            "CoefficientD": {
+              "type": "number",
+              "title": "D",
+              "description": "The D parameter; formula: y = (A+B*x)/(C+D*x)",
+              "example": 0.0
+            },
+            "PersistableReference": {
+              "type": "string",
+              "title": "Persistable Reference",
+              "description": "The self-contained, stringified JSON reference for the unit. This value can be attached to data values and data records and carry the unit reference independent of a UnitOfMeasure instance.",
+              "example": "\"{\\\"scaleOffset\\\":{\\\"scale\\\":0.3048,\\\"offset\\\":0.0},\\\"symbol\\\":\\\"F\\\",\\\"baseMeasurement\\\":{\\\"ancestry\\\":\\\"Length\\\",\\\"type\\\":\\\"UM\\\"},\\\"type\\\":\\\"USO\\\"}\""
+            }
+          },
+          "title": "IndividualProperties"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "ExtensionProperties": {
+              "type": "object"
+            }
+          },
+          "title": "ExtensionProperties"
+        }
+      ]
+    }
+  },
+  "required": [
+    "kind",
+    "acl",
+    "legal"
+  ],
+  "additionalProperties": false,
+  "x-osdu-review-status": "Accepted",
+  "x-osdu-governance-model": "LOCAL",
+  "x-osdu-virtual-properties": {
+    "data.VirtualProperties.DefaultName": {
+      "type": "string",
+      "priority": [
+        {
+          "path": "data.Name"
+        }
+      ]
+    }
+  },
+  "x-osdu-inheriting-from-kind": [
+    {
+      "name": "ReferenceType",
+      "kind": "osdu:wks:AbstractReferenceType:1.0.0"
+    }
+  ]
+}

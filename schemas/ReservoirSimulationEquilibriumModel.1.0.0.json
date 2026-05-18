@@ -1,0 +1,642 @@
+{
+  "x-osdu-license": "Copyright 2025, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "$id": "https://schema.osdu.opengroup.org/json/work-product-component/ReservoirSimulationEquilibriumModel.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:work-product-component--ReservoirSimulationEquilibriumModel:1.0.0",
+  "title": "ReservoirSimulationEquilibriumModel",
+  "description": "Description of the gravity and thermodynamic equilibrium assumed to be reached between all phases for the simulation run or set of runs for a specific Reservoir Simulation Model",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "Previously called ResourceID or SRN which identifies this OSDU resource object without version.",
+      "title": "Entity ID",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-ReservoirSimulationEquilibriumModel:[\\w\\-\\.\\:\\%]+$",
+      "example": "namespace:work-product-component--ReservoirSimulationEquilibriumModel:5536f130-9c0f-5bdc-9bd6-ea619b8f682b"
+    },
+    "kind": {
+      "description": "The schema identification for the OSDU resource object following the pattern {Namespace}:{Source}:{Type}:{VersionMajor}.{VersionMinor}.{VersionPatch}. The versioning scheme follows the semantic versioning, https://semver.org/.",
+      "title": "Entity Kind",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:[\\w\\-\\.]+:[\\w\\-\\.]+:[0-9]+.[0-9]+.[0-9]+$",
+      "example": "osdu:wks:work-product-component--ReservoirSimulationEquilibriumModel:1.0.0"
+    },
+    "version": {
+      "description": "The version number of this OSDU resource; set by the framework.",
+      "title": "Version Number",
+      "type": "integer",
+      "format": "int64",
+      "example": 1562066009929332
+    },
+    "acl": {
+      "description": "The access control tags associated with this entity.",
+      "title": "Access Control List",
+      "$ref": "../abstract/AbstractAccessControlList.1.0.0.json"
+    },
+    "legal": {
+      "description": "The entity's legal tags and compliance status. The actual contents associated with the legal tags is managed by the Compliance Service.",
+      "title": "Legal Tags",
+      "$ref": "../abstract/AbstractLegalTags.1.0.0.json"
+    },
+    "tags": {
+      "title": "Tag Dictionary",
+      "description": "A generic dictionary of string keys mapping to string value. Only strings are permitted as keys and values.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "example": {
+        "NameOfKey": "String value"
+      }
+    },
+    "createTime": {
+      "description": "Timestamp of the time at which initial version of this OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:46:20.163Z"
+    },
+    "createUser": {
+      "title": "Resource Object Creation User Reference",
+      "description": "The user reference, which created the first version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "modifyTime": {
+      "description": "Timestamp of the time at which this version of the OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Version Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:52:24.477Z"
+    },
+    "modifyUser": {
+      "title": "Resource Object Version Creation User Reference",
+      "description": "The user reference, which created this version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "ancestry": {
+      "description": "The links to data, which constitute the inputs, from which this record instance is derived.",
+      "title": "Ancestry",
+      "$ref": "../abstract/AbstractLegalParentList.1.0.0.json"
+    },
+    "meta": {
+      "description": "The Frame of Reference meta data section linking the named properties to self-contained definitions.",
+      "title": "Frame of Reference Meta Data",
+      "type": "array",
+      "items": {
+        "$ref": "../abstract/AbstractMetaItem.1.0.0.json"
+      }
+    },
+    "data": {
+      "allOf": [
+        {
+          "$ref": "../abstract/AbstractCommonResources.1.0.1.json"
+        },
+        {
+          "$ref": "../abstract/AbstractWPCGroupType.1.2.0.json"
+        },
+        {
+          "$ref": "../abstract/AbstractWorkProductComponent.1.1.0.json"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "PressureAtDatum": {
+              "type": "number",
+              "title": "Pressure At Datum",
+              "description": "Hydrostatic Pressure at the Pressure Datum TVD",
+              "x-osdu-frame-of-reference": "UOM:pressure"
+            },
+            "PressureDatumTVD": {
+              "type": "number",
+              "title": "Pressure Datum TVD",
+              "description": "True Vertical Depth from the Vertical CRS to the datum used for pressure. This is further qualified by associated VerticalCRS property. If no VerticalCRS is populated, assume MSL, and therefore \"TVD Subsea\". The Vertical CRS of the Datum must be consistent with one defined for the reservoir simulation model.",
+              "x-osdu-frame-of-reference": "UOM:length"
+            },
+            "VerticalCRSID": {
+              "type": "string",
+              "title": "Vertical Coordinate Reference System ID",
+              "description": "The Vertical Coordinate Reference System defining the origin (i.e., zero point) for the vertical measurements on this data record (e.g. PressureDatum and TopDepth). The most common Vertical CRS in this context is Mean Sea Level. Populating this attribute is especially important when the Vertical CRS is not Mean Sea Level but rather a local alternative like Caspian height or a custom Vertical CRS.",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-CoordinateReferenceSystem:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "CoordinateReferenceSystem"
+                }
+              ]
+            },
+            "VerticalDatumOffsetToMeanSeaLevel": {
+              "type": "number",
+              "title": "Vertical Datum Offset To Mean Sea Level",
+              "description": "If the the vertical measurements on this data record (e.g. PressureDatum and TopDepth) were not referenced from Mean Sea Level, this attribute can capture the difference between the selected Vertical CRS and Mean Sea Level.",
+              "x-osdu-frame-of-reference": "UOM:length"
+            },
+            "FluidContacts": {
+              "type": "array",
+              "title": "Fluid Contacts",
+              "description": "List of individual fluid contacts such as gas/oil contact or oil/water contact, with associated parameters.",
+              "items": {
+                "type": "object",
+                "title": "Fluid Contact",
+                "description": "Description of an individual fluid contact within a reservoir unit",
+                "properties": {
+                  "FluidContactTypeID": {
+                    "type": "string",
+                    "title": "Fluid Contact Type ID",
+                    "description": "Identifies the type of a fluid boundary such as oil/water contact.",
+                    "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-FluidContactType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "reference-data",
+                        "EntityType": "FluidContactType"
+                      }
+                    ]
+                  },
+                  "FluidContactTVD": {
+                    "type": "number",
+                    "title": "Fluid Contact TVD",
+                    "description": "The true vertical depth from the Vertical CRS to the fluid contact.",
+                    "x-osdu-frame-of-reference": "UOM:length"
+                  },
+                  "CapillaryPressure": {
+                    "type": "number",
+                    "title": "Capillary Pressure",
+                    "description": "Capillary pressure at the contact defined by the Fluid Contact Type.",
+                    "x-osdu-frame-of-reference": "UOM:pressure"
+                  },
+                  "ReferenceFluidContactID": {
+                    "type": "string",
+                    "title": "Reference Fluid Contact ID",
+                    "description": "Identifier of the fluid contact interpretation data record used as an input in deriving the fluid contact TVD.",
+                    "pattern": "^[\\w\\-\\.]+:(work-product-component\\-\\-FluidBoundaryInterpretation|work-product-component\\-\\-WellboreMarkerSet):[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "work-product-component",
+                        "EntityType": "FluidBoundaryInterpretation"
+                      },
+                      {
+                        "GroupType": "work-product-component",
+                        "EntityType": "WellboreMarkerSet"
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            "DissolvedGasRatiosUndersaturatedOilVsDepth": {
+              "type": "object",
+              "title": "Dissolved Gas Ratios Undersaturated Oil Versus Depth",
+              "description": "A table showing how gas-oil ratio (Rs) OR a bubble point pressure (Pb) changes by depth. Dissolved gas ratios in undersaturated oil for black oil models are calculated from either gas-oil ratio (Rs) versus depth table OR a bubble point pressure (Pb) versus depth table.",
+              "properties": {
+                "Temperatures": {
+                  "type": "array",
+                  "title": "Temperatures",
+                  "description": "Array of Temperature Values at a given Depth. The usage of Temperature against Depth is mutually exclusive with the usage of any other property",
+                  "x-osdu-frame-of-reference": "UOM:thermodynamic-temperature",
+                  "items": {
+                    "type": "number"
+                  }
+                },
+                "APIGravityValues": {
+                  "type": "array",
+                  "title": "API Gravity Values",
+                  "description": "Array of API Gravity Values at a given Depth. The usage of API Gravity against Depth is mutually exclusive with the usage of any other property.",
+                  "x-osdu-frame-of-reference": "UOM:non-dimensional",
+                  "items": {
+                    "type": "number"
+                  }
+                },
+                "BubblePointPressures": {
+                  "type": "array",
+                  "title": "Bubble Point Pressures",
+                  "description": "Array of Bubble Point Pressure Values (Pb) at a given True Vertical Depth (TVD). The usage of Bubble Point Pressure against TVD is mutually exclusive with the usage of any other property.",
+                  "x-osdu-frame-of-reference": "UOM:pressure",
+                  "items": {
+                    "type": "number"
+                  }
+                },
+                "SolutionGasOilRatios": {
+                  "type": "array",
+                  "title": "Solution Gas Oil Ratios",
+                  "description": "Array of Gas Oil Ratios in Solution Values (Rs) at a given Depth. The usage of Gas Oil Ratios in Solution against Depth is mutually exclusive with the usage of any other property.",
+                  "x-osdu-frame-of-reference": "UOM:volume per volume",
+                  "items": {
+                    "type": "number"
+                  }
+                },
+                "DewPointPressures": {
+                  "type": "array",
+                  "title": "Dew Point Pressures",
+                  "description": "Array of Dew Point Pressure Values (Pd) at a given True Vertical Depth (TVD). The usage of Dew Point Pressure against TVD  is mutually exclusive with the usage of any other property.",
+                  "x-osdu-frame-of-reference": "UOM:pressure",
+                  "items": {
+                    "type": "number"
+                  }
+                },
+                "VaporizedOilRatios": {
+                  "type": "array",
+                  "title": "Vaporized Oil Ratios",
+                  "description": "Array of Vaporized Oil Ratio Values (Rv) at a given Depth. The usage of Vaporized Oil Ratio against Depth is mutually exclusive with the usage of any other property.",
+                  "x-osdu-frame-of-reference": "UOM:volume per volume",
+                  "items": {
+                    "type": "number"
+                  }
+                },
+                "TrueVerticalDepths": {
+                  "type": "array",
+                  "title": "True Vertical Depths",
+                  "description": "Array of True Vertical Depth (TVD) Values to be used as a reference for any other property mapped against depth. This column is required if any other property is populated.",
+                  "x-osdu-frame-of-reference": "UOM:depth",
+                  "items": {
+                    "type": "number"
+                  }
+                }
+              }
+            },
+            "VaporizedOilRatiosUndersaturatedGasVsDepth": {
+              "type": "object",
+              "title": "Vaporized Oil Ratios Undersaturated Gas Versus Depth",
+              "description": "A table showing how vaporized oil ratio (Rv) or a dew point pressure (Pd) changes by depth. Vaporized oil ratios in undersaturated gas for black oil models with wet gas are calculated from either vaporized oil ratio (Rv) versus depth table OR a dew point pressure (Pd) versus depth table.",
+              "properties": {
+                "Temperatures": {
+                  "type": "array",
+                  "title": "Temperatures",
+                  "description": "Array of Temperature Values at a given Depth. The usage of Temperature against Depth is mutually exclusive with the usage of any other property",
+                  "x-osdu-frame-of-reference": "UOM:thermodynamic-temperature",
+                  "items": {
+                    "type": "number"
+                  }
+                },
+                "APIGravityValues": {
+                  "type": "array",
+                  "title": "API Gravity Values",
+                  "description": "Array of API Gravity Values at a given Depth. The usage of API Gravity against Depth is mutually exclusive with the usage of any other property.",
+                  "x-osdu-frame-of-reference": "UOM:non-dimensional",
+                  "items": {
+                    "type": "number"
+                  }
+                },
+                "BubblePointPressures": {
+                  "type": "array",
+                  "title": "Bubble Point Pressures",
+                  "description": "Array of Bubble Point Pressure Values (Pb) at a given True Vertical Depth (TVD). The usage of Bubble Point Pressure against TVD is mutually exclusive with the usage of any other property.",
+                  "x-osdu-frame-of-reference": "UOM:pressure",
+                  "items": {
+                    "type": "number"
+                  }
+                },
+                "SolutionGasOilRatios": {
+                  "type": "array",
+                  "title": "Solution Gas Oil Ratios",
+                  "description": "Array of Gas Oil Ratios in Solution Values (Rs) at a given Depth. The usage of Gas Oil Ratios in Solution against Depth is mutually exclusive with the usage of any other property.",
+                  "x-osdu-frame-of-reference": "UOM:volume per volume",
+                  "items": {
+                    "type": "number"
+                  }
+                },
+                "DewPointPressures": {
+                  "type": "array",
+                  "title": "Dew Point Pressures",
+                  "description": "Array of Dew Point Pressure Values (Pd) at a given True Vertical Depth (TVD). The usage of Dew Point Pressure against TVD  is mutually exclusive with the usage of any other property.",
+                  "x-osdu-frame-of-reference": "UOM:pressure",
+                  "items": {
+                    "type": "number"
+                  }
+                },
+                "VaporizedOilRatios": {
+                  "type": "array",
+                  "title": "Vaporized Oil Ratios",
+                  "description": "Array of Vaporized Oil Ratio Values (Rv) at a given Depth. The usage of Vaporized Oil Ratio against Depth is mutually exclusive with the usage of any other property.",
+                  "x-osdu-frame-of-reference": "UOM:volume per volume",
+                  "items": {
+                    "type": "number"
+                  }
+                },
+                "TrueVerticalDepths": {
+                  "type": "array",
+                  "title": "True Vertical Depths",
+                  "description": "Array of True Vertical Depth (TVD) Values to be used as a reference for any other property mapped against depth. This column is required if any other property is populated.",
+                  "x-osdu-frame-of-reference": "UOM:depth",
+                  "items": {
+                    "type": "number"
+                  }
+                }
+              }
+            },
+            "EnableFineScaleEquilibration": {
+              "type": "boolean",
+              "title": "Enable Fine Scale Equilibration",
+              "description": "If false, fluid saturation is calculated at the center of the block. If true, the block is subdivided based on the value defined by FineScaleEquilibration.InitialFluidsInPlaceCalculationAccuracy."
+            },
+            "FineScaleEquilibration": {
+              "type": "object",
+              "title": "Fine-Scale Equilibration",
+              "description": "Cohesive set of attributes describing the details of the fine scale equilibration. Expectation is to fill out this attribute if the EnableFineScaleEquilibration is set to true.",
+              "properties": {
+                "InitialFluidsInPlaceCalculationAccuracy": {
+                  "type": "integer",
+                  "title": "Initial Fluids In-Place Calculation Accuracy",
+                  "description": "This is a number that controls the vertical resolution by subdividing the cell, often used as an input to an equation used by the simulator."
+                },
+                "EnableTiltedBlockEquilibration": {
+                  "type": "boolean",
+                  "title": "Enable Tilted-Block Equilibration",
+                  "description": "This indicates whether or not the subdivision should be made parallel to the tilted cell structure in place (true) or purely horizontally (false)."
+                },
+                "IsQuiescenceActive": {
+                  "type": "boolean",
+                  "title": "Is Quiescence Active",
+                  "description": "If true, the quiescence option computes a modification to the pressure field such that the reservoir is in hydrostatic equilibrium with respect to the saturations. The pressure modifications are then applied during the rest of the simulation."
+                },
+                "RefinementRange": {
+                  "type": "number",
+                  "title": "Refinement Range",
+                  "description": "Defines the interval distance both above and below the fluid contacts within which the fine scale equilibrium calculation will be performed.",
+                  "x-osdu-frame-of-reference": "UOM:length"
+                },
+                "RefinementDepthStep": {
+                  "type": "number",
+                  "title": "Refinement Depth Step",
+                  "description": "Defines the maximum subdivision used in the fine scale equilibrium calculation.",
+                  "x-osdu-frame-of-reference": "UOM:length"
+                }
+              }
+            },
+            "ReservoirSimulationInitialisationDataTypeID": {
+              "type": "string",
+              "title": "Reservoir Simulation Initialization Data Type ID",
+              "description": "Indicates whether (i) gas-oil contact and composition data, or (ii) Pressure at datum and composition data is the most relevant data to be honored during the initialization process, or whether simulator should analyze the model to determine this.",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-ReservoirSimulationInitialisationDataType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "ReservoirSimulationInitialisationDataType"
+                }
+              ]
+            },
+            "FluidModelID": {
+              "type": "string",
+              "title": "Fluid Model ID",
+              "description": "Identifies the Fluid Model used for the equilibration",
+              "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-FluidModel:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "work-product-component",
+                  "EntityType": "FluidModel"
+                }
+              ]
+            },
+            "EquilibriumModelSaturationTypeID": {
+              "type": "string",
+              "title": "Equilibrium Model Saturation Type ID",
+              "description": "Identifies the type of saturation system the model was built for, such as a bubble point or a dew point fluid system.",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-EquilibriumModelSaturationType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "EquilibriumModelSaturationType"
+                }
+              ]
+            },
+            "APIGravityVsDepth": {
+              "type": "object",
+              "title": "API Gravity Versus Depth",
+              "description": "A table showing how API Gravity changes by depth.",
+              "properties": {
+                "Temperatures": {
+                  "type": "array",
+                  "title": "Temperatures",
+                  "description": "Array of Temperature Values at a given Depth. The usage of Temperature against Depth is mutually exclusive with the usage of any other property",
+                  "x-osdu-frame-of-reference": "UOM:thermodynamic-temperature",
+                  "items": {
+                    "type": "number"
+                  }
+                },
+                "APIGravityValues": {
+                  "type": "array",
+                  "title": "API Gravity Values",
+                  "description": "Array of API Gravity Values at a given Depth. The usage of API Gravity against Depth is mutually exclusive with the usage of any other property.",
+                  "x-osdu-frame-of-reference": "UOM:non-dimensional",
+                  "items": {
+                    "type": "number"
+                  }
+                },
+                "BubblePointPressures": {
+                  "type": "array",
+                  "title": "Bubble Point Pressures",
+                  "description": "Array of Bubble Point Pressure Values (Pb) at a given True Vertical Depth (TVD). The usage of Bubble Point Pressure against TVD is mutually exclusive with the usage of any other property.",
+                  "x-osdu-frame-of-reference": "UOM:pressure",
+                  "items": {
+                    "type": "number"
+                  }
+                },
+                "SolutionGasOilRatios": {
+                  "type": "array",
+                  "title": "Solution Gas Oil Ratios",
+                  "description": "Array of Gas Oil Ratios in Solution Values (Rs) at a given Depth. The usage of Gas Oil Ratios in Solution against Depth is mutually exclusive with the usage of any other property.",
+                  "x-osdu-frame-of-reference": "UOM:volume per volume",
+                  "items": {
+                    "type": "number"
+                  }
+                },
+                "DewPointPressures": {
+                  "type": "array",
+                  "title": "Dew Point Pressures",
+                  "description": "Array of Dew Point Pressure Values (Pd) at a given True Vertical Depth (TVD). The usage of Dew Point Pressure against TVD  is mutually exclusive with the usage of any other property.",
+                  "x-osdu-frame-of-reference": "UOM:pressure",
+                  "items": {
+                    "type": "number"
+                  }
+                },
+                "VaporizedOilRatios": {
+                  "type": "array",
+                  "title": "Vaporized Oil Ratios",
+                  "description": "Array of Vaporized Oil Ratio Values (Rv) at a given Depth. The usage of Vaporized Oil Ratio against Depth is mutually exclusive with the usage of any other property.",
+                  "x-osdu-frame-of-reference": "UOM:volume per volume",
+                  "items": {
+                    "type": "number"
+                  }
+                },
+                "TrueVerticalDepths": {
+                  "type": "array",
+                  "title": "True Vertical Depths",
+                  "description": "Array of True Vertical Depth (TVD) Values to be used as a reference for any other property mapped against depth. This column is required if any other property is populated.",
+                  "x-osdu-frame-of-reference": "UOM:depth",
+                  "items": {
+                    "type": "number"
+                  }
+                }
+              }
+            },
+            "TemperatureVsDepth": {
+              "type": "object",
+              "title": "Temperature Versus Depth",
+              "description": "A table showing how temperature changes by depth.",
+              "properties": {
+                "Temperatures": {
+                  "type": "array",
+                  "title": "Temperatures",
+                  "description": "Array of Temperature Values at a given Depth. The usage of Temperature against Depth is mutually exclusive with the usage of any other property",
+                  "x-osdu-frame-of-reference": "UOM:thermodynamic-temperature",
+                  "items": {
+                    "type": "number"
+                  }
+                },
+                "APIGravityValues": {
+                  "type": "array",
+                  "title": "API Gravity Values",
+                  "description": "Array of API Gravity Values at a given Depth. The usage of API Gravity against Depth is mutually exclusive with the usage of any other property.",
+                  "x-osdu-frame-of-reference": "UOM:non-dimensional",
+                  "items": {
+                    "type": "number"
+                  }
+                },
+                "BubblePointPressures": {
+                  "type": "array",
+                  "title": "Bubble Point Pressures",
+                  "description": "Array of Bubble Point Pressure Values (Pb) at a given True Vertical Depth (TVD). The usage of Bubble Point Pressure against TVD is mutually exclusive with the usage of any other property.",
+                  "x-osdu-frame-of-reference": "UOM:pressure",
+                  "items": {
+                    "type": "number"
+                  }
+                },
+                "SolutionGasOilRatios": {
+                  "type": "array",
+                  "title": "Solution Gas Oil Ratios",
+                  "description": "Array of Gas Oil Ratios in Solution Values (Rs) at a given Depth. The usage of Gas Oil Ratios in Solution against Depth is mutually exclusive with the usage of any other property.",
+                  "x-osdu-frame-of-reference": "UOM:volume per volume",
+                  "items": {
+                    "type": "number"
+                  }
+                },
+                "DewPointPressures": {
+                  "type": "array",
+                  "title": "Dew Point Pressures",
+                  "description": "Array of Dew Point Pressure Values (Pd) at a given True Vertical Depth (TVD). The usage of Dew Point Pressure against TVD  is mutually exclusive with the usage of any other property.",
+                  "x-osdu-frame-of-reference": "UOM:pressure",
+                  "items": {
+                    "type": "number"
+                  }
+                },
+                "VaporizedOilRatios": {
+                  "type": "array",
+                  "title": "Vaporized Oil Ratios",
+                  "description": "Array of Vaporized Oil Ratio Values (Rv) at a given Depth. The usage of Vaporized Oil Ratio against Depth is mutually exclusive with the usage of any other property.",
+                  "x-osdu-frame-of-reference": "UOM:volume per volume",
+                  "items": {
+                    "type": "number"
+                  }
+                },
+                "TrueVerticalDepths": {
+                  "type": "array",
+                  "title": "True Vertical Depths",
+                  "description": "Array of True Vertical Depth (TVD) Values to be used as a reference for any other property mapped against depth. This column is required if any other property is populated.",
+                  "x-osdu-frame-of-reference": "UOM:depth",
+                  "items": {
+                    "type": "number"
+                  }
+                }
+              }
+            },
+            "CompositionsAtDepth": {
+              "type": "array",
+              "title": "Compositions At Depth",
+              "description": "Array defining the equilibrated compositions at given depths; Also known as a compositional model table",
+              "items": {
+                "type": "object",
+                "title": "Composition",
+                "description": "Description of the composition of a mixed fluid at a single depth",
+                "properties": {
+                  "CompositionTypeID": {
+                    "type": "string",
+                    "title": "Composition Type ID",
+                    "description": "Indicating that the table consists of phase component mole fractions versus depth. (Total, Liquid, Vapor, Aqueous, Residual Oil, Solid)",
+                    "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-ReservoirComponentCompositionType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "reference-data",
+                        "EntityType": "ReservoirComponentCompositionType"
+                      }
+                    ]
+                  },
+                  "Depth": {
+                    "type": "number",
+                    "title": "Depth",
+                    "description": "A depth (TVD) value at which the component mole fractions will be specified",
+                    "x-osdu-frame-of-reference": "UOM:length"
+                  },
+                  "ComponentMoleFractions": {
+                    "type": "array",
+                    "title": "Component Mole Fractions",
+                    "description": "A list of component mole fractions at the designated depth corresponding to the appropriate component id (e.g. 0.0121, 0.0194, etc.). These values should sum up to one.",
+                    "x-osdu-frame-of-reference": "UOM:mol/mol",
+                    "items": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            },
+            "ComponentNames": {
+              "type": "array",
+              "title": "Component Names",
+              "description": "Identifies the compositional components at the designated depth (e.g. C1, C2, etc.)",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "title": "IndividualProperties"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "ExtensionProperties": {
+              "type": "object"
+            }
+          },
+          "title": "ExtensionProperties"
+        }
+      ]
+    }
+  },
+  "required": [
+    "kind",
+    "acl",
+    "legal"
+  ],
+  "additionalProperties": false,
+  "x-osdu-review-status": "Accepted",
+  "x-osdu-governance-model": "LOCAL",
+  "x-osdu-governance-authorities": [
+    "OSDU"
+  ],
+  "x-osdu-virtual-properties": {
+    "data.VirtualProperties.DefaultName": {
+      "type": "string",
+      "priority": [
+        {
+          "path": "data.Name"
+        }
+      ]
+    },
+    "data.VirtualProperties.DefaultLocation": {
+      "type": "object",
+      "priority": [
+        {
+          "path": "data.SpatialArea"
+        },
+        {
+          "path": "data.SpatialPoint"
+        }
+      ]
+    }
+  },
+  "x-osdu-inheriting-from-kind": [
+    {
+      "name": "WorkProductComponent",
+      "kind": "osdu:wks:AbstractWPCGroupType:1.2.0"
+    }
+  ]
+}

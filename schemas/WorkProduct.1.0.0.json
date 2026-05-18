@@ -1,0 +1,244 @@
+{
+  "x-osdu-license": "Copyright 2022, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "$id": "https://schema.osdu.opengroup.org/json/work-product/WorkProduct.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:work-product--WorkProduct:1.0.0",
+  "title": "WorkProduct",
+  "description": "A collection of work product components such as might be produced by a business activity and which is delivered to the data platform for loading.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "Previously called ResourceID or SRN which identifies this OSDU resource object without version.",
+      "title": "Entity ID",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:work-product\\-\\-WorkProduct:[\\w\\-\\.\\:\\%]+$",
+      "example": "namespace:work-product--WorkProduct:43809ad8-f097-58b0-ba61-343d848a6047"
+    },
+    "kind": {
+      "description": "The schema identification for the OSDU resource object following the pattern {Namespace}:{Source}:{Type}:{VersionMajor}.{VersionMinor}.{VersionPatch}. The versioning scheme follows the semantic versioning, https://semver.org/.",
+      "title": "Entity Kind",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:[\\w\\-\\.]+:[\\w\\-\\.]+:[0-9]+.[0-9]+.[0-9]+$",
+      "example": "osdu:wks:work-product--WorkProduct:1.0.0"
+    },
+    "version": {
+      "description": "The version number of this OSDU resource; set by the framework.",
+      "title": "Version Number",
+      "type": "integer",
+      "format": "int64",
+      "example": 1562066009929332
+    },
+    "acl": {
+      "description": "The access control tags associated with this entity.",
+      "title": "Access Control List",
+      "$ref": "../abstract/AbstractAccessControlList.1.0.0.json"
+    },
+    "legal": {
+      "description": "The entity's legal tags and compliance status. The actual contents associated with the legal tags is managed by the Compliance Service.",
+      "title": "Legal Tags",
+      "$ref": "../abstract/AbstractLegalTags.1.0.0.json"
+    },
+    "tags": {
+      "title": "Tag Dictionary",
+      "description": "A generic dictionary of string keys mapping to string value. Only strings are permitted as keys and values.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "example": {
+        "NameOfKey": "String value"
+      }
+    },
+    "createTime": {
+      "description": "Timestamp of the time at which initial version of this OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:46:20.163Z"
+    },
+    "createUser": {
+      "title": "Resource Object Creation User Reference",
+      "description": "The user reference, which created the first version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "modifyTime": {
+      "description": "Timestamp of the time at which this version of the OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Version Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:52:24.477Z"
+    },
+    "modifyUser": {
+      "title": "Resource Object Version Creation User Reference",
+      "description": "The user reference, which created this version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "ancestry": {
+      "description": "The links to data, which constitute the inputs, from which this record instance is derived.",
+      "title": "Ancestry",
+      "$ref": "../abstract/AbstractLegalParentList.1.0.0.json"
+    },
+    "meta": {
+      "description": "The Frame of Reference meta data section linking the named properties to self-contained definitions.",
+      "title": "Frame of Reference Meta Data",
+      "type": "array",
+      "items": {
+        "$ref": "../abstract/AbstractMetaItem.1.0.0.json"
+      }
+    },
+    "data": {
+      "allOf": [
+        {
+          "$ref": "../abstract/AbstractCommonResources.1.0.0.json"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "Components": {
+              "type": "array",
+              "items": {
+                "description": "The SRN which identifies this OSDU Work Product Component resource.",
+                "type": "string",
+                "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-[\\w\\-\\.]+:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                "x-osdu-relationship": [
+                  {
+                    "GroupType": "work-product-component"
+                  }
+                ]
+              }
+            },
+            "IsExtendedLoad": {
+              "type": "boolean",
+              "description": "A flag that indicates if the work product is undergoing an extended load.  It reflects the fact that the work product is in an early stage and may be updated before finalization."
+            },
+            "IsDiscoverable": {
+              "type": "boolean",
+              "description": "A flag that indicates if the work product is searchable, which means covered in the search index."
+            },
+            "Name": {
+              "type": "string",
+              "description": "Name of the instance of Work Product - could be a shipment number."
+            },
+            "Description": {
+              "type": "string",
+              "description": "Description of the purpose of the work product."
+            },
+            "CreationDateTime": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Date that a resource (work  product here) is formed outside of OSDU before loading (e.g. publication date, work product delivery package assembly date)."
+            },
+            "Tags": {
+              "type": "array",
+              "description": "Array of key words to identify the work product, especially to help in search.",
+              "items": {
+                "type": "string"
+              }
+            },
+            "SpatialPoint": {
+              "description": "A centroid point that reflects the locale of the content of the work product (location of the subject matter).",
+              "$ref": "../abstract/AbstractSpatialLocation.1.0.0.json"
+            },
+            "SpatialArea": {
+              "description": "A polygon boundary that reflects the locale of the content of the work product (location of the subject matter).",
+              "$ref": "../abstract/AbstractSpatialLocation.1.0.0.json"
+            },
+            "SubmitterName": {
+              "type": "string",
+              "description": "Name of the person that first submitted the work product package to OSDU."
+            },
+            "BusinessActivities": {
+              "type": "array",
+              "description": "Array of business processes/workflows that the work product has been through (ex. well planning, exploration).",
+              "items": {
+                "type": "string",
+                "description": "Business Activity"
+              }
+            },
+            "AuthorIDs": {
+              "type": "array",
+              "description": "Array of Authors' names of the work product.  Could be a person or company entity.",
+              "items": {
+                "type": "string"
+              }
+            },
+            "LineageAssertions": {
+              "type": "array",
+              "description": "Defines relationships with other objects (any kind of Resource) upon which this work product depends.  The assertion is directed only from the asserting WP to ancestor objects, not children.  It should not be used to refer to files or artefacts within the WP -- the association within the WP is sufficient and Artefacts are actually children of the main WP file. They should be recorded in the data.Artefacts[] array.",
+              "items": {
+                "type": "object",
+                "title": "LineageAssertion",
+                "properties": {
+                  "ID": {
+                    "type": "string",
+                    "description": "The object reference identifying the DIRECT, INDIRECT, REFERENCE dependency.",
+                    "pattern": "^[\\w\\-\\.]+:[\\w\\-\\.]+:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": []
+                  },
+                  "LineageRelationshipType": {
+                    "type": "string",
+                    "description": "Used by LineageAssertion to describe the nature of the line of descent of a work product from a prior Resource, such as DIRECT, INDIRECT, REFERENCE.  It is not for proximity (number of nodes away), it is not to cover all the relationships in a full ontology or graph, and it is not to describe the type of activity that created the asserting WP.  LineageAssertion does not encompass a full provenance, process history, or activity model.",
+                    "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-LineageRelationshipType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "reference-data",
+                        "EntityType": "LineageRelationshipType"
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            "Annotations": {
+              "type": "array",
+              "description": "Array of Annotations",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "title": "IndividualProperties"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "ExtensionProperties": {
+              "type": "object"
+            }
+          },
+          "title": "ExtensionProperties"
+        }
+      ]
+    }
+  },
+  "required": [
+    "kind",
+    "acl",
+    "legal"
+  ],
+  "additionalProperties": false,
+  "x-osdu-virtual-properties": {
+    "data.VirtualProperties.DefaultLocation": {
+      "type": "object",
+      "priority": [
+        {
+          "path": "data.SpatialArea"
+        },
+        {
+          "path": "data.SpatialPoint"
+        }
+      ]
+    },
+    "data.VirtualProperties.DefaultName": {
+      "type": "string",
+      "priority": [
+        {
+          "path": "data.Name"
+        }
+      ]
+    }
+  },
+  "x-osdu-inheriting-from-kind": []
+}

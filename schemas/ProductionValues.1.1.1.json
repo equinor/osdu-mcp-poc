@@ -1,0 +1,426 @@
+{
+  "x-osdu-license": "Copyright 2025, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "$id": "https://schema.osdu.opengroup.org/json/work-product-component/ProductionValues.1.1.1.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:work-product-component--ProductionValues:1.1.1",
+  "title": "ProductionValues",
+  "description": "The result of activities or events that result in production metric values, the distinct instances of which reside within the DDMS and/or dataset itself.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "Previously called ResourceID or SRN which identifies this OSDU resource object without version.",
+      "title": "Entity ID",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-ProductionValues:[\\w\\-\\.\\:\\%]+$",
+      "example": "namespace:work-product-component--ProductionValues:5985136c-75f0-5585-91ba-a90f506a4292"
+    },
+    "kind": {
+      "description": "The schema identification for the OSDU resource object following the pattern {Namespace}:{Source}:{Type}:{VersionMajor}.{VersionMinor}.{VersionPatch}. The versioning scheme follows the semantic versioning, https://semver.org/.",
+      "title": "Entity Kind",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:[\\w\\-\\.]+:[\\w\\-\\.]+:[0-9]+.[0-9]+.[0-9]+$",
+      "example": "osdu:wks:work-product-component--ProductionValues:1.1.1"
+    },
+    "version": {
+      "description": "The version number of this OSDU resource; set by the framework.",
+      "title": "Version Number",
+      "type": "integer",
+      "format": "int64",
+      "example": 1562066009929332
+    },
+    "acl": {
+      "description": "The access control tags associated with this entity.",
+      "title": "Access Control List",
+      "$ref": "../abstract/AbstractAccessControlList.1.0.0.json"
+    },
+    "legal": {
+      "description": "The entity's legal tags and compliance status. The actual contents associated with the legal tags is managed by the Compliance Service.",
+      "title": "Legal Tags",
+      "$ref": "../abstract/AbstractLegalTags.1.0.0.json"
+    },
+    "tags": {
+      "title": "Tag Dictionary",
+      "description": "A generic dictionary of string keys mapping to string value. Only strings are permitted as keys and values.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "example": {
+        "NameOfKey": "String value"
+      }
+    },
+    "createTime": {
+      "description": "Timestamp of the time at which initial version of this OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:46:20.163Z"
+    },
+    "createUser": {
+      "title": "Resource Object Creation User Reference",
+      "description": "The user reference, which created the first version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "modifyTime": {
+      "description": "Timestamp of the time at which this version of the OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Version Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:52:24.477Z"
+    },
+    "modifyUser": {
+      "title": "Resource Object Version Creation User Reference",
+      "description": "The user reference, which created this version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "ancestry": {
+      "description": "The links to data, which constitute the inputs, from which this record instance is derived.",
+      "title": "Ancestry",
+      "$ref": "../abstract/AbstractLegalParentList.1.0.0.json"
+    },
+    "meta": {
+      "description": "The Frame of Reference meta data section linking the named properties to self-contained definitions.",
+      "title": "Frame of Reference Meta Data",
+      "type": "array",
+      "items": {
+        "$ref": "../abstract/AbstractMetaItem.1.0.0.json"
+      }
+    },
+    "data": {
+      "allOf": [
+        {
+          "$ref": "../abstract/AbstractCommonResources.1.0.1.json"
+        },
+        {
+          "$ref": "../abstract/AbstractWPCGroupType.1.2.0.json"
+        },
+        {
+          "$ref": "../abstract/AbstractWorkProductComponent.1.1.0.json"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "ReportingEntityID": {
+              "type": "string",
+              "title": "Reporting Entity",
+              "description": "Parent reporting entity which provides the reference to the master entity production values are recording against, and optional parent entity from which values may be allocated down from.",
+              "x-osdu-attribution-authority": "The Open Group",
+              "x-osdu-attribution-publication": "OSDU data platform",
+              "x-osdu-attribution-revision": "Evergreen",
+              "pattern": "^[\\w\\-\\.]+:(master-data\\-\\-Field|master-data\\-\\-Reservoir|master-data\\-\\-ReservoirSegment|master-data\\-\\-Well|master-data\\-\\-Wellbore|master-data\\-\\-IsolatedInterval|master-data\\-\\-WellboreOpening):[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "Field"
+                },
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "Reservoir"
+                },
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "ReservoirSegment"
+                },
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "Well"
+                },
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "Wellbore"
+                },
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "IsolatedInterval"
+                },
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "WellboreOpening"
+                }
+              ]
+            },
+            "StartDateTime": {
+              "type": "string",
+              "title": "Start Datetime",
+              "description": "The start date and time for the presence of any production related data in the associated datasets for the work product component.",
+              "format": "date",
+              "x-osdu-frame-of-reference": "DateTime",
+              "x-osdu-attribution-authority": "The Open Group",
+              "x-osdu-attribution-publication": "OSDU data platform",
+              "x-osdu-attribution-revision": "Evergreen"
+            },
+            "EndDateTime": {
+              "type": "string",
+              "title": "End Datetime",
+              "description": "The last date and time for the presence of any production related data in the associated datasets for the work product component. If production is ongoing this value is to remain null.",
+              "format": "date",
+              "x-osdu-frame-of-reference": "DateTime",
+              "x-osdu-attribution-authority": "The Open Group",
+              "x-osdu-attribution-publication": "OSDU data platform",
+              "x-osdu-attribution-revision": "Evergreen"
+            },
+            "NominalPeriodIDs": {
+              "type": "array",
+              "title": "Nominal Periods",
+              "description": "The nominal time periods covered by the records. Examples include Day, Month, Year.",
+              "example": [
+                "namespace:reference-data--ReportingPeriod:Month:",
+                "namespace:reference-data--ReportingPeriod:Day:"
+              ],
+              "x-osdu-attribution-authority": "The Open Group",
+              "x-osdu-attribution-publication": "OSDU data platform",
+              "x-osdu-attribution-revision": "Evergreen",
+              "items": {
+                "type": "string",
+                "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-ReportingPeriod:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                "x-osdu-relationship": [
+                  {
+                    "GroupType": "reference-data",
+                    "EntityType": "ReportingPeriod"
+                  }
+                ]
+              }
+            },
+            "QuantityMethodIDs": {
+              "type": "array",
+              "title": "Quantity Methods",
+              "description": "The context as to how the values were captured or created and the appropriateness of their use for analytics and reporting.",
+              "example": [
+                "namespace:reference-data--QuantityMethod:Allocated:",
+                "namespace:reference-data--QuantityMethod:Estimated:"
+              ],
+              "x-osdu-attribution-authority": "The Open Group",
+              "x-osdu-attribution-publication": "OSDU data platform",
+              "x-osdu-attribution-revision": "Evergreen",
+              "x-osdu-existing-standard": "PRODML enum QuantityMethod",
+              "items": {
+                "type": "string",
+                "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-QuantityMethod:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                "x-osdu-relationship": [
+                  {
+                    "GroupType": "reference-data",
+                    "EntityType": "QuantityMethod"
+                  }
+                ]
+              }
+            },
+            "DurationContextIDs": {
+              "type": "array",
+              "title": "Duration Contexts",
+              "description": "The explicit duration of activity within the nominal reporting period.",
+              "example": [
+                "namespace:reference-data--DurationContext:UptimeHours:",
+                "namespace:reference-data--DurationContext:DowntimeDays:"
+              ],
+              "x-osdu-attribution-authority": "The Open Group",
+              "x-osdu-attribution-publication": "OSDU data platform",
+              "x-osdu-attribution-revision": "Evergreen",
+              "items": {
+                "type": "string",
+                "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-DurationContext:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                "x-osdu-relationship": [
+                  {
+                    "GroupType": "reference-data",
+                    "EntityType": "DurationContext"
+                  }
+                ]
+              }
+            },
+            "PropertyIDs": {
+              "type": "array",
+              "title": "Properties",
+              "description": "The kinds of quantities being recorded for the products.",
+              "example": [
+                "namespace:reference-data--ProductionPropertyType:Volume:",
+                "namespace:reference-data--ProductionPropertyType:Mass:"
+              ],
+              "x-osdu-attribution-authority": "The Open Group",
+              "x-osdu-attribution-publication": "OSDU data platform",
+              "x-osdu-attribution-revision": "Evergreen",
+              "items": {
+                "type": "string",
+                "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-ProductionPropertyType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                "x-osdu-relationship": [
+                  {
+                    "GroupType": "reference-data",
+                    "EntityType": "ProductionPropertyType"
+                  }
+                ]
+              }
+            },
+            "ProductIDs": {
+              "type": "array",
+              "title": "Products",
+              "description": "The kinds of fluids or substances values are recorded for.",
+              "example": [
+                "namespace:reference-data--ProductKind:Oil:",
+                "namespace:reference-data--ProductKind:Water:"
+              ],
+              "x-osdu-attribution-authority": "The Open Group",
+              "x-osdu-attribution-publication": "OSDU data platform",
+              "x-osdu-attribution-revision": "Evergreen",
+              "x-osdu-existing-standard": "PPDM Well Status and Classification",
+              "items": {
+                "type": "string",
+                "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-ProductKind:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                "x-osdu-relationship": [
+                  {
+                    "GroupType": "reference-data",
+                    "EntityType": "ProductKind"
+                  }
+                ]
+              }
+            },
+            "VolumeFlowMeasurementTypeIDs": {
+              "type": "array",
+              "title": "Volume Flow Measurement Type IDs",
+              "description": "The directions of flow into, or out of the entity to which the values recorded are associated.",
+              "example": [
+                "namespace:reference-data--VolumeFlowMeasurementType:Production:",
+                "namespace:reference-data--VolumeFlowMeasurementType:Injection:"
+              ],
+              "x-osdu-attribution-authority": "The Open Group",
+              "x-osdu-attribution-publication": "OSDU data platform",
+              "x-osdu-attribution-revision": "Evergreen",
+              "x-osdu-existing-standard": "PPDM Well Status and Classification",
+              "items": {
+                "type": "string",
+                "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-VolumeFlowMeasurementType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                "x-osdu-relationship": [
+                  {
+                    "GroupType": "reference-data",
+                    "EntityType": "VolumeFlowMeasurementType"
+                  }
+                ]
+              }
+            },
+            "DispositionIDs": {
+              "type": "array",
+              "title": "Dispositions",
+              "description": "Describes the interim or final stages of movement, or use, of the products within the value stream.",
+              "example": [
+                "namespace:reference-data--DispositionType:Sold:",
+                "namespace:reference-data--DispositionType:Flared:",
+                "namespace:reference-data--DispositionType:Transferred:"
+              ],
+              "x-osdu-attribution-authority": "The Open Group",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-attribution-revision": "Evergreen",
+              "x-osdu-existing-standard": "PRODML",
+              "items": {
+                "type": "string",
+                "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-DispositionType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                "x-osdu-relationship": [
+                  {
+                    "GroupType": "reference-data",
+                    "EntityType": "DispositionType"
+                  }
+                ]
+              }
+            },
+            "ValueContexts": {
+              "type": "array",
+              "title": "Value Contexts",
+              "description": "Array of IDs to the event based entities which describe the details of the occurrences which resulted in the recorded production values.",
+              "x-osdu-attribution-authority": "The Open Group",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-attribution-revision": "Evergreen",
+              "items": {
+                "$ref": "../abstract/AbstractDowntimeContext.1.0.0.json"
+              }
+            },
+            "ReservoirModelScenarioID": {
+              "type": "string",
+              "title": "Reservoir Model Scenario ID",
+              "description": "Identifier of the Model Deck used to run forecasts",
+              "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-ReservoirModelScenario:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "work-product-component",
+                  "EntityType": "ReservoirModelScenario"
+                }
+              ]
+            },
+            "AmendReasonID": {
+              "type": "string",
+              "title": "Amend Reason ID",
+              "description": "Identifier of the entity capturing the reason why a production amendment was posted.",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-AmendReason:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "AmendReason"
+                }
+              ]
+            },
+            "MeasurementConditions": {
+              "$ref": "../abstract/AbstractPTCondition.1.1.0.json",
+              "title": "Measurement Conditions",
+              "description": "Used to capture the conditions at which measurement have been made/computed"
+            },
+            "ProductionValuesObservationDescription": {
+              "$ref": "../abstract/AbstractColumnBasedTable.1.2.1.json",
+              "title": "Production Values Observation Stream Description",
+              "description": "Table describing the observations (estimations or measurements) captured from this WPC. \nIt can either be restricted to \"Properties Descriptions\" only when we have a separated content storage OR used to capture the stream content itself whenever required"
+            },
+            "ObservationInterval": {
+              "type": "string",
+              "title": "Observation Interval",
+              "description": "Used to capture the interval of observations (forecasted estimations or measurements), such as seconds, minutes, hours as well as day, week, month\u2026."
+            }
+          },
+          "required": [
+            "ReportingEntityID",
+            "StartDateTime",
+            "NominalPeriodIDs",
+            "PropertyIDs",
+            "ProductIDs"
+          ],
+          "title": "IndividualProperties"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "ExtensionProperties": {
+              "type": "object"
+            }
+          },
+          "title": "ExtensionProperties"
+        }
+      ]
+    }
+  },
+  "required": [
+    "kind",
+    "acl",
+    "legal"
+  ],
+  "additionalProperties": false,
+  "x-osdu-review-status": "Accepted",
+  "x-osdu-virtual-properties": {
+    "data.VirtualProperties.DefaultName": {
+      "type": "string",
+      "priority": [
+        {
+          "path": "data.Name"
+        }
+      ]
+    },
+    "data.VirtualProperties.DefaultLocation": {
+      "type": "object",
+      "priority": [
+        {
+          "path": "data.SpatialLocation"
+        }
+      ]
+    }
+  },
+  "x-osdu-inheriting-from-kind": [
+    {
+      "name": "WorkProductComponent",
+      "kind": "osdu:wks:AbstractWPCGroupType:1.2.0"
+    }
+  ]
+}

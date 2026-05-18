@@ -1,0 +1,3083 @@
+{
+  "x-osdu-license": "Copyright 2024, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "$id": "https://schema.osdu.opengroup.org/json/work-product-component/StimulationStage.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:work-product-component--StimulationStage:1.0.0",
+  "title": "StimulationStage",
+  "description": "A Stage treated during a Stimulation Job.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "Previously called ResourceID or SRN which identifies this OSDU resource object without version.",
+      "title": "Entity ID",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-StimulationStage:[\\w\\-\\.\\:\\%]+$",
+      "example": "namespace:work-product-component--StimulationStage:a73e9d9f-27d2-57cb-ad40-a6f03119b204"
+    },
+    "kind": {
+      "description": "The schema identification for the OSDU resource object following the pattern {Namespace}:{Source}:{Type}:{VersionMajor}.{VersionMinor}.{VersionPatch}. The versioning scheme follows the semantic versioning, https://semver.org/.",
+      "title": "Entity Kind",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:[\\w\\-\\.]+:[\\w\\-\\.]+:[0-9]+.[0-9]+.[0-9]+$",
+      "example": "osdu:wks:work-product-component--StimulationStage:1.0.0"
+    },
+    "version": {
+      "description": "The version number of this OSDU resource; set by the framework.",
+      "title": "Version Number",
+      "type": "integer",
+      "format": "int64",
+      "example": 1562066009929332
+    },
+    "acl": {
+      "description": "The access control tags associated with this entity.",
+      "title": "Access Control List",
+      "$ref": "../abstract/AbstractAccessControlList.1.0.0.json"
+    },
+    "legal": {
+      "description": "The entity's legal tags and compliance status. The actual contents associated with the legal tags is managed by the Compliance Service.",
+      "title": "Legal Tags",
+      "$ref": "../abstract/AbstractLegalTags.1.0.0.json"
+    },
+    "tags": {
+      "title": "Tag Dictionary",
+      "description": "A generic dictionary of string keys mapping to string value. Only strings are permitted as keys and values.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "example": {
+        "NameOfKey": "String value"
+      }
+    },
+    "createTime": {
+      "description": "Timestamp of the time at which initial version of this OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:46:20.163Z"
+    },
+    "createUser": {
+      "title": "Resource Object Creation User Reference",
+      "description": "The user reference, which created the first version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "modifyTime": {
+      "description": "Timestamp of the time at which this version of the OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Version Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:52:24.477Z"
+    },
+    "modifyUser": {
+      "title": "Resource Object Version Creation User Reference",
+      "description": "The user reference, which created this version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "ancestry": {
+      "description": "The links to data, which constitute the inputs, from which this record instance is derived.",
+      "title": "Ancestry",
+      "$ref": "../abstract/AbstractLegalParentList.1.0.0.json"
+    },
+    "meta": {
+      "description": "The Frame of Reference meta data section linking the named properties to self-contained definitions.",
+      "title": "Frame of Reference Meta Data",
+      "type": "array",
+      "items": {
+        "$ref": "../abstract/AbstractMetaItem.1.0.0.json"
+      }
+    },
+    "data": {
+      "allOf": [
+        {
+          "$ref": "../abstract/AbstractCommonResources.1.0.0.json"
+        },
+        {
+          "$ref": "../abstract/AbstractWPCGroupType.1.2.0.json"
+        },
+        {
+          "$ref": "../abstract/AbstractWorkProductComponent.1.1.0.json"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "WellboreID": {
+              "type": "string",
+              "title": "Wellbore ID",
+              "description": "A link to the Wellbore in which the stimulation took place.",
+              "example": "namespace:master-data--Wellbore:11000091175501:",
+              "x-osdu-existing-standard": "Y",
+              "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Wellbore:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "Wellbore"
+                }
+              ]
+            },
+            "WellActivityID": {
+              "type": "string",
+              "title": "Well Activity ID",
+              "description": "A link to the Well Activity to which this stimulation job was performed.",
+              "example": "namespace:master-data--WellActivity:110000911755.COM:",
+              "x-osdu-existing-standard": "Y",
+              "pattern": "^[\\w\\-\\.]+:master-data\\-\\-WellActivity:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "WellActivity"
+                }
+              ]
+            },
+            "StimulationJobID": {
+              "type": "string",
+              "title": "Stimulation Job ID",
+              "description": "The SRN of the parent Stimulation Job in which the Stage was performed.",
+              "example": "namespace:work-product-component--StimulationJob:110000911755.COM:",
+              "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-StimulationJob:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "work-product-component",
+                  "EntityType": "StimulationJob"
+                }
+              ]
+            },
+            "StageNumber": {
+              "type": "integer",
+              "title": "StageNumber",
+              "description": "The number associated with the stage.",
+              "example": 2,
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.Number",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "StageStartDateTime": {
+              "type": "string",
+              "title": "Stage Start Date Time",
+              "description": "Starting date and time for the stage treatment.",
+              "format": "date-time",
+              "example": "2020-05-01T016:00:00+0000",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.DTimStart",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "StageEndDateTime": {
+              "type": "string",
+              "title": "Stage End Date Time",
+              "description": "Ending date and time for the stage treatment.",
+              "format": "date-time",
+              "example": "2020-05-01T018:30:00+0000",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.DTimEnd",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "IntervalTopMeasuredDepth": {
+              "type": "number",
+              "title": "Interval Top Measured Depth",
+              "description": "Measured depth at the top of the stimulated interval.",
+              "example": "14386 ft",
+              "x-osdu-frame-of-reference": "UOM:length",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.MdOpenHoleTop",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "IntervalBaseMeasuredDepth": {
+              "type": "number",
+              "title": "Interval Base Measured Depth",
+              "description": "Measured depth at base of the stimulated interval.",
+              "example": "14613 ft",
+              "x-osdu-frame-of-reference": "UOM:length",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.MdOpenHoleBottom",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "IntervalTopTrueVerticalDepth": {
+              "type": "number",
+              "title": "Interval Top True Vertical Depth",
+              "description": "True Vertical depth at top of interval.",
+              "example": "7029 ft",
+              "x-osdu-frame-of-reference": "UOM:length",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.TvdOpenHoleTop",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "IntervalBaseTrueVerticalDepth": {
+              "type": "number",
+              "title": "Interval Base True Vertical Depth",
+              "description": "True Vertical depth at base of interval.",
+              "example": "7025 ft",
+              "x-osdu-frame-of-reference": "UOM:length",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.TvdOpenHoleBottom",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "StageIntervalLength": {
+              "type": "number",
+              "title": "Stage Interval Length",
+              "description": "Length (along hole measured depth) of the stimulated interval.",
+              "example": "227 ft",
+              "x-osdu-frame-of-reference": "UOM:length"
+            },
+            "HoleSectionID": {
+              "type": "string",
+              "title": "Hole Section Identifier",
+              "description": "The Hole Section stimulated during this job Stage.",
+              "example": "namespace:master-data--HoleSection:11000091175501.6inHoleSect:",
+              "x-osdu-existing-standard": "Y",
+              "pattern": "^[\\w\\-\\.]+:master-data\\-\\-HoleSection:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "HoleSection"
+                }
+              ]
+            },
+            "JobEvent": {
+              "type": "array",
+              "title": "Job Event",
+              "description": "Timed comments for this job stage of the stim job.",
+              "items": {
+                "type": "object",
+                "title": "Stim Event",
+                "description": "Timed comments for this job stage of the stim job.",
+                "properties": {
+                  "Number": {
+                    "type": "integer",
+                    "title": "Number",
+                    "description": "Event number.",
+                    "example": 1,
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimEvent.Number",
+                    "x-osdu-attribution-revision": "v2.0"
+                  },
+                  "DateTime": {
+                    "type": "string",
+                    "title": "Date Time",
+                    "description": "Date and time of this event.",
+                    "format": "date-time",
+                    "example": "2020-05-01T018:30:00+0000",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimEvent.DTim",
+                    "x-osdu-attribution-revision": "v2.0"
+                  },
+                  "NumberStep": {
+                    "type": "integer",
+                    "title": "Number Step",
+                    "description": "Step number. Use it to reference an existing job step entry.",
+                    "example": 2,
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimEvent.NumStep",
+                    "x-osdu-attribution-revision": "v2.0"
+                  },
+                  "Comment": {
+                    "type": "string",
+                    "title": "Comment",
+                    "description": "A short description of the event.",
+                    "example": "Max acheivable rate 350 L/minute at 61.75 MPa. FLBK 50 m3 at 0.9 m3/min average.",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimEvent.Comment",
+                    "x-osdu-attribution-revision": "v2.0"
+                  }
+                }
+              }
+            },
+            "JobStep": {
+              "type": "array",
+              "title": "Job Step",
+              "description": "Job Step array",
+              "items": {
+                "type": "object",
+                "title": "Job Step",
+                "description": "Summary of the pumping schedule, also known as 'pumping stages', sub-stages or event level details.  \nThis is where you define pressures, rates, volumes, amount of proppant for the Displacement, Flush, Pad, Ramp, etc steps in the pumping operation for this job stage.",
+                "properties": {
+                  "StepNumber": {
+                    "type": "integer",
+                    "title": "Step Number",
+                    "description": "Step number.",
+                    "example": 2,
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobStep.StepNumber",
+                    "x-osdu-attribution-revision": "V2.0"
+                  },
+                  "StepName": {
+                    "type": "string",
+                    "title": "Step Name",
+                    "description": "A human readable name for this job step.",
+                    "example": "Pump Main Body",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobStep.StepName",
+                    "x-osdu-attribution-revision": "V2.0"
+                  },
+                  "JobStepTypeID": {
+                    "type": "string",
+                    "title": "Job Step Type ID",
+                    "description": "The type of  job step.",
+                    "example": "namespace:reference-data--StimJobStepType:PumpMainBody:",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobStep.Kind",
+                    "x-osdu-attribution-revision": "V2.0",
+                    "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-StimJobStepType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "reference-data",
+                        "EntityType": "StimJobStepType"
+                      }
+                    ]
+                  },
+                  "Description": {
+                    "type": "string",
+                    "title": "Description",
+                    "description": "A short description of the job step.",
+                    "example": "Pump Main Body w/ 40/70 Ottawa Sand",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobStep.Description",
+                    "x-osdu-attribution-revision": "V2.0"
+                  },
+                  "StepStartDateTime": {
+                    "type": "string",
+                    "title": "Step Start Date Time",
+                    "description": "Date and time the step started.",
+                    "format": "date-time",
+                    "example": "2020-05-01T016:35:00+0000",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobStep.DTimStart",
+                    "x-osdu-attribution-revision": "V2.0"
+                  },
+                  "StepEndDateTime": {
+                    "type": "string",
+                    "title": "Step End Date Time",
+                    "description": "Date and time the step ended.",
+                    "format": "date-time",
+                    "example": "2020-05-01T016:52:00+0000",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobStep.DTimEnd",
+                    "x-osdu-attribution-revision": "V2.0"
+                  },
+                  "Fluid": {
+                    "type": "object",
+                    "title": "Fluid",
+                    "description": "Fluid used for this job step of the stimulated interval.",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobStep.Fluid",
+                    "x-osdu-attribution-revision": "V2.0",
+                    "properties": {
+                      "Name": {
+                        "type": "string",
+                        "title": "Name",
+                        "description": "The name of the fluid.",
+                        "example": "Slickwater",
+                        "x-osdu-attribution-authority": "Energistics",
+                        "x-osdu-attribution-publication": "WITSML  StimFluid.Name",
+                        "x-osdu-attribution-revision": "V2.0"
+                      },
+                      "FluidTypeID": {
+                        "type": "string",
+                        "title": "Fluid Type ID",
+                        "description": "The fluid type.",
+                        "example": "namespace:reference-data--StimJobFluidType:Water.Slick:",
+                        "x-osdu-attribution-authority": "Energistics",
+                        "x-osdu-attribution-publication": "WITSML  StimFluid.Kind",
+                        "x-osdu-attribution-revision": "V2.0",
+                        "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-StimJobFluidType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                        "x-osdu-relationship": [
+                          {
+                            "GroupType": "reference-data",
+                            "EntityType": "StimJobFluidType"
+                          }
+                        ]
+                      },
+                      "Description": {
+                        "type": "string",
+                        "title": "Description",
+                        "description": "The description of the fluid.",
+                        "example": "FR-70 Slickwater",
+                        "x-osdu-attribution-authority": "Energistics",
+                        "x-osdu-attribution-publication": "WITSML  StimFluid.Description",
+                        "x-osdu-attribution-revision": "V2.0"
+                      },
+                      "AdditiveConcentration": {
+                        "type": "array",
+                        "title": "Additive Concentration",
+                        "description": "Concentrations of additives in the fluid for this job step.",
+                        "items": {
+                          "$ref": "../abstract/AbstractStimMaterialQuantity.1.0.0.json"
+                        }
+                      },
+                      "Density": {
+                        "type": "number",
+                        "title": "Density",
+                        "description": "The density of the fluid.",
+                        "example": "8.76 lbm/gal[US]",
+                        "x-osdu-frame-of-reference": "UOM:mass per volume",
+                        "x-osdu-attribution-authority": "Energistics",
+                        "x-osdu-attribution-publication": "WITSML  StimFluid.Density",
+                        "x-osdu-attribution-revision": "v2.0"
+                      },
+                      "FilterSize": {
+                        "type": "number",
+                        "title": "Filter Size",
+                        "description": "The filter size that the fluid for this job step passes through.",
+                        "x-osdu-frame-of-reference": "UOM:length"
+                      },
+                      "FilterType": {
+                        "type": "string",
+                        "title": "Filter Type",
+                        "description": "The type of fluid filter used for this job step."
+                      },
+                      "FilterCake": {
+                        "type": "number",
+                        "title": "Filter Cake",
+                        "description": "Filter Cake",
+                        "x-osdu-frame-of-reference": "UOM:length"
+                      },
+                      "FluidSurfaceTemperature": {
+                        "type": "number",
+                        "title": "Fluid Surface Temperature",
+                        "description": "The temperature of the fluid at surface.",
+                        "x-osdu-frame-of-reference": "UOM:thermodynamic temperature",
+                        "x-osdu-attribution-authority": "Energistics",
+                        "x-osdu-attribution-publication": "WITSML  StimFluid.FluidTemp",
+                        "x-osdu-attribution-revision": "V2.0"
+                      },
+                      "FluidTestPressure": {
+                        "type": "number",
+                        "title": "FluidTestPressure",
+                        "description": "Test pressure of the fluid during this job step.",
+                        "x-osdu-frame-of-reference": "UOM:pressure"
+                      },
+                      "FluidTestTemperature": {
+                        "type": "number",
+                        "title": "FluidTestTemperature",
+                        "description": "Test temperature of the fluid for this job step.",
+                        "x-osdu-frame-of-reference": "UOM:thermodynamic temperature"
+                      },
+                      "GelStrength10Sec": {
+                        "type": "number",
+                        "title": "Gel Strength10 Sec",
+                        "description": "The shear stress measured at low shear rate after a mud has set quiescently for 10 seconds.",
+                        "x-osdu-frame-of-reference": "UOM:pressure",
+                        "x-osdu-attribution-authority": "Energistics",
+                        "x-osdu-attribution-publication": "WITSML  StimFluid.GelStrength10Sec",
+                        "x-osdu-attribution-revision": "V2.0"
+                      },
+                      "GelStrength10Min": {
+                        "type": "number",
+                        "title": "Gel Strength10 Min",
+                        "description": "The shear stress measured at low shear rate after a mud has set quiescently for 10 minutes.",
+                        "x-osdu-frame-of-reference": "UOM:pressure",
+                        "x-osdu-attribution-authority": "Energistics",
+                        "x-osdu-attribution-publication": "WITSML  StimFluid.GelStrength10Min",
+                        "x-osdu-attribution-revision": "V2.0"
+                      },
+                      "IsKillFluid": {
+                        "type": "boolean",
+                        "title": "Is Kill Fluid",
+                        "description": "Is the fluid a kill fluid?",
+                        "example": false,
+                        "x-osdu-attribution-authority": "Energistics",
+                        "x-osdu-attribution-publication": "WITSML  StimFluid.IsKillFluid",
+                        "x-osdu-attribution-revision": "V2.0"
+                      },
+                      "pH": {
+                        "type": "number",
+                        "title": "pH",
+                        "description": "The pH of the fluid.",
+                        "example": 6,
+                        "x-osdu-frame-of-reference": "UOM:dimensionless",
+                        "x-osdu-attribution-authority": "Energistics",
+                        "x-osdu-attribution-publication": "WITSML  StimFluid.PH",
+                        "x-osdu-attribution-revision": "V2.0"
+                      },
+                      "Purpose": {
+                        "type": "string",
+                        "title": "Purpose",
+                        "description": "The purpose of the fluid.",
+                        "example": "Main Body",
+                        "x-osdu-attribution-authority": "Energistics",
+                        "x-osdu-attribution-publication": "WITSML  StimFluid.Purpose",
+                        "x-osdu-attribution-revision": "V2.0"
+                      },
+                      "SpecificGravity": {
+                        "type": "number",
+                        "title": "Specific Gravity",
+                        "description": "The specific gravity of the fluid at surface.",
+                        "example": "0.6 sg",
+                        "x-osdu-frame-of-reference": "UOM:dimensionless",
+                        "x-osdu-attribution-authority": "Energistics",
+                        "x-osdu-attribution-publication": "WITSML  StimFluid.SpecificGravity",
+                        "x-osdu-attribution-revision": "V2.0"
+                      },
+                      "Supplier": {
+                        "type": "string",
+                        "title": "Supplier",
+                        "description": "The name of the fluid supplier for this job step.",
+                        "example": "Schlumberger",
+                        "x-osdu-attribution-authority": "Energistics",
+                        "x-osdu-attribution-publication": "WITSML StimJobAdditive.Supplier",
+                        "x-osdu-attribution-revision": "v2.0"
+                      },
+                      "SupplierID": {
+                        "type": "string",
+                        "title": "Supplier ID",
+                        "description": "The supplier of the fluid.",
+                        "example": "namespace:master-data--Organisation:SLB:",
+                        "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Organisation:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                        "x-osdu-relationship": [
+                          {
+                            "GroupType": "master-data",
+                            "EntityType": "Organisation"
+                          }
+                        ]
+                      },
+                      "Viscosity": {
+                        "type": "number",
+                        "title": "Viscosity",
+                        "description": "Viscosity of the stimulation fluid for this job step.",
+                        "x-osdu-frame-of-reference": "UOM:dynamic viscosity",
+                        "x-osdu-attribution-authority": "Energistics",
+                        "x-osdu-attribution-publication": "WITSML  StimFluid.Viscosity",
+                        "x-osdu-attribution-revision": "V2.0"
+                      },
+                      "Remarks": {
+                        "type": "string",
+                        "title": "Remarks",
+                        "description": "Remarks"
+                      }
+                    }
+                  },
+                  "FluidReportID": {
+                    "type": "string",
+                    "title": "Fluid Report Identifier",
+                    "description": "Fluid Report Identifier of the fluid used for this Job Step",
+                    "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-WellFluidsReport:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "work-product-component",
+                        "EntityType": "WellFluidsReport"
+                      }
+                    ]
+                  },
+                  "BallsUsed": {
+                    "type": "integer",
+                    "title": "Balls Used",
+                    "description": "Balls used during execution of the step.",
+                    "example": 16,
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobStep.BallsUsed",
+                    "x-osdu-attribution-revision": "V2.0"
+                  },
+                  "BallsRecovered": {
+                    "type": "integer",
+                    "title": "Balls Recovered",
+                    "description": "Balls recovered during execution of the step.",
+                    "example": 16,
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobStep.BallsRecovered",
+                    "x-osdu-attribution-revision": "V2.0"
+                  },
+                  "BaseFluidBypassVolume": {
+                    "type": "number",
+                    "title": "Base Fluid Bypass Volume",
+                    "description": "Base fluid volume recorded after equipment set to bypass.",
+                    "x-osdu-frame-of-reference": "UOM:volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobStep.BaseFluidBypassVol",
+                    "x-osdu-attribution-revision": "V2.0"
+                  },
+                  "BaseFluidQualityAvg": {
+                    "type": "number",
+                    "title": "Base Fluid Quality Average",
+                    "description": "Base quality percentage of foam.",
+                    "x-osdu-frame-of-reference": "UOM:volume per volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobStep.AvgBaseFluidQuality",
+                    "x-osdu-attribution-revision": "V2.0"
+                  },
+                  "BaseFluidVolumeEquip": {
+                    "type": "number",
+                    "title": "Base Fluid Volume Equipment",
+                    "description": "Base fluid volume entering the equipment.",
+                    "example": "72311 gal",
+                    "x-osdu-frame-of-reference": "UOM:volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobStep.BaseFluidVol",
+                    "x-osdu-attribution-revision": "V2.0"
+                  },
+                  "BHPressureStart": {
+                    "type": "number",
+                    "title": "BH Pressure Start",
+                    "description": "Starting bottomhole pressure.",
+                    "x-osdu-frame-of-reference": "UOM:pressure",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobStep.StartPresBottomhole",
+                    "x-osdu-attribution-revision": "V2.0"
+                  },
+                  "BHPressureEnd": {
+                    "type": "number",
+                    "title": "BH Pressure End",
+                    "description": "Final bottomhole pressure.",
+                    "x-osdu-frame-of-reference": "UOM:pressure",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobStep.EndPresBottomhole",
+                    "x-osdu-attribution-revision": "V2.0"
+                  },
+                  "BHPressureAvg": {
+                    "type": "number",
+                    "title": "BH Pressure Average",
+                    "description": "Average bottomhole pressure.",
+                    "x-osdu-frame-of-reference": "UOM:pressure",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobStep.AvgPresBottomhole",
+                    "x-osdu-attribution-revision": "V2.0"
+                  },
+                  "CO2BaseFluidQualityAvg": {
+                    "type": "number",
+                    "title": "CO2 Base Fluid Quality Average",
+                    "description": "Base quality carbon dioxide percent of foam.",
+                    "x-osdu-frame-of-reference": "UOM:volume per volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobStep.AvgCO2BaseFluidQuality",
+                    "x-osdu-attribution-revision": "V2.0"
+                  },
+                  "CO2SurfaceRateEnd": {
+                    "type": "number",
+                    "title": "CO2 Surface Rate End",
+                    "description": "Final CO2 pump rate in volume per time at the surface.",
+                    "x-osdu-frame-of-reference": "UOM:volume per time",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobStep.EndRateSurfaceCO2",
+                    "x-osdu-attribution-revision": "V2.0"
+                  },
+                  "DirtyMaterialRateStart": {
+                    "type": "number",
+                    "title": "Dirty Material Rate Start",
+                    "description": "Starting dirty fluid flow rate.",
+                    "x-osdu-frame-of-reference": "UOM:volume per time",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobStep.StartDirtyMaterialRate",
+                    "x-osdu-attribution-revision": "V2.0"
+                  },
+                  "DirtyMaterialRateEnd": {
+                    "type": "number",
+                    "title": "Dirty Material Rate End",
+                    "description": "Ending dirty fluid flow rate.",
+                    "x-osdu-frame-of-reference": "UOM:volume per time",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobStep.EndDirtyMaterialRate",
+                    "x-osdu-attribution-revision": "V2.0"
+                  },
+                  "FluidBaseVolume": {
+                    "type": "number",
+                    "title": "Fluid Base Volume",
+                    "description": "The step volume of the base fluid.",
+                    "example": "72311.8 gal",
+                    "x-osdu-frame-of-reference": "UOM:volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobStep.FluidVolBase",
+                    "x-osdu-attribution-revision": "V2.0"
+                  },
+                  "FluidCirculatedVolume": {
+                    "type": "number",
+                    "title": "Fluid Circulated Volume",
+                    "description": "Fluid volume circulated.",
+                    "example": "72311.8 gal",
+                    "x-osdu-frame-of-reference": "UOM:volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobStep.FluidVolCirculated",
+                    "x-osdu-attribution-revision": "V2.0"
+                  },
+                  "FluidPumpedVolume": {
+                    "type": "number",
+                    "title": "Fluid Pumped Volume",
+                    "description": "Fluid volume pumped.",
+                    "example": "72311.8 gal",
+                    "x-osdu-frame-of-reference": "UOM:volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobStep.FluidVolPumped",
+                    "x-osdu-attribution-revision": "V2.0"
+                  },
+                  "FluidReturnedVolume": {
+                    "type": "number",
+                    "title": "Fluid Returned Volume",
+                    "description": "Fluid volume returned.",
+                    "example": "71000 gal",
+                    "x-osdu-frame-of-reference": "UOM:volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobStep.FluidVolReturned",
+                    "x-osdu-attribution-revision": "V2.0"
+                  },
+                  "FluidSqueezedVolume": {
+                    "type": "number",
+                    "title": "Fluid Squeezed Volume",
+                    "description": "Fluid volume squeezed.",
+                    "example": "1311 gal",
+                    "x-osdu-frame-of-reference": "UOM:volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobStep.FluidVolSqueezed",
+                    "x-osdu-attribution-revision": "V2.0"
+                  },
+                  "FluidTemperatureAvg": {
+                    "type": "number",
+                    "title": "Fluid Temperature Average",
+                    "description": "Average fluid temperature.",
+                    "example": "45 degF",
+                    "x-osdu-frame-of-reference": "UOM:thermodynamic temperature",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobStep.AvgTemperature",
+                    "x-osdu-attribution-revision": "V2.0"
+                  },
+                  "FluidWashedVolume": {
+                    "type": "number",
+                    "title": "Fluid Washed Volume",
+                    "description": "Fluid volume washed.",
+                    "example": "1430 gal",
+                    "x-osdu-frame-of-reference": "UOM:volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobStep.FluidVolWashed",
+                    "x-osdu-attribution-revision": "V2.0"
+                  },
+                  "FractureGradientInitial": {
+                    "type": "number",
+                    "title": "Fracture Gradient Initial",
+                    "description": "The fracture gradient before starting the step.",
+                    "example": "1.079 psi/ft",
+                    "x-osdu-frame-of-reference": "UOM:force per volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobStep.FractureGradientInitial",
+                    "x-osdu-attribution-revision": "V2.0"
+                  },
+                  "FractureGradientFinal": {
+                    "type": "number",
+                    "title": "Fracture Gradient Final",
+                    "description": "The fracture gradient when the step ends.",
+                    "example": "1.030 psi/ft",
+                    "x-osdu-frame-of-reference": "UOM:force per volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobStep.FractureGradientFinal",
+                    "x-osdu-attribution-revision": "V2.0"
+                  },
+                  "FrictionFactor": {
+                    "type": "number",
+                    "title": "Friction Factor",
+                    "description": "Numeric value used to scale a calculated rheological friction.",
+                    "x-osdu-frame-of-reference": "UOM:dimensionless",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobStep.FrictionFactor",
+                    "x-osdu-attribution-revision": "V2.0"
+                  },
+                  "HhpAvg": {
+                    "type": "number",
+                    "title": "Hhp Average",
+                    "description": "Average hydraulic horsepower used during the step.",
+                    "example": "7400 hp",
+                    "x-osdu-frame-of-reference": "UOM:power",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobStep.AvgHydraulicPower",
+                    "x-osdu-attribution-revision": "V2.0"
+                  },
+                  "HhpMax": {
+                    "type": "number",
+                    "title": "Hhp Maximum",
+                    "description": "Maximum hydraulic horsepower used during the step.",
+                    "example": "7600 hp",
+                    "x-osdu-frame-of-reference": "UOM:power",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobStep.MaxHydraulicPower",
+                    "x-osdu-attribution-revision": "V2.0"
+                  },
+                  "InternalPhaseFractionAvg": {
+                    "type": "number",
+                    "title": "Internal Phase Fraction Average",
+                    "description": "Internal gas phase percentage of the foam.",
+                    "x-osdu-frame-of-reference": "UOM:volume per volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobStep.AvgInternalPhaseFraction",
+                    "x-osdu-attribution-revision": "V2.0"
+                  },
+                  "MaterialUsed": {
+                    "type": "array",
+                    "title": "Material Used",
+                    "description": "Material used during the step",
+                    "items": {
+                      "$ref": "../abstract/AbstractStimMaterialQuantity.1.0.0.json"
+                    }
+                  },
+                  "MaterialUsedRateStart": {
+                    "type": "array",
+                    "title": "Material Used Rate Start",
+                    "description": "Starting quantity of material used per minute entering the flow stream.",
+                    "items": {
+                      "$ref": "../abstract/AbstractStimMaterialQuantity.1.0.0.json"
+                    }
+                  },
+                  "MaterialUsedRateEnd": {
+                    "type": "array",
+                    "title": "Material Used Rate End",
+                    "description": "Ending quantity of material used per minute entering the flow stream.",
+                    "items": {
+                      "$ref": "../abstract/AbstractStimMaterialQuantity.1.0.0.json"
+                    }
+                  },
+                  "MaterialUsedRateMax": {
+                    "type": "array",
+                    "title": "Material Used Rate Max",
+                    "description": "Maximum rate of material used per minute entering the flow stream.",
+                    "items": {
+                      "$ref": "../abstract/AbstractStimMaterialQuantity.1.0.0.json"
+                    }
+                  },
+                  "MaterialUsedRateAvg": {
+                    "type": "array",
+                    "title": "Material Used Rate Average",
+                    "description": "Average material used per minute entering the flow stream.",
+                    "items": {
+                      "$ref": "../abstract/AbstractStimMaterialQuantity.1.0.0.json"
+                    }
+                  },
+                  "BHMaterialUsedRateStart": {
+                    "type": "array",
+                    "title": "BH Material Used Rate Start",
+                    "description": "Bottomhole material usage rate start.",
+                    "items": {
+                      "$ref": "../abstract/AbstractStimMaterialQuantity.1.0.0.json"
+                    }
+                  },
+                  "BHMaterialUsedRateEnd": {
+                    "type": "array",
+                    "title": "BH Material Used Rate End",
+                    "description": "Bottomhole material usage rate end.",
+                    "items": {
+                      "$ref": "../abstract/AbstractStimMaterialQuantity.1.0.0.json"
+                    }
+                  },
+                  "BHMaterialUsedRateAvg": {
+                    "type": "array",
+                    "title": "BH Material Used Rate Average",
+                    "description": "Bottomhole material usage rate average.",
+                    "items": {
+                      "$ref": "../abstract/AbstractStimMaterialQuantity.1.0.0.json"
+                    }
+                  },
+                  "N2BaseFluidQualityAvg": {
+                    "type": "number",
+                    "title": "N2 Base Fluid Quality Average",
+                    "description": "Nitrogen base quality percentage of foam.",
+                    "x-osdu-frame-of-reference": "UOM:volume per volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobStep.AvgN2BaseFluidQuality",
+                    "x-osdu-attribution-revision": "V2.0"
+                  },
+                  "N2SurfaceRateEnd": {
+                    "type": "number",
+                    "title": "N2 Surface Rate End",
+                    "description": "Final nitrogen pump rate at the surface.",
+                    "x-osdu-frame-of-reference": "UOM:volume per time",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobStep.EndStdRateSurfaceN2",
+                    "x-osdu-attribution-revision": "V2.0"
+                  },
+                  "PipeFrictionPressureLoss": {
+                    "type": "number",
+                    "title": "Pipe Friction Pressure Loss",
+                    "description": "The friction pressure loss contribution from pipe.",
+                    "x-osdu-frame-of-reference": "UOM:pressure",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobStep.PipeFrictionPressure",
+                    "x-osdu-attribution-revision": "V2.0"
+                  },
+                  "ProppantConcAvg": {
+                    "type": "number",
+                    "title": "Proppant Conc Average",
+                    "description": "Average proppant concentration at the wellhead.",
+                    "x-osdu-frame-of-reference": "UOM:mass per volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobStep.AvgPropConc",
+                    "x-osdu-attribution-revision": "V2.0"
+                  },
+                  "ProppantConcBHStart": {
+                    "type": "number",
+                    "title": "Proppant Conc BH Start",
+                    "description": "The initial proppant concentration at bottomhole.",
+                    "example": "0.51 lbm/gal[US]",
+                    "x-osdu-frame-of-reference": "UOM:mass per volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobStep.StartProppantConcBottomhole",
+                    "x-osdu-attribution-revision": "V2.0"
+                  },
+                  "ProppantConcBHEnd": {
+                    "type": "number",
+                    "title": "Proppant Conc BH End",
+                    "description": "The final proppant concentration at bottomhole.",
+                    "example": "0.45 lbm/gal[US]",
+                    "x-osdu-frame-of-reference": "UOM:mass per volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobStep.EndProppantConcBottomhole",
+                    "x-osdu-attribution-revision": "V2.0"
+                  },
+                  "ProppantConcBHMax": {
+                    "type": "number",
+                    "title": "Proppant Conc BH Max",
+                    "description": "Maximum proppant concentration at bottomhole during the stimulation step.",
+                    "example": "0.60 lbm/gal[US]",
+                    "x-osdu-frame-of-reference": "UOM:mass per volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobStep.MaxProppantConcBottomhole",
+                    "x-osdu-attribution-revision": "V2.0"
+                  },
+                  "ProppantConcBHAvg": {
+                    "type": "number",
+                    "title": "Proppant Conc BH Average",
+                    "description": "The average proppant concentration at bottomhole.",
+                    "example": "0.51 lbm/gal[US]",
+                    "x-osdu-frame-of-reference": "UOM:mass per volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobStep.AvgProppantConcBottomhole",
+                    "x-osdu-attribution-revision": "V2.0"
+                  },
+                  "ProppantConcSurfaceStart": {
+                    "type": "number",
+                    "title": "Proppant Conc Surface Start",
+                    "description": "The initial proppant concentration at the surface.",
+                    "example": "0.50 lbm/gal[US]",
+                    "x-osdu-frame-of-reference": "UOM:mass per volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobStep.StartProppantConcSurface",
+                    "x-osdu-attribution-revision": "V2.0"
+                  },
+                  "ProppantConcSurfaceEnd": {
+                    "type": "number",
+                    "title": "Proppant Conc Surface End",
+                    "description": "The final proppant concentration at the surface.",
+                    "example": "0.50 lbm/gal[US]",
+                    "x-osdu-frame-of-reference": "UOM:mass per volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobStep.EndProppantConcSurface",
+                    "x-osdu-attribution-revision": "V2.0"
+                  },
+                  "ProppantConcSurfaceMax": {
+                    "type": "number",
+                    "title": "Proppant Conc Surface Max",
+                    "description": "Maximum proppant concentration at the wellhead.",
+                    "example": "0.50 lbm/gal[US]",
+                    "x-osdu-frame-of-reference": "UOM:mass per volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobStep.MaxProppantConcSurface",
+                    "x-osdu-attribution-revision": "V2.0"
+                  },
+                  "ProppantConcSurfaceAvg": {
+                    "type": "number",
+                    "title": "Proppant Conc Surface Average",
+                    "description": "The average proppant concentration at the surface.",
+                    "example": "0.50 lbm/gal[US]",
+                    "x-osdu-frame-of-reference": "UOM:mass per volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobStep.AvgProppantConcSurface",
+                    "x-osdu-attribution-revision": "V2.0"
+                  },
+                  "ProppantSlurryConcAvg": {
+                    "type": "number",
+                    "title": "Proppant Slurry Conc Average",
+                    "description": "Average proppant concentration exiting the equipment.",
+                    "example": "0.50 lbm/gal[US]",
+                    "x-osdu-frame-of-reference": "UOM:mass per volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobStep.AvgSlurryPropConc",
+                    "x-osdu-attribution-revision": "V2.0"
+                  },
+                  "ProppantSlurryConcMax": {
+                    "type": "number",
+                    "title": "Proppant Slurry Conc Max",
+                    "description": "Maximum proppant concentration exiting the equipment.",
+                    "example": "0.50 lbm/gal[US]",
+                    "x-osdu-frame-of-reference": "UOM:mass per volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobStep.MaxSlurryPropConc",
+                    "x-osdu-attribution-revision": "V2.0"
+                  },
+                  "PumpTime": {
+                    "type": "number",
+                    "title": "Pump Time",
+                    "description": "Total pumping time for the step.",
+                    "example": "21 min",
+                    "x-osdu-frame-of-reference": "UOM:time",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobStep.PumpTime",
+                    "x-osdu-attribution-revision": "V2.0"
+                  },
+                  "SlurryFluidVolume": {
+                    "type": "number",
+                    "title": "Slurry Fluid Volume",
+                    "description": "The volume of the slurry (dirty) for this job step.",
+                    "example": "72000 gal",
+                    "x-osdu-frame-of-reference": "UOM:volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobStep.FluidVolSlurry",
+                    "x-osdu-attribution-revision": "V2.0"
+                  },
+                  "SlurryReturnRateAvg": {
+                    "type": "number",
+                    "title": "Slurry Return Rate Average",
+                    "description": "Average slurry return rate.",
+                    "example": "36 bbl/min",
+                    "x-osdu-frame-of-reference": "UOM:volume per time",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobStep.AvgSlurryRate",
+                    "x-osdu-attribution-revision": "V2.0"
+                  },
+                  "SurfacePressureStart": {
+                    "type": "number",
+                    "title": "Surface Pressure Start",
+                    "description": "Starting surface pressure.",
+                    "x-osdu-frame-of-reference": "UOM:pressure",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobStep.StartPresSurface",
+                    "x-osdu-attribution-revision": "V2.0"
+                  },
+                  "SurfacePressureEnd": {
+                    "type": "number",
+                    "title": "Surface Pressure End",
+                    "description": "Final surface pressure.",
+                    "x-osdu-frame-of-reference": "UOM:pressure",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobStep.EndPresSurface",
+                    "x-osdu-attribution-revision": "V2.0"
+                  },
+                  "SurfacePressureMax": {
+                    "type": "number",
+                    "title": "Surface Pressure Max",
+                    "description": "Maximum pumping pressure on surface.",
+                    "x-osdu-frame-of-reference": "UOM:pressure",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobStep.MaxPresSurface",
+                    "x-osdu-attribution-revision": "V2.0"
+                  },
+                  "SurfacePressureAvg": {
+                    "type": "number",
+                    "title": "Surface Pressure Average",
+                    "description": "Average surface pressure.",
+                    "x-osdu-frame-of-reference": "UOM:pressure",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobStep.AvgPresSurface",
+                    "x-osdu-attribution-revision": "V2.0"
+                  },
+                  "WellheadSlurryVolume": {
+                    "type": "number",
+                    "title": "Wellhead Slurry Volume",
+                    "description": "Slurry volume entering the well.",
+                    "x-osdu-frame-of-reference": "UOM:volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobStep.WellheadVol",
+                    "x-osdu-attribution-revision": "V2.0"
+                  },
+                  "WellheadFlowRateAvg": {
+                    "type": "number",
+                    "title": "Wellhead Flow Rate Avg",
+                    "description": "Average flow rate at the wellhead.",
+                    "x-osdu-frame-of-reference": "UOM:volume per time",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobStep.AvgVolumeRateWellhead",
+                    "x-osdu-attribution-revision": "V2.0"
+                  },
+                  "WellheadFlowRateMax": {
+                    "type": "number",
+                    "title": "Wellhead Flow Rate Max",
+                    "description": "Maximum flow rate at the wellhead.",
+                    "x-osdu-frame-of-reference": "UOM:volume per time",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobStep.MaxVolumeRateWellhead",
+                    "x-osdu-attribution-revision": "V2.0"
+                  },
+                  "Remarks": {
+                    "type": "string",
+                    "title": "Remarks",
+                    "description": "General remarks about this job step.",
+                    "example": "Treatment #2"
+                  }
+                }
+              }
+            },
+            "Diversion": {
+              "type": "object",
+              "title": "Diversion",
+              "description": "Diversion details for the stimulated interval.",
+              "properties": {
+                "ContractorName": {
+                  "type": "string",
+                  "title": "Contractor Name",
+                  "description": "Name of the diversion contractor.",
+                  "x-osdu-attribution-authority": "Energistics",
+                  "x-osdu-attribution-publication": "WITSML StimJobDiversion.Contractor",
+                  "x-osdu-attribution-revision": "v2.0"
+                },
+                "ElementSpacing": {
+                  "type": "number",
+                  "title": "Element Spacing",
+                  "description": "Length between packer elements.",
+                  "x-osdu-frame-of-reference": "UOM:length",
+                  "x-osdu-attribution-authority": "Energistics",
+                  "x-osdu-attribution-publication": "WITSML StimJobDiversion.ElementSpacing",
+                  "x-osdu-attribution-revision": "v2.0"
+                },
+                "DiversionMethodID": {
+                  "type": "string",
+                  "title": "Diversion Method ID",
+                  "description": "The diversion method used for this job stage.",
+                  "x-osdu-attribution-authority": "Energistics",
+                  "x-osdu-attribution-publication": "WITSML StimJobDiversion.Method",
+                  "x-osdu-attribution-revision": "v2.0",
+                  "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-StimJobDiversionMethod:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                  "x-osdu-relationship": [
+                    {
+                      "GroupType": "reference-data",
+                      "EntityType": "StimJobDiversionMethod"
+                    }
+                  ]
+                },
+                "ToolDescription": {
+                  "type": "string",
+                  "title": "Tool Description",
+                  "description": "A supplier description of the diversion tool, such as its commercial name.",
+                  "x-osdu-attribution-authority": "Energistics",
+                  "x-osdu-attribution-publication": "WITSML StimJobDiversion.ToolDescription",
+                  "x-osdu-attribution-revision": "v2.0"
+                },
+                "Remarks": {
+                  "type": "string",
+                  "title": "Remarks",
+                  "description": "Remarks on the diversion method."
+                }
+              }
+            },
+            "FlowPath": {
+              "type": "object",
+              "title": "Flow Path",
+              "description": "Details about the downhole equipment design for this stimulation interval.",
+              "properties": {
+                "BreakDownPressure": {
+                  "type": "number",
+                  "title": "Break Down Pressure",
+                  "description": "The downhole pressure at which the formation broke.",
+                  "x-osdu-frame-of-reference": "UOM:pressure",
+                  "x-osdu-attribution-authority": "Energistics",
+                  "x-osdu-attribution-publication": "WITSML  StimFlowPath.BreakDownPres",
+                  "x-osdu-attribution-revision": "v2.0"
+                },
+                "BridgePlugMeasuredDepth": {
+                  "type": "number",
+                  "title": "Bridge Plug Measured Depth",
+                  "description": "The measured depth of a bridge plug.",
+                  "x-osdu-frame-of-reference": "UOM:length",
+                  "x-osdu-attribution-authority": "Energistics",
+                  "x-osdu-attribution-publication": "WITSML  StimFlowPath.BridgePlugMD",
+                  "x-osdu-attribution-revision": "v2.0"
+                },
+                "BridgePlugRemovalDate": {
+                  "type": "string",
+                  "title": "Bridge Plug Removal Date",
+                  "description": "Date that the bridge plug for this stage was removed.",
+                  "format": "date-time"
+                },
+                "TubingBottomMeasuredDepth": {
+                  "type": "number",
+                  "title": "Tubing Bottom Measured Depth",
+                  "description": "The maximum measured depth of the tubing used for treatment of a stage.",
+                  "x-osdu-frame-of-reference": "UOM:length",
+                  "x-osdu-attribution-authority": "Energistics",
+                  "x-osdu-attribution-publication": "WITSML  StimFlowPath.TubingBottomMD",
+                  "x-osdu-attribution-revision": "v2.0"
+                },
+                "FractureGradient": {
+                  "type": "number",
+                  "title": "Fracture Gradient",
+                  "description": "The formation fracture gradient for this treatment flow path.",
+                  "x-osdu-frame-of-reference": "UOM:force per volume",
+                  "x-osdu-attribution-authority": "Energistics",
+                  "x-osdu-attribution-publication": "WITSML  StimFlowPath.FractureGradient",
+                  "x-osdu-attribution-revision": "v2.0"
+                },
+                "FlowPathTypeID": {
+                  "type": "string",
+                  "title": "Flow Path Type ID",
+                  "description": "The type of stim flow path.",
+                  "x-osdu-attribution-authority": "Energistics",
+                  "x-osdu-attribution-publication": "WITSML  StimFlowPath.Kind",
+                  "x-osdu-attribution-revision": "v2.0",
+                  "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-StimFlowPathType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                  "x-osdu-relationship": [
+                    {
+                      "GroupType": "reference-data",
+                      "EntityType": "StimFlowPathType"
+                    }
+                  ]
+                },
+                "OpenHoleFrictionFactor": {
+                  "type": "number",
+                  "title": "Open Hole Friction Factor",
+                  "description": "The friction factor used to compute openhole pressure loss.",
+                  "x-osdu-frame-of-reference": "UOM:dimensionless",
+                  "x-osdu-attribution-authority": "Energistics",
+                  "x-osdu-attribution-publication": "WITSML  StimFlowPath.FrictionFactorOpenHole",
+                  "x-osdu-attribution-revision": "v2.0"
+                },
+                "PackerMeasuredDepth": {
+                  "type": "number",
+                  "title": "Packer Measured Depth",
+                  "description": "The measured depth of a packer.",
+                  "x-osdu-frame-of-reference": "UOM:length",
+                  "x-osdu-attribution-authority": "Energistics",
+                  "x-osdu-attribution-publication": "WITSML  StimFlowPath.PackerMD",
+                  "x-osdu-attribution-revision": "v2.0"
+                },
+                "PipeFrictionFactor": {
+                  "type": "number",
+                  "title": "PipeFriction Factor",
+                  "description": "The friction factor for the pipe, tubing, and/or casing.",
+                  "x-osdu-frame-of-reference": "UOM:dimensionless",
+                  "x-osdu-attribution-authority": "Energistics",
+                  "x-osdu-attribution-publication": "WITSML  StimFlowPath.FrictionFactorPipe",
+                  "x-osdu-attribution-revision": "v2.0"
+                },
+                "PmaxPacPressureAvg": {
+                  "type": "number",
+                  "title": "Pmax Packer Pressure Average",
+                  "description": "PMax prediction allows the tool assembly to be designed with expected pressures. It determines maximum allowable surface pressure and is typically calculated as a single number by which the pressure relief valves are set. This variable is the average of all the pmax pressures calculated for this flow path.",
+                  "x-osdu-frame-of-reference": "UOM:pressure",
+                  "x-osdu-attribution-authority": "Energistics",
+                  "x-osdu-attribution-publication": "WITSML  StimFlowPath.AvgPmaxPacPres",
+                  "x-osdu-attribution-revision": "v2.0"
+                },
+                "PmaxPacPressureMax": {
+                  "type": "number",
+                  "title": "Pmax Packer Pressure Max",
+                  "description": "PMax prediction allows the tool assembly to be designed with expected pressures. It determines maximum allowable surface pressure and is typically calculated as a single number by which the pressure relief valves are set. This variable is the maximum of all the pmax pressures calculated for this flow path.",
+                  "x-osdu-frame-of-reference": "UOM:pressure",
+                  "x-osdu-attribution-authority": "Energistics",
+                  "x-osdu-attribution-publication": "WITSML  StimFlowPath.MaxPmaxPacPres",
+                  "x-osdu-attribution-revision": "v2.0"
+                },
+                "PmaxWeaklinkPressureAvg": {
+                  "type": "number",
+                  "title": "Pmax Weaklink Pressure Average",
+                  "description": "Average allowable pressure for the zone of interest with respect to the bottomhole assembly during the stimulation services.",
+                  "x-osdu-frame-of-reference": "UOM:pressure",
+                  "x-osdu-attribution-authority": "Energistics",
+                  "x-osdu-attribution-publication": "WITSML  StimFlowPath.AvgPmaxWeaklinkPres",
+                  "x-osdu-attribution-revision": "v2.0"
+                },
+                "PmaxWeaklinkPressureMax": {
+                  "type": "number",
+                  "title": "Pmax Weaklink Pressure Max",
+                  "description": "Maximum allowable pressure for the zone of interest with respect to the bottomhole assembly during the stimulation services.",
+                  "x-osdu-frame-of-reference": "UOM:pressure",
+                  "x-osdu-attribution-authority": "Energistics",
+                  "x-osdu-attribution-publication": "WITSML  StimFlowPath.MaxPmaxWeaklinkPres",
+                  "x-osdu-attribution-revision": "v2.0"
+                },
+                "Remarks": {
+                  "type": "string",
+                  "title": "Remarks",
+                  "description": "General remarks about the flow path for this job stage."
+                }
+              }
+            },
+            "FluidPumpRateAvg": {
+              "type": "number",
+              "title": "Fluid Pump Rate Avg",
+              "description": "Average fluid pumping rate for all job Steps while treating the Stage.",
+              "example": "36.54 bbl/min",
+              "x-osdu-frame-of-reference": "UOM:volume per time"
+            },
+            "FluidPumpRateMax": {
+              "type": "number",
+              "title": "Fluid Pump Rate Max",
+              "description": "Maximum fluid pumping rate of any Step while treating the Stage.",
+              "example": "46.23 bbl/min",
+              "x-osdu-frame-of-reference": "UOM:volume per time",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.MaxFluidVolumeRateAnnulus",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "AnnulusPressureAvg": {
+              "type": "number",
+              "title": "Annulus Pressure Average",
+              "description": "The average annulus pressure for all job steps for the stage treatment.",
+              "example": "8303 psi",
+              "x-osdu-frame-of-reference": "UOM:pressure",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.AvgPresAnnulus",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "AnnulusPressureMax": {
+              "type": "number",
+              "title": "Annulus Pressure Max",
+              "description": "The highest annulus pressure for all job steps while treating the stage.",
+              "example": "8755 psi",
+              "x-osdu-frame-of-reference": "UOM:pressure",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.MaxPresAnnulus",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "BaseFluidReturnRateAvg": {
+              "type": "number",
+              "title": "Base Fluid Return Rate Average",
+              "description": "Average base fluid return flow rate of all Steps for this Stage.",
+              "x-osdu-frame-of-reference": "UOM:volume per time",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.AvgBaseFluidReturnVolumeRate",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "BHPumpRateAvg": {
+              "type": "number",
+              "title": "Bottomhole Pump Rate Average",
+              "description": "Average bottomhole flow rate for this Stage.",
+              "example": "36.54 bbl/min",
+              "x-osdu-frame-of-reference": "UOM:volume per time",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.AvgBottomholePumpedVolumeRate",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "DHStaticTemperatureAvg": {
+              "type": "number",
+              "title": "Downhole Static Temperature Average",
+              "description": "The average static temperature of the wellbore injection point(s) or formation at equilibrium (steady state) with no fluid or tool movement, allowing for equilibrium conditions at the wellbore injection point; (DHST: down hole static temperature.",
+              "example": "155 degF",
+              "x-osdu-frame-of-reference": "UOM:thermodynamic temperature",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.AvgBHStaticTemperature",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "BodyVolume": {
+              "type": "number",
+              "title": "Body Volume",
+              "description": "The volume pumped for the body portion of the stage treatment.",
+              "example": "156435 gal[US]",
+              "x-osdu-frame-of-reference": "UOM:volume",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.VolumeBody",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "BreakDownPressure": {
+              "type": "number",
+              "title": "Break Down Pressure",
+              "description": "The pressure at which the formation fractures and accepts injected fluid.",
+              "example": "8358 psi",
+              "x-osdu-frame-of-reference": "UOM:pressure",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.BreakDownPres",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "CasingPumpRateMax": {
+              "type": "number",
+              "title": "Casing Pump Rate Max",
+              "description": "Maximum casing fluid pumping rate of any step while treating the stage.",
+              "example": "46 bbl/min",
+              "x-osdu-frame-of-reference": "UOM:volume per time",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.MaxFluidVolumeRateCasing",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "CasingPressureAvg": {
+              "type": "number",
+              "title": "Casing Pressure Average",
+              "description": "The average casing pressure of any step for the stage treatment.",
+              "x-osdu-frame-of-reference": "UOM:pressure",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.AvgPresCasing",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "CasingPressureMax": {
+              "type": "number",
+              "title": "Casing Pressure Max",
+              "description": "The highest casing pressure of any step while treating the stage.",
+              "x-osdu-frame-of-reference": "UOM:pressure",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.MaxPresCasing",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "ClosureDuration": {
+              "type": "number",
+              "title": "Closure Duration",
+              "description": "Delta time recorded for the closure of the fracture to occur during the stage treatment.",
+              "example": "1 min",
+              "x-osdu-frame-of-reference": "UOM:time",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.ClosureDuration",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "ClosurePressure": {
+              "type": "number",
+              "title": "Closure Pressure",
+              "description": "An analysis parameter used in hydraulic fracture design to indicate the pressure at which the fracture effectively closes without proppant in place.",
+              "x-osdu-frame-of-reference": "UOM:pressure",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.ClosurePres",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "ConductivityAvg": {
+              "type": "number",
+              "title": "Conductivity Average",
+              "description": "Average conductivity of a fracture created during the treatment supported by proppant during the stimulation services. Hydraulic conductivity, symbolically represented as K, is a property of vascular plants, soil or rock, that describes the ease with which water can move through pore spaces or fractures. It depends on the intrinsic permeability of the material and on the degree of saturation. Saturated hydraulic conductivity, Ksat, describes water movement through saturated media.",
+              "x-osdu-frame-of-reference": "UOM:length per time",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.AvgConductivity",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "FlushVolume": {
+              "type": "number",
+              "title": "Flush Volume",
+              "description": "Volume pumped during flush portion of stage treatment.",
+              "example": "5 bbl",
+              "x-osdu-frame-of-reference": "UOM:volume",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.VolumeFlush",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "FormationBreakLengthPerDay": {
+              "type": "number",
+              "title": "Formation Break Length Per Day",
+              "description": "The length of formation broken (fracced) per day.",
+              "example": "1000 ft/d",
+              "x-osdu-frame-of-reference": "UOM:length per time",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.FormationBreakLengthPerDay",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "FormationName": {
+              "type": "string",
+              "title": "Formation Name",
+              "description": "The name of the formation being stimulated in this job stage.",
+              "example": "Willow",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.FormationName",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "LithostratigraphicID": {
+              "type": "string",
+              "title": "Lithostratigraphic ID",
+              "description": "Lithostratigraphic (Formation Top name) Identifier",
+              "x-osdu-existing-standard": "Y",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-LithoStratigraphy:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "LithoStratigraphy"
+                }
+              ]
+            },
+            "WellboreMarketSetID": {
+              "type": "string",
+              "title": "Wellbore Marker Set ID",
+              "description": "ID to the Wellbore Marker Set containing the Marker (Formation Top) that is stimulated in the Job Stage",
+              "x-osdu-existing-standard": "Y",
+              "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-WellboreMarkerSet:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "work-product-component",
+                  "EntityType": "WellboreMarkerSet"
+                }
+              ]
+            },
+            "WellboreMarkerID": {
+              "type": "string",
+              "title": "Wellbore Marker ID",
+              "description": "ID to the Wellbore Marker within the Wellbore Marker Set that is stimulated in the Job Stage"
+            },
+            "ReservoirID": {
+              "type": "string",
+              "title": "Reservoir ID",
+              "description": "Identifier to the Reservoir stimulated in the Job Stage",
+              "example": "namespace:master-data--Reservoir:Willow:",
+              "x-osdu-existing-standard": "Y",
+              "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Reservoir:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "Reservoir"
+                }
+              ]
+            },
+            "ReservoirSegmentID": {
+              "type": "string",
+              "title": "Reservoir Segment ID",
+              "description": "Identifier to the Reservoir Segment stimulated in the Job Stage",
+              "pattern": "^[\\w\\-\\.]+:master-data\\-\\-ReservoirSegment:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "ReservoirSegment"
+                }
+              ]
+            },
+            "FormationTopMeasuredDepth": {
+              "type": "number",
+              "title": "Formation Top Measured Depth",
+              "description": "Measured depth of the top of the formation.",
+              "example": "7300 ft",
+              "x-osdu-frame-of-reference": "UOM:length",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.MdFormationTop",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "FormationTopTrueVerticalDepth": {
+              "type": "number",
+              "title": "Formation Top True Vertical Depth",
+              "description": "True vertical depth of the top of the formation.",
+              "example": "7036 ft",
+              "x-osdu-frame-of-reference": "UOM:length",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.TvdFormationTop",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "FormationBottomMeasuredDepth": {
+              "type": "number",
+              "title": "Formation Bottom Measured Depth",
+              "description": "Measured depth of the bottom of the formation.",
+              "x-osdu-frame-of-reference": "UOM:length",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.MdFormationBottom",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "FormationBottomTrueVerticalDepth": {
+              "type": "number",
+              "title": "Formation Bottom True Vertical Depth",
+              "description": "True vertical depth of the bottom of the formation.",
+              "x-osdu-frame-of-reference": "UOM:length",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.TvdFormationBottom",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "FractureGradientInitial": {
+              "type": "number",
+              "title": "Fracture Gradient Initial",
+              "description": "The formation fracture gradient for stage before treatment.",
+              "example": "1.079 psi/ft",
+              "x-osdu-frame-of-reference": "UOM:force per volume",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.FractureGradientInitial",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "FractureGradientFinal": {
+              "type": "number",
+              "title": "Fracture Gradient Final",
+              "description": "The formation fracture gradient for the stage after treatment.",
+              "example": "1.079 psi/ft",
+              "x-osdu-frame-of-reference": "UOM:force per volume",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.FractureGradientFinal",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "FractureHeight": {
+              "type": "number",
+              "title": "Fracture Height",
+              "description": "The height of the fracture  created after treating the stage.",
+              "example": "0.25 in",
+              "x-osdu-frame-of-reference": "UOM:length",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.FractureHeight",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "FractureLength": {
+              "type": "number",
+              "title": "Fracture Length",
+              "description": "The length of the fracture created after treating the stage.",
+              "example": "12 ft",
+              "x-osdu-frame-of-reference": "UOM:length",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.FractureLength",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "FractureWidthAvg": {
+              "type": "number",
+              "title": "Fracture Width Average",
+              "description": "Average fracture width created during the treatment of the stage.",
+              "example": "0.15 in",
+              "x-osdu-frame-of-reference": "UOM:length",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.AvgFractureWidth",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "FrictionPressure": {
+              "type": "number",
+              "title": "Friction Pressure",
+              "description": "Friction pressure loss encountered by fluid transported to stage interval.",
+              "x-osdu-frame-of-reference": "UOM:pressure",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.FrictionPressure",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "HHPAvg": {
+              "type": "number",
+              "title": "HHP Average",
+              "description": "Average hydraulic horse power used for the stage.",
+              "example": "7431 hp",
+              "x-osdu-frame-of-reference": "UOM:power",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.AvgHydraulicPower",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "HHPMax": {
+              "type": "number",
+              "title": "HHP Max",
+              "description": "Maximum hydraulic horse power used for the stage.",
+              "example": "7800 hp",
+              "x-osdu-frame-of-reference": "UOM:power",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.MaxHydraulicPower",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "HHPOrderedCO2": {
+              "type": "number",
+              "title": "HHP Ordered CO2",
+              "description": "Carbon dioxide hydraulic horsepower ordered for the stage.",
+              "example": "8000 hp",
+              "x-osdu-frame-of-reference": "UOM:power",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.HhpOrderedCO2",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "HHPOrderedFluid": {
+              "type": "number",
+              "title": "HHP Ordered Fluid",
+              "description": "Fluid hydraulic horsepower ordered for the stage.",
+              "x-osdu-frame-of-reference": "UOM:power",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.HhpOrderedFluid",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "HHPUsedCO2": {
+              "type": "number",
+              "title": "HHP Used CO2",
+              "description": "Carbon dioxide hydraulic horsepower actually used for the stage.",
+              "x-osdu-frame-of-reference": "UOM:power",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.HhpUsedCO2",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "HHPUsedFluid": {
+              "type": "number",
+              "title": "HHP Used Fluid",
+              "description": "Fluid hydraulic horsepower actually used for the stage.",
+              "x-osdu-frame-of-reference": "UOM:power",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.HhpUsedFluid",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "IsScreenedOut": {
+              "type": "boolean",
+              "title": "Is Screened Out",
+              "description": "Did screen out occur? True (true or 1) indicates that screen out occurred. False (false or 0) or not given indicates otherwise.",
+              "example": false,
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.ScreenedOut",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "MaterialUsageRateMax": {
+              "type": "array",
+              "title": "Material Usage Rate Max",
+              "description": "Usage and maximum mass or volume flow rates for a material for this job stage.",
+              "items": {
+                "$ref": "../abstract/AbstractStimMaterialQuantity.1.0.0.json"
+              }
+            },
+            "MaterialUsage": {
+              "type": "array",
+              "title": "Material Used",
+              "description": "Material used during this job stage. For example, proppant or gel (additive).",
+              "items": {
+                "$ref": "../abstract/AbstractStimMaterialQuantity.1.0.0.json"
+              }
+            },
+            "NetPressure": {
+              "type": "number",
+              "title": "Net Pressure",
+              "description": "The difference between the pressure which holds a fracture closed (minimal principal stress) and that pressure which is necessary to open the fracture.",
+              "x-osdu-frame-of-reference": "UOM:pressure",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.NetPres",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "OpenHoleDiameter": {
+              "type": "number",
+              "title": "Open Hole Diameter",
+              "description": "The diameter of the open hole.",
+              "example": "6 in",
+              "x-osdu-frame-of-reference": "UOM:length",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.OpenHoleDiameter",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "OpenHoleName": {
+              "type": "string",
+              "title": "Open Hole Name",
+              "description": "A name for the open hole. To be used for open hole completions.",
+              "example": "6\" Hole Section",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.OpenHoleName",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "PadPercent": {
+              "type": "number",
+              "title": "Pad Percent",
+              "description": "The percentage of volume pumped used for the pad.",
+              "example": "100 %",
+              "x-osdu-frame-of-reference": "UOM:volume per volume",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.PercentPad",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "PadVolume": {
+              "type": "number",
+              "title": "Pad Volume",
+              "description": "Volume pumped for pad portion of stage treatment.",
+              "example": "8194 gal[US]",
+              "x-osdu-frame-of-reference": "UOM:volume",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.VolumePad",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "PumpDiagnosticSession": {
+              "type": "array",
+              "title": "Pump Diagnostic Session",
+              "description": "A pumping diagnostics session for this job stage.",
+              "items": {
+                "type": "object",
+                "title": "Stim Job Diagnostic Session",
+                "description": "A pumping diagnostics session for this job stage.",
+                "properties": {
+                  "StageNumber": {
+                    "type": "integer",
+                    "title": "Stage Number",
+                    "description": "The number of the stage associated with this diagnostics session.",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobDiagnosticSession.StageNumber",
+                    "x-osdu-attribution-revision": "v2.0"
+                  },
+                  "Number": {
+                    "type": "integer",
+                    "title": "Number",
+                    "description": "The number of this pumping diagnostics session.",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobDiagnosticSession.Number",
+                    "x-osdu-attribution-revision": "v2.0"
+                  },
+                  "Name": {
+                    "type": "string",
+                    "title": "Name",
+                    "description": "The name of this pumping diagnostic session.",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobDiagnosticSession.Name",
+                    "x-osdu-attribution-revision": "v2.0"
+                  },
+                  "Description": {
+                    "type": "string",
+                    "title": "Description",
+                    "description": "A description of this pumping diagnostic session.",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobDiagnosticSession.Description",
+                    "x-osdu-attribution-revision": "v2.0"
+                  },
+                  "StepDownTest": {
+                    "type": "array",
+                    "title": "Step Down Test",
+                    "description": "An injection test involving multiple steps of injection rate and pressure, where a curve deflection and change of slope indicates the fracture breakdown pressure. An injection test involving multiple steps of injection rate and pressure, where a curve deflection and change of slope indicates the fracture breakdown pressure.",
+                    "items": {
+                      "type": "object",
+                      "title": "Stim Step Down Test",
+                      "description": "An injection test involving multiple steps of injection rate and pressure, where a curve deflection and change of slope indicates the fracture breakdown pressure.",
+                      "properties": {
+                        "FlowBackTestStep": {
+                          "type": "array",
+                          "title": "Flow Back Test Step",
+                          "description": "The data related to a particular step in the step-down test.",
+                          "x-osdu-attribution-authority": "Energistics",
+                          "x-osdu-attribution-publication": "WITSML  StimStepDownTest.Step",
+                          "x-osdu-attribution-revision": "v2.0",
+                          "items": {
+                            "type": "object",
+                            "title": "Stim Pump Flow Back Test Step",
+                            "description": "Details about this flowback test step.",
+                            "properties": {
+                              "StepNumber": {
+                                "type": "integer",
+                                "title": "Step Number",
+                                "description": "The number of the step. Identifies the step within the step down test.",
+                                "x-osdu-attribution-authority": "Energistics",
+                                "x-osdu-attribution-publication": "WITSML  StimPumpFlowBackTestStep.Number",
+                                "x-osdu-attribution-revision": "v2.0"
+                              },
+                              "DateTime": {
+                                "type": "string",
+                                "title": "Date Time",
+                                "description": "Time stamp of the pressure measurement.",
+                                "format": "date-time",
+                                "x-osdu-attribution-authority": "Energistics",
+                                "x-osdu-attribution-publication": "WITSML  StimPumpFlowBackTestStep.DTim",
+                                "x-osdu-attribution-revision": "v2.0"
+                              },
+                              "BHFlowRate": {
+                                "type": "number",
+                                "title": "Bottomhole Flow Rate",
+                                "description": "Bottomhole flow rate for the specific step.",
+                                "x-osdu-frame-of-reference": "UOM:volume per time",
+                                "x-osdu-attribution-authority": "Energistics",
+                                "x-osdu-attribution-publication": "WITSML  StimPumpFlowBackTestStep.BottomholeRate",
+                                "x-osdu-attribution-revision": "v2.0"
+                              },
+                              "EntryFriction": {
+                                "type": "number",
+                                "title": "Entry Friction",
+                                "description": "Calculated entry friction loss accounting for perforation and near wellbore restrictions for the specific step.",
+                                "x-osdu-frame-of-reference": "UOM:pressure",
+                                "x-osdu-attribution-authority": "Energistics",
+                                "x-osdu-attribution-publication": "WITSML  StimPumpFlowBackTestStep.EntryFriction",
+                                "x-osdu-attribution-revision": "v2.0"
+                              },
+                              "FlowbackVolume": {
+                                "type": "number",
+                                "title": "Flowback Volume",
+                                "description": "Cumulative volume of flowback since the start of the test.",
+                                "x-osdu-frame-of-reference": "UOM:volume",
+                                "x-osdu-attribution-authority": "Energistics",
+                                "x-osdu-attribution-publication": "WITSML  StimPumpFlowBackTestStep.FlowbackVolume",
+                                "x-osdu-attribution-revision": "v2.0"
+                              },
+                              "FlowbackRate": {
+                                "type": "number",
+                                "title": "Flowback Rate",
+                                "description": "Flowback rate.",
+                                "x-osdu-frame-of-reference": "UOM:volume per time",
+                                "x-osdu-attribution-authority": "Energistics",
+                                "x-osdu-attribution-publication": "WITSML  StimPumpFlowBackTestStep.FlowbackVolumeRate",
+                                "x-osdu-attribution-revision": "v2.0"
+                              },
+                              "NearWellboreFriction": {
+                                "type": "number",
+                                "title": "Near Wellbore Friction",
+                                "description": "Calculated near-wellbore friction loss for the specific step.",
+                                "x-osdu-frame-of-reference": "UOM:pressure",
+                                "x-osdu-attribution-authority": "Energistics",
+                                "x-osdu-attribution-publication": "WITSML  StimPumpFlowBackTestStep.NearWellboreFriction",
+                                "x-osdu-attribution-revision": "v2.0"
+                              },
+                              "PerfFrictionLoss": {
+                                "type": "number",
+                                "title": "Perf Friction Loss",
+                                "description": "Calculated perforation friction loss for the specific step.",
+                                "x-osdu-frame-of-reference": "UOM:pressure",
+                                "x-osdu-attribution-authority": "Energistics",
+                                "x-osdu-attribution-publication": "WITSML  StimPumpFlowBackTestStep.PerfFriction",
+                                "x-osdu-attribution-revision": "v2.0"
+                              },
+                              "PipeFrictionLoss": {
+                                "type": "number",
+                                "title": "Pipe FrictionLoss",
+                                "description": "Calculated pipe friction loss for the specific step.",
+                                "x-osdu-frame-of-reference": "UOM:pressure",
+                                "x-osdu-attribution-authority": "Energistics",
+                                "x-osdu-attribution-publication": "WITSML  StimPumpFlowBackTestStep.PipeFriction",
+                                "x-osdu-attribution-revision": "v2.0"
+                              },
+                              "SurfacePressure": {
+                                "type": "number",
+                                "title": "SurfacePressure",
+                                "description": "Surface pressure measured for the specific step.",
+                                "x-osdu-frame-of-reference": "UOM:pressure",
+                                "x-osdu-attribution-authority": "Energistics",
+                                "x-osdu-attribution-publication": "WITSML  StimPumpFlowBackTestStep.Pres",
+                                "x-osdu-attribution-revision": "v2.0"
+                              },
+                              "SurfaceFlowRate": {
+                                "type": "number",
+                                "title": "Surface Flow Rate",
+                                "description": "Surface flow rate entering the well for the specific step.",
+                                "x-osdu-frame-of-reference": "UOM:volume per time",
+                                "x-osdu-attribution-authority": "Energistics",
+                                "x-osdu-attribution-publication": "WITSML  StimPumpFlowBackTestStep.SurfaceRate",
+                                "x-osdu-attribution-revision": "v2.0"
+                              }
+                            }
+                          }
+                        },
+                        "BHFluidDensity": {
+                          "type": "number",
+                          "title": "BH Fluid Density",
+                          "description": "The density of the fluid at the bottom of the hole adjusting for bottomhole temperature and pressure during the step-down test.",
+                          "x-osdu-frame-of-reference": "UOM:mass per volume",
+                          "x-osdu-attribution-authority": "Energistics",
+                          "x-osdu-attribution-publication": "WITSML  StimStepDownTest.BottomholeFluidDensity",
+                          "x-osdu-attribution-revision": "v2.0"
+                        },
+                        "DischargeCoefficient": {
+                          "type": "number",
+                          "title": "Discharge Coefficient",
+                          "description": "A coefficient used in the equation for calculation of the pressure drop across a perforation set.",
+                          "x-osdu-frame-of-reference": "UOM:dimensionless",
+                          "x-osdu-attribution-authority": "Energistics",
+                          "x-osdu-attribution-publication": "WITSML  StimStepDownTest.DischargeCoefficient",
+                          "x-osdu-attribution-revision": "v2.0"
+                        },
+                        "EntryHoleDiameter": {
+                          "type": "number",
+                          "title": "Entry Hole Diameter",
+                          "description": "Diameter of the injection point or perforation.",
+                          "x-osdu-frame-of-reference": "UOM:length",
+                          "x-osdu-attribution-authority": "Energistics",
+                          "x-osdu-attribution-publication": "WITSML  StimStepDownTest.DiameterEntryHole",
+                          "x-osdu-attribution-revision": "v2.0"
+                        },
+                        "InitialShutinPressure": {
+                          "type": "number",
+                          "title": "Initial Shutin Pressure",
+                          "description": "The initial shut in pressure.",
+                          "x-osdu-frame-of-reference": "UOM:pressure",
+                          "x-osdu-attribution-authority": "Energistics",
+                          "x-osdu-attribution-publication": "WITSML  StimStepDownTest.InitialShutinPres",
+                          "x-osdu-attribution-revision": "v2.0"
+                        },
+                        "PerforationsEffective": {
+                          "type": "integer",
+                          "title": "Perforations Effective",
+                          "description": "The number of perforations in the interval being tested that are calculated to be open to injection, which is determined during the step-down test.",
+                          "x-osdu-attribution-authority": "Energistics",
+                          "x-osdu-attribution-publication": "WITSML  StimStepDownTest.EffectivePerfs",
+                          "x-osdu-attribution-revision": "v2.0"
+                        },
+                        "PerforationsTotal": {
+                          "type": "integer",
+                          "title": "Perforations Total",
+                          "description": "The total number of perforations in the interval being tested.",
+                          "x-osdu-attribution-authority": "Energistics",
+                          "x-osdu-attribution-publication": "WITSML  StimStepDownTest.PerforationCount",
+                          "x-osdu-attribution-revision": "v2.0"
+                        },
+                        "Remarks": {
+                          "type": "string",
+                          "title": "Remarks",
+                          "description": "General remarks about this Stim Step Down Test."
+                        }
+                      }
+                    }
+                  },
+                  "StepRateTest": {
+                    "type": "array",
+                    "title": "Step Rate Test",
+                    "description": "An injection test, plotted pressure against injection rate, where a curve deflection and change of slope indicates the fracture breakdown pressure.",
+                    "items": {
+                      "type": "object",
+                      "title": "Stim Step Test",
+                      "description": "An injection test, plotted pressure against injection rate, where a curve deflection and change of slope indicates the fracture breakdown pressure.",
+                      "properties": {
+                        "FractureExtensionPressure": {
+                          "type": "number",
+                          "title": "Fracture Extension Pressure",
+                          "description": "The pressure necessary to extend the fracture once initiated. The fracture extension pressure may rise slightly with increasing fracture length andor height because of friction pressure drop down the length of the fracture.",
+                          "x-osdu-frame-of-reference": "UOM:pressure",
+                          "x-osdu-attribution-authority": "Energistics",
+                          "x-osdu-attribution-publication": "WITSML  StimStepTest.FractureExtensionPres",
+                          "x-osdu-attribution-revision": "v2.0"
+                        },
+                        "PressureMeasurement": {
+                          "type": "array",
+                          "title": "Pressure Measurement",
+                          "description": "A pressure and fluid flow rate data set.",
+                          "items": {
+                            "type": "object",
+                            "title": "Stim Pressure Flow Rate",
+                            "description": "An array of bottom hole flow rates and pressures for this stim step test.",
+                            "properties": {
+                              "BHFlowRate": {
+                                "type": "number",
+                                "title": "BH Flow Rate",
+                                "description": "The bottomhole flow rate of the fluid.",
+                                "x-osdu-frame-of-reference": "UOM:volume per time",
+                                "x-osdu-attribution-authority": "Energistics",
+                                "x-osdu-attribution-publication": "WITSML  StimPressureFlowRate.BottomholeRate",
+                                "x-osdu-attribution-revision": "v2.0"
+                              },
+                              "Pressure": {
+                                "type": "number",
+                                "title": "Pressure",
+                                "description": "The pressure of the step test.",
+                                "x-osdu-frame-of-reference": "UOM:pressure",
+                                "x-osdu-attribution-authority": "Energistics",
+                                "x-osdu-attribution-publication": "WITSML StimPressureFlowRate.Pressure",
+                                "x-osdu-attribution-revision": "v2.0"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "BaseFluidVol": {
+                    "type": "number",
+                    "title": "Base Fluid Volume",
+                    "description": "Base fluid volume entering the pumping equipment.",
+                    "x-osdu-frame-of-reference": "UOM:volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobDiagnosticSession.BaseFluidVol",
+                    "x-osdu-attribution-revision": "v2.0"
+                  },
+                  "BHHydrostaticPressure": {
+                    "type": "number",
+                    "title": "BH Hydrostatic Pressure",
+                    "description": "Bottomhole hydrostatic pressure.",
+                    "x-osdu-frame-of-reference": "UOM:pressure",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobDiagnosticSession.BottomholeHydrostaticPres",
+                    "x-osdu-attribution-revision": "v2.0"
+                  },
+                  "BHMeasuredDepth": {
+                    "type": "number",
+                    "title": "BH Measured Depth",
+                    "description": "The measured depth of the bottom of the hole.",
+                    "x-osdu-frame-of-reference": "UOM:length",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobDiagnosticSession.MdBottomhole",
+                    "x-osdu-attribution-revision": "v2.0"
+                  },
+                  "StaticBHTemperature": {
+                    "type": "number",
+                    "title": "Static BH Temperature",
+                    "description": "Static bottomhole temperature.",
+                    "x-osdu-frame-of-reference": "UOM:thermodynamic temperature",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobDiagnosticSession.BottomholeTemperature",
+                    "x-osdu-attribution-revision": "v2.0"
+                  },
+                  "BubblePointPressure": {
+                    "type": "number",
+                    "title": "Bubble Point Pressure",
+                    "description": "The pressure at which gas begins to break out of an under saturated oil and form a free gas phase in the matrix or a gas cap.",
+                    "x-osdu-frame-of-reference": "UOM:pressure",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobDiagnosticSession.BubblePointPres",
+                    "x-osdu-attribution-revision": "v2.0"
+                  },
+                  "ChokeSize": {
+                    "type": "number",
+                    "title": "Choke Size",
+                    "description": "The size of the choke used during a flow back test.",
+                    "x-osdu-frame-of-reference": "UOM:length",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobDiagnosticSession.ChokeSize",
+                    "x-osdu-attribution-revision": "v2.0"
+                  },
+                  "FluidCompressibility": {
+                    "type": "number",
+                    "title": "Fluid Compressibility",
+                    "description": "The volume change of a fluid when pressure is applied.",
+                    "x-osdu-frame-of-reference": "UOM:isothermal compressibility",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobDiagnosticSession.FluidCompressibility",
+                    "x-osdu-attribution-revision": "v2.0"
+                  },
+                  "FluidDensity": {
+                    "type": "number",
+                    "title": "Fluid Density",
+                    "description": "The density of the fluid during this pumping diagnostic session.",
+                    "x-osdu-frame-of-reference": "UOM:mass per volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobDiagnosticSession.FluidDensity",
+                    "x-osdu-attribution-revision": "v2.0"
+                  },
+                  "FluidEfficiency": {
+                    "type": "number",
+                    "title": "Fluid Efficiency",
+                    "description": "A measurement, derived from a data frac, of the efficiency of a particular fluid in creating fracture area on a particular formation at a set of conditions.",
+                    "x-osdu-frame-of-reference": "UOM:volume per volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobDiagnosticSession.FluidEfficiency",
+                    "x-osdu-attribution-revision": "v2.0"
+                  },
+                  "FluidEfficiencyTest": {
+                    "type": "array",
+                    "title": "Fluid Efficiency Test",
+                    "description": "A diagnostic test determining fluid efficiency.",
+                    "items": {
+                      "type": "object",
+                      "title": "Stim Fluid Efficiency Test",
+                      "description": "Fluid Efficiency Test for this pumping diagnostic session.",
+                      "properties": {
+                        "StartDateTime": {
+                          "type": "string",
+                          "title": "Start Date Time",
+                          "description": "Start time for the FET.",
+                          "format": "date-time",
+                          "x-osdu-attribution-authority": "Energistics",
+                          "x-osdu-attribution-publication": "WITSML  StimFetTest.DTimStart",
+                          "x-osdu-attribution-revision": "v2.0"
+                        },
+                        "EndDateTime": {
+                          "type": "string",
+                          "title": "End Date Time",
+                          "description": "End time for the FET.",
+                          "format": "date-time",
+                          "x-osdu-attribution-authority": "Energistics",
+                          "x-osdu-attribution-publication": "WITSML  StimFetTest.DTimEnd",
+                          "x-osdu-attribution-revision": "v2.0"
+                        },
+                        "AnalysisMethodID": {
+                          "type": "string",
+                          "title": "Analysis Method ID",
+                          "description": "An analysis method used for this FET.",
+                          "x-osdu-attribution-authority": "Energistics",
+                          "x-osdu-attribution-publication": "WITSML  StimFetTest.AnalysisMethod",
+                          "x-osdu-attribution-revision": "v2.0",
+                          "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-StimFETestAnalysisMethod:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                          "x-osdu-relationship": [
+                            {
+                              "GroupType": "reference-data",
+                              "EntityType": "StimFETestAnalysisMethod"
+                            }
+                          ]
+                        },
+                        "FluidEfficiency": {
+                          "type": "number",
+                          "title": "Fluid Efficiency",
+                          "description": "A measurement, derived from a data frac, of the efficiency of a particular fluid in creating fracture area on a particular formation at a set of conditions.",
+                          "x-osdu-frame-of-reference": "UOM:volume per volume",
+                          "x-osdu-attribution-authority": "Energistics",
+                          "x-osdu-attribution-publication": "WITSML  StimFetTest.FluidEfficiency",
+                          "x-osdu-attribution-revision": "v2.0"
+                        },
+                        "FractureCloseDuration": {
+                          "type": "number",
+                          "title": "Fracture Close Duration",
+                          "description": "The time required for the fracture to effectively close without proppant in place.",
+                          "x-osdu-frame-of-reference": "UOM:time",
+                          "x-osdu-attribution-authority": "Energistics",
+                          "x-osdu-attribution-publication": "WITSML  StimFetTest.FractureCloseDuration",
+                          "x-osdu-attribution-revision": "v2.0"
+                        },
+                        "FractureClosePressure": {
+                          "type": "number",
+                          "title": "Fracture Close Pressure",
+                          "description": "The pressure at which the fracture effectively closes without proppant in place.",
+                          "x-osdu-frame-of-reference": "UOM:pressure",
+                          "x-osdu-attribution-authority": "Energistics",
+                          "x-osdu-attribution-publication": "WITSML  StimFetTest.FractureClosePres",
+                          "x-osdu-attribution-revision": "v2.0"
+                        },
+                        "FractureExtensionPressure": {
+                          "type": "number",
+                          "title": "Fracture Extension Pressure",
+                          "description": "The fracture pressure limit for an unfractured formation is the fracture initiation pressure. This is typically considered the upper bound for the minimum horizontal stress or closure pressure. A step-rate test is used to determine the fracture extension pressure.",
+                          "x-osdu-frame-of-reference": "UOM:pressure",
+                          "x-osdu-attribution-authority": "Energistics",
+                          "x-osdu-attribution-publication": "WITSML  StimFetTest.FractureExtensionPres",
+                          "x-osdu-attribution-revision": "v2.0"
+                        },
+                        "FractureGradient": {
+                          "type": "number",
+                          "title": "Fracture Gradient",
+                          "description": "The fracture gradient of the formation.",
+                          "x-osdu-frame-of-reference": "UOM:force per volume",
+                          "x-osdu-attribution-authority": "Energistics",
+                          "x-osdu-attribution-publication": "WITSML  StimFetTest.FractureGradient",
+                          "x-osdu-attribution-revision": "v2.0"
+                        },
+                        "FractureLength": {
+                          "type": "number",
+                          "title": "Fracture Length",
+                          "description": "The length of the fracture tip to tip; fracture half length is the length of one wing of a fracture from the wellbore to the tip.",
+                          "x-osdu-frame-of-reference": "UOM:length",
+                          "x-osdu-attribution-authority": "Energistics",
+                          "x-osdu-attribution-publication": "WITSML  StimFetTest.FractureLength",
+                          "x-osdu-attribution-revision": "v2.0"
+                        },
+                        "FractureWidth": {
+                          "type": "number",
+                          "title": "Fracture Width",
+                          "description": "The width of a fracture at the wellbore. Hydraulic frac width is generated by frac fluid viscosity andor pump rate (i.e., horsepower).",
+                          "x-osdu-frame-of-reference": "UOM:length",
+                          "x-osdu-attribution-authority": "Energistics",
+                          "x-osdu-attribution-publication": "WITSML  StimFetTest.FractureWidth",
+                          "x-osdu-attribution-revision": "v2.0"
+                        },
+                        "NetPressure": {
+                          "type": "number",
+                          "title": "Net Pressure",
+                          "description": "The difference between the fracture extension pressure and the pressure that exists in the fracture.",
+                          "x-osdu-frame-of-reference": "UOM:pressure",
+                          "x-osdu-attribution-authority": "Energistics",
+                          "x-osdu-attribution-publication": "WITSML  StimFetTest.NetPres",
+                          "x-osdu-attribution-revision": "v2.0"
+                        },
+                        "PdlCoefficient": {
+                          "type": "number",
+                          "title": "Pdl Coefficient",
+                          "description": "The pressure dependent leak-off coefficient.",
+                          "x-osdu-frame-of-reference": "UOM:dimensionless",
+                          "x-osdu-attribution-authority": "Energistics",
+                          "x-osdu-attribution-publication": "WITSML  StimFetTest.PdlCoef",
+                          "x-osdu-attribution-revision": "v2.0"
+                        },
+                        "PdlEndDuration": {
+                          "type": "number",
+                          "title": "Pdl End Duration",
+                          "description": "The end of the pressure-dependent leak-off portion of the FET.",
+                          "x-osdu-frame-of-reference": "UOM:time",
+                          "x-osdu-attribution-authority": "Energistics",
+                          "x-osdu-attribution-publication": "WITSML  StimFetTest.EndPdlDuration",
+                          "x-osdu-attribution-revision": "v2.0"
+                        },
+                        "PorePressure": {
+                          "type": "number",
+                          "title": "Pore Pressure",
+                          "description": "The pressure of the liquids in the formation pore space.",
+                          "x-osdu-frame-of-reference": "UOM:pressure",
+                          "x-osdu-attribution-authority": "Energistics",
+                          "x-osdu-attribution-publication": "WITSML  StimFetTest.PorePres",
+                          "x-osdu-attribution-revision": "v2.0"
+                        },
+                        "PseudoRadialPressure": {
+                          "type": "number",
+                          "title": "Pseudo Radial Pressure",
+                          "description": "The Horner plot is used to determine if pseudo-radial flow developed during pressure decline. If a semi-log straight line is observed and the line can be extrapolated to a reasonable value of reservoir pressure, then radial or pseudo-radial flow may be affecting the decline behavior. This suggests that the fracture is already closed and that data beyond the point of influence need not be considered in the evaluation of closure.",
+                          "x-osdu-frame-of-reference": "UOM:pressure",
+                          "x-osdu-attribution-authority": "Energistics",
+                          "x-osdu-attribution-publication": "WITSML  StimFetTest.PseudoRadialPres",
+                          "x-osdu-attribution-revision": "v2.0"
+                        },
+                        "ResidualPermeability": {
+                          "type": "number",
+                          "title": "Residual Permeability",
+                          "description": "That permeability which remains after a fractured formation has closed, allowing the the formation fracture face to be pressurized before the fracture is mechanically reopened.",
+                          "x-osdu-frame-of-reference": "UOM:permeability rock",
+                          "x-osdu-attribution-authority": "Energistics",
+                          "x-osdu-attribution-publication": "WITSML  StimFetTest.ResidualPermeability",
+                          "x-osdu-attribution-revision": "v2.0"
+                        }
+                      }
+                    }
+                  },
+                  "FluidKprimeFactor": {
+                    "type": "number",
+                    "title": "Fluid Kprime Factor",
+                    "description": "The consistency index K is the shear stress or viscosity of the fluid at one sec-1 shear rate. An increasing K raises the effective viscosity.",
+                    "x-osdu-frame-of-reference": "UOM:dimensionless",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobDiagnosticSession.FluidKprimeFactor",
+                    "x-osdu-attribution-revision": "v2.0"
+                  },
+                  "FluidNprimeFactor": {
+                    "type": "number",
+                    "title": "Fluid Nprime Factor",
+                    "description": "Power law component. As 'n' decreases from 1, the fluid becomes more shear thinning. Reducing 'n' produces more non-Newtonian behavior.",
+                    "x-osdu-frame-of-reference": "UOM:dimensionless",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobDiagnosticSession.FluidNprimeFactor",
+                    "x-osdu-attribution-revision": "v2.0"
+                  },
+                  "FluidSpecificHeat": {
+                    "type": "number",
+                    "title": "Fluid Specific Heat",
+                    "description": "The heat required to raise one unit mass of a substance by one degree.",
+                    "x-osdu-frame-of-reference": "UOM:specific heat capacity",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobDiagnosticSession.FluidSpecificHeat",
+                    "x-osdu-attribution-revision": "v2.0"
+                  },
+                  "FluidThermalConductivity": {
+                    "type": "number",
+                    "title": "Fluid Thermal Conductivity",
+                    "description": "In physics, thermal conductivity is the property of a material describing its ability to conduct heat. It appears primarily in Fourier's Law for heat conduction. Thermal conductivity is measured in watts per kelvin-meter. Multiplied by a temperature difference (in kelvins) and an area (in square meters), and divided by a thickness (in meters), the thermal conductivity predicts the rate of energy loss (in watts) through a piece of material.",
+                    "x-osdu-frame-of-reference": "UOM:thermal conductivity",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobDiagnosticSession.FluidThermalConductivity",
+                    "x-osdu-attribution-revision": "v2.0"
+                  },
+                  "FluidThermalExpansionCoefficient": {
+                    "type": "number",
+                    "title": "Fluid Thermal Expansion Coefficient",
+                    "description": "Dimensional response to temperature change is expressed by its coefficient of thermal expansion. When the temperature of a substance changes, the energy that is stored in the intermolecular bonds between atoms also changes. When the stored energy increases, so does the length of the molecular bonds. As a result, solids typically expand in response to heating and contract on cooling. The degree of expansion divided by the change in temperature is called the material's coefficient of thermal expansion and generally varies with temperature.",
+                    "x-osdu-frame-of-reference": "UOM:volumetric thermal expansion",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobDiagnosticSession.FluidThermalExpansionCoefficient",
+                    "x-osdu-attribution-revision": "v2.0"
+                  },
+                  "FoamQuality": {
+                    "type": "number",
+                    "title": "Foam Quality",
+                    "description": "Foam quality percentage of foam for the pumping diagnostic session during the stimulation services.",
+                    "x-osdu-frame-of-reference": "UOM:volume per volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobDiagnosticSession.FoamQuality",
+                    "x-osdu-attribution-revision": "v2.0"
+                  },
+                  "FractureCloseDateTime": {
+                    "type": "string",
+                    "title": "Fracture Close Date Time",
+                    "description": "The date and time when the fluid in the fracture is completely leaked off into the formation and the fracture closes on its faces.",
+                    "format": "date-time",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobDiagnosticSession.DTimFractureClose",
+                    "x-osdu-attribution-revision": "v2.0"
+                  },
+                  "FractureClosePressure": {
+                    "type": "number",
+                    "title": "Fracture Close Pressure",
+                    "description": "The pressure when the fracture width becomes zero.",
+                    "x-osdu-frame-of-reference": "UOM:pressure",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobDiagnosticSession.FractureClosePres",
+                    "x-osdu-attribution-revision": "v2.0"
+                  },
+                  "FrictionPressure": {
+                    "type": "number",
+                    "title": "Friction Pressure",
+                    "description": "The pressure loss due to fluid friction with the pipe while a fluid is being pumped.",
+                    "x-osdu-frame-of-reference": "UOM:pressure",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobDiagnosticSession.FrictionPres",
+                    "x-osdu-attribution-revision": "v2.0"
+                  },
+                  "IsTemperatureCorrectionApplied": {
+                    "type": "boolean",
+                    "title": "Is Temperature Correction Applied",
+                    "description": "Are the calculations corrected for temperature? A value of true (or 1) indicates that the calculations were corrected for temperature. A value of false (or 0) or not given indicates otherwise.",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobDiagnosticSession.TemperatureCorrectionApplied",
+                    "x-osdu-attribution-revision": "v2.0"
+                  },
+                  "MidPerforationMeasuredDepth": {
+                    "type": "number",
+                    "title": "Mid Perforation Measured Depth",
+                    "description": "The measured depth of the middle perforation (MPP).",
+                    "x-osdu-frame-of-reference": "UOM:length",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobDiagnosticSession.MdMidPerforation",
+                    "x-osdu-attribution-revision": "v2.0"
+                  },
+                  "MidPerforationTrueVerticalDepth": {
+                    "type": "number",
+                    "title": "Mid Perforation True Vertical Depth",
+                    "description": "The true vertical depth of the middle perforation.",
+                    "x-osdu-frame-of-reference": "UOM:length",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobDiagnosticSession.TvdMidPerforation",
+                    "x-osdu-attribution-revision": "v2.0"
+                  },
+                  "PadPercent": {
+                    "type": "number",
+                    "title": "Pad Percent",
+                    "description": "The volume of the pad divided by the (volume of the pad + the volume of the proppant laden fluid).",
+                    "x-osdu-frame-of-reference": "UOM:volume per volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobDiagnosticSession.PercentPad",
+                    "x-osdu-attribution-revision": "v2.0"
+                  },
+                  "PorePressure": {
+                    "type": "number",
+                    "title": "Pore Pressure",
+                    "description": "The pressure of the liquids in the formation pore space.",
+                    "x-osdu-frame-of-reference": "UOM:pressure",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobDiagnosticSession.PorePres",
+                    "x-osdu-attribution-revision": "v2.0"
+                  },
+                  "PumpDuration": {
+                    "type": "number",
+                    "title": "Pump Duration",
+                    "description": "The time between the shutin time and the pump on time.",
+                    "x-osdu-frame-of-reference": "UOM:time",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobDiagnosticSession.PumpDuration",
+                    "x-osdu-attribution-revision": "v2.0"
+                  },
+                  "PumpFlowBackTest": {
+                    "type": "array",
+                    "title": "Pump Flow Back Test",
+                    "description": "A diagnostic test involving flowing a well back after treatment.",
+                    "items": {
+                      "type": "object",
+                      "title": "StimPumpFlowBackTest",
+                      "description": "Pump flow back test for this stim job diagnostic session.",
+                      "properties": {
+                        "FlowBackStartDateTime": {
+                          "type": "string",
+                          "title": "Flow Back Start Date Time",
+                          "description": "Start time for the test.",
+                          "format": "date-time",
+                          "x-osdu-attribution-authority": "Energistics",
+                          "x-osdu-attribution-publication": "WITSML  StimPumpFlowBackTest.DTimStart",
+                          "x-osdu-attribution-revision": "v2.0"
+                        },
+                        "FlowBackEndDateTime": {
+                          "type": "string",
+                          "title": "Flow Back End Date Time",
+                          "description": "End time for the test.",
+                          "format": "date-time",
+                          "x-osdu-attribution-authority": "Energistics",
+                          "x-osdu-attribution-publication": "WITSML  StimPumpFlowBackTest.DTimEnd",
+                          "x-osdu-attribution-revision": "v2.0"
+                        },
+                        "Step": {
+                          "type": "array",
+                          "title": "Step",
+                          "description": "Step",
+                          "x-osdu-attribution-authority": "Energistics",
+                          "x-osdu-attribution-publication": "WITSML  StimPumpFlowBackTest.Step",
+                          "x-osdu-attribution-revision": "v2.0",
+                          "items": {
+                            "type": "object",
+                            "title": "Stim Pump Flow Back Test Step",
+                            "description": "Details about this flowback test step.",
+                            "properties": {
+                              "StepNumber": {
+                                "type": "integer",
+                                "title": "Step Number",
+                                "description": "The number of the step. Identifies the step within the step down test.",
+                                "x-osdu-attribution-authority": "Energistics",
+                                "x-osdu-attribution-publication": "WITSML  StimPumpFlowBackTestStep.Number",
+                                "x-osdu-attribution-revision": "v2.0"
+                              },
+                              "DateTime": {
+                                "type": "string",
+                                "title": "Date Time",
+                                "description": "Time stamp of the pressure measurement.",
+                                "format": "date-time",
+                                "x-osdu-attribution-authority": "Energistics",
+                                "x-osdu-attribution-publication": "WITSML  StimPumpFlowBackTestStep.DTim",
+                                "x-osdu-attribution-revision": "v2.0"
+                              },
+                              "BHFlowRate": {
+                                "type": "number",
+                                "title": "Bottomhole Flow Rate",
+                                "description": "Bottomhole flow rate for the specific step.",
+                                "x-osdu-frame-of-reference": "UOM:volume per time",
+                                "x-osdu-attribution-authority": "Energistics",
+                                "x-osdu-attribution-publication": "WITSML  StimPumpFlowBackTestStep.BottomholeRate",
+                                "x-osdu-attribution-revision": "v2.0"
+                              },
+                              "EntryFriction": {
+                                "type": "number",
+                                "title": "Entry Friction",
+                                "description": "Calculated entry friction loss accounting for perforation and near wellbore restrictions for the specific step.",
+                                "x-osdu-frame-of-reference": "UOM:pressure",
+                                "x-osdu-attribution-authority": "Energistics",
+                                "x-osdu-attribution-publication": "WITSML  StimPumpFlowBackTestStep.EntryFriction",
+                                "x-osdu-attribution-revision": "v2.0"
+                              },
+                              "FlowbackVolume": {
+                                "type": "number",
+                                "title": "Flowback Volume",
+                                "description": "Cumulative volume of flowback since the start of the test.",
+                                "x-osdu-frame-of-reference": "UOM:volume",
+                                "x-osdu-attribution-authority": "Energistics",
+                                "x-osdu-attribution-publication": "WITSML  StimPumpFlowBackTestStep.FlowbackVolume",
+                                "x-osdu-attribution-revision": "v2.0"
+                              },
+                              "FlowbackRate": {
+                                "type": "number",
+                                "title": "Flowback Rate",
+                                "description": "Flowback rate.",
+                                "x-osdu-frame-of-reference": "UOM:volume per time",
+                                "x-osdu-attribution-authority": "Energistics",
+                                "x-osdu-attribution-publication": "WITSML  StimPumpFlowBackTestStep.FlowbackVolumeRate",
+                                "x-osdu-attribution-revision": "v2.0"
+                              },
+                              "NearWellboreFriction": {
+                                "type": "number",
+                                "title": "Near Wellbore Friction",
+                                "description": "Calculated near-wellbore friction loss for the specific step.",
+                                "x-osdu-frame-of-reference": "UOM:pressure",
+                                "x-osdu-attribution-authority": "Energistics",
+                                "x-osdu-attribution-publication": "WITSML  StimPumpFlowBackTestStep.NearWellboreFriction",
+                                "x-osdu-attribution-revision": "v2.0"
+                              },
+                              "PerfFrictionLoss": {
+                                "type": "number",
+                                "title": "Perf Friction Loss",
+                                "description": "Calculated perforation friction loss for the specific step.",
+                                "x-osdu-frame-of-reference": "UOM:pressure",
+                                "x-osdu-attribution-authority": "Energistics",
+                                "x-osdu-attribution-publication": "WITSML  StimPumpFlowBackTestStep.PerfFriction",
+                                "x-osdu-attribution-revision": "v2.0"
+                              },
+                              "PipeFrictionLoss": {
+                                "type": "number",
+                                "title": "Pipe FrictionLoss",
+                                "description": "Calculated pipe friction loss for the specific step.",
+                                "x-osdu-frame-of-reference": "UOM:pressure",
+                                "x-osdu-attribution-authority": "Energistics",
+                                "x-osdu-attribution-publication": "WITSML  StimPumpFlowBackTestStep.PipeFriction",
+                                "x-osdu-attribution-revision": "v2.0"
+                              },
+                              "SurfacePressure": {
+                                "type": "number",
+                                "title": "SurfacePressure",
+                                "description": "Surface pressure measured for the specific step.",
+                                "x-osdu-frame-of-reference": "UOM:pressure",
+                                "x-osdu-attribution-authority": "Energistics",
+                                "x-osdu-attribution-publication": "WITSML  StimPumpFlowBackTestStep.Pres",
+                                "x-osdu-attribution-revision": "v2.0"
+                              },
+                              "SurfaceFlowRate": {
+                                "type": "number",
+                                "title": "Surface Flow Rate",
+                                "description": "Surface flow rate entering the well for the specific step.",
+                                "x-osdu-frame-of-reference": "UOM:volume per time",
+                                "x-osdu-attribution-authority": "Energistics",
+                                "x-osdu-attribution-publication": "WITSML  StimPumpFlowBackTestStep.SurfaceRate",
+                                "x-osdu-attribution-revision": "v2.0"
+                              }
+                            }
+                          }
+                        },
+                        "CasingPressure": {
+                          "type": "number",
+                          "title": "Casing Pressure",
+                          "description": "Casing pressure.",
+                          "x-osdu-frame-of-reference": "UOM:pressure",
+                          "x-osdu-attribution-authority": "Energistics",
+                          "x-osdu-attribution-publication": "WITSML  StimPumpFlowBackTest.PresCasing",
+                          "x-osdu-attribution-revision": "v2.0"
+                        },
+                        "FlowBackVolume": {
+                          "type": "number",
+                          "title": "Flow Back Volume",
+                          "description": "Total fluid volume recovered during a flow back test.",
+                          "x-osdu-frame-of-reference": "UOM:volume",
+                          "x-osdu-attribution-authority": "Energistics",
+                          "x-osdu-attribution-publication": "WITSML  StimPumpFlowBackTest.FlowBackVolume",
+                          "x-osdu-attribution-revision": "v2.0"
+                        },
+                        "FractureCloseDuration": {
+                          "type": "number",
+                          "title": "Fracture Close Duration",
+                          "description": "The time required for the fracture width to become zero.",
+                          "x-osdu-frame-of-reference": "UOM:time",
+                          "x-osdu-attribution-authority": "Energistics",
+                          "x-osdu-attribution-publication": "WITSML  StimPumpFlowBackTest.FractureCloseDuration",
+                          "x-osdu-attribution-revision": "v2.0"
+                        },
+                        "FractureClosePressure": {
+                          "type": "number",
+                          "title": "Fracture Close Pressure",
+                          "description": "The pressure when the fracture width becomes zero.",
+                          "x-osdu-frame-of-reference": "UOM:pressure",
+                          "x-osdu-attribution-authority": "Energistics",
+                          "x-osdu-attribution-publication": "WITSML  StimPumpFlowBackTest.FractureClosePres",
+                          "x-osdu-attribution-revision": "v2.0"
+                        },
+                        "TubingPressure": {
+                          "type": "number",
+                          "title": "Tubing Pressure",
+                          "description": "Tubing pressure.",
+                          "x-osdu-frame-of-reference": "UOM:pressure",
+                          "x-osdu-attribution-authority": "Energistics",
+                          "x-osdu-attribution-publication": "WITSML  StimPumpFlowBackTest.PresTubing",
+                          "x-osdu-attribution-revision": "v2.0"
+                        },
+                        "Remarks": {
+                          "type": "string",
+                          "title": "Remarks",
+                          "description": "General remarks for this stim pump flow back test."
+                        }
+                      }
+                    }
+                  },
+                  "PumpOffDateTime": {
+                    "type": "string",
+                    "title": "Pump Off Date Time",
+                    "description": "The date and time pumping ended.",
+                    "format": "date-time",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobDiagnosticSession.DTimPumpOff",
+                    "x-osdu-attribution-revision": "v2.0"
+                  },
+                  "PumpOnDateTime": {
+                    "type": "string",
+                    "title": "Pump On Date Time",
+                    "description": "The date and time pumping began.",
+                    "format": "date-time",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobDiagnosticSession.DTimPumpOn",
+                    "x-osdu-attribution-revision": "v2.0"
+                  },
+                  "ReservoirTotalCompressibility": {
+                    "type": "number",
+                    "title": "Reservoir Total Compressibility",
+                    "description": "The volume change of a reservoir material when pressure is applied.",
+                    "x-osdu-frame-of-reference": "UOM:isothermal compressibility",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobDiagnosticSession.ReservoirTotalCompressibility",
+                    "x-osdu-attribution-revision": "v2.0"
+                  },
+                  "ShutInInitialPressure": {
+                    "type": "number",
+                    "title": "Shutin Initial Pressure",
+                    "description": "Initial shutin pressure.",
+                    "x-osdu-frame-of-reference": "UOM:pressure",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobDiagnosticSession.InitialShutinPres",
+                    "x-osdu-attribution-revision": "v2.0"
+                  },
+                  "SurfaceFluidTemperature": {
+                    "type": "number",
+                    "title": "Surface Fluid Temperature",
+                    "description": "Temperature of the fluid at the surface.",
+                    "x-osdu-frame-of-reference": "UOM:thermodynamic temperature",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobDiagnosticSession.SurfaceFluidTemperature",
+                    "x-osdu-attribution-revision": "v2.0"
+                  },
+                  "InjectionPointMeasuredDepth": {
+                    "type": "number",
+                    "title": "Injection Point Measured Depth",
+                    "description": "The measured depth of the wellbore to its injection point.",
+                    "x-osdu-frame-of-reference": "UOM:length",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobDiagnosticSession.MdSurface",
+                    "x-osdu-attribution-revision": "v2.0"
+                  },
+                  "SurfaceTemperature": {
+                    "type": "number",
+                    "title": "Surface Temperature",
+                    "description": "The temperature at surface during this pumping diagnostic session.",
+                    "x-osdu-frame-of-reference": "UOM:thermodynamic temperature",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobDiagnosticSession.SurfaceTemperature",
+                    "x-osdu-attribution-revision": "v2.0"
+                  },
+                  "BHTreatmentPressureAvg": {
+                    "type": "number",
+                    "title": "BH Treatment Pressure Average",
+                    "description": "Average bottomhole treatment pressure.",
+                    "x-osdu-frame-of-reference": "UOM:pressure",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobDiagnosticSession.AvgBottomholeTreatmentPres",
+                    "x-osdu-attribution-revision": "v2.0"
+                  },
+                  "BHTreatmentRateAvg": {
+                    "type": "number",
+                    "title": "BH Treatment Rate Average",
+                    "description": "Average bottomhole treatment flow rate.",
+                    "x-osdu-frame-of-reference": "UOM:volume per time",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobDiagnosticSession.AvgBottomholeTreatmentRate",
+                    "x-osdu-attribution-revision": "v2.0"
+                  },
+                  "WellboreVolume": {
+                    "type": "number",
+                    "title": "Wellbore Volume",
+                    "description": "The volume of fluid in the wellbore for this pumping diagnostic session.",
+                    "x-osdu-frame-of-reference": "UOM:volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobDiagnosticSession.WellboreVolume",
+                    "x-osdu-attribution-revision": "v2.0"
+                  },
+                  "WellShutinDateTime": {
+                    "type": "string",
+                    "title": "Well Shutin Date Time",
+                    "description": "The date and time at which a well ceases flowing and the valves are closed.",
+                    "format": "date-time",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML  StimJobDiagnosticSession.DTimWellShutin",
+                    "x-osdu-attribution-revision": "v2.0"
+                  },
+                  "Remarks": {
+                    "type": "string",
+                    "title": "Remarks",
+                    "description": "Remarks"
+                  }
+                }
+              }
+            },
+            "PerfBallCount": {
+              "type": "integer",
+              "title": "Perf Ball Count",
+              "description": "Total number of perforation balls used while treating the stage.",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.PerfBallCount",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "PerfBallSize": {
+              "type": "number",
+              "title": "Perf Ball Size",
+              "description": "The size (diameter) of the perforation balls used while treating the Stage",
+              "x-osdu-frame-of-reference": "UOM:length",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.PerfBallSize",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "ProppantBHConcAvg": {
+              "type": "number",
+              "title": "Proppant Bottomhole Concentration Average",
+              "description": "The average proppant concentration at the bottom of the interval.",
+              "example": "0.51 lbm/gal[US]",
+              "x-osdu-frame-of-reference": "UOM:mass per volume",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.AvgProppantConcBottomhole",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "ProppantBHConcMax": {
+              "type": "number",
+              "title": "Proppant Bottomhole Concentration Max",
+              "description": "The maximum proppant concentration at the bottom of the stage interval for all job steps.",
+              "example": "0.61 lbm/gal[US]",
+              "x-osdu-frame-of-reference": "UOM:mass per volume",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.MaxProppantConcBottomhole",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "ProppantDesignMass": {
+              "type": "number",
+              "title": "Proppant Design Mass",
+              "description": "The planned, total proppant mass for this job stage.",
+              "example": "0.55 lbm",
+              "x-osdu-frame-of-reference": "UOM:mass"
+            },
+            "ProppantInFormationMass": {
+              "type": "number",
+              "title": "Proppant In Formation Mass",
+              "description": "The weight of proppant placed in the formation.",
+              "example": "44100 lbm",
+              "x-osdu-frame-of-reference": "UOM:mass",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.FormationProppantMass",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "ProppantHeight": {
+              "type": "number",
+              "title": "Proppant Height",
+              "description": "The proppant height.",
+              "example": "0.25 in",
+              "x-osdu-frame-of-reference": "UOM:length",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.ProppantHeight",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "ProppantInFormationTotal": {
+              "type": "number",
+              "title": "Proppant In Formation Total",
+              "description": "The cumulative total amount of proppant in the formation including the current stage.",
+              "example": "44100 lbm",
+              "x-osdu-frame-of-reference": "UOM:mass",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.TotalProppantInFormation",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "ProppantPerforationConc": {
+              "type": "number",
+              "title": "Proppant Perforation Concentration",
+              "description": "The proppant concentration at the perforations.",
+              "example": "0.51 lbm/gal[US]",
+              "x-osdu-frame-of-reference": "UOM:mass per volume",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.PerfProppantConc",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "ProppantPumpedPercent": {
+              "type": "number",
+              "title": "Proppant Pumped Percent",
+              "description": "Total proppant mass used as a percent of the design mass.",
+              "example": "100 %",
+              "x-osdu-frame-of-reference": "UOM:volume per volume",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.PercentProppantPumped",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "ProppantSurfaceConcAvg": {
+              "type": "number",
+              "title": "Proppant Surface Conc Average",
+              "description": "The average proppant concentration on the surface.",
+              "example": "0.51 lbm/gal[US]",
+              "x-osdu-frame-of-reference": "UOM:mass per volume",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.AvgProppantConcSurface",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "ProppantSurfaceConcMax": {
+              "type": "number",
+              "title": "Proppant Surface Conc Max",
+              "description": "The maximum proppant concentration on the surface.",
+              "example": "0.51 lbm/gal[US]",
+              "x-osdu-frame-of-reference": "UOM:mass per volume",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.MaxProppantConcSurface",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "ProppantWellboreMass": {
+              "type": "number",
+              "title": "Proppant Wellbore Mass",
+              "description": "The weight of proppant left in the wellbore after pumping has stopped.",
+              "example": "44100 lbm",
+              "x-osdu-frame-of-reference": "UOM:mass",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.WellboreProppantMass",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "PumpTimeTotal": {
+              "type": "number",
+              "title": "Pump Time Total",
+              "description": "The total pumping time for the treatment of the stage.",
+              "example": "45 min",
+              "x-osdu-frame-of-reference": "UOM:time",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.TotalPumpTime",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "ScreenOutPressure": {
+              "type": "number",
+              "title": "Screen Out Pressure",
+              "description": "The screen out pressure.",
+              "x-osdu-frame-of-reference": "UOM:pressure",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.ScreenOutPres",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "ShutInPressure": {
+              "type": "array",
+              "title": "Shut In Pressure",
+              "description": "Shut in pressure data for this job stage.",
+              "items": {
+                "type": "object",
+                "title": "Stim Shut In Pressure",
+                "description": "Shut in pressure data for this job stage.",
+                "properties": {
+                  "Pressure": {
+                    "type": "number",
+                    "title": "Pressure",
+                    "description": "The shut-in pressure.",
+                    "x-osdu-frame-of-reference": "UOM:pressure",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML StimShutInPressure.Pressure",
+                    "x-osdu-attribution-revision": "v2.0"
+                  },
+                  "TimeAfterShutin": {
+                    "type": "number",
+                    "title": "Time After Shutin",
+                    "description": "The cumulative time span after shut-in at which the pressure was measured.",
+                    "x-osdu-frame-of-reference": "UOM:time",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML StimShutInPressure.TimeAfterShutin",
+                    "x-osdu-attribution-revision": "v2.0"
+                  }
+                }
+              }
+            },
+            "ShutinPressureInitial": {
+              "type": "number",
+              "title": "Shut In Pressure Initial",
+              "description": "The initial shut-in pressure.",
+              "example": "3964 psi",
+              "x-osdu-frame-of-reference": "UOM:pressure",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.InitialShutinPres",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "SlurryReturnRateAvg": {
+              "type": "number",
+              "title": "Slurry Return Rate Average",
+              "description": "The average slurry return rate of all steps for the stage treatment.",
+              "x-osdu-frame-of-reference": "UOM:volume per time",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.AvgSlurryReturnVolumeRate",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "SurfacePressureAvg": {
+              "type": "number",
+              "title": "Surface Pressure Average",
+              "description": "The average pressure for treating the stage across all steps.",
+              "x-osdu-frame-of-reference": "UOM:pressure",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.AvgPresSurface",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "SurfacePressureMax": {
+              "type": "number",
+              "title": "Surface Pressure Max",
+              "description": "Maximum surface pressure during treatment of the stage.",
+              "x-osdu-frame-of-reference": "UOM:pressure",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.MaxPresSurface",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "TechnologyDescription": {
+              "type": "string",
+              "title": "Technology Description",
+              "description": "Text describing the technology used while pumping the stage.",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.TechnologyType",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "BHTreatingTemperatureAvg": {
+              "type": "number",
+              "title": "Bottomhole Treating Temperature Average",
+              "description": "The average measured or calculated bottom hole temperature whilst pumping with well fluid injection or circulation of the wellbore at the point of interest. Point of interest is generally the injection point or region of interest for the test or treatment.",
+              "x-osdu-frame-of-reference": "UOM:thermodynamic temperature",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.AvgBHTreatingTemperature",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "TubingFluidRateMax": {
+              "type": "number",
+              "title": "Tubing Fluid Rate Max",
+              "description": "Maximum tubing fluid pumping rate of any step while treating the stage.",
+              "x-osdu-frame-of-reference": "UOM:volume per time",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.MaxFluidVolumeRateTubing",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "TubingPressureAvg": {
+              "type": "number",
+              "title": "Tubing Pressure Average",
+              "description": "The average tubing pressure for the stage treatment.",
+              "x-osdu-frame-of-reference": "UOM:pressure",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.AvgPresTubing",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "TubingPressureMax": {
+              "type": "number",
+              "title": "Tubing Pressure Max",
+              "description": "The highest tubing pressure of any step while treating the stage.",
+              "x-osdu-frame-of-reference": "UOM:pressure",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.MaxPresTubing",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "SlurryVolumeTotal": {
+              "type": "number",
+              "title": "Slurry VolumeTotal",
+              "description": "The total slurry volume pumped for all steps while treating the stage.",
+              "x-osdu-frame-of-reference": "UOM:volume",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.TotalVolume",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "WaterSource": {
+              "type": "string",
+              "title": "Water Source",
+              "description": "Water source description for fluid pumped during stage.",
+              "example": "Willow Municipal",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJobStage.WaterSource",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "PerforationSet": {
+              "type": "array",
+              "title": "Perforation Set",
+              "description": "Set of Perforation Intervals stimulated in this stage.",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimPerforationCluster",
+              "x-osdu-attribution-revision": "v2.0",
+              "items": {
+                "type": "string",
+                "pattern": "^[\\w\\-\\.]+:master-data\\-\\-PerforationInterval:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                "x-osdu-relationship": [
+                  {
+                    "GroupType": "master-data",
+                    "EntityType": "PerforationInterval"
+                  }
+                ]
+              }
+            },
+            "PerforationSetFrictionFactor": {
+              "type": "number",
+              "title": "Perforation Set Friction Factor",
+              "description": "Perforation Set Friction Factor",
+              "x-osdu-frame-of-reference": "UOM:dimensionless",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimPerforationCluster.FrictionFactor",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "PerforationSetFrictionPressure": {
+              "type": "number",
+              "title": "Perforation Set Friction Pressure",
+              "description": "Perforation Set Friction Pressure",
+              "x-osdu-frame-of-reference": "UOM:pressure",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimPerforationCluster.FrictionPres",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "PerforationSetDischargeCoefficient": {
+              "type": "number",
+              "title": "Perforation Set Discharge Coefficient",
+              "description": "Perforation Set Discharge Coefficient",
+              "x-osdu-frame-of-reference": "UOM:dimensionless",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimPerforationCluster.DischargeCoefficient",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "WellLog": {
+              "type": "array",
+              "title": "Well Logs",
+              "description": "Log(s) associated to the Stimulation Stage",
+              "items": {
+                "type": "string",
+                "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-WellLog:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                "x-osdu-relationship": [
+                  {
+                    "GroupType": "work-product-component",
+                    "EntityType": "WellLog"
+                  }
+                ]
+              }
+            },
+            "Remarks": {
+              "type": "string",
+              "title": "Remarks",
+              "description": "General remarks about this Stage of the Stim Job.",
+              "example": "Screened out observing 1.5T in formation, 1.5T in wellbore, max acheivable rate 350 L/minute at 61.75 MPa. FLBK 50 m3 at 0.9 m3/min average. Attempted to Flush Wellbore observing 24 m3 to seat ball. Established feed rate 0.5 m3/min at 60 MPa. Displaced 1 m3 HCR to perfs and let soak 5 min. Re-initiated frac as per."
+            }
+          },
+          "required": [
+            "WellboreID"
+          ],
+          "title": "IndividualProperties"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "ExtensionProperties": {
+              "type": "object"
+            }
+          },
+          "title": "ExtensionProperties"
+        }
+      ]
+    }
+  },
+  "required": [
+    "kind",
+    "acl",
+    "legal"
+  ],
+  "additionalProperties": false,
+  "x-osdu-review-status": "Accepted",
+  "x-osdu-supported-file-formats": [
+    "WITSML"
+  ],
+  "x-osdu-virtual-properties": {
+    "data.VirtualProperties.DefaultName": {
+      "type": "string",
+      "priority": [
+        {
+          "path": "data.Name"
+        }
+      ]
+    },
+    "data.VirtualProperties.DefaultLocation": {
+      "type": "object",
+      "priority": [
+        {
+          "path": "data.SpatialArea"
+        },
+        {
+          "path": "data.SpatialPoint"
+        }
+      ]
+    }
+  },
+  "x-osdu-inheriting-from-kind": [
+    {
+      "name": "WorkProductComponent",
+      "kind": "osdu:wks:AbstractWPCGroupType:1.2.0"
+    }
+  ]
+}

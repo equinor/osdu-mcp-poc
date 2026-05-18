@@ -1,0 +1,393 @@
+{
+  "x-osdu-license": "Copyright 2024, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "$id": "https://schema.osdu.opengroup.org/json/master-data/BlowoutPreventerComponent.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:master-data--BlowoutPreventerComponent:1.0.0",
+  "title": "BlowoutPreventerComponent",
+  "description": "Information related to a component associated with a blowout preventer.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "Previously called ResourceID or SRN which identifies this OSDU resource object without version.",
+      "title": "Entity ID",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:master-data\\-\\-BlowoutPreventerComponent:[\\w\\-\\.\\:\\%]+$",
+      "example": "namespace:master-data--BlowoutPreventerComponent:28b153fa-dd9d-5360-bbc2-7973d5dd75f4"
+    },
+    "kind": {
+      "description": "The schema identification for the OSDU resource object following the pattern {Namespace}:{Source}:{Type}:{VersionMajor}.{VersionMinor}.{VersionPatch}. The versioning scheme follows the semantic versioning, https://semver.org/.",
+      "title": "Entity Kind",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:[\\w\\-\\.]+:[\\w\\-\\.]+:[0-9]+.[0-9]+.[0-9]+$",
+      "example": "osdu:wks:master-data--BlowoutPreventerComponent:1.0.0"
+    },
+    "version": {
+      "description": "The version number of this OSDU resource; set by the framework.",
+      "title": "Version Number",
+      "type": "integer",
+      "format": "int64",
+      "example": 1562066009929332
+    },
+    "acl": {
+      "description": "The access control tags associated with this entity.",
+      "title": "Access Control List",
+      "$ref": "../abstract/AbstractAccessControlList.1.0.0.json"
+    },
+    "legal": {
+      "description": "The entity's legal tags and compliance status. The actual contents associated with the legal tags is managed by the Compliance Service.",
+      "title": "Legal Tags",
+      "$ref": "../abstract/AbstractLegalTags.1.0.0.json"
+    },
+    "tags": {
+      "title": "Tag Dictionary",
+      "description": "A generic dictionary of string keys mapping to string value. Only strings are permitted as keys and values.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "example": {
+        "NameOfKey": "String value"
+      }
+    },
+    "createTime": {
+      "description": "Timestamp of the time at which initial version of this OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:46:20.163Z"
+    },
+    "createUser": {
+      "title": "Resource Object Creation User Reference",
+      "description": "The user reference, which created the first version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "modifyTime": {
+      "description": "Timestamp of the time at which this version of the OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Version Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:52:24.477Z"
+    },
+    "modifyUser": {
+      "title": "Resource Object Version Creation User Reference",
+      "description": "The user reference, which created this version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "ancestry": {
+      "description": "The links to data, which constitute the inputs, from which this record instance is derived.",
+      "title": "Ancestry",
+      "$ref": "../abstract/AbstractLegalParentList.1.0.0.json"
+    },
+    "meta": {
+      "description": "The Frame of Reference meta data section linking the named properties to self-contained definitions.",
+      "title": "Frame of Reference Meta Data",
+      "type": "array",
+      "items": {
+        "$ref": "../abstract/AbstractMetaItem.1.0.0.json"
+      }
+    },
+    "data": {
+      "allOf": [
+        {
+          "$ref": "../abstract/AbstractCommonResources.1.0.0.json"
+        },
+        {
+          "$ref": "../abstract/AbstractMaster.1.2.0.json"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "BlowoutPreventerID": {
+              "type": "string",
+              "title": "Blowout Preventer ID",
+              "description": "Identifier of the blowout preventer the component is a part of.",
+              "example": "namespace:master-data--BlowoutPreventer:11000091175501:",
+              "pattern": "^[\\w\\-\\.]+:master-data\\-\\-BlowoutPreventer:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "BlowoutPreventer"
+                }
+              ]
+            },
+            "WellID": {
+              "type": "string",
+              "title": "Well ID",
+              "description": "Identifier of the Well the component is associated with.",
+              "pattern": "^[\\w\\-\\.]+:(master-data\\-\\-Well|master-data\\-\\-WellPlanningWell):[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "Well"
+                },
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "WellPlanningWell"
+                }
+              ]
+            },
+            "BlowoutPreventerComponentTypeID": {
+              "type": "string",
+              "title": "Blowout Preventer Component Type ID",
+              "description": "Identifier of the type of blowout preventer component.",
+              "example": "namespace:reference-data--BlowoutPreventerComponentType:AnnularPreventer:",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML",
+              "x-osdu-attribution-revision": "Version 2.0",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-BlowoutPreventerComponentType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "BlowoutPreventerComponentType"
+                }
+              ]
+            },
+            "Name": {
+              "type": "string",
+              "title": "Name",
+              "description": "The name of the blowout preventer component.",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-attribution-revision": "Evergreen"
+            },
+            "Description": {
+              "type": "string",
+              "title": "Description",
+              "description": "Description of the blowout preventer component.",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML",
+              "x-osdu-attribution-revision": "Version 2.0"
+            },
+            "IsVertical": {
+              "type": "boolean",
+              "title": "Is Vertical",
+              "description": "Is the blowout preventer component vertical?",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-attribution-revision": "Evergreen"
+            },
+            "IsVariable": {
+              "type": "boolean",
+              "title": "Is Variable",
+              "description": "Is ram bore variable?",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML",
+              "x-osdu-attribution-revision": "Version 2.0"
+            },
+            "ManufacturerID": {
+              "type": "string",
+              "title": "Manufacturer ID",
+              "description": "Unique identifier for the manufacturer of this equipment.",
+              "example": "namespace:master-data--Organisation:Cameron:",
+              "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Organisation:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "Organisation"
+                }
+              ]
+            },
+            "Model": {
+              "type": "string",
+              "title": "Model",
+              "description": "Manufacturer's designated model.",
+              "example": "UM",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-attribution-revision": "Evergreen"
+            },
+            "SerialNumber": {
+              "type": "string",
+              "title": "Serial Number",
+              "description": "Serial number of the component as provided by the manufacturer and/or the supplier.",
+              "example": "7inN80Csg",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-attribution-revision": "Evergreen"
+            },
+            "SequenceNumber": {
+              "type": "integer",
+              "title": "Sequence Number",
+              "description": "The sequence within which the components entered the hole. That is, a sequence number of 1 entered first, 2 entered next, etc.",
+              "example": 25,
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-attribution-revision": "Evergreen"
+            },
+            "LastCertificationDateTime": {
+              "type": "string",
+              "title": "Last Certification Date Time",
+              "description": "The last data and time the component was certified.",
+              "format": "date-time",
+              "example": "2022-12-18T15:00:00",
+              "x-osdu-frame-of-reference": "DateTime",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-attribution-revision": "Evergreen"
+            },
+            "MaximumCloseDiameter": {
+              "type": "number",
+              "title": "Maximum Close Diameter",
+              "description": "The allowable maximum outer diameter of pipe that can be safely closed around.",
+              "x-osdu-frame-of-reference": "UOM:length",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML",
+              "x-osdu-attribution-revision": "Version 2.0"
+            },
+            "MinimumCloseDiameter": {
+              "type": "number",
+              "title": "Minimum Close Diameter",
+              "description": "The minimum outer diameter of pipe that can be safely closed around (only applicable for blowout preventers with variable bore rams).",
+              "x-osdu-frame-of-reference": "UOM:length",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML",
+              "x-osdu-attribution-revision": "Version 2.0"
+            },
+            "NominalInnerDiameter": {
+              "type": "number",
+              "title": "Nominal Inner Diameter",
+              "description": "The nominal inner diameter of the blowout preventer component.",
+              "x-osdu-frame-of-reference": "UOM:length",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-attribution-revision": "Evergreen"
+            },
+            "NominalOuterDiameter": {
+              "type": "number",
+              "title": "Nominal Inner Diameter",
+              "description": "The nominal outer diameter of the blowout preventer component.",
+              "x-osdu-frame-of-reference": "UOM:length",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-attribution-revision": "Evergreen"
+            },
+            "PressureRating": {
+              "type": "number",
+              "title": "Pressure Rating",
+              "description": "Maximum pressure rating of the blowout preventer component.",
+              "example": "5000 psi",
+              "x-osdu-frame-of-reference": "UOM:pressure",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML",
+              "x-osdu-attribution-revision": "Version 2.0"
+            },
+            "OperatingPressureRating": {
+              "type": "number",
+              "title": "Operating Pressure Rating",
+              "description": "Maximum pressure at which the blowout preventer component is expected to operate under normal conditions. It is typically set below the pressure rating to provide a safety margin.",
+              "example": "15000 psi",
+              "x-osdu-frame-of-reference": "UOM:pressure",
+              "x-osdu-attribution-authority": "Qual Tools",
+              "x-osdu-attribution-publication": "Blowout Preventer (BOP) Spec Sheets"
+            },
+            "TopMeasuredDepth": {
+              "type": "number",
+              "title": "Top Measured Depth",
+              "description": "Measured depth of the the top of the component.",
+              "x-osdu-frame-of-reference": "UOM:length",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-attribution-revision": "Evergreen"
+            },
+            "BaseMeasuredDepth": {
+              "type": "number",
+              "title": "Base Measured Depth",
+              "description": "Measured depth of the the base of the component.",
+              "x-osdu-frame-of-reference": "UOM:length",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-attribution-revision": "Evergreen"
+            },
+            "Length": {
+              "type": "number",
+              "title": "Length",
+              "description": "Total length of the component.",
+              "example": ".56 m",
+              "x-osdu-frame-of-reference": "UOM:length",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-attribution-revision": "Evergreen"
+            },
+            "FluidVolumeToOpen": {
+              "type": "number",
+              "title": "Fluid Volume To Open",
+              "description": "The fluid volume required to open the component.",
+              "example": "3.43 gal",
+              "x-osdu-frame-of-reference": "UOM:volume",
+              "x-osdu-attribution-authority": "Qual Tools",
+              "x-osdu-attribution-publication": "Blowout Preventer (BOP) Spec Sheets"
+            },
+            "FluidVolumeToClose": {
+              "type": "number",
+              "title": "Fluid Volume To Close",
+              "description": "The fluid volume required to close the component.",
+              "example": "4.92 gal",
+              "x-osdu-frame-of-reference": "UOM:volume",
+              "x-osdu-attribution-authority": "Qual Tools",
+              "x-osdu-attribution-publication": "Blowout Preventer (BOP) Spec Sheets"
+            },
+            "MaximumHangOffWeight": {
+              "type": "number",
+              "title": "Maximum Hang Off Weight",
+              "description": "The maximum allowable hang-off weight supported by the component.",
+              "example": "603929 lbf",
+              "x-osdu-frame-of-reference": "UOM:force",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-attribution-revision": "Evergreen"
+            },
+            "Comment": {
+              "type": "string",
+              "title": "Comment",
+              "description": "General comments and remarks related to the component.",
+              "x-osdu-attribution-authority": "OSDU",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-attribution-revision": "Evergreen"
+            }
+          },
+          "required": [
+            "BlowoutPreventerID"
+          ],
+          "title": "IndividualProperties"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "ExtensionProperties": {
+              "type": "object"
+            }
+          },
+          "title": "ExtensionProperties"
+        }
+      ]
+    }
+  },
+  "required": [
+    "kind",
+    "acl",
+    "legal"
+  ],
+  "additionalProperties": false,
+  "x-osdu-review-status": "Accepted",
+  "x-osdu-virtual-properties": {
+    "data.VirtualProperties.DefaultName": {
+      "type": "string",
+      "priority": [
+        {
+          "path": "data.Name"
+        }
+      ]
+    },
+    "data.VirtualProperties.DefaultLocation": {
+      "type": "object",
+      "priority": [
+        {
+          "path": "data.SpatialLocation"
+        }
+      ]
+    }
+  },
+  "x-osdu-inheriting-from-kind": []
+}

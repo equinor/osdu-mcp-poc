@@ -1,0 +1,296 @@
+{
+  "x-osdu-license": "Copyright 2023, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "$id": "https://schema.osdu.opengroup.org/json/master-data/UserProfile.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:master-data--UserProfile:1.0.0",
+  "title": "UserProfile",
+  "description": "A user profile for an individual using the OSDU data platform. This profile represents one given instance of the user activation.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "Previously called ResourceID or SRN which identifies this OSDU resource object without version.",
+      "title": "Entity ID",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:master-data\\-\\-UserProfile:[\\w\\-\\.\\:\\%]+$",
+      "example": "namespace:master-data--UserProfile:e1865b78-cf7d-5154-b664-d0e4004abf56"
+    },
+    "kind": {
+      "description": "The schema identification for the OSDU resource object following the pattern {Namespace}:{Source}:{Type}:{VersionMajor}.{VersionMinor}.{VersionPatch}. The versioning scheme follows the semantic versioning, https://semver.org/.",
+      "title": "Entity Kind",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:[\\w\\-\\.]+:[\\w\\-\\.]+:[0-9]+.[0-9]+.[0-9]+$",
+      "example": "osdu:wks:master-data--UserProfile:1.0.0"
+    },
+    "version": {
+      "description": "The version number of this OSDU resource; set by the framework.",
+      "title": "Version Number",
+      "type": "integer",
+      "format": "int64",
+      "example": 1562066009929332
+    },
+    "acl": {
+      "description": "The access control tags associated with this entity.",
+      "title": "Access Control List",
+      "$ref": "../abstract/AbstractAccessControlList.1.0.0.json"
+    },
+    "legal": {
+      "description": "The entity's legal tags and compliance status. The actual contents associated with the legal tags is managed by the Compliance Service.",
+      "title": "Legal Tags",
+      "$ref": "../abstract/AbstractLegalTags.1.0.0.json"
+    },
+    "tags": {
+      "title": "Tag Dictionary",
+      "description": "A generic dictionary of string keys mapping to string value. Only strings are permitted as keys and values.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "example": {
+        "NameOfKey": "String value"
+      }
+    },
+    "createTime": {
+      "description": "Timestamp of the time at which initial version of this OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:46:20.163Z"
+    },
+    "createUser": {
+      "title": "Resource Object Creation User Reference",
+      "description": "The user reference, which created the first version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "modifyTime": {
+      "description": "Timestamp of the time at which this version of the OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Version Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:52:24.477Z"
+    },
+    "modifyUser": {
+      "title": "Resource Object Version Creation User Reference",
+      "description": "The user reference, which created this version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "ancestry": {
+      "description": "The links to data, which constitute the inputs, from which this record instance is derived.",
+      "title": "Ancestry",
+      "$ref": "../abstract/AbstractLegalParentList.1.0.0.json"
+    },
+    "meta": {
+      "description": "The Frame of Reference meta data section linking the named properties to self-contained definitions.",
+      "title": "Frame of Reference Meta Data",
+      "type": "array",
+      "items": {
+        "$ref": "../abstract/AbstractMetaItem.1.0.0.json"
+      }
+    },
+    "data": {
+      "allOf": [
+        {
+          "$ref": "../abstract/AbstractCommonResources.1.0.0.json"
+        },
+        {
+          "$ref": "../abstract/AbstractMaster.1.2.0.json"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "Name": {
+              "type": "string",
+              "title": "Name",
+              "description": "The individual's name. Usually this includes first and last name."
+            },
+            "UserOSDUIdentifier": {
+              "type": "string",
+              "title": "User OSDU Identifier",
+              "description": "A unique identifier for this individual within the OSDU platform."
+            },
+            "IsUserCurrentlyActive": {
+              "type": "boolean",
+              "title": "Is User Currently Active",
+              "description": "An indicator of whether this User Profile is currently considered active."
+            },
+            "UserActivatedDateTime": {
+              "type": "string",
+              "title": "User Activated Date Time",
+              "description": "The date and time that this User Profile begins to be considered active.",
+              "format": "date-time",
+              "x-osdu-frame-of-reference": "DateTime"
+            },
+            "UserDeactivatedDateTime": {
+              "type": "string",
+              "title": "User Deactivated Date Time",
+              "description": "The date and time that this User Profile is considered no longer active.",
+              "format": "date-time",
+              "x-osdu-frame-of-reference": "DateTime"
+            },
+            "UserProfilePredecessorID": {
+              "type": "string",
+              "title": "User Profile Predecessor ID",
+              "description": "A reference to the OSDU User Profile representing a previous time of user activation for the same individual.",
+              "pattern": "^[\\w\\-\\.]+:master-data\\-\\-UserProfile:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "UserProfile"
+                }
+              ]
+            },
+            "UserEmailAddress": {
+              "type": "string",
+              "title": "User Email Address",
+              "description": "The individual's full email address.",
+              "format": "email"
+            },
+            "UserPhoneNumber": {
+              "type": "string",
+              "title": "User Phone Number",
+              "description": "The individual's telephone number."
+            },
+            "UserContactRoleTypeID": {
+              "type": "string",
+              "title": "User Contact Role Type ID",
+              "description": "The identifier of a reference value for the role of the contact within the associated organisation, such as Account owner, Sales Representative, Technical Support, Project Manager, Party Chief, Client Representative, Senior Observer.",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-ContactRoleType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "ContactRoleType"
+                }
+              ]
+            },
+            "UserCompanyID": {
+              "type": "string",
+              "title": "User Company ID",
+              "description": "Reference to the company the individual is associated with.",
+              "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Organisation:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "Organisation"
+                }
+              ]
+            },
+            "UserWorkflowPersonaTypeIDs": {
+              "type": "array",
+              "title": "User Workflow Persona Type IDs",
+              "description": "The business workflow roles in which an individual functions.",
+              "items": {
+                "type": "string",
+                "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-WorkflowPersonaType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                "x-osdu-relationship": [
+                  {
+                    "GroupType": "reference-data",
+                    "EntityType": "WorkflowPersonaType"
+                  }
+                ]
+              }
+            },
+            "Remark": {
+              "type": "string",
+              "title": "Remark",
+              "description": "Additional information about the individual user."
+            },
+            "UserDataGovernanceRoles": {
+              "type": "array",
+              "title": "DataGovernanceRoles",
+              "description": "A list of Data Governance roles held by this individual, with the ability to qualify and timebox those roles.",
+              "x-osdu-indexing": {
+                "type": "nested"
+              },
+              "items": {
+                "type": "object",
+                "title": "DataGovernanceRole",
+                "properties": {
+                  "DataGovernanceRoleIdentifier": {
+                    "type": "string",
+                    "title": "Data Governance Role Identifier",
+                    "description": "Internal, unique identifier for the set of attributes describing and qualifying a specific data governance role."
+                  },
+                  "OrganisationID": {
+                    "type": "string",
+                    "title": "Organisation ID",
+                    "description": "Reference to the organisation to which this data governance role is associated. For example, a specific business unit.",
+                    "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Organisation:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "master-data",
+                        "EntityType": "Organisation"
+                      }
+                    ]
+                  },
+                  "DataGovernanceRoleTypeID": {
+                    "type": "string",
+                    "title": "Data Governance Role Type ID",
+                    "description": "Reference to a data governance role assigned to this individual in the associated Organisation.",
+                    "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-DataGovernanceRoleType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "reference-data",
+                        "EntityType": "DataGovernanceRoleType"
+                      }
+                    ]
+                  },
+                  "DataGovernanceRoleEffectiveDateTime": {
+                    "type": "string",
+                    "title": "Data Governance Role Effective Date Time",
+                    "description": "The date and time that this data governance role in this Organisation begins to be considered active.",
+                    "format": "date-time",
+                    "x-osdu-frame-of-reference": "DateTime"
+                  },
+                  "DataGovernanceRoleTerminationDateTime": {
+                    "type": "string",
+                    "title": "Data Governance Role Termination Date Time",
+                    "description": "The date and time that this data governance role in this Organisation begins to be considered inactive.",
+                    "format": "date-time",
+                    "x-osdu-frame-of-reference": "DateTime"
+                  }
+                }
+              }
+            }
+          },
+          "title": "IndividualProperties"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "ExtensionProperties": {
+              "type": "object"
+            }
+          },
+          "title": "ExtensionProperties"
+        }
+      ]
+    }
+  },
+  "required": [
+    "kind",
+    "acl",
+    "legal"
+  ],
+  "additionalProperties": false,
+  "x-osdu-review-status": "Accepted",
+  "x-osdu-virtual-properties": {
+    "data.VirtualProperties.DefaultName": {
+      "type": "string",
+      "priority": [
+        {
+          "path": "data.Name"
+        }
+      ]
+    },
+    "data.VirtualProperties.DefaultLocation": {
+      "type": "object",
+      "priority": [
+        {
+          "path": "data.SpatialLocation"
+        }
+      ]
+    }
+  },
+  "x-osdu-inheriting-from-kind": []
+}

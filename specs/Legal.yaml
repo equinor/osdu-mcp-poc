@@ -1,0 +1,1256 @@
+openapi: 3.1.0
+info:
+  title: Legal Service
+  description: "Legal Service provides APIs to help with legal data governance in\
+    \ the Data Lake. See [Legal Service Documentation](https://osdu.pages.opengroup.org/platform/security-and-compliance/legal)."
+  contact:
+    name: OSDU Data Platform Team
+    email: dps@OSDU.org
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+servers:
+- url: /api/legal/v1/
+security:
+- Authorization: []
+tags:
+- name: health
+  description: Health related endpoints
+- name: legaltag
+  description: LegalTags related endpoints
+- name: legaltag-status-job
+  description: LegalTags status Job related endpoints
+- name: info
+  description: Version info endpoint
+paths:
+  /legaltags:
+    get:
+      tags:
+      - legaltag
+      summary: Gets all LegalTags.
+      description: This allows for the retrieval of all LegalTags.
+      operationId: listLegalTags
+      parameters:
+      - name: valid
+        in: query
+        description: "If true returns only valid LegalTags, if false returns only\
+          \ invalid LegalTags.  Default value is true."
+        required: false
+        schema:
+          type: boolean
+          default: true
+      - name: data-partition-id
+        in: header
+        description: Tenant Id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Retrieved LegalTags successfully.
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/LegalTagDtos"
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "403":
+          description: User not authorized to perform the action.
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "404":
+          description: Requested LegalTag to update was not found.
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "500":
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "502":
+          description: Bad Gateway
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "503":
+          description: Service Unavailable
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+      security:
+      - Authorization: []
+    put:
+      tags:
+      - legaltag
+      summary: Updates the LegalTag for the given `name`.
+      description: This allows to update certain properties of your LegalTag using
+        the `name` associated with it.
+      operationId: updateLegalTag
+      parameters:
+      - name: data-partition-id
+        in: header
+        description: Tenant Id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateLegalTag"
+        required: true
+      responses:
+        "200":
+          description: Updated LegalTag successfully.
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/LegalTagDto"
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "403":
+          description: User not authorized to perform the action.
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "404":
+          description: Requested LegalTag to update was not found.
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "409":
+          description: A LegalTag with the given name already exists.
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "500":
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "502":
+          description: Bad Gateway
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "503":
+          description: Service Unavailable
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+      security:
+      - Authorization: []
+    post:
+      tags:
+      - legaltag
+      summary: Creates the LegalTag for the given `name`.
+      description: This allows for the creation of your LegalTag. There can only be
+        1 LegalTag per `name`. A LegalTag must be created before you can start ingesting
+        data for that name.
+      operationId: createLegalTag
+      parameters:
+      - name: data-partition-id
+        in: header
+        description: Tenant Id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LegalTagDto"
+        required: true
+      responses:
+        "201":
+          description: Created LegalTag successfully.
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/LegalTagDto"
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "403":
+          description: User not authorized to perform the action.
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "404":
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "409":
+          description: A LegalTag with the given name already exists.
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "500":
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "502":
+          description: Bad Gateway
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "503":
+          description: Service Unavailable
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+      security:
+      - Authorization: []
+  /legaltags:validate:
+    post:
+      tags:
+      - legaltag
+      summary: Retrieves the invalid LegalTag names with reasons for the given `names`.
+      description: This allows for the retrieval of the reason why your LegalTag is
+        not valid. A maximum of 25 can be retrieved at once.
+      operationId: validateLegalTags
+      parameters:
+      - name: data-partition-id
+        in: header
+        description: Tenant Id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RequestLegalTags"
+        required: true
+      responses:
+        "200":
+          description: Retrieved LegalTag names with reason successfully.
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/InvalidTagsWithReason"
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "403":
+          description: User not authorized to perform the action.
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "404":
+          description: LegalTag names were not found.
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "500":
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "502":
+          description: Bad Gateway
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "503":
+          description: Service Unavailable
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+      security:
+      - Authorization: []
+  /legaltags:query:
+    post:
+      tags:
+      - legaltag
+      summary: Retrieves the legaltags which matches query criteria or none if there
+        is no match.
+      description: "This allows query for specific attributes of legaltags including\
+        \ the attributes of extensionproperties. See [https://osdu.pages.opengroup.org/platform/security-and-compliance/legal/api/#legal-query](https://osdu.pages.opengroup.org/platform/security-and-compliance/legal/api/#legal-query)\
+        \ for more details."
+      operationId: queryLegalTag
+      parameters:
+      - name: valid
+        in: query
+        description: "If true returns only valid LegalTags, if false returns only\
+          \ invalid LegalTags.  Default value is true."
+        required: false
+        schema:
+          type: boolean
+          default: true
+      - name: data-partition-id
+        in: header
+        description: Tenant Id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/QueryLegalTag"
+        required: true
+      responses:
+        "200":
+          description: Retrieved LegalTags successfully.
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/LegalTagDtos"
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "403":
+          description: User not authorized to perform the action.
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "404":
+          description: Requested LegalTag to update was not found.
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "405":
+          description: Method not allowed. Legal Query API is disabled.
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "500":
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "502":
+          description: Bad Gateway
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "503":
+          description: Service Unavailable
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+      security:
+      - Authorization: []
+  /legaltags:batchRetrieve:
+    post:
+      tags:
+      - legaltag
+      summary: Retrieves the LegalTags for the given `names`.
+      description: This allows for the retrieval of your LegalTags using the `name`
+        associated with it. A maximum of 25 can be retrieved at once.
+      operationId: getLegalTags
+      parameters:
+      - name: data-partition-id
+        in: header
+        description: Tenant Id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RequestLegalTags"
+        required: true
+      responses:
+        "200":
+          description: Retrieved LegalTags successfully.
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/LegalTagDtos"
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "403":
+          description: User not authorized to perform the action.
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "404":
+          description: One or more requested LegalTags were not found.
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "500":
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "502":
+          description: Bad Gateway
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "503":
+          description: Service Unavailable
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+      security:
+      - Authorization: []
+  /legaltags:properties:
+    get:
+      tags:
+      - legaltag
+      summary: Gets LegalTag property values.
+      description: This allows for the retrieval of allowed values for LegalTag properties.
+      operationId: getLegalTagProperties
+      parameters:
+      - name: data-partition-id
+        in: header
+        description: Tenant Id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Retrieved LegalTag properties successfully.
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ReadablePropertyValues"
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "403":
+          description: User not authorized to perform the action.
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "500":
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "502":
+          description: Bad Gateway
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "503":
+          description: Service Unavailable
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+      security:
+      - Authorization: []
+  /legaltags/{name}:
+    get:
+      tags:
+      - legaltag
+      summary: Gets a LegalTag for the given `name`.
+      description: This allows for the retrieval of your LegalTag using the `name`
+        associated with it.
+      operationId: getLegalTag
+      parameters:
+      - name: name
+        in: path
+        description: Name of the LegalTag
+        required: true
+        schema:
+          type: string
+        example: OSDU-Private-USA-EHC
+      - name: data-partition-id
+        in: header
+        description: Tenant Id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Retrieved LegalTag successfully.
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/LegalTagDto"
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "403":
+          description: User not authorized to perform the action.
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "404":
+          description: Requested LegalTag was not found.
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "500":
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "502":
+          description: Bad Gateway
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "503":
+          description: Service Unavailable
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+      security:
+      - Authorization: []
+    delete:
+      tags:
+      - legaltag
+      summary: Deletes a LegalTag for the given `name`.
+      description: This allows for the deletion of your LegalTag with the given `name`.
+        This makes the given legaltags data invalid.
+      operationId: deleteLegalTag
+      parameters:
+      - name: name
+        in: path
+        description: Name of the LegalTag to delete
+        required: true
+        schema:
+          type: string
+        example: OSDU-Private-USA-EHC
+      - name: data-partition-id
+        in: header
+        description: Tenant Id
+        required: true
+        schema:
+          type: string
+      responses:
+        "204":
+          description: LegalTag deleted successfully.
+          content:
+            '*/*':
+              schema:
+                type: string
+                enum:
+                - 100 CONTINUE
+                - 101 SWITCHING_PROTOCOLS
+                - 102 PROCESSING
+                - 103 EARLY_HINTS
+                - 103 CHECKPOINT
+                - 200 OK
+                - 201 CREATED
+                - 202 ACCEPTED
+                - 203 NON_AUTHORITATIVE_INFORMATION
+                - 204 NO_CONTENT
+                - 205 RESET_CONTENT
+                - 206 PARTIAL_CONTENT
+                - 207 MULTI_STATUS
+                - 208 ALREADY_REPORTED
+                - 226 IM_USED
+                - 300 MULTIPLE_CHOICES
+                - 301 MOVED_PERMANENTLY
+                - 302 FOUND
+                - 302 MOVED_TEMPORARILY
+                - 303 SEE_OTHER
+                - 304 NOT_MODIFIED
+                - 305 USE_PROXY
+                - 307 TEMPORARY_REDIRECT
+                - 308 PERMANENT_REDIRECT
+                - 400 BAD_REQUEST
+                - 401 UNAUTHORIZED
+                - 402 PAYMENT_REQUIRED
+                - 403 FORBIDDEN
+                - 404 NOT_FOUND
+                - 405 METHOD_NOT_ALLOWED
+                - 406 NOT_ACCEPTABLE
+                - 407 PROXY_AUTHENTICATION_REQUIRED
+                - 408 REQUEST_TIMEOUT
+                - 409 CONFLICT
+                - 410 GONE
+                - 411 LENGTH_REQUIRED
+                - 412 PRECONDITION_FAILED
+                - 413 PAYLOAD_TOO_LARGE
+                - 413 REQUEST_ENTITY_TOO_LARGE
+                - 414 URI_TOO_LONG
+                - 414 REQUEST_URI_TOO_LONG
+                - 415 UNSUPPORTED_MEDIA_TYPE
+                - 416 REQUESTED_RANGE_NOT_SATISFIABLE
+                - 417 EXPECTATION_FAILED
+                - 418 I_AM_A_TEAPOT
+                - 419 INSUFFICIENT_SPACE_ON_RESOURCE
+                - 420 METHOD_FAILURE
+                - 421 DESTINATION_LOCKED
+                - 422 UNPROCESSABLE_ENTITY
+                - 423 LOCKED
+                - 424 FAILED_DEPENDENCY
+                - 425 TOO_EARLY
+                - 426 UPGRADE_REQUIRED
+                - 428 PRECONDITION_REQUIRED
+                - 429 TOO_MANY_REQUESTS
+                - 431 REQUEST_HEADER_FIELDS_TOO_LARGE
+                - 451 UNAVAILABLE_FOR_LEGAL_REASONS
+                - 500 INTERNAL_SERVER_ERROR
+                - 501 NOT_IMPLEMENTED
+                - 502 BAD_GATEWAY
+                - 503 SERVICE_UNAVAILABLE
+                - 504 GATEWAY_TIMEOUT
+                - 505 HTTP_VERSION_NOT_SUPPORTED
+                - 506 VARIANT_ALSO_NEGOTIATES
+                - 507 INSUFFICIENT_STORAGE
+                - 508 LOOP_DETECTED
+                - 509 BANDWIDTH_LIMIT_EXCEEDED
+                - 510 NOT_EXTENDED
+                - 511 NETWORK_AUTHENTICATION_REQUIRED
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "403":
+          description: User not authorized to perform the action.
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "404":
+          description: Requested LegalTag to delete was not found.
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "500":
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "502":
+          description: Bad Gateway
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "503":
+          description: Service Unavailable
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+      security:
+      - Authorization: []
+  /jobs/updateLegalTagStatus:
+    get:
+      tags:
+      - legaltag-status-job
+      summary: Check LegalTag Compliance Job Status
+      description: To check LegalTag Compliance Job Status.
+      operationId: checkLegalTagStatusChanges
+      parameters:
+      - name: data-partition-id
+        in: header
+        description: Tenant Id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+                enum:
+                - 100 CONTINUE
+                - 101 SWITCHING_PROTOCOLS
+                - 102 PROCESSING
+                - 103 EARLY_HINTS
+                - 103 CHECKPOINT
+                - 200 OK
+                - 201 CREATED
+                - 202 ACCEPTED
+                - 203 NON_AUTHORITATIVE_INFORMATION
+                - 204 NO_CONTENT
+                - 205 RESET_CONTENT
+                - 206 PARTIAL_CONTENT
+                - 207 MULTI_STATUS
+                - 208 ALREADY_REPORTED
+                - 226 IM_USED
+                - 300 MULTIPLE_CHOICES
+                - 301 MOVED_PERMANENTLY
+                - 302 FOUND
+                - 302 MOVED_TEMPORARILY
+                - 303 SEE_OTHER
+                - 304 NOT_MODIFIED
+                - 305 USE_PROXY
+                - 307 TEMPORARY_REDIRECT
+                - 308 PERMANENT_REDIRECT
+                - 400 BAD_REQUEST
+                - 401 UNAUTHORIZED
+                - 402 PAYMENT_REQUIRED
+                - 403 FORBIDDEN
+                - 404 NOT_FOUND
+                - 405 METHOD_NOT_ALLOWED
+                - 406 NOT_ACCEPTABLE
+                - 407 PROXY_AUTHENTICATION_REQUIRED
+                - 408 REQUEST_TIMEOUT
+                - 409 CONFLICT
+                - 410 GONE
+                - 411 LENGTH_REQUIRED
+                - 412 PRECONDITION_FAILED
+                - 413 PAYLOAD_TOO_LARGE
+                - 413 REQUEST_ENTITY_TOO_LARGE
+                - 414 URI_TOO_LONG
+                - 414 REQUEST_URI_TOO_LONG
+                - 415 UNSUPPORTED_MEDIA_TYPE
+                - 416 REQUESTED_RANGE_NOT_SATISFIABLE
+                - 417 EXPECTATION_FAILED
+                - 418 I_AM_A_TEAPOT
+                - 419 INSUFFICIENT_SPACE_ON_RESOURCE
+                - 420 METHOD_FAILURE
+                - 421 DESTINATION_LOCKED
+                - 422 UNPROCESSABLE_ENTITY
+                - 423 LOCKED
+                - 424 FAILED_DEPENDENCY
+                - 425 TOO_EARLY
+                - 426 UPGRADE_REQUIRED
+                - 428 PRECONDITION_REQUIRED
+                - 429 TOO_MANY_REQUESTS
+                - 431 REQUEST_HEADER_FIELDS_TOO_LARGE
+                - 451 UNAVAILABLE_FOR_LEGAL_REASONS
+                - 500 INTERNAL_SERVER_ERROR
+                - 501 NOT_IMPLEMENTED
+                - 502 BAD_GATEWAY
+                - 503 SERVICE_UNAVAILABLE
+                - 504 GATEWAY_TIMEOUT
+                - 505 HTTP_VERSION_NOT_SUPPORTED
+                - 506 VARIANT_ALSO_NEGOTIATES
+                - 507 INSUFFICIENT_STORAGE
+                - 508 LOOP_DETECTED
+                - 509 BANDWIDTH_LIMIT_EXCEEDED
+                - 510 NOT_EXTENDED
+                - 511 NETWORK_AUTHENTICATION_REQUIRED
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "403":
+          description: User not authorized to perform the action.
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "404":
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "500":
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "502":
+          description: Bad Gateway
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "503":
+          description: Service Unavailable
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppError"
+      security:
+      - Authorization: []
+  /info:
+    get:
+      tags:
+      - info
+      summary: Version info
+      description: "For deployment available public `/info` endpoint, which provides\
+        \ build and git related information."
+      operationId: info
+      parameters:
+      - name: data-partition-id
+        in: header
+        description: Tenant Id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Version info.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VersionInfo"
+  /_ah/readiness_check:
+    get:
+      tags:
+      - health
+      summary: Readiness Check endpoint
+      description: "For deployment available public `/readiness_check` endpoint, which\
+        \ provides `Legal service is ready` message."
+      operationId: readinessCheck
+      parameters:
+      - name: data-partition-id
+        in: header
+        description: Tenant Id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Legal service is ready
+          content:
+            '*/*':
+              schema:
+                type: string
+  /_ah/liveness_check:
+    get:
+      tags:
+      - health
+      summary: Liveness Check endpoint
+      description: "For deployment available public `/liveness_check` endpoint, which\
+        \ provides `Legal service is alive` message."
+      operationId: livenessCheck
+      parameters:
+      - name: data-partition-id
+        in: header
+        description: Tenant Id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Legal service is alive
+          content:
+            '*/*':
+              schema:
+                type: string
+components:
+  schemas:
+    UpdateLegalTag:
+      type: object
+      description: The model to update an existing LegalTag
+      properties:
+        name:
+          type: string
+          description: The name of the LegalTag
+          example: OSDU-Private-EHCData
+        contractId:
+          type: string
+          description: The Id of the physical contract associated with the data being
+            ingested.
+          example: No Contract Related
+        description:
+          type: string
+          description: The optional description if the LegalTag to allow for easier
+            discoverability of Legaltags overtime.
+        expirationDate:
+          type: string
+          format: date-time
+          description: The optional expiration date of the contract in the format
+            YYYY-MM-DD
+          example: 2025-12-25
+        extensionProperties:
+          type: object
+          additionalProperties:
+            type: object
+          description: The optional object field to attach any company specific attributes.
+    LegalTagDto:
+      type: object
+      description: Represents a single LegalTag
+      properties:
+        name:
+          type: string
+          description: The name of the LegalTag
+          example: OSDU-Private-EHCData
+        description:
+          type: string
+          description: The description of the LegalTag
+        properties:
+          $ref: "#/components/schemas/Properties"
+          description: LegalTag properties
+    Properties:
+      type: object
+      properties:
+        countryOfOrigin:
+          type: array
+          description: List of ISO 3166-1 alpha-2 country codes where the data originated.
+          example:
+          - US
+          items:
+            type: string
+        contractId:
+          type: string
+          description: The contract id associated with this legal tag.
+          example: Unknown
+        expirationDate:
+          type: string
+          format: date-time
+          description: "The date when this legal tag expires. Format: yyyy-MM-dd."
+          example: 2099-12-31
+        originator:
+          type: string
+          description: The company or individual that created the data.
+          example: Equinor
+        dataType:
+          type: string
+          description: "The data type classification (e.g. 'Third Party Data', 'First\
+            \ Party Data')."
+          example: Third Party Data
+        securityClassification:
+          type: string
+          description: "The security classification (e.g. 'Public', 'Private', 'Confidential')."
+          example: Private
+        personalData:
+          type: string
+          description: "The personal data type classification (e.g. 'No Personal Data',\
+            \ 'Personal Data')."
+          example: No Personal Data
+        exportClassification:
+          type: string
+          description: "The export classification control number (e.g. 'EAR99', 'AT1')."
+          example: EAR99
+        extensionProperties:
+          type: object
+          additionalProperties: true
+    AppError:
+      type: object
+      description: Standard error response returned by OSDU services.
+      properties:
+        code:
+          type: integer
+          format: int32
+          description: HTTP status code.
+          example: 400
+        reason:
+          type: string
+          description: Short error reason.
+          example: Bad Request
+        message:
+          type: string
+          description: Detailed error message.
+          example: Invalid record format.
+    RequestLegalTags:
+      type: object
+      description: The model to retrieve multiple LegalTags in batch.
+      properties:
+        names:
+          type: array
+          description: The name of all the LegalTags to retrieve.
+          items:
+            type: string
+          maxItems: 25
+          minItems: 1
+      required:
+      - names
+    InvalidTagWithReason:
+      type: object
+      description: Represents a single invalid LegalTag.
+      properties:
+        name:
+          type: string
+          description: The name of the LegalTag.
+        reason:
+          type: string
+          description: The reason the LegalTag is currently invalid.
+    InvalidTagsWithReason:
+      type: object
+      description: Represents a collection of invalid LegalTags.
+      properties:
+        invalidLegalTags:
+          type: array
+          description: A collection of invalid LegalTags
+          items:
+            $ref: "#/components/schemas/InvalidTagWithReason"
+    QueryLegalTag:
+      type: object
+      description: Represents the Search Query objects for Legaltags.
+      properties:
+        queryList:
+          type: array
+          description: Filter condition query
+          items:
+            type: string
+        operatorList:
+          type: array
+          description: If there are multiple conditions need to be joined in by logical
+            operators
+          items:
+            type: string
+        sortBy:
+          type: string
+          description: The field to sort results by
+        sortOrder:
+          type: string
+          description: "The sort order, e.g. 'ASC' or 'DESC'"
+        limit:
+          type: integer
+          format: int32
+          description: The maximum number of LegalTags to return
+      required:
+      - queryList
+    LegalTagDtos:
+      type: object
+      description: Represents a collection of LegalTags.
+      properties:
+        legalTags:
+          type: array
+          description: A collection of complete LegalTags
+          items:
+            $ref: "#/components/schemas/LegalTagDto"
+    ReadablePropertyValues:
+      type: object
+      description: Shows the allowed values of the fields of a LegalTag.
+      properties:
+        countriesOfOrigin:
+          type: object
+          additionalProperties:
+            type: string
+          description: The values of all the allowed Countries of Origin with the
+            ISO Alpha 2 code and country name.
+        otherRelevantDataCountries:
+          type: object
+          additionalProperties:
+            type: string
+          description: The values of all the allowed Other Relevant Data Countries
+            with the ISO Alpha 2 code and country name.
+        securityClassifications:
+          type: array
+          description: The values of all the allowed Security Classifications.
+          items:
+            type: string
+          uniqueItems: true
+        exportClassificationControlNumbers:
+          type: array
+          description: The name of all the allowed Export Classifications.
+          items:
+            type: string
+          uniqueItems: true
+        personalDataTypes:
+          type: array
+          description: The name of all the allowed Personal Data Type values.
+          items:
+            type: string
+          uniqueItems: true
+        dataTypes:
+          type: array
+          description: The name of all the allowed Data Type values.
+          items:
+            type: string
+          uniqueItems: true
+    ConnectedOuterService:
+      type: object
+      description: Name and version of an external service that this OSDU service
+        connects to.
+      properties:
+        name:
+          type: string
+          description: Name of the connected external service.
+          example: storage
+        version:
+          type: string
+          description: Version of the connected external service.
+          example: 2.0.0
+    FeatureFlagState:
+      type: object
+      description: State of a feature flag for a given partition and source.
+      properties:
+        name:
+          type: string
+          description: Name of the feature flag.
+          example: collaborations-api
+        enabled:
+          type: boolean
+          description: Whether the feature flag is currently enabled.
+          example: true
+        partition:
+          type: string
+          description: Data partition this flag applies to.
+          example: opendes
+        source:
+          type: string
+          description: Source configuration that provided this flag state.
+          example: runtime
+    VersionInfo:
+      type: object
+      description: Version and build information for an OSDU service.
+      properties:
+        groupId:
+          type: string
+          description: Maven group ID of the service artifact.
+          example: org.opengroup.osdu
+        artifactId:
+          type: string
+          description: Maven artifact ID of the service.
+          example: os-search
+        version:
+          type: string
+          description: Semantic version of the deployed service.
+          example: 0.27.0
+        buildTime:
+          type: string
+          description: ISO 8601 timestamp of the build.
+          example: 2021-01-26T02:24:13.843Z
+        branch:
+          type: string
+          description: Source control branch from which the service was built.
+          example: main
+        commitId:
+          type: string
+          description: Short commit SHA of the build.
+          example: "7777777"
+        commitMessage:
+          type: string
+          description: Commit message of the build.
+          example: initial commit
+        connectedOuterServices:
+          type: array
+          description: List of external services this service depends on.
+          items:
+            $ref: "#/components/schemas/ConnectedOuterService"
+        featureFlagStates:
+          type: array
+          description: "Current feature flag states for this partition, if any."
+          items:
+            $ref: "#/components/schemas/FeatureFlagState"
+  securitySchemes:
+    Authorization:
+      type: http
+      name: Authorization
+      in: header
+      scheme: bearer
+      bearerFormat: Authorization

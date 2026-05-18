@@ -1,0 +1,464 @@
+{
+  "x-osdu-license": "Copyright 2025, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "$id": "https://schema.osdu.opengroup.org/json/work-product-component/WellPressureTestRawMeasurement.1.1.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:work-product-component--WellPressureTestRawMeasurement:1.1.0",
+  "title": "WellPressureTestRawMeasurement",
+  "description": "Entity aiming to capture raw measurements from Well Pressure Tests. It aims to capture single test file gathering raw measurements before any kind of processing, composing, interpretation or analysis",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "Previously called ResourceID or SRN which identifies this OSDU resource object without version.",
+      "title": "Entity ID",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-WellPressureTestRawMeasurement:[\\w\\-\\.\\:\\%]+$",
+      "example": "namespace:work-product-component--WellPressureTestRawMeasurement:0c4b5c5b-32cd-57d2-b6a7-bbff6801fb09"
+    },
+    "kind": {
+      "description": "The schema identification for the OSDU resource object following the pattern {Namespace}:{Source}:{Type}:{VersionMajor}.{VersionMinor}.{VersionPatch}. The versioning scheme follows the semantic versioning, https://semver.org/.",
+      "title": "Entity Kind",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:[\\w\\-\\.]+:[\\w\\-\\.]+:[0-9]+.[0-9]+.[0-9]+$",
+      "example": "osdu:wks:work-product-component--WellPressureTestRawMeasurement:1.1.0"
+    },
+    "version": {
+      "description": "The version number of this OSDU resource; set by the framework.",
+      "title": "Version Number",
+      "type": "integer",
+      "format": "int64",
+      "example": 1562066009929332
+    },
+    "acl": {
+      "description": "The access control tags associated with this entity.",
+      "title": "Access Control List",
+      "$ref": "../abstract/AbstractAccessControlList.1.0.0.json"
+    },
+    "legal": {
+      "description": "The entity's legal tags and compliance status. The actual contents associated with the legal tags is managed by the Compliance Service.",
+      "title": "Legal Tags",
+      "$ref": "../abstract/AbstractLegalTags.1.0.0.json"
+    },
+    "tags": {
+      "title": "Tag Dictionary",
+      "description": "A generic dictionary of string keys mapping to string value. Only strings are permitted as keys and values.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "example": {
+        "NameOfKey": "String value"
+      }
+    },
+    "createTime": {
+      "description": "Timestamp of the time at which initial version of this OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:46:20.163Z"
+    },
+    "createUser": {
+      "title": "Resource Object Creation User Reference",
+      "description": "The user reference, which created the first version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "modifyTime": {
+      "description": "Timestamp of the time at which this version of the OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Version Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:52:24.477Z"
+    },
+    "modifyUser": {
+      "title": "Resource Object Version Creation User Reference",
+      "description": "The user reference, which created this version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "ancestry": {
+      "description": "The links to data, which constitute the inputs, from which this record instance is derived.",
+      "title": "Ancestry",
+      "$ref": "../abstract/AbstractLegalParentList.1.0.0.json"
+    },
+    "meta": {
+      "description": "The Frame of Reference meta data section linking the named properties to self-contained definitions.",
+      "title": "Frame of Reference Meta Data",
+      "type": "array",
+      "items": {
+        "$ref": "../abstract/AbstractMetaItem.1.0.0.json"
+      }
+    },
+    "data": {
+      "allOf": [
+        {
+          "$ref": "../abstract/AbstractCommonResources.1.0.1.json"
+        },
+        {
+          "$ref": "../abstract/AbstractWPCGroupType.1.2.0.json"
+        },
+        {
+          "$ref": "../abstract/AbstractWorkProductComponent.1.1.0.json"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "WellPressureTestAcquisitionJobID": {
+              "type": "string",
+              "title": "Well Pressure Test Acquisition Job ID",
+              "description": "Identifier of the acquisition job master data.",
+              "pattern": "^[\\w\\-\\.]+:master-data\\-\\-WellPressureTestAcquisitionJob:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "WellPressureTestAcquisitionJob"
+                }
+              ]
+            },
+            "WellPressureTestAcquisitionRunIdentifier": {
+              "type": "integer",
+              "title": "Well Pressure Test Acquisition Run Identifier",
+              "description": "Identifier of the Run within the acquisition job"
+            },
+            "AcquisitionStringToolFace": {
+              "type": "number",
+              "title": "Acquisition String ToolFace",
+              "description": "Angle of rotation of the Acquisition String while running this test",
+              "x-osdu-frame-of-reference": "CRS"
+            },
+            "PressureTestStartDate": {
+              "type": "string",
+              "title": "Pressure Test Start Date",
+              "description": "The date (and time) at which the test started",
+              "format": "date-time",
+              "x-osdu-frame-of-reference": "DateTime"
+            },
+            "ClosedInDate": {
+              "type": "string",
+              "title": "Closed In Date",
+              "description": "Date that the production string has been closed in prior to the pressure test.",
+              "format": "date-time",
+              "x-osdu-frame-of-reference": "DateTime"
+            },
+            "Measurements": {
+              "type": "array",
+              "title": "Measurements",
+              "description": "Array of comprehensive description of the well test raw measurement (one entry per gauge's depth)",
+              "x-osdu-indexing": {
+                "type": "nested"
+              },
+              "items": {
+                "type": "object",
+                "title": "Measurement",
+                "description": "Unitary Measurement Serie Description",
+                "properties": {
+                  "WellPressureTestAcquisitionStationIdentifier": {
+                    "type": "integer",
+                    "title": "Well Pressure Test Acquisition Station Identifier",
+                    "description": "Identifier of the Station within the acquisition job captured in the unitary serie"
+                  },
+                  "IsStationary": {
+                    "type": "boolean",
+                    "title": "Is Stationary",
+                    "description": "Boolean describing if the test serie is run at constant depth (as opposed as at different stations)"
+                  },
+                  "PressurePointMeasuredDepth": {
+                    "type": "number",
+                    "title": "Pressure Point Measured Depth",
+                    "description": "Measured Depth of the station for Stationary Tests - mutually exclusive with (PressureTestTop/bottom measuredDepth",
+                    "x-osdu-frame-of-reference": "UOM:length"
+                  },
+                  "PressureTestTopMeasuredDepth": {
+                    "type": "number",
+                    "title": "Pressure Point Top Measured Depth",
+                    "description": "Measured Depth of the top station for Non Stationary Tests - mutually exclusive with (Pressure Point Measured Depth",
+                    "x-osdu-frame-of-reference": "UOM:length"
+                  },
+                  "PressureTestBottomMeasuredDepth": {
+                    "type": "number",
+                    "title": "Pressure Point Bottom Measured Depth",
+                    "description": "Measured Depth of the bottom station for Non Stationary Tests- mutually exclusive with (Pressure Point Measured Depth",
+                    "x-osdu-frame-of-reference": "UOM:length"
+                  },
+                  "TestNumber": {
+                    "type": "integer",
+                    "title": "Test Number",
+                    "description": "Sequential number of the test (or pre-test) which identifies it into the record"
+                  },
+                  "ActiveProbeTypeID": {
+                    "type": "string",
+                    "title": "Pressure Test Probe Type Identifier",
+                    "description": "Describe the active Probe type for this current measurement station",
+                    "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-WellPressureTestProbeType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "reference-data",
+                        "EntityType": "WellPressureTestProbeType"
+                      }
+                    ]
+                  },
+                  "ActiveGaugeID": {
+                    "type": "string",
+                    "title": "Active Gauge Identifier",
+                    "description": "Identifier of the unitary gauge active for this specific curve measurement",
+                    "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-WellPressureTestGaugeType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "reference-data",
+                        "EntityType": "WellPressureTestGaugeType"
+                      }
+                    ]
+                  },
+                  "PreTests": {
+                    "type": "array",
+                    "title": "Pre Tests",
+                    "description": "DEPRECATED - PLEASE USE \"MEASUREMENT PERIOD\" INSTEAD: array of information to identify pretests measurements within the complete measurement recording.",
+                    "x-osdu-indexing": {
+                      "type": "nested"
+                    },
+                    "items": {
+                      "type": "object",
+                      "title": "PreTest",
+                      "description": "Describes the pieces of information required to identity individual pretests within the complete record.",
+                      "properties": {
+                        "PreTestNumber": {
+                          "type": "integer",
+                          "title": "Pre Test Number",
+                          "description": "DEPRECATED: Sequential number identifying the pretest within the record"
+                        },
+                        "PreTestStartTime": {
+                          "type": "number",
+                          "title": "Pre Test Start Time",
+                          "description": "DEPRECATED: Time index where the individual pretest starts into the sequence",
+                          "x-osdu-frame-of-reference": "DateTime"
+                        },
+                        "PreTestEndTime": {
+                          "type": "number",
+                          "title": "Pre Test End Time",
+                          "description": "DEPRECATED: Time index where the individual pretest ends into the sequence",
+                          "x-osdu-frame-of-reference": "DateTime"
+                        }
+                      }
+                    }
+                  },
+                  "IsTubular": {
+                    "type": "boolean",
+                    "title": "Is Tubular",
+                    "description": "Boolean that indicates the measurement is tubular (meaning proceeded inside the installed tubular) - or annular otherwise."
+                  },
+                  "DetailedTestTypeID": {
+                    "type": "string",
+                    "title": "Detailed Test Type ID",
+                    "description": "Identifier of the detailed test run at this station (such as miniDST, miniFrac,\u2026)",
+                    "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-WellPressureDetailedTestCategory:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "reference-data",
+                        "EntityType": "WellPressureDetailedTestCategory"
+                      }
+                    ]
+                  },
+                  "DepthReference": {
+                    "$ref": "../abstract/AbstractFacilityVerticalMeasurement.1.0.0.json",
+                    "title": "Depth Reference",
+                    "description": "The vertical measurement reference for this well logging acquisition activity. This object defines the vertical reference datum for the measured depths."
+                  },
+                  "TestReliabilityID": {
+                    "type": "string",
+                    "title": "Test Reliability ID",
+                    "description": "Identifier of the reference data record indicating the reliability of the tests. This encapsulates the common \"TestSuccess\" notion - but allows for more flexibility",
+                    "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-WellPressureTestValidityStatus:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "reference-data",
+                        "EntityType": "WellPressureTestValidityStatus"
+                      }
+                    ]
+                  },
+                  "MeasurementPeriods": {
+                    "type": "array",
+                    "title": "Measurement Periods",
+                    "description": "array of information to identify interval times within the complete measurement recording, significant in themselves - such as PreTests in Formation Pressure Test - BuildUp/Close-in intervals in Build Ups production pressure tests,\u2026.",
+                    "x-osdu-indexing": {
+                      "type": "nested"
+                    },
+                    "items": {
+                      "type": "object",
+                      "title": "Measurement Period",
+                      "description": "Contains information about the individual, discrete events or periods during a wellbore pressure test",
+                      "properties": {
+                        "PeriodNumber": {
+                          "type": "integer",
+                          "title": "Period Number",
+                          "description": "Sequential number identifying the period within the record"
+                        },
+                        "PeriodStartTime": {
+                          "type": "number",
+                          "title": "Period Start Time",
+                          "description": "Time index where the individual period starts into the sequence",
+                          "format": "date-time",
+                          "x-osdu-frame-of-reference": "DateTime"
+                        },
+                        "PeriodEndTime": {
+                          "type": "number",
+                          "title": "Period End Time",
+                          "description": "Time index where the individual period ends into the sequence",
+                          "format": "date-time",
+                          "x-osdu-frame-of-reference": "DateTime"
+                        },
+                        "MeasurementPeriodKind": {
+                          "type": "string",
+                          "title": "Measurement Period Kind",
+                          "description": "An identifying kind of the MeasurementPeriod e.g. BuildUp, FallOff, PreTest",
+                          "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-WellPressureTestMeasurementPeriodKind:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                          "x-osdu-relationship": [
+                            {
+                              "GroupType": "reference-data",
+                              "EntityType": "WellPressureTestMeasurementPeriodKind"
+                            }
+                          ]
+                        },
+                        "MeasurementPeriodMeasurements": {
+                          "$ref": "../abstract/AbstractColumnBasedTable.1.2.1.json",
+                          "title": "Measurement Period Measurements",
+                          "description": "An embedded ColumnBasedTable containing the Measurements within the period that are required (and only if required) for indexing"
+                        }
+                      }
+                    }
+                  }
+                },
+                "required": [
+                  "ActiveProbeTypeID"
+                ]
+              }
+            },
+            "Curves": {
+              "type": "array",
+              "title": "Curves",
+              "description": "Array of unitary Curve (Pressure against Time) description",
+              "x-osdu-indexing": {
+                "type": "nested"
+              },
+              "items": {
+                "type": "object",
+                "title": "Curve",
+                "description": "Describing the characteristics of the \"Pressure against Time\" recorded curves.",
+                "properties": {
+                  "CurveID": {
+                    "type": "string",
+                    "title": "Curve ID",
+                    "description": "The ID of the Well Log Curve"
+                  },
+                  "NullValue": {
+                    "type": "boolean",
+                    "title": "Null Value",
+                    "description": "Indicates that there is no measurement within the curve"
+                  },
+                  "TimeUnitID": {
+                    "type": "string",
+                    "title": "Time Unit ID",
+                    "description": "Unit of Measure Time Reference",
+                    "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-UnitOfMeasure:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "reference-data",
+                        "EntityType": "UnitOfMeasure"
+                      }
+                    ]
+                  },
+                  "CurveUnitID": {
+                    "type": "string",
+                    "title": "Curve Unit ID",
+                    "description": "Unit of Measure for the Log Curve",
+                    "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-UnitOfMeasure:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "reference-data",
+                        "EntityType": "UnitOfMeasure"
+                      }
+                    ]
+                  },
+                  "Mnemonic": {
+                    "type": "string",
+                    "title": "Mnemonic",
+                    "description": "The Mnemonic of the Log Curve is the value as received either from Raw Providers or from Internal Processing team",
+                    "example": "PRES_HDRB.BAR"
+                  },
+                  "NumberOfColumns": {
+                    "type": "integer",
+                    "title": "Number Of Columns",
+                    "description": "The number of columns present in this Curve for a single reference value. For simple logs this is typically 1; for image logs this holds the number of image traces or property series. Further information about the columns can be obtained via the respective log or curve APIs of the Domain Data Management Service.",
+                    "example": 192
+                  },
+                  "CurveSampleTypeID": {
+                    "type": "string",
+                    "title": "Curve Sample Type ID",
+                    "description": "The value type to be expected as curve sample values.",
+                    "example": "namespace:reference-data--CurveSampleType:float:",
+                    "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-CurveSampleType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "reference-data",
+                        "EntityType": "CurveSampleType"
+                      }
+                    ]
+                  },
+                  "CurveDescription": {
+                    "type": "string",
+                    "title": "Curve Description",
+                    "description": "Mnemonic-level curve description is used during parsing or reading and ingesting LAS or DLIS files, to explain the type of measurement being looked at, specifically for that moment. Curve description is specific to that single (log) mnemonic and for the entire log (acquisition run) interval. In essence, curve description defines the internal factors such as what the \"curve\" or measurement ideally is representing, how is it calculated, what are the assumptions and the \"constants\".",
+                    "example": "CBL Adjustment Factor, Resistivity Inversion Selection, Detector 1 Barite Constant"
+                  }
+                }
+              }
+            }
+          },
+          "required": [
+            "WellPressureTestAcquisitionJobID",
+            "WellPressureTestAcquisitionRunIdentifier"
+          ],
+          "title": "IndividualProperties"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "ExtensionProperties": {
+              "type": "object"
+            }
+          },
+          "title": "ExtensionProperties"
+        }
+      ]
+    }
+  },
+  "required": [
+    "kind",
+    "acl",
+    "legal"
+  ],
+  "additionalProperties": false,
+  "x-osdu-review-status": "Accepted",
+  "x-osdu-virtual-properties": {
+    "data.VirtualProperties.DefaultName": {
+      "type": "string",
+      "priority": [
+        {
+          "path": "data.Name"
+        }
+      ]
+    },
+    "data.VirtualProperties.DefaultLocation": {
+      "type": "object",
+      "priority": [
+        {
+          "path": "data.SpatialLocation"
+        }
+      ]
+    }
+  },
+  "x-osdu-inheriting-from-kind": [
+    {
+      "name": "WorkProductComponent",
+      "kind": "osdu:wks:AbstractWPCGroupType:1.2.0"
+    }
+  ]
+}

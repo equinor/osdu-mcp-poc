@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+*.egg
+dist/
+build/
+.eggs/
+
+# uv / virtualenv
+.venv/
+.python-version
+
+# ChromaDB — generated index, rebuild with osdu-index
+chroma_db/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Secrets / env
+.env
+.env.*
+!.env.example
+
+# GitHub Actions secrets / local overrides
+*.local

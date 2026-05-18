@@ -1,0 +1,3175 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "OSDU Policy Service",
+    "description": "\n    OSDU Policy Service API v1.0.0 Build 0.29.a0.dev0 for M26\n\nPolicy service is used for management and evaluation of dynamic policies in OSDU.\n\n### Dependencies:\nPolicy service has a runtime dependency on the following:\n* Open Policy Agent [OPA](https://openpolicyagent.org/)\n* OSDU entitlements service for API authorization\n\n### API authorization\n* To read or evaluate policies, user calling the policy service, must be a member of _service.policy.user_ or _service.policy.admin_ group.\n* To create, update, or delete the policies, user must be a member of _service.policy.admin_ group.\n* User can be added to these groups by using entitlements service.\n\n### Useful information\n* [Documentation](https://osdu.pages.opengroup.org/platform/security-and-compliance/policy/)\n* [Source](https://community.opengroup.org/osdu/platform/security-and-compliance/policy)\n",
+    "contact": {
+      "name": "OSDU Policy Service",
+      "url": "https://osdu.pages.opengroup.org/platform/security-and-compliance/policy/"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "https://community.opengroup.org/osdu/platform/security-and-compliance/policy/-/raw/trusted-FastAPI/LICENSE"
+    },
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/": {
+      "get": {
+        "tags": [
+          "home"
+        ],
+        "summary": "Home Page",
+        "operationId": "home_page__get",
+        "parameters": [
+          {
+            "name": "correlation-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "Correlation-Id"
+            }
+          },
+          {
+            "name": "user-agent",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "User-Agent"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/policy/v1/policies": {
+      "get": {
+        "tags": [
+          "policies"
+        ],
+        "summary": "Fetch All Policies That Match Partition",
+        "description": "Return all policies from OPA directly that match partition_bundle_root data-partition-id in header (if bundles are enabled).\nThis API gives the list of all the defined policies and it includes the policy definitions in the raw Rego form.\nIt performs authorization check. The user making the call needs to be either service.policy.user or service.policy.admin in the provided data partition.\n\n### Permission required to use this API:\n\n`policy.service.user` or `policy.service.admin`",
+        "operationId": "fetch_all_policies_that_match_partition_api_policy_v1_policies_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "data-partition-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "description": "identifier of the data partition to query",
+              "title": "Data-Partition-Id"
+            },
+            "description": "identifier of the data partition to query"
+          },
+          {
+            "name": "correlation-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "Correlation-Id"
+            }
+          },
+          {
+            "name": "user-agent",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "User-Agent"
+            }
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "description": "identifier the user in the query",
+              "title": "X-User-Id"
+            },
+            "description": "identifier the user in the query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/policy/v1/policies/{policy_id}": {
+      "get": {
+        "tags": [
+          "policies"
+        ],
+        "summary": "Fetch A Policy",
+        "description": "Return a policy directly from OPA with no filtering\n\n### Permission required to use this API:\n\n`policy.service.user` or `policy.service.admin`",
+        "operationId": "fetch_a_policy_api_policy_v1_policies__policy_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "policy_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Policy Id"
+            }
+          },
+          {
+            "name": "correlation-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "Correlation-Id"
+            }
+          },
+          {
+            "name": "user-agent",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "User-Agent"
+            }
+          },
+          {
+            "name": "data-partition-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "description": "identifier of the data partition to query",
+              "title": "Data-Partition-Id"
+            },
+            "description": "identifier of the data partition to query"
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "description": "identifier the user in the query",
+              "title": "X-User-Id"
+            },
+            "description": "identifier the user in the query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/policy/v1/policies/osdu/instance/{policy_id}": {
+      "get": {
+        "tags": [
+          "policies"
+        ],
+        "summary": "Fetch Instance Policy",
+        "description": "Return an instance policy from OPA directly.\n\n### Permission required to use this API:\n\n`policy.service.user` or `policy.service.admin`",
+        "operationId": "fetch_instance_policy_api_policy_v1_policies_osdu_instance__policy_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "policy_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Policy Id"
+            }
+          },
+          {
+            "name": "correlation-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "Correlation-Id"
+            }
+          },
+          {
+            "name": "user-agent",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "User-Agent"
+            }
+          },
+          {
+            "name": "data-partition-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "description": "identifier of the data partition to query",
+              "title": "Data-Partition-Id"
+            },
+            "description": "identifier of the data partition to query"
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "description": "identifier the user in the query",
+              "title": "X-User-Id"
+            },
+            "description": "identifier the user in the query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/policy/v1/policies/osdu/partition/{data_partition}/{policy_id}": {
+      "get": {
+        "tags": [
+          "policies"
+        ],
+        "summary": "Fetch Partition Policy Directly From Opa",
+        "description": "Return an policy for a partition id from OPA.\nRequires data-partition-id in header.\n\n### Permission required to use this API:\n\n`policy.service.user` or `policy.service.admin`",
+        "operationId": "fetch_partition_policy_directly_from_opa_api_policy_v1_policies_osdu_partition__data_partition___policy_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "policy_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Policy Id"
+            }
+          },
+          {
+            "name": "data_partition",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Data Partition"
+            }
+          },
+          {
+            "name": "correlation-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "Correlation-Id"
+            }
+          },
+          {
+            "name": "user-agent",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "User-Agent"
+            }
+          },
+          {
+            "name": "data-partition-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "description": "identifier of the data partition to query",
+              "title": "Data-Partition-Id"
+            },
+            "description": "identifier of the data partition to query"
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "description": "identifier the user in the query",
+              "title": "X-User-Id"
+            },
+            "description": "identifier the user in the query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "policies"
+        ],
+        "summary": "Delete Partition Policy",
+        "description": "## Delete a partition policy\n* This API requires admin privileges (service.policy.admin) in the provided data partition.\n* Partition ID in header and in path must match\n* Policy_id must end with a \".rego\"\n\n### Possible http return status codes:\n* 200 - no error\n* 202 - accepted\n* 400 - bad request\n    * for example, if data_partition in path doesn't match data-partition-id in header\n* 401 - unauthorized\n* 403 - forbidden\n    * for example, if calling with only user privs\n* 404 - not found\n* 422 - validation Error\n    * for example, if policy_id doesn't end with \".rego\"\n* 500 - server error\n* 501 - not implemented\n    * for example, if bundles are not supported.\n* 503 - service not available\n    * for example, if issues with bundles server\n\nErrors will include some detail in returning json.\n\nReturn json:\n```\n    {\n        \"policy_id\": string,\n        \"data_partition\": string,\n        \"status\": bool,\n        \"message\": string,\n        \"result\": string json from OPA\n    }\n```\n\n### Permission required to use this API:\n\n`policy.service.admin`",
+        "operationId": "delete_partition_policy_api_policy_v1_policies_osdu_partition__data_partition___policy_id__delete",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "policy_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Policy Id"
+            }
+          },
+          {
+            "name": "data_partition",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Data Partition"
+            }
+          },
+          {
+            "name": "correlation-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "Correlation-Id"
+            }
+          },
+          {
+            "name": "user-agent",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "User-Agent"
+            }
+          },
+          {
+            "name": "data-partition-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "description": "identifier of the data partition to query",
+              "title": "Data-Partition-Id"
+            },
+            "description": "identifier of the data partition to query"
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "description": "identifier the user in the query",
+              "title": "X-User-Id"
+            },
+            "description": "identifier the user in the query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Accepted"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "501": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Not Implemented"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "policies"
+        ],
+        "summary": "Create Or Update Partition Policy",
+        "description": "## Create or update a policy with given policy_id for a given data partition.\nThis API will create/update policy definition with provided Rego expression included in file and assign it with provided id.\n\n* This API requires admin privileges (service.policy.admin) in the provided data partition.\n* Partition ID in header and in path must match\n* Policy_id must end with a \".rego\"\n\n### Possible http return status codes:\n* 200 - no error\n* 202 - accepted\n* 400 - bad request\n    * for example, if data_partition in path doesn't match data-partition-id in header\n* 401 - unauthorized\n* 403 - forbidden\n    * for example, if calling with only user privs\n* 422 - validation Error\n    * for example, if policy_id doesn't end with \".rego\"\n    * for example, if package declaration issue\n* 500 - server error\n* 501 - not implemented\n    * for example, if bundles are not supported.\n* 503 - service not available\n    * for example, if issues with bundles server\n\nErrors will include some detail in returning json.\n\nReturn json:\n```\n    {\n        \"policy_id\": string,\n        \"data_partition\": string,\n        \"opa_payload\": string,\n        \"status_code\": http status code\n        \"status\": bool\n        \"message\": string\n    }\n```\n\n### Permission required to use this API:\n\n`policy.service.admin`",
+        "operationId": "create_or_update_partition_policy_api_policy_v1_policies_osdu_partition__data_partition___policy_id__put",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "policy_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Policy Id"
+            }
+          },
+          {
+            "name": "data_partition",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Data Partition"
+            }
+          },
+          {
+            "name": "correlation-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "Correlation-Id"
+            }
+          },
+          {
+            "name": "user-agent",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "User-Agent"
+            }
+          },
+          {
+            "name": "data-partition-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "description": "identifier of the data partition to query",
+              "title": "Data-Partition-Id"
+            },
+            "description": "identifier of the data partition to query"
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "description": "identifier the user in the query",
+              "title": "X-User-Id"
+            },
+            "description": "identifier the user in the query"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_create_or_update_partition_policy_api_policy_v1_policies_osdu_partition__data_partition___policy_id__put"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "501": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Not Implemented"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/policy/v1/evaluations/query": {
+      "post": {
+        "tags": [
+          "evaluate"
+        ],
+        "summary": "Evaluate Policy",
+        "description": "## Evaulate Policies\nThis API is to help you evaluate policies.\n\nIf include_auth is True, then in your file data token, xuserid and data partition id will be ignored in the file and information from the headers\nof the request will be used for this information.\n\n### Example:\nFor example file data for policy dataauthz.rego:\nWhere XXXX is the data partition and YYYY is a legal tag\n```json\n{\n    \"input\": {\n        \"operation\": \"update\",\n        \"records\": [\n            {\n                \"id\":\"XXXX:test:1.4.1654807204111\",\n                \"kind\":\"XXXX:bulkupdate:test:1.1.1654807204111\",\n                \"legal\":{\n                    \"legaltags\":[\n                        \"YYYY\"\n                    ],\n                    \"otherRelevantDataCountries\":[\"US\"],\n                    \"status\":\"compliant\"\n                },\n                \"acls\":{\n                    \"viewers\":[\"data.default.viewers@XXXX.group\"],\n                    \"owners\":[\"data.default.owners@XXXX.group\"]\n                }\n            }\n        ]\n    }\n}\n```\n\n### Permission required to use this API:\n\n`policy.service.user` or `policy.service.admin`\n\nSetting cache to disable is intended for testing policies, in particular policies that do caching in OPA.",
+        "operationId": "evaluate_policy_api_policy_v1_evaluations_query_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "policy_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Policy Id"
+            }
+          },
+          {
+            "name": "include_auth",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "description": "Update posted data to include auth (token, xuserid and data partition id) from headers",
+              "default": false,
+              "title": "Include Auth"
+            },
+            "description": "Update posted data to include auth (token, xuserid and data partition id) from headers"
+          },
+          {
+            "name": "cache",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "description": "Use cache (if enabled) on policy service.",
+              "default": true,
+              "title": "Cache"
+            },
+            "description": "Use cache (if enabled) on policy service."
+          },
+          {
+            "name": "correlation-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "Correlation-Id"
+            }
+          },
+          {
+            "name": "user-agent",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "User-Agent"
+            }
+          },
+          {
+            "name": "data-partition-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "description": "identifier of the data partition to query",
+              "title": "Data-Partition-Id"
+            },
+            "description": "identifier of the data partition to query"
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "description": "identifier the user in the query",
+              "title": "X-User-Id"
+            },
+            "description": "identifier the user in the query"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_evaluate_policy_api_policy_v1_evaluations_query_post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/policy/v1/translate": {
+      "post": {
+        "tags": [
+          "translate",
+          "translate"
+        ],
+        "summary": "Translate Policy Api",
+        "description": "## Translate policy\nGiven an OPA query that should be partially evaluated, return an ElasticSearch request body\n\nIn the body of the request the JSON schema should match \"TranslateItem\".\nPlease note: xuserid, token and datapartitionid are now actively inserted into input request\n\n### Permission required to use this API:\n\n`policy.service.user` or `policy.service.admin`",
+        "operationId": "translate_policy_api_api_policy_v1_translate_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "correlation-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "Correlation-Id"
+            }
+          },
+          {
+            "name": "user-agent",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "User-Agent"
+            }
+          },
+          {
+            "name": "data-partition-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "description": "identifier of the data partition to query",
+              "title": "Data-Partition-Id"
+            },
+            "description": "identifier of the data partition to query"
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "description": "identifier the user in the query",
+              "title": "X-User-Id"
+            },
+            "description": "identifier the user in the query"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TranslateItem"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "406": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Not Acceptable"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/policy/v1/info": {
+      "get": {
+        "tags": [
+          "diagnostic"
+        ],
+        "summary": "Return Version Info",
+        "description": "Return Service version information.\nExpected returned JSON is in \"InfoOut\" schema, which include Services and ServiceDetail schemas.\n\n### Permission required to use this API:\n\n    None",
+        "operationId": "return_version_info_api_policy_v1_info_get",
+        "parameters": [
+          {
+            "name": "correlation-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "Correlation-Id"
+            }
+          },
+          {
+            "name": "user-agent",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "User-Agent"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InfoOut"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/policy/v1/compile": {
+      "post": {
+        "tags": [
+          "utility"
+        ],
+        "summary": "Compile Partially Evaluate A Query",
+        "description": "# Compile - Partially evaluate a query.\nThe Compile API allows you to partially evaluate Rego queries and obtain a simplified version of the policy.\n\n### Metrics\nWhen query parameter metrics=true, the API response will include detailed performance metrics from OPA.\nOPA currently supports the following query performance metrics:\n\n    timer_rego_input_parse_ns: time taken (in nanoseconds) to parse the input\n    timer_rego_query_parse_ns: time taken (in nanonseconds) to parse the query.\n    timer_rego_query_compile_ns: time taken (in nanonseconds) to compile the query.\n    timer_rego_query_eval_ns: time taken (in nanonseconds) to evaluate the query.\n    timer_rego_module_parse_ns: time taken (in nanoseconds) to parse the input policy module.\n    timer_rego_module_compile_ns: time taken (in nanoseconds) to compile the loaded policy modules.\n    timer_server_handler_ns: time take (in nanoseconds) to handle the API request.\n\n### Instrumentation\nTo enable query instrumentation, specify metrics=true and instrument=true query parameters when executing the API call.\nQuery instrumentation can help diagnose performance problems, however, it can add significant overhead to query evaluation.\nWe recommend leaving query instrumentation off unless you are debugging a performance problem.\n\n### Permission required to use this API:\n\n    policy.service.admin",
+        "operationId": "compile_partially_evaluate_a_query_api_policy_v1_compile_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "metrics",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "description": "Include report detailed performance metrics on requested on individual API call. Returned inline with the API response",
+              "default": false,
+              "title": "Metrics"
+            },
+            "description": "Include report detailed performance metrics on requested on individual API call. Returned inline with the API response"
+          },
+          {
+            "name": "instrument",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "description": "Include instrumentation data wth detailed performance metrics on requested on individual API call. Returned inline with the API response",
+              "default": false,
+              "title": "Instrument"
+            },
+            "description": "Include instrumentation data wth detailed performance metrics on requested on individual API call. Returned inline with the API response"
+          },
+          {
+            "name": "correlation-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "Correlation-Id"
+            }
+          },
+          {
+            "name": "user-agent",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "User-Agent"
+            }
+          },
+          {
+            "name": "data-partition-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "description": "identifier of the data partition to query",
+              "title": "Data-Partition-Id"
+            },
+            "description": "identifier of the data partition to query"
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "description": "identifier the user in the query",
+              "title": "X-User-Id"
+            },
+            "description": "identifier the user in the query"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_compile_partially_evaluate_a_query_api_policy_v1_compile_post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          }
+        }
+      }
+    },
+    "/api/policy/v1/tenant": {
+      "get": {
+        "tags": [
+          "utility"
+        ],
+        "summary": "Get Tenant",
+        "description": "Experimental tenant API for retrieving OPA bundle config for a data partition.\nThese details are read from OPA configmap.\n\n### Permission required to use this API:\n\n`policy.service.admin`",
+        "operationId": "get_tenant_api_policy_v1_tenant_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "all_data",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "title": "All Data"
+            }
+          },
+          {
+            "name": "correlation-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "Correlation-Id"
+            }
+          },
+          {
+            "name": "user-agent",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "User-Agent"
+            }
+          },
+          {
+            "name": "data-partition-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "description": "identifier of the data partition to query",
+              "title": "Data-Partition-Id"
+            },
+            "description": "identifier of the data partition to query"
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "description": "identifier the user in the query",
+              "title": "X-User-Id"
+            },
+            "description": "identifier the user in the query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "405": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Method Not Allowed"
+          },
+          "501": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Not Implemented"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "utility"
+        ],
+        "summary": "Update Tenant",
+        "description": "Experimental tenant API for updating OPA bundle config for a data partition.\n\nAdding new partitions is not supported in M20 and later.\n\nServices must be one of the supported (s3, gcs, gcp, blob, ...). See documentation for full list.\n- Min polling 1 second\n- Max polling 3600(1 hour)\n\n### Permission required to use this API on this system (configurable):\n\nservice.policy.admin",
+        "operationId": "update_tenant_api_policy_v1_tenant_put",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "service",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Service"
+            }
+          },
+          {
+            "name": "polling_min_delay_seconds",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 6,
+              "title": "Polling Min Delay Seconds"
+            }
+          },
+          {
+            "name": "polling_max_delay_seconds",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 12,
+              "title": "Polling Max Delay Seconds"
+            }
+          },
+          {
+            "name": "correlation-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "Correlation-Id"
+            }
+          },
+          {
+            "name": "user-agent",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "User-Agent"
+            }
+          },
+          {
+            "name": "data-partition-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "description": "identifier of the data partition to query",
+              "title": "Data-Partition-Id"
+            },
+            "description": "identifier of the data partition to query"
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "description": "identifier the user in the query",
+              "title": "X-User-Id"
+            },
+            "description": "identifier the user in the query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "405": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Method Not Allowed"
+          },
+          "501": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Not Implemented"
+          },
+          "502": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Bad Gateway"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "utility"
+        ],
+        "summary": "Delete Tenant",
+        "description": "Experimental tenant API for deleting tenant OPA bundle config for a data partition.\n\n- Deleting partitions is not supported in M21.\n- X-Error response header is also included.\n\n### Permission required to use this API on this system (configurable):\n\nservice.policy.admin",
+        "operationId": "delete_tenant_api_policy_v1_tenant_delete",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "correlation-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "Correlation-Id"
+            }
+          },
+          {
+            "name": "user-agent",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "User-Agent"
+            }
+          },
+          {
+            "name": "data-partition-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "description": "identifier of the data partition to query",
+              "title": "Data-Partition-Id"
+            },
+            "description": "identifier of the data partition to query"
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "description": "identifier the user in the query",
+              "title": "X-User-Id"
+            },
+            "description": "identifier the user in the query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "405": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Method Not Allowed"
+          },
+          "501": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Not Implemented"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/policy/v1/health": {
+      "get": {
+        "tags": [
+          "diagnostic"
+        ],
+        "summary": "Health",
+        "description": "## Health check endpoint, which does not depend on OPA.\nThis API does not require any headers or authentication.\n\nThe /health endpoint responds with a 200 HTTP status code when the service pod can receive requests.\nThe endpoint indicates that the service pod is healthy and reachable.\nIt does not indicate that the service is ready to serve requests.\n\n### Permission required to use this API:\n\n    None",
+        "operationId": "health_api_policy_v1_health_get",
+        "parameters": [
+          {
+            "name": "correlation-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "Correlation-Id"
+            }
+          },
+          {
+            "name": "user-agent",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "User-Agent"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/policy/v1/ready": {
+      "get": {
+        "tags": [
+          "diagnostic"
+        ],
+        "summary": "Ready",
+        "description": "## Health check endpoint, which depends on OPA being available and healthy.\nThis API does not require any headers or authentication.\n\n### Possible http return status codes:\n* 200 - no error\n* 501 - not implemented\n* 503 - service not available\n\nThe /ready endpoint responds with a 200 HTTP status code if the overall application works.\nThe endpoint indicates that the service is ready to serve requests.\n\n### Permission required to use this API:\n\n    None",
+        "operationId": "ready_api_policy_v1_ready_get",
+        "parameters": [
+          {
+            "name": "correlation-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "Correlation-Id"
+            }
+          },
+          {
+            "name": "user-agent",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "User-Agent"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "501": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Not Implemented"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/policy/v1/validate/{policy_id}": {
+      "put": {
+        "tags": [
+          "diagnostic"
+        ],
+        "summary": "Validate Policy",
+        "description": "# Validate Policy\nThis API checks to make sure the rego is valid and the naming of the policy package is acceptable.\n\nIf template parameter is True, then the incoming file will automatically replace the following during validation:\n- data_partition\n- DATA_PARTITION\n- name with policy_id without \".rego\" suffix",
+        "operationId": "validate_policy_api_policy_v1_validate__policy_id__put",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "policy_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Policy Id"
+            }
+          },
+          {
+            "name": "template",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "title": "Template"
+            }
+          },
+          {
+            "name": "correlation-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "Correlation-Id"
+            }
+          },
+          {
+            "name": "user-agent",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "User-Agent"
+            }
+          },
+          {
+            "name": "data-partition-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "description": "identifier of the data partition to query",
+              "title": "Data-Partition-Id"
+            },
+            "description": "identifier of the data partition to query"
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "description": "identifier the user in the query",
+              "title": "X-User-Id"
+            },
+            "description": "identifier the user in the query"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_validate_policy_api_policy_v1_validate__policy_id__put"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          }
+        }
+      }
+    },
+    "/api/policy/v1/backup": {
+      "get": {
+        "tags": [
+          "utility"
+        ],
+        "summary": "Backup",
+        "description": "## Experimental Backup API.\n\nAllows downloading the bundle for a data partition.\n\n- Bundle filename will be in the form bundle-`data-partition-id`-`date`.tar.gz.\n- Date will be in YYYY-MM-DD format.\n\n### Permission required to use this API:\n\n    service.policy.admin",
+        "operationId": "backup_api_policy_v1_backup_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "correlation-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "Correlation-Id"
+            }
+          },
+          {
+            "name": "user-agent",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "User-Agent"
+            }
+          },
+          {
+            "name": "data-partition-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "description": "identifier of the data partition to query",
+              "title": "Data-Partition-Id"
+            },
+            "description": "identifier of the data partition to query"
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "description": "identifier the user in the query",
+              "title": "X-User-Id"
+            },
+            "description": "identifier the user in the query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "424": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Failed Dependency"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/policy/v1/bootstrap": {
+      "post": {
+        "tags": [
+          "utility"
+        ],
+        "summary": "Bootstrap",
+        "description": "## Experimental bootstrap API for creating and updating bundle to default.\n\nThis should be used when adding a partition to OSDU or when wanting to reset to a known good state.\n    \n### Without force:\n\n- This method is only allowed if the partition doesn't already have a bundle.\n- If the bundle already exists it will return 405 METHOD_NOT_ALLOWED.\n- Policy Service can be configured to ignore force.\n\n### May return:\n\n- `HTTP_202_ACCEPTED` - updated\n- `HTTP_201_CREATED` - created\n- `HTTP_405_METHOD_NOT_ALLOWED` - not allowed\n- `HTTP_424_FAILED_DEPENDENCY` - bundle server caused failure\n\n### Permission required to use this API on this system (configurable):\n\n    service.policy.admin",
+        "operationId": "bootstrap_api_policy_v1_bootstrap_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "force",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "title": "Force"
+            }
+          },
+          {
+            "name": "correlation-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "Correlation-Id"
+            }
+          },
+          {
+            "name": "user-agent",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "User-Agent"
+            }
+          },
+          {
+            "name": "data-partition-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "description": "identifier of the data partition to query",
+              "title": "Data-Partition-Id"
+            },
+            "description": "identifier of the data partition to query"
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "description": "identifier the user in the query",
+              "title": "X-User-Id"
+            },
+            "description": "identifier the user in the query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Created"
+          },
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Accepted"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "405": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Method Not Allowed"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/policy/v1/config": {
+      "get": {
+        "tags": [
+          "diagnostic"
+        ],
+        "summary": "Show Policy Config Details",
+        "description": "Return detail configuration details.\nDiagnostic API\n\n### Permission required to use this API:\n\n    policy.service.admin",
+        "operationId": "show_policy_config_details_api_policy_v1_config_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "correlation-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "Correlation-Id"
+            }
+          },
+          {
+            "name": "user-agent",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "User-Agent"
+            }
+          },
+          {
+            "name": "data-partition-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "description": "identifier of the data partition to query",
+              "title": "Data-Partition-Id"
+            },
+            "description": "identifier of the data partition to query"
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "description": "identifier the user in the query",
+              "title": "X-User-Id"
+            },
+            "description": "identifier the user in the query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/policy/v1/user/{user_id}": {
+      "put": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Set User Details",
+        "description": "## Set details for user\nThis API is to set details (like country) for a user\n```\n\n### Permission required to use this API:\n\n`policy.service.useradmin`",
+        "operationId": "set_user_details_api_policy_v1_user__user_id__put",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "User Id"
+            }
+          },
+          {
+            "name": "correlation-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "Correlation-Id"
+            }
+          },
+          {
+            "name": "user-agent",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "User-Agent"
+            }
+          },
+          {
+            "name": "data-partition-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "description": "identifier of the data partition to query",
+              "title": "Data-Partition-Id"
+            },
+            "description": "identifier of the data partition to query"
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "description": "identifier the user in the query",
+              "title": "X-User-Id"
+            },
+            "description": "identifier the user in the query"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserDetailRequestModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Get User Details Of Another User",
+        "description": "## Get user details\nThis API is to retrieve user details on another user\n```\n\n### Permission required to use this API:\n\n`policy.service.useradmin`",
+        "operationId": "get_user_details_of_another_user_api_policy_v1_user__user_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "User Id"
+            }
+          },
+          {
+            "name": "correlation-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "Correlation-Id"
+            }
+          },
+          {
+            "name": "user-agent",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "User-Agent"
+            }
+          },
+          {
+            "name": "data-partition-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "description": "identifier of the data partition to query",
+              "title": "Data-Partition-Id"
+            },
+            "description": "identifier of the data partition to query"
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "description": "identifier the user in the query",
+              "title": "X-User-Id"
+            },
+            "description": "identifier the user in the query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDetailRequestModel"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Delete User",
+        "description": "## delete user details\nThis API is to delete user details\n```\n\n### Permission required to use this API:\n\n`policy.service.useradmin`",
+        "operationId": "delete_user_api_policy_v1_user__user_id__delete",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "User Id"
+            }
+          },
+          {
+            "name": "correlation-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "Correlation-Id"
+            }
+          },
+          {
+            "name": "user-agent",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "User-Agent"
+            }
+          },
+          {
+            "name": "data-partition-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "description": "identifier of the data partition to query",
+              "title": "Data-Partition-Id"
+            },
+            "description": "identifier of the data partition to query"
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "description": "identifier the user in the query",
+              "title": "X-User-Id"
+            },
+            "description": "identifier the user in the query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/policy/v1/user": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Get My User Details",
+        "description": "## Get user details\nThis API is to retrieve your own user details\n```\n\n### Permission required to use this API:\n\n`policy.service.user` or `policy.service.admin` or `policy.service.useradmin`",
+        "operationId": "get_my_user_details_api_policy_v1_user_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "correlation-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "Correlation-Id"
+            }
+          },
+          {
+            "name": "user-agent",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "User-Agent"
+            }
+          },
+          {
+            "name": "data-partition-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "description": "identifier of the data partition to query",
+              "title": "Data-Partition-Id"
+            },
+            "description": "identifier of the data partition to query"
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "description": "identifier the user in the query",
+              "title": "X-User-Id"
+            },
+            "description": "identifier the user in the query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDetailsModel"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detail"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Body_compile_partially_evaluate_a_query_api_policy_v1_compile_post": {
+        "properties": {
+          "file": {
+            "type": "string",
+            "format": "binary",
+            "title": "File"
+          }
+        },
+        "type": "object",
+        "required": [
+          "file"
+        ],
+        "title": "Body_compile_partially_evaluate_a_query_api_policy_v1_compile_post"
+      },
+      "Body_create_or_update_partition_policy_api_policy_v1_policies_osdu_partition__data_partition___policy_id__put": {
+        "properties": {
+          "file": {
+            "type": "string",
+            "format": "binary",
+            "title": "File"
+          }
+        },
+        "type": "object",
+        "required": [
+          "file"
+        ],
+        "title": "Body_create_or_update_partition_policy_api_policy_v1_policies_osdu_partition__data_partition___policy_id__put"
+      },
+      "Body_evaluate_policy_api_policy_v1_evaluations_query_post": {
+        "properties": {
+          "file": {
+            "type": "string",
+            "format": "binary",
+            "title": "File"
+          }
+        },
+        "type": "object",
+        "required": [
+          "file"
+        ],
+        "title": "Body_evaluate_policy_api_policy_v1_evaluations_query_post"
+      },
+      "Body_validate_policy_api_policy_v1_validate__policy_id__put": {
+        "properties": {
+          "file": {
+            "type": "string",
+            "format": "binary",
+            "title": "File"
+          }
+        },
+        "type": "object",
+        "required": [
+          "file"
+        ],
+        "title": "Body_validate_policy_api_policy_v1_validate__policy_id__put"
+      },
+      "Detail": {
+        "properties": {
+          "detail": {
+            "type": "string",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "required": [
+          "detail"
+        ],
+        "title": "Detail"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "InfoOut": {
+        "properties": {
+          "version": {
+            "type": "string",
+            "title": "Version"
+          },
+          "artifactId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Artifactid"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name",
+            "default": "policy"
+          },
+          "groupId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Groupid"
+          },
+          "buildTime": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Buildtime"
+          },
+          "branch": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Branch"
+          },
+          "commitId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Commitid"
+          },
+          "commitMessage": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Commitmessage"
+          },
+          "connectedOuterServices": {
+            "$ref": "#/components/schemas/Services"
+          }
+        },
+        "type": "object",
+        "required": [
+          "version",
+          "connectedOuterServices"
+        ],
+        "title": "InfoOut"
+      },
+      "Input": {
+        "properties": {
+          "operation": {
+            "type": "string",
+            "enum": [
+              "view",
+              "create",
+              "update",
+              "delete",
+              "purge"
+            ],
+            "title": "Operation"
+          },
+          "groups": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Groups",
+            "default": [
+              ""
+            ]
+          },
+          "xuserid": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Xuserid",
+            "default": ""
+          },
+          "token": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Token",
+            "default": ""
+          },
+          "datapartitionid": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Datapartitionid",
+            "default": ""
+          }
+        },
+        "type": "object",
+        "required": [
+          "operation"
+        ],
+        "title": "Input"
+      },
+      "ServiceDetail": {
+        "properties": {
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version"
+          }
+        },
+        "type": "object",
+        "title": "ServiceDetail"
+      },
+      "Services": {
+        "properties": {
+          "opa": {
+            "$ref": "#/components/schemas/ServiceDetail"
+          }
+        },
+        "type": "object",
+        "required": [
+          "opa"
+        ],
+        "title": "Services"
+      },
+      "TranslateItem": {
+        "properties": {
+          "query": {
+            "type": "string",
+            "title": "Query"
+          },
+          "input": {
+            "$ref": "#/components/schemas/Input"
+          },
+          "unknowns": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Unknowns"
+          }
+        },
+        "type": "object",
+        "required": [
+          "query",
+          "input",
+          "unknowns"
+        ],
+        "title": "TranslateItem"
+      },
+      "UserDetailRequestModel": {
+        "properties": {
+          "user_detail": {
+            "$ref": "#/components/schemas/UserDetailsModel"
+          },
+          "ttl": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ttl"
+          }
+        },
+        "type": "object",
+        "required": [
+          "user_detail"
+        ],
+        "title": "UserDetailRequestModel"
+      },
+      "UserDetailsModel": {
+        "properties": {
+          "country_code": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^\\w{2}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Country Code"
+          }
+        },
+        "additionalProperties": true,
+        "type": "object",
+        "title": "UserDetailsModel"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    },
+    "securitySchemes": {
+      "HTTPBearer": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "policies",
+      "description": "Policy Maintenance"
+    },
+    {
+      "name": "evaluate",
+      "description": "Evaluate APIs"
+    },
+    {
+      "name": "translate",
+      "description": "Translation APIs",
+      "externalDocs": {
+        "description": "Translate API documentation",
+        "url": "https://osdu.pages.opengroup.org/platform/security-and-compliance/policy/translate/"
+      }
+    },
+    {
+      "name": "diagnostic",
+      "description": "Version information and other diagnostic APIs"
+    },
+    {
+      "name": "utility",
+      "description": "Service APIs"
+    },
+    {
+      "name": "login",
+      "description": "Login for Admin UI"
+    },
+    {
+      "name": "home",
+      "description": "Home Page"
+    }
+  ]
+}
