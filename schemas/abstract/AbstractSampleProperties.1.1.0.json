@@ -1,0 +1,65 @@
+{
+  "x-osdu-license": "Copyright 2024, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "x-osdu-review-status": "Accepted",
+  "$id": "https://schema.osdu.opengroup.org/json/abstract/AbstractSampleProperties.1.1.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:AbstractSampleProperties:1.1.0",
+  "title": "AbstractSampleProperties",
+  "description": "A nested object definition for ordinary sample properties.",
+  "type": "object",
+  "properties": {
+    "SampleWeight": {
+      "type": "number",
+      "title": "Sample Weight",
+      "description": "This captures the weight or mass of the sample.",
+      "x-osdu-frame-of-reference": "UOM:mass",
+      "x-osdu-attribution-authority": "OpenGroup",
+      "x-osdu-attribution-publication": "OSDU",
+      "x-osdu-attribution-revision": "Evergreen"
+    },
+    "SampleDiameter": {
+      "type": "number",
+      "title": "Sample Diameter",
+      "description": "This captures the diameter of the sample. This is mostly applicable in core samples.",
+      "x-osdu-frame-of-reference": "UOM:length",
+      "x-osdu-attribution-authority": "OpenGroup",
+      "x-osdu-attribution-publication": "OSDU",
+      "x-osdu-attribution-revision": "Evergreen"
+    },
+    "SampleVolume": {
+      "type": "number",
+      "title": "Sample Volume",
+      "description": "This refers to the volume of the sample acquired. It is applicable to both rock and fluid samples.",
+      "x-osdu-frame-of-reference": "UOM:volume",
+      "x-osdu-attribution-authority": "OpenGroup",
+      "x-osdu-attribution-publication": "OSDU",
+      "x-osdu-attribution-revision": "Evergreen"
+    },
+    "SampleLength": {
+      "type": "number",
+      "title": "Sample Length",
+      "description": "This refers to the length of the sample. Applicable to rock / core samples.",
+      "x-osdu-frame-of-reference": "UOM:length",
+      "x-osdu-attribution-authority": "OpenGroup",
+      "x-osdu-attribution-publication": "OSDU",
+      "x-osdu-attribution-revision": "Evergreen"
+    },
+    "SampleOrientationTypeID": {
+      "type": "string",
+      "title": "Sample Orientation Type ID",
+      "description": "The kind of orientation of the rock sample with respect to the bedding or drilling direction. Typical values are Horizontal, Vertical, Axial.",
+      "example": "namespace:reference-data--SampleOrientationType:Axial:",
+      "x-osdu-attribution-authority": "OpenGroup",
+      "x-osdu-attribution-publication": "OSDU",
+      "x-osdu-attribution-revision": "Evergreen",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-SampleOrientationType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "SampleOrientationType"
+        }
+      ]
+    }
+  },
+  "x-osdu-inheriting-from-kind": []
+}

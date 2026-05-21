@@ -1,0 +1,294 @@
+{
+  "x-osdu-license": "Copyright 2022, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "x-osdu-review-status": "Accepted",
+  "$id": "https://schema.osdu.opengroup.org/json/abstract/AbstractProject.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:AbstractProject:1.0.0",
+  "title": "AbstractProject",
+  "description": "A Project is a business activity that consumes financial and human resources and produces (digital) work products.",
+  "type": "object",
+  "properties": {
+    "ProjectID": {
+      "type": "string",
+      "title": "External Project Identifier",
+      "description": "Native identifier from a Master Data Management System or other trusted source external to OSDU - stored here in order to allow for multi-system connection and synchronization. If used, the \"Source\" property should identify that source system."
+    },
+    "ProjectName": {
+      "type": "string",
+      "description": "The common or preferred name of a Project.",
+      "x-osdu-natural-key": 0
+    },
+    "ProjectNames": {
+      "type": "array",
+      "description": "DEPRECATED: please use data.NameAliases. The history of Project names, codes, and other business identifiers.",
+      "items": {
+        "$ref": "../abstract/AbstractAliasNames.1.0.0.json"
+      }
+    },
+    "Purpose": {
+      "type": "string",
+      "description": "Description of the objectives of a Project."
+    },
+    "ProjectBeginDate": {
+      "type": "string",
+      "description": "The date and time when the Project was initiated.",
+      "format": "date-time",
+      "x-osdu-frame-of-reference": "DateTime"
+    },
+    "ProjectEndDate": {
+      "type": "string",
+      "description": "The date and time when the Project was completed.",
+      "format": "date-time",
+      "x-osdu-frame-of-reference": "DateTime"
+    },
+    "FundsAuthorizations": {
+      "type": "array",
+      "description": "The history of expenditure approvals.",
+      "x-osdu-indexing": {
+        "type": "nested"
+      },
+      "items": {
+        "type": "object",
+        "title": "FundsAuthorizations",
+        "description": "The history of expenditure approvals.",
+        "properties": {
+          "AuthorizationID": {
+            "type": "string",
+            "description": "Internal Company control number which identifies the allocation of funds to the Project."
+          },
+          "EffectiveDateTime": {
+            "type": "string",
+            "description": "The date and time when the funds were approved.",
+            "format": "date-time",
+            "x-osdu-frame-of-reference": "DateTime"
+          },
+          "FundsAmount": {
+            "type": "number",
+            "description": "The level of expenditure approved."
+          },
+          "CurrencyID": {
+            "type": "string",
+            "description": "Type of currency for the authorized expenditure.",
+            "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-Currency:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+            "x-osdu-relationship": [
+              {
+                "GroupType": "reference-data",
+                "EntityType": "Currency"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "ContractIDs": {
+      "type": "array",
+      "description": "References to applicable agreements in external contract database system of record.",
+      "items": {
+        "type": "string",
+        "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Agreement:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+        "x-osdu-relationship": [
+          {
+            "GroupType": "master-data",
+            "EntityType": "Agreement"
+          }
+        ]
+      }
+    },
+    "Operator": {
+      "type": "string",
+      "description": "The organisation which controlled the conduct of the project.",
+      "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Organisation:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "master-data",
+          "EntityType": "Organisation"
+        }
+      ]
+    },
+    "Contractors": {
+      "type": "array",
+      "description": "References to organisations which supplied services to the Project.",
+      "x-osdu-indexing": {
+        "type": "nested"
+      },
+      "items": {
+        "type": "object",
+        "title": "Contractors",
+        "description": "References to organisations which supplied services to the Project.",
+        "properties": {
+          "ContractorOrganisationID": {
+            "type": "string",
+            "description": "Reference to a company that provided services.",
+            "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Organisation:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+            "x-osdu-relationship": [
+              {
+                "GroupType": "master-data",
+                "EntityType": "Organisation"
+              }
+            ]
+          },
+          "ContractorCrew": {
+            "type": "string",
+            "description": "Name of the team, unit, crew, party, or other subdivision of the Contractor that provided services."
+          },
+          "ContractorTypeID": {
+            "type": "string",
+            "description": "The identifier of a reference value for the role of a contractor providing services, such as Recording, Line Clearing, Positioning, Data Processing.",
+            "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-ContractorType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+            "x-osdu-relationship": [
+              {
+                "GroupType": "reference-data",
+                "EntityType": "ContractorType"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "Personnel": {
+      "type": "array",
+      "description": "List of key individuals supporting the Project.  This could be Abstracted for re-use, and could reference a separate Persons master data object.",
+      "x-osdu-indexing": {
+        "type": "flattened"
+      },
+      "items": {
+        "type": "object",
+        "title": "Personnel",
+        "description": "List of key individuals supporting the Project.  This could be Abstracted for re-use, and could reference a separate Persons master data object.",
+        "properties": {
+          "PersonName": {
+            "type": "string",
+            "description": "Name of an individual supporting the Project."
+          },
+          "CompanyOrganisationID": {
+            "type": "string",
+            "description": "Reference to the company which employs Personnel.",
+            "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Organisation:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+            "x-osdu-relationship": [
+              {
+                "GroupType": "master-data",
+                "EntityType": "Organisation"
+              }
+            ]
+          },
+          "ProjectRoleID": {
+            "type": "string",
+            "description": "The identifier of a reference value for the role of an individual supporting a Project, such as Project Manager, Party Chief, Client Representative, Senior Observer.",
+            "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-ProjectRole:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+            "x-osdu-relationship": [
+              {
+                "GroupType": "reference-data",
+                "EntityType": "ProjectRole"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "ProjectSpecifications": {
+      "type": "array",
+      "description": "General parameters defining the configuration of the Project.  In the case of a seismic acquisition project it is like receiver interval, source depth, source type.  In the case of a processing project, it is like replacement velocity, reference datum above mean sea level.",
+      "x-osdu-indexing": {
+        "type": "flattened"
+      },
+      "items": {
+        "type": "object",
+        "title": "ProjectSpecifications",
+        "description": "General parameters defining the configuration of the Project.  In the case of a seismic acquisition project it is like receiver interval, source depth, source type.  In the case of a processing project, it is like replacement velocity, reference datum above mean sea level.",
+        "properties": {
+          "EffectiveDateTime": {
+            "type": "string",
+            "description": "The date and time at which a ProjectSpecification becomes effective.",
+            "format": "date-time",
+            "x-osdu-frame-of-reference": "DateTime"
+          },
+          "TerminationDateTime": {
+            "type": "string",
+            "description": "The date and time at which a ProjectSpecification is no longer in effect.",
+            "format": "date-time",
+            "x-osdu-frame-of-reference": "DateTime"
+          },
+          "ProjectSpecificationQuantity": {
+            "type": "number",
+            "description": "The value for the specified parameter type.",
+            "x-osdu-frame-of-reference": "UOM_via_property:UnitOfMeasureID"
+          },
+          "ProjectSpecificationDateTime": {
+            "type": "string",
+            "description": "The actual date and time value of the parameter.  ISO format permits specification of time or date only.",
+            "format": "date-time",
+            "x-osdu-frame-of-reference": "DateTime"
+          },
+          "ProjectSpecificationIndicator": {
+            "type": "boolean",
+            "description": "The actual indicator value of the parameter."
+          },
+          "ProjectSpecificationText": {
+            "type": "string",
+            "description": "The actual text value of the parameter."
+          },
+          "UnitOfMeasureID": {
+            "type": "string",
+            "description": "The unit for the quantity parameter if overriding the default for this ParameterType, like metre (m in SI units system) for quantity Length.",
+            "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-UnitOfMeasure:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+            "x-osdu-relationship": [
+              {
+                "GroupType": "reference-data",
+                "EntityType": "UnitOfMeasure"
+              }
+            ]
+          },
+          "ParameterTypeID": {
+            "type": "string",
+            "description": "Parameter type of property or characteristic.",
+            "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-ParameterType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+            "x-osdu-relationship": [
+              {
+                "GroupType": "reference-data",
+                "EntityType": "ParameterType"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "ProjectStates": {
+      "type": "array",
+      "description": "The history of life cycle states that the Project has been through..",
+      "x-osdu-indexing": {
+        "type": "flattened"
+      },
+      "items": {
+        "type": "object",
+        "title": "ProjectStates",
+        "description": "The history of life cycle states that the Project has been through..",
+        "properties": {
+          "EffectiveDateTime": {
+            "type": "string",
+            "description": "The date and time at which the state becomes effective.",
+            "format": "date-time",
+            "x-osdu-frame-of-reference": "DateTime"
+          },
+          "TerminationDateTime": {
+            "type": "string",
+            "description": "The date and time at which the state is no longer in effect.",
+            "format": "date-time",
+            "x-osdu-frame-of-reference": "DateTime"
+          },
+          "ProjectStateTypeID": {
+            "type": "string",
+            "description": "The Project life cycle state from planning to completion.",
+            "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-ProjectStateType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+            "x-osdu-relationship": [
+              {
+                "GroupType": "reference-data",
+                "EntityType": "ProjectStateType"
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "x-osdu-inheriting-from-kind": []
+}

@@ -1,0 +1,864 @@
+{
+  "x-osdu-license": "Copyright 2022, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "$id": "https://schema.osdu.opengroup.org/json/master-data/PlannedCementJob.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:master-data--PlannedCementJob:1.0.0",
+  "title": "PlannedCementJob",
+  "description": "A single cement job description for the purpose of planning.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "Previously called ResourceID or SRN which identifies this OSDU resource object without version.",
+      "title": "Entity ID",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:master-data\\-\\-PlannedCementJob:[\\w\\-\\.\\:\\%]+$",
+      "example": "namespace:master-data--PlannedCementJob:548489bd-65c8-5bbe-992a-22dd56457a46"
+    },
+    "kind": {
+      "description": "The schema identification for the OSDU resource object following the pattern {Namespace}:{Source}:{Type}:{VersionMajor}.{VersionMinor}.{VersionPatch}. The versioning scheme follows the semantic versioning, https://semver.org/.",
+      "title": "Entity Kind",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:[\\w\\-\\.]+:[\\w\\-\\.]+:[0-9]+.[0-9]+.[0-9]+$",
+      "example": "osdu:wks:master-data--PlannedCementJob:1.0.0"
+    },
+    "version": {
+      "description": "The version number of this OSDU resource; set by the framework.",
+      "title": "Version Number",
+      "type": "integer",
+      "format": "int64",
+      "example": 1562066009929332
+    },
+    "acl": {
+      "description": "The access control tags associated with this entity.",
+      "title": "Access Control List",
+      "$ref": "../abstract/AbstractAccessControlList.1.0.0.json"
+    },
+    "legal": {
+      "description": "The entity's legal tags and compliance status. The actual contents associated with the legal tags is managed by the Compliance Service.",
+      "title": "Legal Tags",
+      "$ref": "../abstract/AbstractLegalTags.1.0.0.json"
+    },
+    "tags": {
+      "title": "Tag Dictionary",
+      "description": "A generic dictionary of string keys mapping to string value. Only strings are permitted as keys and values.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "example": {
+        "NameOfKey": "String value"
+      }
+    },
+    "createTime": {
+      "description": "Timestamp of the time at which initial version of this OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:46:20.163Z"
+    },
+    "createUser": {
+      "title": "Resource Object Creation User Reference",
+      "description": "The user reference, which created the first version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "modifyTime": {
+      "description": "Timestamp of the time at which this version of the OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Version Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:52:24.477Z"
+    },
+    "modifyUser": {
+      "title": "Resource Object Version Creation User Reference",
+      "description": "The user reference, which created this version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "ancestry": {
+      "description": "The links to data, which constitute the inputs, from which this record instance is derived.",
+      "title": "Ancestry",
+      "$ref": "../abstract/AbstractLegalParentList.1.0.0.json"
+    },
+    "meta": {
+      "description": "The Frame of Reference meta data section linking the named properties to self-contained definitions.",
+      "title": "Frame of Reference Meta Data",
+      "type": "array",
+      "items": {
+        "$ref": "../abstract/AbstractMetaItem.1.0.0.json"
+      }
+    },
+    "data": {
+      "allOf": [
+        {
+          "$ref": "../abstract/AbstractCommonResources.1.0.0.json"
+        },
+        {
+          "$ref": "../abstract/AbstractMaster.1.0.0.json"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "Name": {
+              "type": "string",
+              "title": "Name",
+              "description": "Human recognizable context for the cement job."
+            },
+            "WellboreID": {
+              "type": "string",
+              "title": "Wellbore ID",
+              "description": "Reference to the Wellbore",
+              "pattern": "^[\\w\\-\\.]+:master-data\\-\\-WellPlanningWellbore:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "WellPlanningWellbore"
+                }
+              ]
+            },
+            "JobTypeID": {
+              "type": "string",
+              "title": "Job Type ID",
+              "description": "Type of cement job.",
+              "x-osdu-existing-standard": "Proposed reference values: Primary, Plug, Squeeze, Unknown",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-CementJobType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "CementJobType"
+                }
+              ]
+            },
+            "JobConfig": {
+              "type": "string",
+              "title": "Job Config",
+              "description": "Job configuration."
+            },
+            "NameCementedString": {
+              "type": "string",
+              "title": "Name Cemented String",
+              "description": "Name for the cemented string"
+            },
+            "WorkStringID": {
+              "type": "string",
+              "title": "Work String ID",
+              "description": "Identifier of the TubularAssembly that describes the cement work string",
+              "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-TubularAssembly:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "work-product-component",
+                  "EntityType": "TubularAssembly"
+                }
+              ]
+            },
+            "ContractorID": {
+              "type": "string",
+              "title": "Contractor ID",
+              "description": "Identifier of cementing contractor.",
+              "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Organisation:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "Organisation"
+                }
+              ]
+            },
+            "IsOffshoreJob": {
+              "type": "boolean",
+              "title": "Is Offshore Job",
+              "description": "Offshore job? Values are \"true\" (or \"1\") and \"false\" (or \"0\")."
+            },
+            "WaterDepth": {
+              "type": "number",
+              "title": "Water Depth",
+              "description": "Water depth if offshore. The distance from mean sea level to water bottom.",
+              "x-osdu-frame-of-reference": "UOM:length"
+            },
+            "IsReturnsToSeabed": {
+              "type": "boolean",
+              "title": "Is Returns To Seabed",
+              "description": "Returns to seabed? Values are \"true\" (or \"1\") and \"false\" (or \"0\")."
+            },
+            "IsReciprocating": {
+              "type": "boolean",
+              "title": "Is Reciprocating",
+              "description": "Pipe being reciprocated.  Values are \"true\" (or \"1\") and \"false\" (or \"0\")."
+            },
+            "EstimatedWaitingOnCement": {
+              "type": "string",
+              "title": "Estimated Waiting On Cement",
+              "description": "Estimated duration for waiting on cement to set."
+            },
+            "EstimatedPluggedTopMeasuredDepth": {
+              "type": "number",
+              "title": "Estimated Plugged Top Measured Depth",
+              "description": "If Plug, estimated measured depth of top of plug. Depth relative to Planned wellbore ZDP. Navigate via WellboreID to the side-car WellPlanningWellbore, which holds the depth reference in data.VerticalMeasurement.",
+              "x-osdu-frame-of-reference": "UOM:length"
+            },
+            "EstimatedPluggedBaseMeasuredDepth": {
+              "type": "number",
+              "title": "Estimated Plugged Base Measured Depth",
+              "description": "If Plug,  estimated measured depth of bottom of plug. Depth relative to Planned wellbore ZDP. Navigate via WellboreID to the side-car WellPlanningWellbore, which holds the depth reference in data.VerticalMeasurement.",
+              "x-osdu-frame-of-reference": "UOM:length"
+            },
+            "EstimatedHoleMeasuredDepth": {
+              "type": "number",
+              "title": "Estimated Hole Measured Depth",
+              "description": "Estimated measured depth at bottom of hole. Depth relative to Planned wellbore ZDP. Navigate via WellboreID to the side-car WellPlanningWellbore, which holds the depth reference in data.VerticalMeasurement.",
+              "x-osdu-frame-of-reference": "UOM:length"
+            },
+            "EstimatedPreviousShoeMeasuredDepth": {
+              "type": "number",
+              "title": "Estimated Previous Shoe Measured Depth",
+              "description": "Estimated measured depth of previous shoe. Depth relative to Planned wellbore ZDP. Navigate via WellboreID to the side-car WellPlanningWellbore, which holds the depth reference in data.VerticalMeasurement.",
+              "x-osdu-frame-of-reference": "UOM:length"
+            },
+            "EstimatedPreviousShoeTrueVerticalDepth": {
+              "type": "number",
+              "title": "Estimated Previous Shoe True Vertical Depth",
+              "description": "Estimated True Vertical Depth of previous shoe. Depth relative to Planned wellbore ZDP. Navigate via WellboreID to the side-car WellPlanningWellbore, which holds the depth reference in data.VerticalMeasurement.",
+              "x-osdu-frame-of-reference": "UOM:length"
+            },
+            "EstimatedStringSetMeasuredDepth": {
+              "type": "number",
+              "title": "Estimated String Set Measured Depth",
+              "description": "Estimated measured depth of cement string shoe. Depth relative to Planned wellbore ZDP. Navigate via WellboreID to the side-car WellPlanningWellbore, which holds the depth reference in data.VerticalMeasurement.",
+              "x-osdu-frame-of-reference": "UOM:length"
+            },
+            "EstimatedStringSetTrueVerticalDepth": {
+              "type": "number",
+              "title": "Estimated String Set True Vertical Depth",
+              "description": "Estimated True vertical depth of cement string shoe. Depth relative to Planned wellbore ZDP. Navigate via WellboreID to the side-car WellPlanningWellbore, which holds the depth reference in data.VerticalMeasurement.",
+              "x-osdu-frame-of-reference": "UOM:length"
+            },
+            "CementStages": {
+              "type": "array",
+              "title": "Cement Stages",
+              "description": "Set of stages for the job (usually 1 or 2).",
+              "items": {
+                "type": "object",
+                "title": "Cement Stage",
+                "description": "A single cement job.",
+                "properties": {
+                  "StageNumber": {
+                    "type": "number",
+                    "title": "Stage Number",
+                    "description": "Stage number."
+                  },
+                  "StageType": {
+                    "type": "string",
+                    "title": "Stage Type",
+                    "description": "Stage type."
+                  },
+                  "IntervalTopMeasuredDepth": {
+                    "type": "number",
+                    "title": "Interval Top Measured Depth",
+                    "description": "Measured depth at top of interval. Depth relative to Planned wellbore ZDP. Navigate via WellboreID to the side-car WellPlanningWellbore, which holds the depth reference in data.VerticalMeasurement.",
+                    "x-osdu-frame-of-reference": "UOM:length"
+                  },
+                  "CementBaseMeasuredDepth": {
+                    "type": "number",
+                    "title": "Cement Base Measured Depth",
+                    "description": "Measured depth of base of cement. Depth relative to Planned wellbore ZDP. Navigate via WellboreID to the side-car WellPlanningWellbore, which holds the depth reference in data.VerticalMeasurement.",
+                    "x-osdu-frame-of-reference": "UOM:length"
+                  },
+                  "Excess Volume": {
+                    "type": "number",
+                    "title": "Excess Volume",
+                    "description": "Excess volume.",
+                    "x-osdu-frame-of-reference": "UOM:volume"
+                  },
+                  "FlowrateDisplaceAv": {
+                    "type": "number",
+                    "title": "Flowrate Displace Average",
+                    "description": "Average displacement rate.",
+                    "x-osdu-frame-of-reference": "UOM:volume per time"
+                  },
+                  "FlowrateDisplaceMx": {
+                    "type": "number",
+                    "title": "Flowrate Displace Maximum",
+                    "description": "Maximum displacement rate.",
+                    "x-osdu-frame-of-reference": "UOM:volume per time"
+                  },
+                  "PressureDisplace": {
+                    "type": "number",
+                    "title": "Pressure Displace",
+                    "description": "Planned displacement pressure.",
+                    "x-osdu-frame-of-reference": "UOM:pressure"
+                  },
+                  "FlowrateMudCirc": {
+                    "type": "number",
+                    "title": "Flowrate Mud Circ",
+                    "description": "Rate mud circulated during stage.",
+                    "x-osdu-frame-of-reference": "UOM:volume per time"
+                  },
+                  "PresMudCirc": {
+                    "type": "number",
+                    "title": "Pres Mud Circ",
+                    "description": "Mud circulation pressure.",
+                    "x-osdu-frame-of-reference": "UOM:pressure"
+                  },
+                  "FlowrateEnd": {
+                    "type": "number",
+                    "title": "Flowrate End",
+                    "description": "Final displacement pump rate.",
+                    "x-osdu-frame-of-reference": "UOM:volume per time"
+                  },
+                  "CementingFluid": {
+                    "type": "object",
+                    "title": "Cementing Fluid",
+                    "description": "Displaced Mud, washes and spacers, cements, displacement mud.",
+                    "properties": {
+                      "TypeFluid": {
+                        "type": "string",
+                        "title": "Type Fluid",
+                        "description": "Fluid type: Mud, Wash, Spacer, Slurry."
+                      },
+                      "FluidIndex": {
+                        "type": "number",
+                        "title": "Fluid Index",
+                        "description": "Fluid Index: 1: first fluid pumped (=original mud), \n\t\t\t\t\t(last-1)=Tail cement, last= displacement mud"
+                      },
+                      "FluidDescription": {
+                        "type": "string",
+                        "title": "Fluid Description",
+                        "description": "Fluid description."
+                      },
+                      "Purpose": {
+                        "type": "string",
+                        "title": "Purpose",
+                        "description": "Purpose description."
+                      },
+                      "ClassSlurryDryBlend": {
+                        "type": "string",
+                        "title": "Class Slurry Dry Blend",
+                        "description": "Slurry class."
+                      },
+                      "FluidTopMeasuredDepth": {
+                        "type": "number",
+                        "title": "Fluid Top Measured Depth",
+                        "description": "Estimated Measured depth at top of slurry placement.",
+                        "x-osdu-frame-of-reference": "UOM:length"
+                      },
+                      "FluidBaseMeasuredDepth": {
+                        "type": "number",
+                        "title": "Fluid Base Measured Depth",
+                        "description": "Measured depth at bottom of slurry placement.",
+                        "x-osdu-frame-of-reference": "UOM:length"
+                      },
+                      "WaterVolume": {
+                        "type": "number",
+                        "title": "Water Volume",
+                        "description": "Water volume.",
+                        "x-osdu-frame-of-reference": "UOM:volume"
+                      },
+                      "CementVolume": {
+                        "type": "number",
+                        "title": "Cement Volume",
+                        "description": "Volume of cement.",
+                        "x-osdu-frame-of-reference": "UOM:volume"
+                      },
+                      "RatioMixWater": {
+                        "type": "number",
+                        "title": "Ratio Mix Water",
+                        "description": "Mix Water Ratio.",
+                        "x-osdu-frame-of-reference": "UOM:dimensionless"
+                      },
+                      "FluidVolume": {
+                        "type": "number",
+                        "title": "Fluid Volume",
+                        "description": "Fluid/Slurry Volume.",
+                        "x-osdu-frame-of-reference": "UOM:volume"
+                      },
+                      "CementPumpSchedule": {
+                        "type": "object",
+                        "title": "Cement Pump Schedule",
+                        "description": "Set of (Time / Rate / Back Pressure).",
+                        "properties": {
+                          "PumpRate": {
+                            "type": "number",
+                            "title": "Pump Rate",
+                            "description": "Rate fluid is pumped. 0 means it is a pause.",
+                            "x-osdu-frame-of-reference": "UOM:volume per time"
+                          },
+                          "PumpVolume": {
+                            "type": "number",
+                            "title": "Pump Volume",
+                            "description": "Volume pumped = eTimPump * ratePump.",
+                            "x-osdu-frame-of-reference": "UOM:volume"
+                          },
+                          "BackPressure": {
+                            "type": "number",
+                            "title": "Back Pressure",
+                            "description": "Back pressure applied during pumping stage.",
+                            "x-osdu-frame-of-reference": "UOM:pressure"
+                          },
+                          "Comments": {
+                            "type": "string",
+                            "title": "Comments",
+                            "description": "Comments and Remarks."
+                          }
+                        }
+                      },
+                      "ExcessPercent": {
+                        "type": "number",
+                        "title": "Excess Percent.",
+                        "description": "Excess Percent."
+                      },
+                      "YieldVolume": {
+                        "type": "number",
+                        "title": "Yield Volume",
+                        "description": "Slurry Yield.",
+                        "x-osdu-frame-of-reference": "UOM:volume"
+                      },
+                      "Density": {
+                        "type": "number",
+                        "title": "Density",
+                        "description": "Fluid density.",
+                        "x-osdu-frame-of-reference": "UOM:mass per volume"
+                      },
+                      "PumpedVolume": {
+                        "type": "number",
+                        "title": "Pumped Vol",
+                        "description": "Volume Pumped.",
+                        "x-osdu-frame-of-reference": "UOM:volume"
+                      },
+                      "OtherVolume": {
+                        "type": "number",
+                        "title": "Other Volume",
+                        "description": "Other Volume.",
+                        "x-osdu-frame-of-reference": "UOM:volume"
+                      },
+                      "FluidRheologicalModelID": {
+                        "type": "string",
+                        "title": "Fluid Rheological Model ID",
+                        "description": "Newtonian/Bingham/Power Law/Herschel Bulkley.",
+                        "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-FluidRheologicalModelType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                        "x-osdu-relationship": [
+                          {
+                            "GroupType": "reference-data",
+                            "EntityType": "FluidRheologicalModelType"
+                          }
+                        ]
+                      },
+                      "Viscosity": {
+                        "type": "number",
+                        "title": "Viscosity",
+                        "description": "Viscosity (Newtonian) or Plastic Viscosity if Bingham.",
+                        "x-osdu-frame-of-reference": "UOM:permeability rock"
+                      },
+                      "YieldPoint": {
+                        "type": "number",
+                        "title": "Yield Point",
+                        "description": "Yield point (Bingham and Herschel Bulkley models).",
+                        "x-osdu-frame-of-reference": "UOM:pressure"
+                      },
+                      "N": {
+                        "type": "number",
+                        "title": "N",
+                        "description": "Power Law index (Power Law and HB).",
+                        "x-osdu-frame-of-reference": "UOM:dimensionless"
+                      },
+                      "K": {
+                        "type": "number",
+                        "title": "K",
+                        "description": "Consistency index (Power Law and HB).",
+                        "x-osdu-frame-of-reference": "UOM:dimensionless"
+                      },
+                      "Gel10SecReading": {
+                        "type": "number",
+                        "title": "Gel10 Sec Reading",
+                        "description": "Gel reading after 10 seconds.",
+                        "x-osdu-frame-of-reference": "UOM:pressure"
+                      },
+                      "Gel10SecStrength": {
+                        "type": "number",
+                        "title": "Gel10 Sec Strength",
+                        "description": "Gel strength after 10 seconds.",
+                        "x-osdu-frame-of-reference": "UOM:pressure"
+                      },
+                      "Gel1MinReading": {
+                        "type": "number",
+                        "title": "Gel1 Min Reading",
+                        "description": "Gel reading after 1 minute.",
+                        "x-osdu-frame-of-reference": "UOM:pressure"
+                      },
+                      "Gel1MinStrength": {
+                        "type": "number",
+                        "title": "Gel1 Min Strength",
+                        "description": "Gel strength after 1 minute.",
+                        "x-osdu-frame-of-reference": "UOM:pressure"
+                      },
+                      "Gel10MinReading": {
+                        "type": "number",
+                        "title": "Gel10 Min Reading",
+                        "description": "Gel reading after 10 minutes.",
+                        "x-osdu-frame-of-reference": "UOM:pressure"
+                      },
+                      "Gel10MinStrength": {
+                        "type": "number",
+                        "title": "Gel10 Min Strength",
+                        "description": "Gel strength after 10 minutes.",
+                        "x-osdu-frame-of-reference": "UOM:pressure"
+                      },
+                      "BaseFluidType": {
+                        "type": "string",
+                        "title": "Base Fluid Type",
+                        "description": "Type of base fluid: Fresh water, Sea water, Brine, Brackish water."
+                      },
+                      "BaseFluidDensity": {
+                        "type": "number",
+                        "title": "Base Fluid Density",
+                        "description": "Density of base fluid.",
+                        "x-osdu-frame-of-reference": "UOM:mass per volume"
+                      },
+                      "DryBlendName": {
+                        "type": "string",
+                        "title": "Dry Blend Name",
+                        "description": "Name of dry blend."
+                      },
+                      "DryBlendDescription": {
+                        "type": "string",
+                        "title": "Dry Blend Description",
+                        "description": "Description of dry blend."
+                      },
+                      "DryBlendMass": {
+                        "type": "number",
+                        "title": "Dry Blend Mass",
+                        "description": "Mass of dry blend: the blend is made of different solid additives: the volume is not constant.",
+                        "x-osdu-frame-of-reference": "UOM:mass"
+                      },
+                      "DryBlendDensity": {
+                        "type": "number",
+                        "title": "Dry Blend Density",
+                        "description": "Density of Dry blend.",
+                        "x-osdu-frame-of-reference": "UOM:mass per volume"
+                      },
+                      "DryBlendMassSack": {
+                        "type": "number",
+                        "title": "Dry Blend MassSack",
+                        "description": "Weight of a sack of dry blend.",
+                        "x-osdu-frame-of-reference": "UOM:mass"
+                      },
+                      "CementAdditives": {
+                        "type": "array",
+                        "title": "Cement Additives",
+                        "description": "Additives can be added in slurry but also in spacers, washes, mud.",
+                        "items": {
+                          "type": "object",
+                          "title": "Cement Additive",
+                          "description": "Additives used during a cement job",
+                          "properties": {
+                            "AdditiveName": {
+                              "type": "string",
+                              "title": "Additive Name",
+                              "description": "Additive name."
+                            },
+                            "AdditiveTypeID": {
+                              "type": "string",
+                              "title": "Additive Type ID",
+                              "description": "Identifier of additive type or Function (Retarder, Viscosifier, Weighting agent).",
+                              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-AdditiveType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                              "x-osdu-relationship": [
+                                {
+                                  "GroupType": "reference-data",
+                                  "EntityType": "AdditiveType"
+                                }
+                              ]
+                            },
+                            "AdditiveFormulation": {
+                              "type": "string",
+                              "title": "Additive Formulation",
+                              "description": "Wet or Dry."
+                            },
+                            "AdditiveDensity": {
+                              "type": "number",
+                              "title": "Additive Density",
+                              "description": "Additive density.",
+                              "x-osdu-frame-of-reference": "UOM:mass per volume"
+                            },
+                            "AdditiveAmount": {
+                              "type": "number",
+                              "title": "Additive Amount",
+                              "description": "Additive Amount.",
+                              "x-osdu-frame-of-reference": "UOM:mass"
+                            },
+                            "TypeConc": {
+                              "type": "string",
+                              "title": "Type Conc",
+                              "description": "ConcentrationType: %BWOC (%By weight of Cement), %BWOB (%By weight of blend), %BWOW (%By weight of water), %BWOBF (%By weight of base fluid)"
+                            },
+                            "Concentration": {
+                              "type": "number",
+                              "title": "Concentration",
+                              "description": "Concentration Amount: unit type depends of typeConc.",
+                              "x-osdu-frame-of-reference": "UOM:mass per mass"
+                            },
+                            "WtSack": {
+                              "type": "number",
+                              "title": "Weight Sack",
+                              "description": "Concentration in terms of weight per sack.",
+                              "x-osdu-frame-of-reference": "UOM:mass"
+                            },
+                            "VolSack": {
+                              "type": "number",
+                              "title": "Volume Sack",
+                              "description": "Concentration in terms of volume per sack.",
+                              "x-osdu-frame-of-reference": "UOM:volume"
+                            }
+                          },
+                          "required": [
+                            "AdditiveName",
+                            "AdditiveAmount",
+                            "TypeConc",
+                            "Concentration",
+                            "WtSack",
+                            "VolSack"
+                          ]
+                        }
+                      },
+                      "IsFoamUsed": {
+                        "type": "boolean",
+                        "title": "Is Foam Used",
+                        "description": "Foam used indicator.  Values are \"true\" (or \"1\") and \"false\" (or \"0\")."
+                      },
+                      "GasFoamType": {
+                        "type": "string",
+                        "title": "Gas Foam Type",
+                        "description": "Gas type used for foam job."
+                      },
+                      "GasFoamVol": {
+                        "type": "number",
+                        "title": "Gas Foam Vol",
+                        "description": "Volume of gas used for foam job.",
+                        "x-osdu-frame-of-reference": "UOM:volume"
+                      },
+                      "DensAtPres": {
+                        "type": "number",
+                        "title": "Density At Pressure",
+                        "description": "Slurry density at pressure.",
+                        "x-osdu-frame-of-reference": "UOM:mass per volume"
+                      }
+                    }
+                  },
+                  "SqueezeObjective": {
+                    "type": "string",
+                    "title": "Squeeze Objective",
+                    "description": "Squeeze objective."
+                  },
+                  "StringMeasuredDepth": {
+                    "type": "number",
+                    "title": "String Measured Depth",
+                    "description": "Measured depth of string (multi-stage cement job). Depth relative to Planned wellbore ZDP. Navigate via WellboreID to the side-car WellPlanningWellbore, which holds the depth reference in data.VerticalMeasurement.",
+                    "x-osdu-frame-of-reference": "UOM:length"
+                  },
+                  "ToolMeasuredDepth": {
+                    "type": "number",
+                    "title": "Tool Measured Depth",
+                    "description": "Measured depth of tool (multi-stage cement job. Depth relative to Planned wellbore ZDP. Navigate via WellboreID to the side-car WellPlanningWellbore, which holds the depth reference in data.VerticalMeasurement.",
+                    "x-osdu-frame-of-reference": "UOM:length"
+                  },
+                  "CoilTubingMeasuredDepth": {
+                    "type": "number",
+                    "title": "Coil Tubing Measured Depth",
+                    "description": "Measured depth of CoilTubing (multi-stage cement job. Depth relative to Planned wellbore ZDP. Navigate via WellboreID to the side-car WellPlanningWellbore, which holds the depth reference in data.VerticalMeasurement.",
+                    "x-osdu-frame-of-reference": "UOM:length"
+                  },
+                  "InsideCasingVolume": {
+                    "type": "number",
+                    "title": "Inside Casing Volume",
+                    "description": "Estimated volume inside casing.",
+                    "x-osdu-frame-of-reference": "UOM:volume"
+                  },
+                  "OutsideCasingVolume": {
+                    "type": "number",
+                    "title": "Outside Casing Volume",
+                    "description": "Estimated volume outside casing for this stage placement.",
+                    "x-osdu-frame-of-reference": "UOM:volume"
+                  },
+                  "TypeOriginalMud": {
+                    "type": "string",
+                    "title": "Type Original Mud",
+                    "description": "Type of mud in hole."
+                  },
+                  "WtMud": {
+                    "type": "number",
+                    "title": "Wt Mud",
+                    "description": "Mud density.",
+                    "x-osdu-frame-of-reference": "UOM:mass per volume"
+                  },
+                  "ViscoFunnelMud": {
+                    "type": "number",
+                    "title": "Viscosity Funnel Mud",
+                    "description": "Marsh funnel viscosity measured in a conical-shaped funnel, fitted with a small-bore tube on the bottom end through which mud flows under a gravity head. It is a time measurement, i.e., the time it takes for a given volume of fluid to flow through the funnel.",
+                    "x-osdu-frame-of-reference": "UOM:time"
+                  },
+                  "PlasticViscoMud": {
+                    "type": "number",
+                    "title": "Plastic Viscosity Mud",
+                    "description": "Plastic viscosity (in hole at start of job).",
+                    "x-osdu-frame-of-reference": "UOM:permeability rock"
+                  },
+                  "YieldPointMud": {
+                    "type": "number",
+                    "title": "Yield Point Mud",
+                    "description": "Yield point (in hole at start of job).",
+                    "x-osdu-frame-of-reference": "UOM:pressure"
+                  },
+                  "Gel10Sec": {
+                    "type": "number",
+                    "title": "Gel10 Sec",
+                    "description": "Gels-10Sec (in hole at start of job).",
+                    "x-osdu-frame-of-reference": "UOM:pressure"
+                  },
+                  "Gel10Min": {
+                    "type": "number",
+                    "title": "Gel10 Min",
+                    "description": "Gels-10Min (in hole at start of job).",
+                    "x-osdu-frame-of-reference": "UOM:pressure"
+                  },
+                  "FluidDisplace": {
+                    "type": "string",
+                    "title": "Fluid Displace",
+                    "description": "Displacement fluid name."
+                  },
+                  "DensDisplaceFluid": {
+                    "type": "number",
+                    "title": "Density Displace Fluid",
+                    "description": "Density of displacement fluid.",
+                    "x-osdu-frame-of-reference": "UOM:mass per volume"
+                  },
+                  "VolDisplaceFluid": {
+                    "type": "number",
+                    "title": "Vol Displace Fluid",
+                    "description": "Volume of displacement fluid.",
+                    "x-osdu-frame-of-reference": "UOM:volume"
+                  }
+                },
+                "required": [
+                  "StageNumber",
+                  "StageType"
+                ]
+              }
+            },
+            "PlugTypeID": {
+              "type": "string",
+              "title": "Plug Type ID",
+              "description": "Plug type.",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-PlugType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "PlugType"
+                }
+              ]
+            },
+            "TypeSqueeze": {
+              "type": "string",
+              "title": "Type Squeeze",
+              "description": "Type of squeeze."
+            },
+            "SqueezeMeasuredDepth": {
+              "type": "number",
+              "title": "Squeeze Measured Depth",
+              "description": "Measured depth of squeeze. DDepth relative to Planned wellbore ZDP. Navigate via WellboreID to the side-car WellPlanningWellbore, which holds the depth reference in data.VerticalMeasurement.",
+              "x-osdu-frame-of-reference": "UOM:length"
+            },
+            "IsCoilTubing": {
+              "type": "boolean",
+              "title": "Is Coil Tubing",
+              "description": "Coiled Tubing Used (true=CTU used). Values are \"true\" (or \"1\") and \"false\" (or \"0\")."
+            },
+            "TubularAssemblyID": {
+              "type": "string",
+              "title": "Tubular Assembly Identifier",
+              "description": "Identifier of the tubular assembly actually installed or to be installed",
+              "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-TubularAssembly:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "work-product-component",
+                  "EntityType": "TubularAssembly"
+                }
+              ]
+            },
+            "WellboreArchitectureID": {
+              "type": "string",
+              "title": "Wellbore Architecture ID",
+              "description": "Identifier of the Wellbore Architecture describing the geometry of the installed tubular.",
+              "pattern": "^[\\w\\-\\.]+:master-data\\-\\-WellboreArchitecture:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "WellboreArchitecture"
+                }
+              ]
+            },
+            "EstimatedCementTopMeasuredDepth": {
+              "type": "number",
+              "title": "Estimated Cement Top Measured Depth",
+              "description": "The estimated Measured depth of the Top of Cement. Depth relative to Planned wellbore ZDP. Navigate via WellboreID to the side-car WellPlanningWellbore, which holds the depth reference in data.VerticalMeasurement.",
+              "x-osdu-frame-of-reference": "UOM:length"
+            },
+            "CementToolTubularComponentID": {
+              "type": "string",
+              "title": "Cement Tool Tubular Component ID",
+              "description": "The identifier of the TubularComponent used for Cementing the wellbore",
+              "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-TubularComponent:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "work-product-component",
+                  "EntityType": "TubularComponent"
+                }
+              ]
+            }
+          },
+          "required": [
+            "Name",
+            "WellboreID",
+            "JobTypeID",
+            "NameCementedString",
+            "TubularAssemblyID",
+            "WellboreArchitectureID",
+            "CementToolTubularComponentID"
+          ],
+          "title": "IndividualProperties"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "ExtensionProperties": {
+              "type": "object"
+            }
+          },
+          "title": "ExtensionProperties"
+        }
+      ]
+    }
+  },
+  "required": [
+    "kind",
+    "acl",
+    "legal"
+  ],
+  "additionalProperties": false,
+  "x-osdu-review-status": "Accepted",
+  "x-osdu-virtual-properties": {
+    "data.VirtualProperties.DefaultLocation": {
+      "type": "object",
+      "priority": [
+        {
+          "path": "data.SpatialLocation"
+        }
+      ]
+    },
+    "data.VirtualProperties.DefaultName": {
+      "type": "string",
+      "priority": [
+        {
+          "path": "data.Name"
+        }
+      ]
+    }
+  },
+  "x-osdu-inheriting-from-kind": []
+}

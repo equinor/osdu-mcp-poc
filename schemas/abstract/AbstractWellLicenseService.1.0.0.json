@@ -1,0 +1,115 @@
+{
+  "x-osdu-license": "Copyright 2023, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "x-osdu-review-status": "Accepted",
+  "$id": "https://schema.osdu.opengroup.org/json/abstract/AbstractWellLicenseService.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:AbstractWellLicenseService:1.0.0",
+  "title": "WellLicenseArea",
+  "description": "Services for a well license may involve field work, office work, legal representation and more.  These services are specific to the license and its management.  Avoid using this subset for other services such as logging, coring, testing, drilling and so on.",
+  "type": "object",
+  "properties": {
+    "ContactBusinessAssociateID": {
+      "type": "string",
+      "description": "The person or organization group who is the primary contact for this service.",
+      "pattern": "^[\\w\\-\\.]+:master-data\\-\\-BusinessAssociate:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "master-data",
+          "EntityType": "BusinessAssociate"
+        }
+      ]
+    },
+    "Description": {
+      "type": "string",
+      "description": "Narrative remarks about the service provided for the license."
+    },
+    "EndTime": {
+      "type": "string",
+      "description": "The time of day on the end date when the service was completed.",
+      "format": "date-time"
+    },
+    "RepresentedBusinessAssociateID": {
+      "type": "string",
+      "description": "The business associate on whose behalf the service was provided.",
+      "pattern": "^[\\w\\-\\.]+:master-data\\-\\-BusinessAssociate:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "master-data",
+          "EntityType": "BusinessAssociate"
+        }
+      ]
+    },
+    "ServiceAgentID": {
+      "type": "string",
+      "description": "The agent through whom a service is brokered or otherwise obtained.  Commonly used where regulations require the use of local agents, or where confidentiality is a concern.",
+      "pattern": "^[\\w\\-\\.]+:master-data\\-\\-BusinessAssociate:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "master-data",
+          "EntityType": "BusinessAssociate"
+        }
+      ]
+    },
+    "ServiceAgentApprovedDate": {
+      "type": "string",
+      "description": "Service agents work on behalf of a licensee, and must be approved by the regulator. The service agent has legal authority, and the relationship between a regulator, a licensee  is formal.  If the service agent changes, the regulator must be notified and approval for the change given. This is the date that the authority who granted the license gave consent to change the service agent.",
+      "format": "date"
+    },
+    "ServiceAgentDischargeDate": {
+      "type": "string",
+      "description": "The relationship between a licensee and service agent is formal.  When a service agent is discharged, regulatory notification, and sometimes approval, is required.",
+      "format": "date"
+    },
+    "ServiceByBusinessAssociateID": {
+      "type": "string",
+      "description": "The business associate who provided the service, generally the supplier.",
+      "pattern": "^[\\w\\-\\.]+:master-data\\-\\-BusinessAssociate:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "master-data",
+          "EntityType": "BusinessAssociate"
+        }
+      ]
+    },
+    "ServiceForBusinessAssociate": {
+      "type": "string",
+      "description": "The business associate for whom this service was provided, generally the client or customer."
+    },
+    "ServiceQualityTypeID": {
+      "type": "string",
+      "description": "This attribute can be used to capture information about the quality of service.  Users of this attribute should be aware that this information may be considered private or privileged, and in some situations data may become public, resulting in violation of certain laws.",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-WellLicenseServiceQualityType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "WellLicenseServiceQualityType"
+        }
+      ]
+    },
+    "ServiceSequenceNumber": {
+      "type": "number",
+      "description": "In some cases, it is necessary to order services in the sequence provided, particularly when there are relationships between the services. Use this number to organize services in the order that they were done in.  Note that some services are not necessarily associated with a date sufficiently accurate to allow this sequencing to be reliably derived."
+    },
+    "ServiceTypeID": {
+      "type": "string",
+      "description": "The service provided for the license.  Examples of services may be field related, such as surveys, or back office services such as address for service, accounting, or legal representative.",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-WellLicenseServiceType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "WellLicenseServiceType"
+        }
+      ]
+    },
+    "StartTime": {
+      "type": "string",
+      "description": "The time of start day when the service started.",
+      "format": "date-time"
+    },
+    "ElementIdentifier": {
+      "type": "string",
+      "description": "Unique identifier of this element in the parent's list of license services."
+    }
+  },
+  "x-osdu-inheriting-from-kind": []
+}

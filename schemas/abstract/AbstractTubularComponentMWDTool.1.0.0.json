@@ -1,0 +1,63 @@
+{
+  "x-osdu-license": "Copyright 2025, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "x-osdu-review-status": "Accepted",
+  "$id": "https://schema.osdu.opengroup.org/json/abstract/AbstractTubularComponentMWDTool.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:AbstractTubularComponentMWDTool:1.0.0",
+  "title": "Abstract Tubular Component MWD Tool",
+  "description": "Tubular MWD Tool Component Schema. Used to capture operating parameters of the MWD / LWD tool. Based on WITSML Tubular  Component 'MwdTool' ComplexType.",
+  "type": "object",
+  "properties": {
+    "MinimumFlowrate": {
+      "type": "number",
+      "title": "Minimum Flowrate",
+      "description": "Specifies the minimum flowrate across the MWD/LWD tool.",
+      "x-osdu-frame-of-reference": "UOM:volumepertime",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML Tubular.MWDTool.FlowrateMn",
+      "x-osdu-attribution-revision": "V2.1"
+    },
+    "MaximumFlowrate": {
+      "type": "number",
+      "title": "Maximum Flowrate",
+      "description": "Specifies the maximum flowrate across the MWD/LWD tool.",
+      "x-osdu-frame-of-reference": "UOM:volumepertime",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML Tubular.MWDTool.FlowrateMx",
+      "x-osdu-attribution-revision": "V2.1"
+    },
+    "MaximumTemperature": {
+      "type": "number",
+      "title": "Maximum Temperature",
+      "description": "Maximum working temperature for the tool.",
+      "x-osdu-frame-of-reference": "UOM:ThermodynamicTemperature",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML Tubular.MWDTool.TempMx",
+      "x-osdu-attribution-revision": "V2.1"
+    },
+    "EquivalentInnerDiameter": {
+      "type": "number",
+      "title": "Equivalent Inner Diameter",
+      "description": "Equivalent inner diameter used for hydraulic pressure loss calculations",
+      "x-osdu-frame-of-reference": "UOM:length",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML Tubular.MWDTool.IdEquv",
+      "x-osdu-attribution-revision": "V2.1"
+    },
+    "PressureLossReferenceFluidDensity": {
+      "type": "number",
+      "title": "Pressure Loss Reference Fluid Density",
+      "description": "Specifies the fluid density used by the manufacturer for the pressure loss curve correction/testing.",
+      "x-osdu-frame-of-reference": "UOM:density"
+    },
+    "PressureLossCurve": {
+      "type": "array",
+      "title": "PressureLossCurve",
+      "description": "Array of one or more flow rate versus measured pressure loss points used to interpolate pressure loss across the MWD/LWD tool for a given flowrate",
+      "items": {
+        "$ref": "../abstract/AbstractTubularComponentPressureLoss.1.0.0.json"
+      }
+    }
+  },
+  "x-osdu-inheriting-from-kind": []
+}

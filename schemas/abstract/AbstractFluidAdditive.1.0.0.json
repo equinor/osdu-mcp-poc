@@ -1,0 +1,102 @@
+{
+  "x-osdu-license": "Copyright 2024, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "x-osdu-review-status": "Accepted",
+  "$id": "https://schema.osdu.opengroup.org/json/abstract/AbstractFluidAdditive.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:AbstractFluidAdditive:1.0.0",
+  "title": "Fluid Additive",
+  "description": "Properties of an additive mixed into a Drilling, Stimulation or other type of Wellbore Fluid.",
+  "type": "object",
+  "properties": {
+    "AdditiveName": {
+      "type": "string",
+      "title": "Additive Name",
+      "description": "The name of the additive.",
+      "example": "UNIFLAC",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML StimJobAdditive.Name",
+      "x-osdu-attribution-revision": "v2.0"
+    },
+    "MaterialTypeID": {
+      "type": "string",
+      "title": "Material Type ID",
+      "description": "The additive material type.",
+      "example": "namespace:reference-data--StimMaterialType:Additive:",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML StimJobAdditive.KindID",
+      "x-osdu-attribution-revision": "v2.0",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-StimMaterialType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "StimMaterialType"
+        }
+      ]
+    },
+    "AdditiveKindID": {
+      "type": "string",
+      "title": "Additive Kind ID",
+      "description": "Additive type or function",
+      "example": "namespace:reference-data--StimAdditiveType:FluidLoss:",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML StimJobAdditive.AdditiveKind",
+      "x-osdu-attribution-revision": "v2.0",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-StimAdditiveType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "StimAdditiveType"
+        }
+      ]
+    },
+    "AdditiveType": {
+      "type": "string",
+      "title": "Additive Type",
+      "description": "The type of additive that is used, which can represent a suppliers description or type of AdditiveKind. For example, 5% HCl could be the type when AdditiveKind=acid.",
+      "example": "Universal fluid-loss additive",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML StimJobAdditive.Type",
+      "x-osdu-attribution-revision": "v2.0"
+    },
+    "SupplierName": {
+      "type": "string",
+      "title": "Supplier Name",
+      "description": "The name of the additive supplier.",
+      "example": "SLB",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML StimJobAdditive.Supplier",
+      "x-osdu-attribution-revision": "v2.0"
+    },
+    "SupplierCode": {
+      "type": "string",
+      "title": "Supplier Code",
+      "description": "A code used to identify the supplier of the additive.",
+      "example": "UNIFLAC* L D168",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML StimJobAdditive.SupplierCode",
+      "x-osdu-attribution-revision": "v2.0"
+    },
+    "AdditiveCode": {
+      "type": "string",
+      "title": "Additive Code",
+      "description": "Code to identify additive by supplier's product number/code.",
+      "example": "D168"
+    },
+    "ChemicalAbstractServiceNumber": {
+      "type": "string",
+      "title": "Chemical Abstract Service Number",
+      "description": "The chemical abstract service number for this additive (CAS registry number).",
+      "example": "7647-14-5"
+    },
+    "Remarks": {
+      "type": "string",
+      "title": "Remarks",
+      "description": "General remarks about this fluid additive.",
+      "example": "Dry-blend in cement using solid\nUNIFLAC additives D167 and\nD167A"
+    }
+  },
+  "required": [
+    "AdditiveName"
+  ],
+  "x-osdu-inheriting-from-kind": []
+}

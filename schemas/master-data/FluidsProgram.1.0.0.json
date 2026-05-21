@@ -1,0 +1,468 @@
+{
+  "x-osdu-license": "Copyright 2022, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "$id": "https://schema.osdu.opengroup.org/json/master-data/FluidsProgram.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:master-data--FluidsProgram:1.0.0",
+  "title": "FluidsProgram",
+  "description": "Description of the fluids program design",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "Previously called ResourceID or SRN which identifies this OSDU resource object without version.",
+      "title": "Entity ID",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:master-data\\-\\-FluidsProgram:[\\w\\-\\.\\:\\%]+$",
+      "example": "namespace:master-data--FluidsProgram:be30dc5c-df06-5616-bbe3-dc3ded1ba765"
+    },
+    "kind": {
+      "description": "The schema identification for the OSDU resource object following the pattern {Namespace}:{Source}:{Type}:{VersionMajor}.{VersionMinor}.{VersionPatch}. The versioning scheme follows the semantic versioning, https://semver.org/.",
+      "title": "Entity Kind",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:[\\w\\-\\.]+:[\\w\\-\\.]+:[0-9]+.[0-9]+.[0-9]+$",
+      "example": "osdu:wks:master-data--FluidsProgram:1.0.0"
+    },
+    "version": {
+      "description": "The version number of this OSDU resource; set by the framework.",
+      "title": "Version Number",
+      "type": "integer",
+      "format": "int64",
+      "example": 1562066009929332
+    },
+    "acl": {
+      "description": "The access control tags associated with this entity.",
+      "title": "Access Control List",
+      "$ref": "../abstract/AbstractAccessControlList.1.0.0.json"
+    },
+    "legal": {
+      "description": "The entity's legal tags and compliance status. The actual contents associated with the legal tags is managed by the Compliance Service.",
+      "title": "Legal Tags",
+      "$ref": "../abstract/AbstractLegalTags.1.0.0.json"
+    },
+    "tags": {
+      "title": "Tag Dictionary",
+      "description": "A generic dictionary of string keys mapping to string value. Only strings are permitted as keys and values.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "example": {
+        "NameOfKey": "String value"
+      }
+    },
+    "createTime": {
+      "description": "Timestamp of the time at which initial version of this OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:46:20.163Z"
+    },
+    "createUser": {
+      "title": "Resource Object Creation User Reference",
+      "description": "The user reference, which created the first version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "modifyTime": {
+      "description": "Timestamp of the time at which this version of the OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Version Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:52:24.477Z"
+    },
+    "modifyUser": {
+      "title": "Resource Object Version Creation User Reference",
+      "description": "The user reference, which created this version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "ancestry": {
+      "description": "The links to data, which constitute the inputs, from which this record instance is derived.",
+      "title": "Ancestry",
+      "$ref": "../abstract/AbstractLegalParentList.1.0.0.json"
+    },
+    "meta": {
+      "description": "The Frame of Reference meta data section linking the named properties to self-contained definitions.",
+      "title": "Frame of Reference Meta Data",
+      "type": "array",
+      "items": {
+        "$ref": "../abstract/AbstractMetaItem.1.0.0.json"
+      }
+    },
+    "data": {
+      "allOf": [
+        {
+          "$ref": "../abstract/AbstractCommonResources.1.0.0.json"
+        },
+        {
+          "$ref": "../abstract/AbstractMaster.1.0.0.json"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "WellboreID": {
+              "type": "string",
+              "title": "Wellbore ID",
+              "description": "Identifier of the planned Wellbore",
+              "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Wellbore:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "Wellbore"
+                }
+              ]
+            },
+            "FluidIntervals": {
+              "type": "array",
+              "title": "Fluid Intervals",
+              "description": "An array of fluid intervals that in turn describe the target fluid properties that should be implemented",
+              "items": {
+                "type": "object",
+                "title": "Fluids Interval",
+                "description": "A fluid used in the drilling of a wellbore's section",
+                "properties": {
+                  "IntervalName": {
+                    "type": "string",
+                    "title": "Interval Name",
+                    "description": "The name of an interval in which the fluid will be used"
+                  },
+                  "IntervalTopMeasuredDepth": {
+                    "type": "number",
+                    "title": "Interval Top Measured Depth",
+                    "description": "The top measured depth of the interval in which the fluid will be used (in many cases, this Measured Depth will be the same than the one provided by WellboreArchitecture.HoleSection content). Depth relative to Planned wellbore ZDP. Navigate via WellboreID to the side-car WellPlanningWellbore, which holds the depth reference in data.VerticalMeasurement.",
+                    "x-osdu-frame-of-reference": "UOM:length"
+                  },
+                  "IntervalBaseMeasuredDepth": {
+                    "type": "number",
+                    "title": "Interval Base Measured Depth",
+                    "description": "The bottom measured depth of the interval in which the fluid will be used (in many cases, this Measured Depth will be the same than the one provided by WellboreArchitecture.HoleSection content). Depth relative to Planned wellbore ZDP. Navigate via WellboreID to the side-car WellPlanningWellbore, which holds the depth reference in data.VerticalMeasurement.",
+                    "x-osdu-frame-of-reference": "UOM:length"
+                  },
+                  "HoleSectionID": {
+                    "type": "string",
+                    "title": "Hole Section ID",
+                    "description": "Description of the Hole Section for this Fluids Program",
+                    "pattern": "^[\\w\\-\\.]+:master-data\\-\\-HoleSection:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "master-data",
+                        "EntityType": "HoleSection"
+                      }
+                    ]
+                  },
+                  "InstalledTubularAssemblyID": {
+                    "type": "string",
+                    "title": "Installed Tubular Assembly ID",
+                    "description": "The identifier of the tubular to be installed.",
+                    "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-TubularAssembly:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "work-product-component",
+                        "EntityType": "TubularAssembly"
+                      }
+                    ]
+                  },
+                  "FluidTypeID": {
+                    "type": "string",
+                    "title": "Fluid Type ID",
+                    "description": "A fixed list of reference values describing the high level type of the drilling fluid",
+                    "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-FluidType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "reference-data",
+                        "EntityType": "FluidType"
+                      }
+                    ]
+                  },
+                  "LabReferenceNumber": {
+                    "type": "number",
+                    "title": "Lab Reference Number",
+                    "description": "A reference number allowing traceability back to the analysis of the fluid in a lab"
+                  },
+                  "ViscosityFunnel": {
+                    "type": "number",
+                    "title": "Viscosity Funnel",
+                    "description": "Funnel viscosity in seconds.",
+                    "x-osdu-frame-of-reference": "UOM:time"
+                  },
+                  "Comments": {
+                    "type": "string",
+                    "title": "Comments",
+                    "description": "Comments and remarks."
+                  },
+                  "FluidsSystem": {
+                    "type": "object",
+                    "title": "Fluid System",
+                    "description": "Provides the overall description of the drilling fluids system.",
+                    "properties": {
+                      "FluidSystemName": {
+                        "type": "string",
+                        "title": "Fluid System Name",
+                        "description": "Free text string of the common name or product name of the drilling mud.",
+                        "example": "KCL Polymer"
+                      },
+                      "FluidPurposeID": {
+                        "type": "string",
+                        "title": "Fluid Purpose ID",
+                        "description": "The purpose the mud will play in this hole section (can be Sweep, Displacement Mud).",
+                        "example": "namespace:reference-data--FluidRole:Sweep:",
+                        "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-FluidRole:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                        "x-osdu-relationship": [
+                          {
+                            "GroupType": "reference-data",
+                            "EntityType": "FluidRole"
+                          }
+                        ]
+                      },
+                      "FluidProperties": {
+                        "type": "array",
+                        "title": "Fluid Properties",
+                        "description": "An array of planned / designed properties of the fluid for the Interval / Phase. Properties may have a specified value or a range that should be maintained",
+                        "items": {
+                          "type": "object",
+                          "title": "Fluids Property",
+                          "description": "A description of fluid used in the drilling of a wellbore",
+                          "properties": {
+                            "FluidPropertyNameID": {
+                              "type": "string",
+                              "title": "Fluid Property Name",
+                              "description": "An open reference list of fluid properties",
+                              "example": "namespace:reference-data--FluidPropertyName:MW:",
+                              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-FluidPropertyName:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                              "x-osdu-relationship": [
+                                {
+                                  "GroupType": "reference-data",
+                                  "EntityType": "FluidPropertyName"
+                                }
+                              ]
+                            },
+                            "FluidFacets": {
+                              "type": "array",
+                              "title": "Fluid Facets",
+                              "description": "Array of Fluids facet that describes each individual programmed property of the fluids.",
+                              "items": {
+                                "type": "object",
+                                "title": "Fluid Facet",
+                                "description": "A description of an individual facet composing a fluid",
+                                "properties": {
+                                  "FluidPropertyFacetNameID": {
+                                    "type": "string",
+                                    "title": "Fluid Property Type Facet Name ID",
+                                    "description": "Identifier to the list of potential types of Fluid Property Facet (e.g. Measured, Range (Min), Range (Max)",
+                                    "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-FluidPropertyFacetName:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                                    "x-osdu-relationship": [
+                                      {
+                                        "GroupType": "reference-data",
+                                        "EntityType": "FluidPropertyFacetName"
+                                      }
+                                    ]
+                                  },
+                                  "FluidPropertyValue": {
+                                    "type": "number",
+                                    "title": "Fluid Property Value",
+                                    "description": "The actual value of the property",
+                                    "x-osdu-frame-of-reference": "UOM_via_property:FluidPropertyUnit"
+                                  },
+                                  "FluidPropertyUnit": {
+                                    "type": "string",
+                                    "title": "Fluid Property Unit",
+                                    "description": "The measurement unit of the Fluid Property Value",
+                                    "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-UnitOfMeasure:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                                    "x-osdu-relationship": [
+                                      {
+                                        "GroupType": "reference-data",
+                                        "EntityType": "UnitOfMeasure"
+                                      }
+                                    ]
+                                  },
+                                  "MeasuredPropertyID": {
+                                    "type": "string",
+                                    "title": "Measured Property Identifier",
+                                    "description": "The unique identifier of the fluid property (density or temperature measurement,\u2026.)",
+                                    "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-UnitQuantity:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                                    "x-osdu-relationship": [
+                                      {
+                                        "GroupType": "reference-data",
+                                        "EntityType": "UnitQuantity"
+                                      }
+                                    ]
+                                  }
+                                },
+                                "required": [
+                                  "FluidPropertyFacetNameID",
+                                  "FluidPropertyValue",
+                                  "FluidPropertyUnit",
+                                  "MeasuredPropertyID"
+                                ]
+                              }
+                            }
+                          },
+                          "required": [
+                            "FluidPropertyNameID",
+                            "FluidFacets"
+                          ]
+                        }
+                      },
+                      "BarrelFormulation": {
+                        "type": "array",
+                        "title": "Barrel Formulation",
+                        "description": "Description of the formulation to be used for the drilling activity",
+                        "items": {
+                          "type": "object",
+                          "title": "Barrel Formulation",
+                          "description": "Description of the formulation of the barrel that will be part of the drilling mud",
+                          "properties": {
+                            "ProductName": {
+                              "type": "string",
+                              "title": "Product Name",
+                              "description": "Name of the Product",
+                              "example": "Bentonite, Caustic Soda, Soda Ash"
+                            },
+                            "ConcentrationValue": {
+                              "type": "number",
+                              "title": "Concentration Value",
+                              "description": "The actual value of the planned product concentration",
+                              "x-osdu-frame-of-reference": "UOM_via_property:ConcentrationUnitOfMeasure"
+                            },
+                            "ConcentrationUnitOfMeasure": {
+                              "type": "string",
+                              "title": "Concentration Value Unit of Measure",
+                              "description": "The unit of measure of the planned product concentration",
+                              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-UnitOfMeasure:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                              "x-osdu-relationship": [
+                                {
+                                  "GroupType": "reference-data",
+                                  "EntityType": "UnitOfMeasure"
+                                }
+                              ]
+                            },
+                            "Quantity": {
+                              "type": "number",
+                              "title": "Quantity",
+                              "description": "The actual number of units of the component. The unit size of the component. For example if you wanted to use 15 x 25 lb bags then the Unit would be lbs, the UnitSize would be 25 and the Product Package would be \"Bag\" and the Quantity would be 15",
+                              "x-osdu-frame-of-reference": "UOM_via_property:ProductUnitOfMeasure"
+                            },
+                            "ProductUnitOfMeasure": {
+                              "type": "string",
+                              "title": "Product Unit Of Measure",
+                              "description": "The unit size of the component. For example if this product came in 25 lb bags then the Unit would be lbs, the UnitSize would be 25 and the Product Package would be \"Bag\"",
+                              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-UnitOfMeasure:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                              "x-osdu-relationship": [
+                                {
+                                  "GroupType": "reference-data",
+                                  "EntityType": "UnitOfMeasure"
+                                }
+                              ]
+                            },
+                            "ProductUnitSize": {
+                              "type": "string",
+                              "title": "Product Unit Size",
+                              "description": "The unit size of the component. For example if this product came in 25 lb bags then the Unit would be lbs, the UnitSize would be 25 and the Product Package would be \"Bag\""
+                            },
+                            "ProductCode": {
+                              "type": "string",
+                              "title": "Product Code",
+                              "description": "The code associated with the product"
+                            },
+                            "ProductFunction": {
+                              "type": "string",
+                              "title": "Product Function",
+                              "description": "The function that the component plays in the formulation. For example Base Oil, Fresh Water, Chemical Additive"
+                            },
+                            "ProductPackage": {
+                              "type": "string",
+                              "title": "Product Package",
+                              "description": "The packaging that the component comes in. For example Sacks, Bags. For Liquids this is usually N/A"
+                            },
+                            "ProductSg": {
+                              "type": "number",
+                              "title": "Product Specific Gravity",
+                              "description": "The specific gravity value of the component."
+                            }
+                          },
+                          "required": [
+                            "ProductName"
+                          ]
+                        }
+                      },
+                      "PolymerType": {
+                        "type": "string",
+                        "title": "Polymer Type",
+                        "description": "Type of polymers present in mud system."
+                      }
+                    },
+                    "required": [
+                      "FluidProperties"
+                    ]
+                  }
+                },
+                "required": [
+                  "IntervalName",
+                  "IntervalTopMeasuredDepth",
+                  "IntervalBaseMeasuredDepth",
+                  "FluidsSystem"
+                ]
+              }
+            },
+            "FluidsSupplierID": {
+              "type": "string",
+              "title": "Fluids Supplier ID",
+              "description": "Identifier of the fluids supplier company",
+              "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Organisation:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "Organisation"
+                }
+              ]
+            },
+            "Name": {
+              "type": "string",
+              "title": "Name",
+              "description": "Name of Fluids Program"
+            }
+          },
+          "required": [
+            "WellboreID",
+            "FluidIntervals"
+          ],
+          "title": "IndividualProperties"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "ExtensionProperties": {
+              "type": "object"
+            }
+          },
+          "title": "ExtensionProperties"
+        }
+      ]
+    }
+  },
+  "required": [
+    "kind",
+    "acl",
+    "legal"
+  ],
+  "additionalProperties": false,
+  "x-osdu-review-status": "Accepted",
+  "x-osdu-virtual-properties": {
+    "data.VirtualProperties.DefaultLocation": {
+      "type": "object",
+      "priority": [
+        {
+          "path": "data.SpatialLocation"
+        }
+      ]
+    },
+    "data.VirtualProperties.DefaultName": {
+      "type": "string",
+      "priority": [
+        {
+          "path": "data.Name"
+        }
+      ]
+    }
+  },
+  "x-osdu-inheriting-from-kind": []
+}

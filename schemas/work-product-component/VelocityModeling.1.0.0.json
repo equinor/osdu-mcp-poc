@@ -1,0 +1,404 @@
+{
+  "x-osdu-license": "Copyright 2022, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "$id": "https://schema.osdu.opengroup.org/json/work-product-component/VelocityModeling.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:work-product-component--VelocityModeling:1.0.0",
+  "title": "VelocityModeling",
+  "description": "An earth model describing seismic velocities.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "Previously called ResourceID or SRN which identifies this OSDU resource object without version.",
+      "title": "Entity ID",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-VelocityModeling:[\\w\\-\\.\\:\\%]+$",
+      "example": "namespace:work-product-component--VelocityModeling:c31d4243-1c94-5f84-8627-81cbb3347ebb"
+    },
+    "kind": {
+      "description": "The schema identification for the OSDU resource object following the pattern {Namespace}:{Source}:{Type}:{VersionMajor}.{VersionMinor}.{VersionPatch}. The versioning scheme follows the semantic versioning, https://semver.org/.",
+      "title": "Entity Kind",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:[\\w\\-\\.]+:[\\w\\-\\.]+:[0-9]+.[0-9]+.[0-9]+$",
+      "example": "osdu:wks:work-product-component--VelocityModeling:1.0.0"
+    },
+    "version": {
+      "description": "The version number of this OSDU resource; set by the framework.",
+      "title": "Version Number",
+      "type": "integer",
+      "format": "int64",
+      "example": 1562066009929332
+    },
+    "acl": {
+      "description": "The access control tags associated with this entity.",
+      "title": "Access Control List",
+      "$ref": "../abstract/AbstractAccessControlList.1.0.0.json"
+    },
+    "legal": {
+      "description": "The entity's legal tags and compliance status. The actual contents associated with the legal tags is managed by the Compliance Service.",
+      "title": "Legal Tags",
+      "$ref": "../abstract/AbstractLegalTags.1.0.0.json"
+    },
+    "tags": {
+      "title": "Tag Dictionary",
+      "description": "A generic dictionary of string keys mapping to string value. Only strings are permitted as keys and values.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "example": {
+        "NameOfKey": "String value"
+      }
+    },
+    "createTime": {
+      "description": "Timestamp of the time at which initial version of this OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:46:20.163Z"
+    },
+    "createUser": {
+      "title": "Resource Object Creation User Reference",
+      "description": "The user reference, which created the first version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "modifyTime": {
+      "description": "Timestamp of the time at which this version of the OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Version Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:52:24.477Z"
+    },
+    "modifyUser": {
+      "title": "Resource Object Version Creation User Reference",
+      "description": "The user reference, which created this version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "ancestry": {
+      "description": "The links to data, which constitute the inputs, from which this record instance is derived.",
+      "title": "Ancestry",
+      "$ref": "../abstract/AbstractLegalParentList.1.0.0.json"
+    },
+    "meta": {
+      "description": "The Frame of Reference meta data section linking the named properties to self-contained definitions.",
+      "title": "Frame of Reference Meta Data",
+      "type": "array",
+      "items": {
+        "$ref": "../abstract/AbstractMetaItem.1.0.0.json"
+      }
+    },
+    "data": {
+      "allOf": [
+        {
+          "$ref": "../abstract/AbstractCommonResources.1.0.0.json"
+        },
+        {
+          "$ref": "../abstract/AbstractWPCGroupType.1.0.0.json"
+        },
+        {
+          "$ref": "../abstract/AbstractWorkProductComponent.1.0.0.json"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "Remark": {
+              "description": "Comments about the velocity model reflecting the thinking of the modeler.  Distinguished from Description which is a general explanation of the model.",
+              "type": "string"
+            },
+            "ObjectiveType": {
+              "description": "The purpose or intended use of the velocity model, such as Stacking|Depth Migration|Time Migration|Time-depth.",
+              "type": "string",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-ObjectiveType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "ObjectiveType"
+                }
+              ]
+            },
+            "VelocityType": {
+              "description": "Name of the Velocity Type describing the statistic represented, such as RMS|Average|Interval|Instantaneous|Stacking|Migration.",
+              "type": "string",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-VelocityType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "VelocityType"
+                }
+              ]
+            },
+            "VelocityDirectionType": {
+              "type": "string",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-VelocityDirectionType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "description": "Direction associated with the velocity.  Orientation of velocity specification such as vertical, dip and azimuth.",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "VelocityDirectionType"
+                }
+              ]
+            },
+            "AnisotropyType": {
+              "type": "string",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-AnisotropyType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "description": "Type of anisotropy used in the velocity model",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "AnisotropyType"
+                }
+              ]
+            },
+            "DimensionType": {
+              "type": "string",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-DimensionType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "description": "Is this model defined along a line, on a surface, for a volume, for a time series?",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "DimensionType"
+                }
+              ]
+            },
+            "PropertyFieldRepresentationType": {
+              "type": "string",
+              "description": "Is the velocity field represented as a grid or mesh or..",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-PropertyFieldRepresentationType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "PropertyFieldRepresentationType"
+                }
+              ]
+            },
+            "DimensionNodeCounts": {
+              "type": "array",
+              "description": "The number of grid nodes in each direction (i,j,k)",
+              "items": {
+                "type": "integer"
+              }
+            },
+            "AverageNodeSpacings": {
+              "type": "array",
+              "description": "The average distance between grid nodes or mesh vertices in each direction (i,j,k).  Note that vertical case is equivalent to sample interval.",
+              "items": {
+                "type": "number"
+              }
+            },
+            "TotalNodeCount": {
+              "type": "number",
+              "description": "Total number of vertices in the model."
+            },
+            "PropertyNameTypes": {
+              "type": "array",
+              "description": "List of properties represented, eg. Vp, Vs, ....  Length ValuesPerNodeOrCell.",
+              "items": {
+                "type": "string",
+                "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-PropertyNameType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                "x-osdu-relationship": [
+                  {
+                    "GroupType": "reference-data",
+                    "EntityType": "PropertyNameType"
+                  }
+                ]
+              }
+            },
+            "ValuesPerNodeOrCell": {
+              "type": "integer",
+              "description": "The number of numerical values stored at each node or cell "
+            },
+            "CellValueTypes": {
+              "type": "array",
+              "description": "The type of numerical value(s) stored in each grid cell, such as Float or Double.",
+              "items": {
+                "type": "string"
+              }
+            },
+            "DiscretisationSchemeType": {
+              "type": "string",
+              "description": "Given a discretisation of a property field (e.g. a  mesh), the value of a property may refer to a vertex, the center of a cell, or the region covered by a cell.  When vertical interpolation is constant, this also includes an indication of Z Grid Registration, which whether the sample value pertains to the top, center, of bottom of grid.",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-DiscretisationSchemeType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "DiscretisationSchemeType"
+                }
+              ]
+            },
+            "DataSourceReferenceKeys": {
+              "type": "array",
+              "description": "Reference to history in source system, for example Jobpro jobset id, dataset id, workflow id",
+              "items": {
+                "type": "integer"
+              }
+            },
+            "DataSourceSystem": {
+              "type": "string",
+              "description": "System providing data source history, eg. Jobpro, etc."
+            },
+            "InterpolationMethodID": {
+              "type": "string",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-InterpolationMethod:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "description": "For discretely sampled models, the mathematical form of interpolation between nodes, such as linear in space, bicubic spline, linear in time, trilinear, horizon-based.",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "InterpolationMethod"
+                }
+              ]
+            },
+            "PropertyUOMIDs": {
+              "type": "array",
+              "description": "Units of measure for each property type in Cell Values.  Array of length ValuesPerNodeOrCell.",
+              "items": {
+                "type": "string",
+                "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-UnitOfMeasure:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                "x-osdu-relationship": [
+                  {
+                    "GroupType": "reference-data",
+                    "EntityType": "UnitOfMeasure"
+                  }
+                ]
+              }
+            },
+            "SeismicDomainTypeID": {
+              "type": "string",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-SeismicDomainType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "description": "Vertical domain of velocities.  E.g. Time, Depth.",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "SeismicDomainType"
+                }
+              ]
+            },
+            "SeismicDomainUOM": {
+              "type": "string",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-UnitOfMeasure:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "description": "Unit of measurement for vertical domain",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "UnitOfMeasure"
+                }
+              ]
+            },
+            "RecordLength": {
+              "type": "number",
+              "description": "Total depth or time covered by velocity model.  In units of SeismicDomainUoM.",
+              "x-osdu-frame-of-reference": "UOM_via_property:SeismicDomainUOM"
+            },
+            "HorizontalCRSID": {
+              "type": "string",
+              "description": "The CRS for surface coordinates used in fault locations if not specified in File.",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-CoordinateReferenceSystem:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "CoordinateReferenceSystem"
+                }
+              ]
+            },
+            "VelocityAnalysisMethodID": {
+              "type": "string",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-VelocityAnalysisMethod:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "description": "Type of algorithm used to derive velocities such as Stacking NMO, Tomography, etc.",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "VelocityAnalysisMethod"
+                }
+              ]
+            },
+            "FloatingDatumIndicator": {
+              "type": "boolean",
+              "description": "Boolean to show that datum reference is not a constant.  Any description or horizon information must be described in model file(s)."
+            },
+            "VerticalDatumOffset": {
+              "type": "number",
+              "description": "Datum value, the elevation of zero time/depth on the vertical axis in the domain of seismicdomaintype relative to the vertical reference datum used (usually MSL). Positive is upward from zero elevation to seismic datum).",
+              "x-osdu-frame-of-reference": "UOM:length"
+            },
+            "VerticalMeasurementTypeID": {
+              "type": "string",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-VerticalMeasurementType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "description": "Identifies a vertical reference datum type. E.g. mean sea level, ground level, mudline.",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "VerticalMeasurementType"
+                }
+              ]
+            },
+            "ReplacementVelocity": {
+              "type": "number",
+              "description": "Value used to produce vertical static shifts in data",
+              "x-osdu-frame-of-reference": "UOM:length per time"
+            },
+            "BinGridID": {
+              "type": "string",
+              "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-SeismicBinGrid:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "description": "the Bin Grid of the Fault System when coordinates are specified in seismic bin inline/crossline.",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "work-product-component",
+                  "EntityType": "SeismicBinGrid"
+                }
+              ]
+            }
+          },
+          "title": "IndividualProperties"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "ExtensionProperties": {
+              "type": "object"
+            }
+          },
+          "title": "ExtensionProperties"
+        }
+      ]
+    }
+  },
+  "required": [
+    "kind",
+    "acl",
+    "legal"
+  ],
+  "additionalProperties": false,
+  "x-osdu-supported-file-formats": [
+    "RESQML",
+    "SEGY",
+    "OpenVDS",
+    "OpenZGY"
+  ],
+  "x-osdu-virtual-properties": {
+    "data.VirtualProperties.DefaultLocation": {
+      "type": "object",
+      "priority": [
+        {
+          "path": "data.SpatialArea"
+        },
+        {
+          "path": "data.SpatialPoint"
+        }
+      ]
+    },
+    "data.VirtualProperties.DefaultName": {
+      "type": "string",
+      "priority": [
+        {
+          "path": "data.Name"
+        }
+      ]
+    }
+  },
+  "x-osdu-inheriting-from-kind": [
+    {
+      "name": "WorkProductComponent",
+      "kind": "osdu:wks:AbstractWPCGroupType:1.0.0"
+    }
+  ]
+}

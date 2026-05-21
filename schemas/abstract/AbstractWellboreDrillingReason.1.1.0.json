@@ -1,0 +1,57 @@
+{
+  "x-osdu-license": "Copyright 2022, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "x-osdu-review-status": "Accepted",
+  "$id": "https://schema.osdu.opengroup.org/json/abstract/AbstractWellboreDrillingReason.1.1.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:AbstractWellboreDrillingReason:1.1.0",
+  "title": "AbstractWellboreDrillingReason",
+  "description": "Purpose for drilling a wellbore, which often is an indication of the level of risk.",
+  "type": "object",
+  "properties": {
+    "LaheeClassID": {
+      "type": "string",
+      "title": "Lahee Class ID",
+      "description": "The Lahee classification, based on the traditional, commonly accepted, scheme to categorize wells by the general degree of risk assumed by the operator at the time of drilling.",
+      "x-osdu-attribution-authority": "PPDM",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-LaheeClass:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "LaheeClass"
+        }
+      ]
+    },
+    "DrillingReasonTypeID": {
+      "type": "string",
+      "title": "Drilling Reason Type ID",
+      "description": "DEPRECATED: Superseded by LaheeClassID. Identifier of the drilling reason type for the corresponding time period.",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-DrillingReasonType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "DrillingReasonType"
+        }
+      ]
+    },
+    "EffectiveDateTime": {
+      "type": "string",
+      "title": "Effective Date Time",
+      "description": "The date and time at which the event becomes effective.",
+      "format": "date-time",
+      "x-osdu-frame-of-reference": "DateTime"
+    },
+    "TerminationDateTime": {
+      "type": "string",
+      "title": "Termination Date Time",
+      "description": "The date and time at which the event is no longer in effect.",
+      "format": "date-time",
+      "x-osdu-frame-of-reference": "DateTime"
+    },
+    "Remark": {
+      "type": "string",
+      "title": "Remark",
+      "description": "A remark or comment explaining the drilling reason or LaheeClass assignment."
+    }
+  },
+  "x-osdu-inheriting-from-kind": []
+}

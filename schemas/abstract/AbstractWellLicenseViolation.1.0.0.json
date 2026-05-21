@@ -1,0 +1,126 @@
+{
+  "x-osdu-license": "Copyright 2023, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "x-osdu-review-status": "Accepted",
+  "$id": "https://schema.osdu.opengroup.org/json/abstract/AbstractWellLicenseViolation.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:AbstractWellLicenseViolation:1.0.0",
+  "title": "AbstractWellLicenseViolation",
+  "description": "Violations of license conditions may have serious consequences, including penalties or suspension or revocation of the license.  Any condition may be violated, and the regulator may provide notice to the address for service that the violation must be remedied. These processes are complex, but this simplified subset of attributes allows basic information to be captured.",
+  "type": "object",
+  "properties": {
+    "QuantityLost": {
+      "type": "number",
+      "description": "The liquid or gaseous volume or other quantity that was lost or that escaped.",
+      "example": "96 bbl",
+      "x-osdu-frame-of-reference": "UOM:volume"
+    },
+    "QuantityLostDuration": {
+      "type": "number",
+      "description": "The duration over which the volume loss was recorded, usually in hours or days.",
+      "example": "10 d",
+      "x-osdu-frame-of-reference": "UOM:time"
+    },
+    "ViolatedCondition": {
+      "type": "string",
+      "description": "The condition(s) in a license that have been violated.  This may be a relationship to the specific conditions. The ViolatedCondition value refers to an array element in data.LicenseConditions[]."
+    },
+    "IsActive": {
+      "type": "boolean",
+      "description": "Indicates whether this violation is still in effect, or has not been fully resolved."
+    },
+    "ViolationConsequenceTypeIDs": {
+      "type": "array",
+      "description": "The consequence of the violation as assigned by the regulatory or other authority.  Consequence may be financial, work to be done, reports to be submitted. In addition, the authority may suspend, terminate or otherwise revise a license by adding new conditions or obligations.  For each violation, there may be more than one consequences.",
+      "items": {
+        "type": "string",
+        "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-WellLicenseViolationConsequenceType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+        "x-osdu-relationship": [
+          {
+            "GroupType": "reference-data",
+            "EntityType": "WellLicenseViolationConsequenceType"
+          }
+        ]
+      }
+    },
+    "ViolationDate": {
+      "type": "string",
+      "description": "The date on which the violation was first on record, such as the date that the regulatory agency notified you about a problem, or the date when something such as a report was overdue. Violations may be triggered by operations or events (or failure to complete something) or may be reported by another party.",
+      "format": "date"
+    },
+    "ViolationDescription": {
+      "type": "string",
+      "description": "A supporting narrative that describes the violation.  While in some cases the nature of the violations, others require detailed explanations.  For example, environmental violations often require explanatory text). \n\nIn populating descriptions of the violation and the resolution, ensure that the contents are appropriate to the attribute.  Do not put resolution information in the violation description, for example."
+    },
+    "ViolationEndDate": {
+      "type": "string",
+      "description": "The date on which a violation is determined to have been fully resolved.",
+      "format": "date"
+    },
+    "ViolationResolutionDescription": {
+      "type": "string",
+      "description": "A short narrative description of the specific resolution of the violation, such as procedures modified, fence repaired, water disposal corrected etc."
+    },
+    "ViolationResolutionMethodTypeIDs": {
+      "type": "array",
+      "description": "The method by which a license violation has been resolved.  In some cases, more than one method must be used, so multiple entries may be required, with appropriate dates associated.  Methods may be financial (fines or other payments), operational (procedures altered),  rectification (things fixed or moved) or conciliatory (remedies to citizens or other stakeholders).",
+      "items": {
+        "type": "string",
+        "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-WellLicenseViolationResolutionMethodType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+        "x-osdu-relationship": [
+          {
+            "GroupType": "reference-data",
+            "EntityType": "WellLicenseViolationResolutionMethodType"
+          }
+        ]
+      }
+    },
+    "ViolationResolvedDate": {
+      "type": "string",
+      "description": "The date that this violation was resolved by submitting required information, paying fines, amending procedures etc. and necessary release notice provided (usually by the regulator).  This may or may not be the same as the ViolationEndDate.",
+      "format": "date"
+    },
+    "ViolationStartDate": {
+      "type": "string",
+      "description": "The date on which this violation was determined to be in effect.  This may not be the same date as the violation actually first began, ViolationDate.",
+      "format": "date"
+    },
+    "ViolationTypeID": {
+      "type": "string",
+      "description": "The type of violation of a license that is being recorded. Can be as simple as failure to submit necessary reports or something more difficult such as improper procedures. Grouping these violations by class supports reporting, metrics and analysis.",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-WellLicenseViolationType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "WellLicenseViolationType"
+        }
+      ]
+    },
+    "WellID": {
+      "type": "string",
+      "description": "Identify the well  that is in violation. The condition violated can be tracked via ViolatedCondition referring to an object in data.LicenseConditions[].",
+      "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Well:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "master-data",
+          "EntityType": "Well"
+        }
+      ]
+    },
+    "WellboreID": {
+      "type": "string",
+      "description": "Identify the wellbore  that is in violation. The condition violated can be tracked via ViolatedCondition referring to an object in data.LicenseConditions[].",
+      "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Wellbore:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "master-data",
+          "EntityType": "Wellbore"
+        }
+      ]
+    },
+    "ElementIdentifier": {
+      "type": "string",
+      "description": "Unique identifier of this element in the parent's list of license violations."
+    }
+  },
+  "x-osdu-inheriting-from-kind": []
+}

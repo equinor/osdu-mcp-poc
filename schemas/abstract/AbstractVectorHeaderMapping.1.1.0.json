@@ -1,0 +1,234 @@
+{
+  "x-osdu-license": "Copyright 2023, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "x-osdu-review-status": "Accepted",
+  "$id": "https://schema.osdu.opengroup.org/json/abstract/AbstractVectorHeaderMapping.1.1.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:AbstractVectorHeaderMapping:1.1.0",
+  "title": "AbstractVectorHeaderMapping",
+  "description": "Array of objects which define the meaning and format of a tabular structure used in a binary file as a header.  The initial use case is the trace headers of a SEG-Y file.  Note that some of this information may be repeated in the SEG-Y EBCDIC header.",
+  "type": "object",
+  "properties": {
+    "VectorHeaderMapping": {
+      "type": "array",
+      "title": "Vector Header Mapping",
+      "description": "Array of objects which define the meaning and format of a tabular structure used in a binary file as a header.  The initial use case is the trace headers of a SEG-Y file.  Note that some of this information may be repeated in the SEG-Y EBCDIC header.",
+      "items": {
+        "type": "object",
+        "title": "VectorHeaderMapping",
+        "description": "Array of objects which define the meaning and format of a tabular structure used in a binary file as a header.  The initial use case is the trace headers of a SEG-Y file.  Note that some of this information may be repeated in the SEG-Y EBCDIC header.",
+        "properties": {
+          "KeyName": {
+            "type": "string",
+            "title": "Key Name",
+            "description": "Relationship to a reference value for a name of a property header such as INLINE, CDPX.",
+            "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-HeaderKeyName:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+            "x-osdu-relationship": [
+              {
+                "GroupType": "reference-data",
+                "EntityType": "HeaderKeyName"
+              }
+            ]
+          },
+          "WordFormat": {
+            "type": "string",
+            "title": "Word Format",
+            "description": "Relationship to a reference value for binary data types, such as INT, UINT, FLOAT, IBM_FLOAT, ASCII, EBCDIC.",
+            "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-WordFormatType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+            "x-osdu-relationship": [
+              {
+                "GroupType": "reference-data",
+                "EntityType": "WordFormatType"
+              }
+            ]
+          },
+          "WordWidth": {
+            "type": "integer",
+            "title": "Word Width",
+            "description": "Size of the word in bytes."
+          },
+          "Position": {
+            "type": "integer",
+            "description": "Beginning byte position of header value, 1 indexed."
+          },
+          "UoM": {
+            "type": "string",
+            "title": "Unit of Measure",
+            "description": "Relationship to units of measure reference if header standard is not followed.",
+            "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-UnitOfMeasure:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+            "x-osdu-relationship": [
+              {
+                "GroupType": "reference-data",
+                "EntityType": "UnitOfMeasure"
+              }
+            ]
+          },
+          "ScalarIndicator": {
+            "type": "string",
+            "title": "Scalar Indicator",
+            "description": "Enumerated string indicating whether to use the normal scalar field for scaling this field (STANDARD), no scaling (NOSCALE), or override scalar (OVERRIDE).  Default is current STANDARD (such as SEG-Y rev2).",
+            "enum": [
+              "STANDARD",
+              "NOSCALE",
+              "OVERRIDE"
+            ]
+          },
+          "ScalarOverride": {
+            "type": "number",
+            "title": "Scalar Override",
+            "description": "Scalar value (as defined by standard) when a value present in the header needs to be overwritten for this value."
+          }
+        }
+      }
+    },
+    "TraceHeaderOverrides": {
+      "type": "array",
+      "title": "Trace Header Overrides",
+      "description": "Trace header override definitions.",
+      "items": {
+        "type": "object",
+        "title": "TraceHeaderOverride",
+        "description": "An object defining an override condition  for a vector header value, e.g. SEG-Y trace header value.",
+        "properties": {
+          "KeyName": {
+            "type": "string",
+            "title": "Key Name",
+            "description": "Relationship to a reference value for a name of a property header such as INLINE, CDPX.",
+            "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-HeaderKeyName:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+            "x-osdu-relationship": [
+              {
+                "GroupType": "reference-data",
+                "EntityType": "HeaderKeyName"
+              }
+            ]
+          },
+          "OverrideByConstant": {
+            "type": "number",
+            "title": "Override by Constant",
+            "description": "The constant value to be assigned to the position. If populated, the OverrideByExpressions must be empty."
+          },
+          "OverrideByExpressions": {
+            "type": "array",
+            "title": "Override by Expressions",
+            "description": "The value to be overridden is computed by evaluating the sequence of expressions. If populated, the OverrideByConstant must be empty.",
+            "items": {
+              "type": "object",
+              "title": "Expression",
+              "description": "An expression, potentially in a sequence, allowing the computation of a value or intermediate value.",
+              "properties": {
+                "Input": {
+                  "type": "string",
+                  "title": "Input",
+                  "description": "The input variable given by the HeaderKeyName.",
+                  "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-HeaderKeyName:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                  "x-osdu-relationship": [
+                    {
+                      "GroupType": "reference-data",
+                      "EntityType": "HeaderKeyName"
+                    }
+                  ]
+                },
+                "Operator1": {
+                  "type": "string",
+                  "title": "Operator 1",
+                  "description": "The operator 1, an enumeration with permitted values of Plus, Minus, DivideBy, DivideByInteger, MultiplyBy,  Modulo, Equals.",
+                  "enum": [
+                    "Plus",
+                    "Minus",
+                    "DivideBy",
+                    "DivideByInteger",
+                    "MultiplyBy",
+                    "Modulo",
+                    "Equals"
+                  ]
+                },
+                "Operand1Constant": {
+                  "type": "number",
+                  "title": "Operand 1 Constant",
+                  "description": "The constant operand 1 value.  If populated, Operand1Variable must be absent."
+                },
+                "Operand1Variable": {
+                  "type": "string",
+                  "title": "Operand 1 Variable",
+                  "description": "The operand 1 variable given by the HeaderKeyName, where to obtain the value. If populated, Operand1Constant must be absent.",
+                  "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-HeaderKeyName:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                  "x-osdu-relationship": [
+                    {
+                      "GroupType": "reference-data",
+                      "EntityType": "HeaderKeyName"
+                    }
+                  ]
+                },
+                "Operator2": {
+                  "type": "string",
+                  "title": "Operator 2",
+                  "description": "The operator 2, an enumeration with permitted values of Plus, Minus, DivideBy, DivideByInteger, MultiplyBy,  Modulo, Equals.",
+                  "enum": [
+                    "Plus",
+                    "Minus",
+                    "DivideBy",
+                    "DivideByInteger",
+                    "MultiplyBy",
+                    "Modulo",
+                    "Equals"
+                  ]
+                },
+                "Operand2Constant": {
+                  "type": "number",
+                  "title": "Operand 2 Constant",
+                  "description": "The constant operand 2 value. If populated, Operand2Variable must be absent."
+                },
+                "Operand2Variable": {
+                  "type": "string",
+                  "title": "Operand 2 Variable",
+                  "description": "The operand 2 variable given by the HeaderKeyName, where to obtain the value. If populated, Operand2Constant must be absent.",
+                  "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-HeaderKeyName:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                  "x-osdu-relationship": [
+                    {
+                      "GroupType": "reference-data",
+                      "EntityType": "HeaderKeyName"
+                    }
+                  ]
+                },
+                "Remark": {
+                  "type": "string",
+                  "title": "Remark",
+                  "description": "An optional remark explaining the intention or purpose of this expression."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "BinaryHeaderOverrides": {
+      "type": "array",
+      "title": "Binary Header Overrides",
+      "description": "Binary header override definitions.",
+      "items": {
+        "type": "object",
+        "title": "BinaryHeaderOverride",
+        "description": "An object defining an override condition  for a vector header value, e.g. SEG-Y binary header value.",
+        "properties": {
+          "KeyName": {
+            "type": "string",
+            "title": "Key Name",
+            "description": "Relationship to a reference value for a name of a property header such as LineNumber.",
+            "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-HeaderKeyName:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+            "x-osdu-relationship": [
+              {
+                "GroupType": "reference-data",
+                "EntityType": "HeaderKeyName"
+              }
+            ]
+          },
+          "OverrideByConstant": {
+            "type": "integer",
+            "title": "Override by Constant",
+            "description": "The constant value to be assigned to the position."
+          }
+        }
+      }
+    }
+  },
+  "x-osdu-inheriting-from-kind": []
+}

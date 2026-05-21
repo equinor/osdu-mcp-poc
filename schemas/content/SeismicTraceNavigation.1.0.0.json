@@ -1,0 +1,198 @@
+{
+  "x-osdu-license": "Copyright 2023, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "x-osdu-review-status": "Pending",
+  "x-osdu-governance-authorities": [
+    "OSDU"
+  ],
+  "$id": "https://schema.osdu.opengroup.org/json/content/SeismicTraceNavigation.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:content--SeismicTraceNavigation:1.0.0",
+  "title": "SeismicTraceNavigation",
+  "description": "The OSDU standard content schema for seismic trace navigation, typically for post-stack seismic 2D lines.",
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../abstract/AbstractContent.1.0.0.json",
+      "example": {
+        "SchemaKind": "osdu:wks:content--SeismicTraceNavigation:1.0.0",
+        "Name": "ST0299-05005+MIG_FIN",
+        "Description": "Example TraceNavigation for the seismic 2D line ST0299-05005+MIG_FIN",
+        "ExtensionProperties": {
+          "Kind": "abc:xyz:CustomKind:0.0.0",
+          "Custom": "Value"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "properties": {
+        "OriginalSeismicLineGeometryID": {
+          "type": "string",
+          "title": "Original Seismic Line Geometry ID",
+          "description": "The relationship to the original work-product-component--SeismicLineGeometry.",
+          "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-SeismicLineGeometry:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+          "x-osdu-relationship": [
+            {
+              "GroupType": "work-product-component",
+              "EntityType": "SeismicLineGeometry"
+            }
+          ]
+        },
+        "LineSegments": {
+          "type": "array",
+          "title": "Line Segments",
+          "description": "The summary data for each line segment. At least one segment is expected. If only one segment is defined, the feature type is AnyCrsLineString/LineString, otherwise AnyCrsMultiLineString/MultiLineString.",
+          "items": {
+            "type": "object",
+            "title": "LineSegment",
+            "description": "Context summary data for each line segment as well as name references to link back to source navigation and seismic.",
+            "properties": {
+              "NavigationLineName": {
+                "type": "string",
+                "title": "Navigation Line Name",
+                "description": "The original name of the line defined by the navigation.",
+                "example": "ST0299-05005"
+              },
+              "SeismicLineName": {
+                "type": "string",
+                "title": "Seismic Line Name",
+                "description": "The original name of the line defined by the seismic trace data.",
+                "example": "ST0299-05005+MIG_FIN"
+              },
+              "NumberOfLocations": {
+                "type": "integer",
+                "title": "Number of Locations",
+                "description": "The number of locations/coordinates in the line segment.",
+                "example": 984
+              },
+              "ShotPointRange": {
+                "type": "object",
+                "title": "Shot Point Range",
+                "description": "The shot point range.",
+                "example": {
+                  "Start": 954,
+                  "End": 1468.5
+                },
+                "properties": {
+                  "Start": {
+                    "type": "number",
+                    "title": "Start",
+                    "description": "The start point number of the range."
+                  },
+                  "End": {
+                    "type": "number",
+                    "title": "End",
+                    "description": "The end point number of the range."
+                  }
+                },
+                "required": [
+                  "Start",
+                  "End"
+                ]
+              },
+              "CommonMidPointRange": {
+                "type": "object",
+                "title": "Common Mid-Point Range",
+                "description": "The common mid-point range.",
+                "example": {
+                  "Start": 2100,
+                  "End": 3083
+                },
+                "properties": {
+                  "Start": {
+                    "type": "number",
+                    "title": "Start",
+                    "description": "The start point number of the range."
+                  },
+                  "End": {
+                    "type": "number",
+                    "title": "End",
+                    "description": "The end point number of the range."
+                  }
+                },
+                "required": [
+                  "Start",
+                  "End"
+                ]
+              },
+              "ShotPointCommonMidPointRatio": {
+                "type": "object",
+                "title": "Shot Point to Common Mid-Point Ratio",
+                "description": "The ratio definition between shot point and common mid-point numbers.",
+                "properties": {
+                  "ShotPoint": {
+                    "type": "number",
+                    "title": "Shot Point",
+                    "description": "The number of shot point(s) (dividend) per common mid-point.",
+                    "example": 1
+                  },
+                  "CommonMidPoint": {
+                    "type": "number",
+                    "title": "Common Mid Point",
+                    "description": "The divisor in the short point to common mid-point ratio.",
+                    "example": 2
+                  },
+                  "RoundingError": {
+                    "type": "number",
+                    "title": "Rounding Error",
+                    "description": "The rounding error for the shot point to common mid-point ratio. If absent the value is assumed to be 0.",
+                    "example": 0
+                  }
+                },
+                "required": [
+                  "ShotPoint",
+                  "CommonMidPoint"
+                ]
+              },
+              "GenericLabels": {
+                "type": "object",
+                "title": "Generic Labels",
+                "description": "Generic text labels for the first and last coordinate.",
+                "properties": {
+                  "First": {
+                    "type": "string",
+                    "title": "First",
+                    "description": "The first label of the line segment.",
+                    "example": "First Label"
+                  },
+                  "Last": {
+                    "type": "string",
+                    "title": "Last",
+                    "description": "The last label of the line segment.",
+                    "example": "Last Label"
+                  }
+                },
+                "required": [
+                  "First",
+                  "Last"
+                ]
+              },
+              "IsExtrapolated": {
+                "type": "boolean",
+                "title": "Is Extrapolated",
+                "description": "Has the segment been extrapolated to cover the entire trace range?"
+              },
+              "IsInterpolated": {
+                "type": "boolean",
+                "title": "Is Interpolated",
+                "description": "Has the segment been interpolated?"
+              }
+            }
+          }
+        },
+        "TotalNumberOfLocations": {
+          "type": "integer",
+          "title": "Total Number of Locations",
+          "description": "The total number of coordinates equalling the total number of traces in the seismic trace dataset."
+        },
+        "SpatialLocation": {
+          "$ref": "../abstract/AbstractSpatialLocation.1.1.0.json",
+          "title": "Spatial Location",
+          "description": "The original and WGS 84 (GeoJSON) trace locations with annotation properties (AbstractGeoJson.PropertiesSeismic2DLineNavigation)."
+        }
+      },
+      "title": "SeismicTraceNavigation"
+    }
+  ],
+  "x-osdu-inheriting-from-kind": []
+}

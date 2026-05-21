@@ -1,0 +1,36 @@
+{
+  "x-osdu-license": "Copyright 2024, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "x-osdu-review-status": "Accepted",
+  "$id": "https://schema.osdu.opengroup.org/json/abstract/AbstractTimeSeriesLink.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:AbstractTimeSeriesLink:1.0.0",
+  "title": "AbstractTimeSeriesLink",
+  "description": "Defines the link between a work-product-component (likely a representation in the RESQML sense) and a time series work-product-component holding the entire list of time steps in a series.",
+  "type": "object",
+  "properties": {
+    "TimeIndex": {
+      "type": "integer",
+      "title": "TimeIndices",
+      "description": "Index of the timestamp of the representation in the associated TimeSeries",
+      "example": 3
+    },
+    "TimeSeriesID": {
+      "type": "string",
+      "title": "TimeSeriesID",
+      "description": "Time series the representation is associated to",
+      "example": "namespace:work-product-component--TimeSeries:85348741-3433-406B-9189-22B298C3E2D2:",
+      "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-TimeSeries:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "work-product-component",
+          "EntityType": "TimeSeries"
+        }
+      ]
+    }
+  },
+  "required": [
+    "TimeIndex",
+    "TimeSeriesID"
+  ],
+  "x-osdu-inheriting-from-kind": []
+}

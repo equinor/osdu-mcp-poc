@@ -1,0 +1,101 @@
+{
+  "x-osdu-license": "Copyright 2022, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "x-osdu-review-status": "Accepted",
+  "$id": "https://schema.osdu.opengroup.org/json/abstract/AbstractWorkProductComponent.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:AbstractWorkProductComponent:1.0.0",
+  "title": "AbstractWorkProductComponent",
+  "description": "Generic reference object containing the universal properties of a Work Product Component for inclusion in data type specific Work Product Component objects",
+  "type": "object",
+  "properties": {
+    "Name": {
+      "type": "string",
+      "description": "Name"
+    },
+    "Description": {
+      "type": "string",
+      "description": "Description.  Summary of the work product component.  Not the same as Remark which captures thoughts of creator about the wpc."
+    },
+    "CreationDateTime": {
+      "type": "string",
+      "description": "Date that a resource (work  product component here) is formed outside of OSDU before loading (e.g. publication date).",
+      "format": "date-time"
+    },
+    "Tags": {
+      "type": "array",
+      "description": "Array of key words to identify the work product, especially to help in search.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "SpatialPoint": {
+      "$ref": "../abstract/AbstractSpatialLocation.1.0.0.json",
+      "description": "A centroid point that reflects the locale of the content of the work product component (location of the subject matter)."
+    },
+    "SpatialArea": {
+      "$ref": "../abstract/AbstractSpatialLocation.1.0.0.json",
+      "description": "A polygon boundary that reflects the locale of the content of the work product component (location of the subject matter)."
+    },
+    "GeoContexts": {
+      "type": "array",
+      "description": "List of geographic entities which provide context to the WPC.  This may include multiple types or multiple values of the same type.",
+      "x-osdu-indexing": {
+        "type": "nested"
+      },
+      "items": {
+        "$ref": "../abstract/AbstractGeoContext.1.0.0.json"
+      }
+    },
+    "SubmitterName": {
+      "type": "string",
+      "description": "Name of the person that first submitted the work product component to OSDU."
+    },
+    "BusinessActivities": {
+      "type": "array",
+      "description": "Array of business processes/workflows that the work product component has been through (ex. well planning, exploration).",
+      "items": {
+        "type": "string"
+      }
+    },
+    "AuthorIDs": {
+      "type": "array",
+      "title": "Author IDs",
+      "description": "Array of Authors' names of the work product component.  Could be a person or company entity.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "LineageAssertions": {
+      "type": "array",
+      "description": "Defines relationships with other objects (any kind of Resource) upon which this work product component depends.  The assertion is directed only from the asserting WPC to ancestor objects, not children.  It should not be used to refer to files or artefacts within the WPC -- the association within the WPC is sufficient and Artefacts are actually children of the main WPC file. They should be recorded in the data.Artefacts[] array.",
+      "x-osdu-indexing": {
+        "type": "flattened"
+      },
+      "items": {
+        "type": "object",
+        "title": "LineageAssertion",
+        "description": "Defines relationships with other objects (any kind of Resource) upon which this work product component depends.  The assertion is directed only from the asserting WPC to ancestor objects, not children.  It should not be used to refer to files or artefacts within the WPC -- the association within the WPC is sufficient and Artefacts are actually children of the main WPC file. They should be recorded in the data.Artefacts[] array.",
+        "properties": {
+          "ID": {
+            "type": "string",
+            "description": "The object reference identifying the DIRECT, INDIRECT, REFERENCE dependency.",
+            "pattern": "^[\\w\\-\\.]+:[\\w\\-\\.]+:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+            "x-osdu-relationship": []
+          },
+          "LineageRelationshipType": {
+            "type": "string",
+            "description": "Used by LineageAssertion to describe the nature of the line of descent of a work product component from a prior Resource, such as DIRECT, INDIRECT, REFERENCE.  It is not for proximity (number of nodes away), it is not to cover all the relationships in a full ontology or graph, and it is not to describe the type of activity that created the asserting WPC.  LineageAssertion does not encompass a full provenance, process history, or activity model.",
+            "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-LineageRelationshipType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+            "x-osdu-relationship": [
+              {
+                "GroupType": "reference-data",
+                "EntityType": "LineageRelationshipType"
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "x-osdu-inheriting-from-kind": []
+}

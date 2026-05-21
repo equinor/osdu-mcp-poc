@@ -1,0 +1,105 @@
+{
+  "x-osdu-license": "Copyright 2022, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "x-osdu-review-status": "Accepted",
+  "$id": "https://schema.osdu.opengroup.org/json/abstract/AbstractCommonResources.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:AbstractCommonResources:1.0.0",
+  "title": "OSDU Common Resources",
+  "description": "Common resources to be injected at root 'data' level for every entity, which is persistable in Storage. The insertion is performed by the OsduSchemaComposer script.",
+  "type": "object",
+  "properties": {
+    "ResourceHomeRegionID": {
+      "type": "string",
+      "title": "Resource Home Region ID",
+      "description": "The name of the home [cloud environment] region for this OSDU resource object.",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-OSDURegion:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "OSDURegion"
+        }
+      ]
+    },
+    "ResourceHostRegionIDs": {
+      "type": "array",
+      "title": "Resource Host Region ID",
+      "description": "The name of the host [cloud environment] region(s) for this OSDU resource object.",
+      "items": {
+        "type": "string",
+        "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-OSDURegion:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+        "x-osdu-relationship": [
+          {
+            "GroupType": "reference-data",
+            "EntityType": "OSDURegion"
+          }
+        ]
+      }
+    },
+    "ResourceCurationStatus": {
+      "type": "string",
+      "title": "Resource Curation Status",
+      "description": "Describes the current Curation status.",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-ResourceCurationStatus:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "ResourceCurationStatus"
+        }
+      ]
+    },
+    "ResourceLifecycleStatus": {
+      "type": "string",
+      "title": "Resource Lifecycle Status",
+      "description": "Describes the current Resource Lifecycle status.",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-ResourceLifecycleStatus:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "ResourceLifecycleStatus"
+        }
+      ]
+    },
+    "ResourceSecurityClassification": {
+      "type": "string",
+      "title": "Resource Security Classification",
+      "description": "Classifies the security level of the resource.",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-ResourceSecurityClassification:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "ResourceSecurityClassification"
+        }
+      ]
+    },
+    "Source": {
+      "type": "string",
+      "title": "Data Source",
+      "description": "The entity that produced the record, or from which it is received; could be an organization, agency, system, internal team, or individual. For informational purposes only, the list of sources is not governed."
+    },
+    "ExistenceKind": {
+      "type": "string",
+      "title": "Existence Kind",
+      "description": "Where does this data resource sit in the cradle-to-grave span of its existence?",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-ExistenceKind:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "ExistenceKind"
+        }
+      ]
+    },
+    "TechnicalAssuranceID": {
+      "type": "string",
+      "title": "Technical Assurance ID",
+      "description": "DEPRECATED: Describes a record's overall suitability for general business consumption based on data quality. Clarifications: Since Certified is the highest classification of suitable quality, any further change or versioning of a Certified record should be carefully considered and justified. If a Technical Assurance value is not populated then one can assume the data has not been evaluated or its quality is unknown (=Unevaluated). Technical Assurance values are not intended to be used for the identification of a single \"preferred\" or \"definitive\" record by comparison with other records.",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-TechnicalAssuranceType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "TechnicalAssuranceType"
+        }
+      ]
+    }
+  },
+  "x-osdu-inheriting-from-kind": []
+}

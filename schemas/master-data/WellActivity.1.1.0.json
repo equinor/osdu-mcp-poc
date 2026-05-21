@@ -1,0 +1,436 @@
+{
+  "x-osdu-license": "Copyright 2023, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "$id": "https://schema.osdu.opengroup.org/json/master-data/WellActivity.1.1.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:master-data--WellActivity:1.1.0",
+  "title": "WellActivity",
+  "description": "A Well Activity is a operation performed on a well to accomplish a predetermined objective. This may be as short as a few hours in duration, or may last several days, weeks or even months. It will have one or more associated daily Operations Reports, and may have other associated data as well.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "Previously called ResourceID or SRN which identifies this OSDU resource object without version.",
+      "title": "Entity ID",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:master-data\\-\\-WellActivity:[\\w\\-\\.\\:\\%]+$",
+      "example": "namespace:master-data--WellActivity:00532723-0d16-55cb-964e-cb9b6254e840"
+    },
+    "kind": {
+      "description": "The schema identification for the OSDU resource object following the pattern {Namespace}:{Source}:{Type}:{VersionMajor}.{VersionMinor}.{VersionPatch}. The versioning scheme follows the semantic versioning, https://semver.org/.",
+      "title": "Entity Kind",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:[\\w\\-\\.]+:[\\w\\-\\.]+:[0-9]+.[0-9]+.[0-9]+$",
+      "example": "osdu:wks:master-data--WellActivity:1.1.0"
+    },
+    "version": {
+      "description": "The version number of this OSDU resource; set by the framework.",
+      "title": "Version Number",
+      "type": "integer",
+      "format": "int64",
+      "example": 1562066009929332
+    },
+    "acl": {
+      "description": "The access control tags associated with this entity.",
+      "title": "Access Control List",
+      "$ref": "../abstract/AbstractAccessControlList.1.0.0.json"
+    },
+    "legal": {
+      "description": "The entity's legal tags and compliance status. The actual contents associated with the legal tags is managed by the Compliance Service.",
+      "title": "Legal Tags",
+      "$ref": "../abstract/AbstractLegalTags.1.0.0.json"
+    },
+    "tags": {
+      "title": "Tag Dictionary",
+      "description": "A generic dictionary of string keys mapping to string value. Only strings are permitted as keys and values.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "example": {
+        "NameOfKey": "String value"
+      }
+    },
+    "createTime": {
+      "description": "Timestamp of the time at which initial version of this OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:46:20.163Z"
+    },
+    "createUser": {
+      "title": "Resource Object Creation User Reference",
+      "description": "The user reference, which created the first version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "modifyTime": {
+      "description": "Timestamp of the time at which this version of the OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Version Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:52:24.477Z"
+    },
+    "modifyUser": {
+      "title": "Resource Object Version Creation User Reference",
+      "description": "The user reference, which created this version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "ancestry": {
+      "description": "The links to data, which constitute the inputs, from which this record instance is derived.",
+      "title": "Ancestry",
+      "$ref": "../abstract/AbstractLegalParentList.1.0.0.json"
+    },
+    "meta": {
+      "description": "The Frame of Reference meta data section linking the named properties to self-contained definitions.",
+      "title": "Frame of Reference Meta Data",
+      "type": "array",
+      "items": {
+        "$ref": "../abstract/AbstractMetaItem.1.0.0.json"
+      }
+    },
+    "data": {
+      "allOf": [
+        {
+          "$ref": "../abstract/AbstractCommonResources.1.0.0.json"
+        },
+        {
+          "$ref": "../abstract/AbstractMaster.1.1.0.json"
+        },
+        {
+          "$ref": "../abstract/AbstractProject.1.0.0.json"
+        },
+        {
+          "$ref": "../abstract/AbstractProjectActivity.1.1.0.json"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "Name": {
+              "type": "string",
+              "title": "Name",
+              "description": "The name of this Well Activity"
+            },
+            "WellID": {
+              "type": "string",
+              "title": "Well ID",
+              "description": "Link to the Well",
+              "x-osdu-attribution-authority": "The Open Group",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-attribution-revision": "evergreen",
+              "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Well:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "Well"
+                }
+              ]
+            },
+            "WellActivityType": {
+              "type": "string",
+              "title": "Well Activity Type",
+              "description": "The type of well activity being conducted.",
+              "x-osdu-attribution-authority": "The Open Group",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-attribution-revision": "evergreen",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-WellActivityType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "WellActivityType"
+                }
+              ]
+            },
+            "WellActivityDescription": {
+              "type": "string",
+              "title": "Well Activity Description",
+              "description": "A narrative summary of the work being conducted in this well activity",
+              "x-osdu-attribution-authority": "The Open Group",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-attribution-revision": "evergreen"
+            },
+            "WellActivityObjective": {
+              "type": "array",
+              "title": "Well Activity Objective",
+              "description": "The objective for the Well Activity.  A Well Activity may have one or more objectives. The first is the primary objective to need to retain order.",
+              "x-osdu-attribution-authority": "The Open Group",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-attribution-revision": "evergreen",
+              "items": {
+                "type": "string"
+              }
+            },
+            "EstimatedDuration": {
+              "type": "number",
+              "title": "Estimated Duration",
+              "description": "Expected duration in days for the well activity",
+              "x-osdu-attribution-authority": "The Open Group",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-attribution-revision": "evergreen"
+            },
+            "WellheadConnection": {
+              "type": "string",
+              "title": "Wellhead Connection",
+              "description": "Current wellhead connection (from picklist - local)",
+              "x-osdu-attribution-authority": "The Open Group",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-attribution-revision": "evergreen",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-WellheadConnection:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "WellheadConnection"
+                }
+              ]
+            },
+            "TechnologyApplied": {
+              "type": "array",
+              "title": "Technology Applied",
+              "description": "Benchmarking categories (from picklist - open)",
+              "x-osdu-attribution-authority": "The Open Group",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-attribution-revision": "evergreen",
+              "items": {
+                "type": "string",
+                "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-WellTechnologyApplied:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                "x-osdu-relationship": [
+                  {
+                    "GroupType": "reference-data",
+                    "EntityType": "WellTechnologyApplied"
+                  }
+                ]
+              }
+            },
+            "StartDateTime": {
+              "type": "string",
+              "title": "Start Date/Time",
+              "description": "Timestamp for the beginning of the Well Activity",
+              "format": "date-time",
+              "x-osdu-frame-of-reference": "DateTime",
+              "x-osdu-attribution-authority": "The Open Group",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-attribution-revision": "evergreen"
+            },
+            "EndDateTime": {
+              "type": "string",
+              "title": "End Date/Time",
+              "description": "Timestamp for the end of the Well Activity",
+              "format": "date-time",
+              "x-osdu-frame-of-reference": "DateTime",
+              "x-osdu-attribution-authority": "The Open Group",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-attribution-revision": "evergreen"
+            },
+            "DataQCName": {
+              "type": "string",
+              "title": "Data QC Name",
+              "description": "Name of the individual that approved the quality check for the data",
+              "format": "date-time",
+              "x-osdu-frame-of-reference": "DateTime",
+              "x-osdu-attribution-authority": "The Open Group",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-attribution-revision": "evergreen"
+            },
+            "DataQCDate": {
+              "type": "string",
+              "title": "Data QC Date",
+              "description": "Date of data quality check approval",
+              "format": "date-time",
+              "x-osdu-frame-of-reference": "DateTime",
+              "x-osdu-attribution-authority": "The Open Group",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-attribution-revision": "evergreen"
+            },
+            "OffProductionDateTime": {
+              "type": "string",
+              "title": "Off Production Date/Time",
+              "description": "Timestamp for when well was taken off production for well activity",
+              "format": "date-time",
+              "x-osdu-frame-of-reference": "DateTime",
+              "x-osdu-attribution-authority": "The Open Group",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-attribution-revision": "evergreen"
+            },
+            "OnProductionDateTime": {
+              "type": "string",
+              "title": "On Production Date/Time",
+              "description": "Timestamp for when the well is returned to production following well activity",
+              "format": "date-time",
+              "x-osdu-frame-of-reference": "DateTime",
+              "x-osdu-attribution-authority": "The Open Group",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-attribution-revision": "evergreen"
+            },
+            "IsPerformanceBenchmarkSubmitted": {
+              "type": "boolean",
+              "title": "Performance Benchmark Submitted?",
+              "description": "Flag to identify whether data has been submitted for performance benchmarking",
+              "x-osdu-attribution-authority": "The Open Group",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-attribution-revision": "evergreen"
+            },
+            "PerformanceBenchmarkSubmitter": {
+              "type": "string",
+              "title": "Performance Benchmark Submitter",
+              "description": "Name of the individual that submitted data for benchmarking",
+              "x-osdu-attribution-authority": "The Open Group",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-attribution-revision": "evergreen"
+            },
+            "PerformanceBenchmarkSubmittedDate": {
+              "type": "string",
+              "title": "Performance Benchmark Submitted Date",
+              "description": "Date Performance Benchmark was submitted",
+              "format": "date-time",
+              "x-osdu-frame-of-reference": "DateTime",
+              "x-osdu-attribution-authority": "The Open Group",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-attribution-revision": "evergreen"
+            },
+            "Comments": {
+              "type": "string",
+              "title": "Comments",
+              "description": "Freeform comments describing the overall well activity",
+              "x-osdu-attribution-authority": "The Open Group",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-attribution-revision": "evergreen"
+            },
+            "StewardingCompany": {
+              "type": "string",
+              "title": "Stewarding Company",
+              "description": "Company or corporate division that is responsible for executing the work.",
+              "x-osdu-attribution-authority": "The Open Group",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-attribution-revision": "evergreen"
+            },
+            "StewardingCompanyTeam": {
+              "type": "string",
+              "title": "Stewarding Company Team",
+              "description": "Team within a company, or corporate division that is responsible for executing the work.",
+              "x-osdu-attribution-authority": "The Open Group",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-attribution-revision": "evergreen"
+            },
+            "Customer": {
+              "type": "string",
+              "title": "Customer",
+              "description": "Individual, company, or corporate division that work is being executed on behalf of.",
+              "x-osdu-attribution-authority": "The Open Group",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-attribution-revision": "evergreen"
+            },
+            "RigAssignments": {
+              "type": "array",
+              "title": "Rig Assignments",
+              "description": "List of Rigs or Work Units performing the Well Activity",
+              "x-osdu-indexing": {
+                "type": "flattened"
+              },
+              "x-osdu-attribution-authority": "The Open Group",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-attribution-revision": "evergreen",
+              "items": {
+                "type": "object",
+                "title": "RigAssignment",
+                "description": "Association of a rig to a particular well and well activity.",
+                "properties": {
+                  "RigID": {
+                    "type": "string",
+                    "title": "Rig ID",
+                    "description": "A link to the Rig",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen",
+                    "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Rig:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "master-data",
+                        "EntityType": "Rig"
+                      }
+                    ]
+                  },
+                  "StartDateTime": {
+                    "type": "string",
+                    "title": "Start Date Time",
+                    "description": "The start time for this rig assignment to the well activity",
+                    "format": "date-time",
+                    "x-osdu-frame-of-reference": "DateTime",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "EndDateTime": {
+                    "type": "string",
+                    "title": "End Date Time",
+                    "description": "The end time for this rig assignment to the well activity",
+                    "format": "date-time",
+                    "x-osdu-frame-of-reference": "DateTime",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "Remark": {
+                    "type": "string",
+                    "title": "Remark",
+                    "description": "Remarks related to this rig assignment",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  }
+                }
+              }
+            }
+          },
+          "required": [
+            "WellID",
+            "WellActivityType"
+          ],
+          "title": "IndividualProperties"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "ExtensionProperties": {
+              "type": "object"
+            }
+          },
+          "title": "ExtensionProperties"
+        }
+      ]
+    }
+  },
+  "required": [
+    "kind",
+    "acl",
+    "legal"
+  ],
+  "additionalProperties": false,
+  "x-osdu-review-status": "Accepted",
+  "x-osdu-virtual-properties": {
+    "data.VirtualProperties.DefaultName": {
+      "type": "string",
+      "priority": [
+        {
+          "path": "data.Name"
+        }
+      ]
+    },
+    "data.VirtualProperties.DefaultLocation": {
+      "type": "object",
+      "priority": [
+        {
+          "path": "data.SpatialLocation"
+        }
+      ]
+    }
+  },
+  "x-osdu-inheriting-from-kind": [
+    {
+      "name": "Project",
+      "kind": "osdu:wks:AbstractProject:1.0.0"
+    },
+    {
+      "name": "Activity",
+      "kind": "osdu:wks:AbstractProjectActivity:1.1.0"
+    }
+  ]
+}

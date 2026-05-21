@@ -1,0 +1,465 @@
+{
+  "x-osdu-license": "Copyright 2022, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "$id": "https://schema.osdu.opengroup.org/json/master-data/Coring.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:master-data--Coring:1.0.0",
+  "title": "Coring",
+  "description": "The activity of acquiring a core from within a wellbore. The two predominant types are by drilling, or by sidewall. In drilling a cylindrical sample of rock is collected using a core bit in conjunction with a core barrel and core catcher. Sidewall cores are taken from the side of the borehole, usually by a wireline tool. Sidewall cores may be taken using percussion or mechanical drilling.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "Previously called ResourceID or SRN which identifies this OSDU resource object without version.",
+      "title": "Entity ID",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Coring:[\\w\\-\\.\\:\\%]+$",
+      "example": "namespace:master-data--Coring:22300d5b-9a54-5a4b-a40a-0d242a064894"
+    },
+    "kind": {
+      "description": "The schema identification for the OSDU resource object following the pattern {Namespace}:{Source}:{Type}:{VersionMajor}.{VersionMinor}.{VersionPatch}. The versioning scheme follows the semantic versioning, https://semver.org/.",
+      "title": "Entity Kind",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:[\\w\\-\\.]+:[\\w\\-\\.]+:[0-9]+.[0-9]+.[0-9]+$",
+      "example": "osdu:wks:master-data--Coring:1.0.0"
+    },
+    "version": {
+      "description": "The version number of this OSDU resource; set by the framework.",
+      "title": "Version Number",
+      "type": "integer",
+      "format": "int64",
+      "example": 1562066009929332
+    },
+    "acl": {
+      "description": "The access control tags associated with this entity.",
+      "title": "Access Control List",
+      "$ref": "../abstract/AbstractAccessControlList.1.0.0.json"
+    },
+    "legal": {
+      "description": "The entity's legal tags and compliance status. The actual contents associated with the legal tags is managed by the Compliance Service.",
+      "title": "Legal Tags",
+      "$ref": "../abstract/AbstractLegalTags.1.0.0.json"
+    },
+    "tags": {
+      "title": "Tag Dictionary",
+      "description": "A generic dictionary of string keys mapping to string value. Only strings are permitted as keys and values.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "example": {
+        "NameOfKey": "String value"
+      }
+    },
+    "createTime": {
+      "description": "Timestamp of the time at which initial version of this OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:46:20.163Z"
+    },
+    "createUser": {
+      "title": "Resource Object Creation User Reference",
+      "description": "The user reference, which created the first version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "modifyTime": {
+      "description": "Timestamp of the time at which this version of the OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Version Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:52:24.477Z"
+    },
+    "modifyUser": {
+      "title": "Resource Object Version Creation User Reference",
+      "description": "The user reference, which created this version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "ancestry": {
+      "description": "The links to data, which constitute the inputs, from which this record instance is derived.",
+      "title": "Ancestry",
+      "$ref": "../abstract/AbstractLegalParentList.1.0.0.json"
+    },
+    "meta": {
+      "description": "The Frame of Reference meta data section linking the named properties to self-contained definitions.",
+      "title": "Frame of Reference Meta Data",
+      "type": "array",
+      "items": {
+        "$ref": "../abstract/AbstractMetaItem.1.0.0.json"
+      }
+    },
+    "data": {
+      "allOf": [
+        {
+          "$ref": "../abstract/AbstractCommonResources.1.0.0.json"
+        },
+        {
+          "$ref": "../abstract/AbstractMaster.1.1.0.json"
+        },
+        {
+          "$ref": "../abstract/AbstractProjectActivity.1.0.0.json"
+        },
+        {
+          "title": "Coring",
+          "description": "Common properties for all coring types.",
+          "properties": {
+            "CoreIdentifier": {
+              "type": "string",
+              "title": "Core Identifier",
+              "description": "Native identifier from a Master Data Management System or other trusted source external to OSDU - stored here in order to allow for multi-system connection and synchronization. If used, the \"Source\" property should identify that source system. i.e. this item is optional.",
+              "example": "421112222200-Core1"
+            },
+            "WellboreID": {
+              "type": "string",
+              "title": "Wellbore ID",
+              "description": "The relationship to the wellbore.",
+              "example": "namespace:master-data--Wellbore:421112222200:",
+              "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Wellbore:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "Wellbore"
+                }
+              ]
+            },
+            "Name": {
+              "type": "string",
+              "title": "Name",
+              "description": "The name of the core. For example ACME 1 Core 1",
+              "example": "ACME 1 Core 1"
+            },
+            "VerticalMeasurement": {
+              "$ref": "../abstract/AbstractFacilityVerticalMeasurement.1.0.0.json",
+              "title": "Vertical Measurement",
+              "description": "References an entry in the VerticalMeasurements array for the Wellbore identified by WellboreID, or a standalone vertical reference which defines the vertical reference datum for all measured depths of the Coring record.",
+              "example": {
+                "VerticalReferenceID": "ZDP",
+                "VerticalMeasurement": 0.0,
+                "VerticalMeasurementPathID": "namespace:reference-data--VerticalMeasurementPath:MD:",
+                "VerticalMeasurementSourceID": "namespace:reference-data--VerticalMeasurementSource:DRL:",
+                "VerticalMeasurementDescription": "Same vertical reference as wellbore ZDP, Measured Depth, Drillers Depth."
+              }
+            },
+            "ServiceCompanyID": {
+              "type": "string",
+              "title": "Service Company ID",
+              "description": "The coring company that extracted the well core. For Example: ACME Limited PLC",
+              "example": "namespace:master-data--Organisation:ACME-Limited-PLC:",
+              "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Organisation:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "Organisation"
+                }
+              ]
+            },
+            "TopDepth": {
+              "type": "number",
+              "title": "Top Depth",
+              "description": "The depth of the top of the core. The reference and kind of depth (e.g. driller's depth versus logger's depth) is described in data.VerticalMeasurement. For SidewallCores this is the depth of the shallowest core.",
+              "x-osdu-frame-of-reference": "UOM:length"
+            },
+            "BottomDepth": {
+              "type": "number",
+              "title": "Bottom Depth",
+              "description": "The depth of the base of the core. The reference and kind of depth (e.g. driller's depth versus logger's depth) is described in data.VerticalMeasurement. For SidewallCores this is the depth of the deepest core.",
+              "x-osdu-frame-of-reference": "UOM:length"
+            },
+            "RunNumber": {
+              "type": "integer",
+              "title": "Run Number",
+              "description": "The coring run number."
+            },
+            "CoreDiameter": {
+              "type": "number",
+              "title": "Core Diameter",
+              "description": "The diameter of the core.",
+              "x-osdu-frame-of-reference": "UOM:length"
+            },
+            "CoreNumber": {
+              "type": "string",
+              "title": "Core Number",
+              "description": "The vendor assigned core number."
+            },
+            "IsOriented": {
+              "type": "boolean",
+              "title": "Core Oriented Indicator",
+              "description": "Indicates if the core was oriented."
+            },
+            "CoreRemarks": {
+              "type": "array",
+              "title": "Core Remarks",
+              "description": "An array contains narrative remarks pertaining to a core.",
+              "x-osdu-indexing": {
+                "type": "flattened"
+              },
+              "items": {
+                "type": "object",
+                "title": "CoreRemark",
+                "description": "An array contains narrative remarks pertaining to a core.",
+                "properties": {
+                  "RemarkID": {
+                    "type": "string",
+                    "title": "Remark ID",
+                    "description": "A unique identifier for each remark record."
+                  },
+                  "Remark": {
+                    "type": "string",
+                    "title": "Remark",
+                    "description": "A descriptive comment for this remark."
+                  },
+                  "RemarkSource": {
+                    "type": "string",
+                    "title": "Remark Source",
+                    "description": "The person, vendor, interpreter or other provider of information."
+                  }
+                }
+              }
+            },
+            "PreferredDepthShiftsID": {
+              "type": "string",
+              "title": "Preferred Depth Shifts ID",
+              "description": "The WellLog representation carrying the preferred core-depth to logging-depth correction or mapping.",
+              "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-WellLog:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "work-product-component",
+                  "EntityType": "WellLog"
+                }
+              ]
+            },
+            "HasTrippingSchedule": {
+              "type": "boolean",
+              "description": "Flag indicating whether a detailed tripping schedule is available. Available tripping schedules are usually a sign of controlled coring sample quality.",
+              "example": true
+            },
+            "CoringOperationDate": {
+              "type": "string",
+              "title": "Recovery Date",
+              "description": "The date of the coring operation.",
+              "format": "date"
+            },
+            "CoreRecoveredDate": {
+              "type": "string",
+              "title": "Core Recovered Date",
+              "description": "The date the core returned to surface.",
+              "format": "date"
+            },
+            "PreservationTypeID": {
+              "type": "string",
+              "title": "Preservation Type ID",
+              "description": "The kind of preservation applied to this conventional coring or sidewall core.",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-CorePreservationType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "CorePreservationType"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "title": "ConventionalOrSidewall",
+          "description": "Switchboard for conventional or sidewall coring structures.",
+          "oneOf": [
+            {
+              "title": "ConventionalCoring",
+              "description": "Properties relevant to conventional coring.",
+              "properties": {
+                "ConventionalCoring": {
+                  "type": "object",
+                  "title": "Conventional Coring",
+                  "description": "The Conventional Coring specific sub-structure.",
+                  "properties": {
+                    "CoreTypeID": {
+                      "type": "string",
+                      "title": "Core Type ID",
+                      "description": "The name identifying the type of coring procedure used to extract the core, e.g., Conventional Core,  Drop Cores.",
+                      "example": "namespace:reference-data--ConventionalCoreType:CONV:",
+                      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-ConventionalCoreType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                      "x-osdu-relationship": [
+                        {
+                          "GroupType": "reference-data",
+                          "EntityType": "ConventionalCoreType"
+                        }
+                      ]
+                    },
+                    "CoreSections": {
+                      "type": "array",
+                      "title": "Core Sections",
+                      "description": "An array of core sections.",
+                      "x-osdu-indexing": {
+                        "type": "flattened"
+                      },
+                      "items": {
+                        "type": "object",
+                        "title": "CoreSection",
+                        "description": "An array of core sections.",
+                        "properties": {
+                          "CoreSectionID": {
+                            "type": "string",
+                            "title": "Core Section ID",
+                            "description": "A unique core section identifier, typically for human consumption.",
+                            "example": "2B"
+                          },
+                          "RecoveredLength": {
+                            "type": "number",
+                            "title": "Recovered Length",
+                            "description": "The length of core section recovered.",
+                            "x-osdu-frame-of-reference": "UOM:length"
+                          },
+                          "TopDepth": {
+                            "type": "number",
+                            "title": "Top Depth",
+                            "description": "The measured depth at the top of this section, typically in driller's depth.",
+                            "x-osdu-frame-of-reference": "UOM:length"
+                          },
+                          "BottomDepth": {
+                            "type": "number",
+                            "title": "Bottom Depth",
+                            "description": "The measured depth at the base of this section, typically driller's depth.",
+                            "x-osdu-frame-of-reference": "UOM:length"
+                          }
+                        }
+                      }
+                    },
+                    "RecoveredLength": {
+                      "type": "number",
+                      "title": "Recovered Length",
+                      "description": "The length of core recovered in this run.",
+                      "x-osdu-frame-of-reference": "UOM:length"
+                    }
+                  }
+                }
+              },
+              "required": [
+                "ConventionalCoring"
+              ]
+            },
+            {
+              "title": "SidewallCoring",
+              "description": "Properties relevant to sidewall coring.",
+              "properties": {
+                "SidewallCoring": {
+                  "type": "object",
+                  "title": "Sidewall Coring",
+                  "description": "The Sidewall Coring specific sub-structure.",
+                  "properties": {
+                    "CoreTypeID": {
+                      "type": "string",
+                      "title": "Core Type ID",
+                      "description": "The name identifying the type of coring procedure used to extract the sidewall core, e.g., percussion or rotary (mechanical)  sidewall core.",
+                      "example": "namespace:reference-data--SidewallCoreType:RSWC:",
+                      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-SidewallCoreType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                      "x-osdu-relationship": [
+                        {
+                          "GroupType": "reference-data",
+                          "EntityType": "SidewallCoreType"
+                        }
+                      ]
+                    },
+                    "SidewallCores": {
+                      "type": "array",
+                      "title": "Sidewall Cores",
+                      "description": "The array of sidewall core samples, their depth and description.",
+                      "x-osdu-indexing": {
+                        "type": "nested"
+                      },
+                      "items": {
+                        "type": "object",
+                        "title": "SidewallCoreSample",
+                        "description": "A core taken during sidewall coring.",
+                        "properties": {
+                          "SampleID": {
+                            "type": "string",
+                            "title": "Sample ID",
+                            "description": "Typically a sequential number identifying the sidewall core sample.",
+                            "example": 3
+                          },
+                          "Depth": {
+                            "type": "number",
+                            "title": "Depth",
+                            "description": "The measured depth at position the sidewall core was taken, typically in logger's depth.",
+                            "example": 2958.3,
+                            "x-osdu-frame-of-reference": "UOM:length"
+                          },
+                          "Description": {
+                            "type": "string",
+                            "title": "Description",
+                            "description": "The sidewall core sample description, if available.",
+                            "example": "SANDSTONE:\u00a0 (100%)\u00a0 light olive grey, minor light grey to medium light grey, very soft to friable, fine to medium grained, predominantly fine grained, sub-angular, rare sub-rounded, sub-spherical, well to very well sorted, trace weak siliceous cement, trace argillaceous matrix, trace pinkish grey quartz grains, trace micro micas, trace carbonaceous (?) specks, good intergranular visual porosity."
+                          },
+                          "RecoveredLength": {
+                            "type": "number",
+                            "title": "Recovered Length",
+                            "description": "The recovered length of the sidewall core.",
+                            "x-osdu-frame-of-reference": "UOM:length"
+                          }
+                        }
+                      }
+                    },
+                    "PlannedVersusActual": {
+                      "type": "number",
+                      "title": "Planned versus Actual",
+                      "description": "The ratio between planned sidewall cores versus the actually retrieved sidewall cores.",
+                      "x-osdu-frame-of-reference": "UOM:dimensionless"
+                    }
+                  }
+                }
+              },
+              "required": [
+                "SidewallCoring"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {},
+          "title": "IndividualProperties"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "ExtensionProperties": {
+              "type": "object"
+            }
+          },
+          "title": "ExtensionProperties"
+        }
+      ]
+    }
+  },
+  "required": [
+    "kind",
+    "acl",
+    "legal"
+  ],
+  "additionalProperties": false,
+  "x-osdu-review-status": "Accepted",
+  "x-osdu-virtual-properties": {
+    "data.VirtualProperties.DefaultLocation": {
+      "type": "object",
+      "priority": [
+        {
+          "path": "data.SpatialLocation"
+        }
+      ]
+    },
+    "data.VirtualProperties.DefaultName": {
+      "type": "string",
+      "priority": [
+        {
+          "path": "data.Name"
+        }
+      ]
+    }
+  },
+  "x-osdu-inheriting-from-kind": [
+    {
+      "name": "Activity",
+      "kind": "osdu:wks:AbstractProjectActivity:1.0.0"
+    }
+  ]
+}

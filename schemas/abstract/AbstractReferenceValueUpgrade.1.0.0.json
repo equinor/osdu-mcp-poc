@@ -1,0 +1,123 @@
+{
+  "x-osdu-license": "Copyright 2022, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "x-osdu-review-status": "Accepted",
+  "$id": "https://schema.osdu.opengroup.org/json/abstract/AbstractReferenceValueUpgrade.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:AbstractReferenceValueUpgrade:1.0.0",
+  "title": "AbstractReferenceValueUpgrade",
+  "description": "Schema for reference-value upgrade usages and value look-up tables.",
+  "type": "object",
+  "properties": {
+    "UsingKinds": {
+      "type": "object",
+      "patternProperties": {
+        "^[\\w\\-\\.]+:[\\w\\-\\.]+:[\\w\\-\\.]+:[0-9]+.[0-9]+.[0-9]+$": {
+          "type": "array",
+          "title": "Schema Property Names",
+          "description": "The property name, which refers to the reference-data type in the schema kind represented by the key",
+          "additionalProperties": false,
+          "items": {
+            "type": "object",
+            "title": "Using Property",
+            "description": "The a data structure pairing the full path of the property name, which is used to refer to the reference value type in question and the search specification.",
+            "properties": {
+              "Path": {
+                "type": "string",
+                "title": "Path",
+                "description": "The complete path to the property name, which refers to the reference-data type in the schema kind represented by the key of his array."
+              },
+              "SearchModeID": {
+                "type": "string",
+                "title": "Search Mode ID",
+                "description": "This property defines the discoverability of the property in the data structure, which is important for array elements. Depending on the x-osdu-indexing declaration of the array, the property may be queried nested, flattened or not at all. Properties outside of nested structures will always be searchable.",
+                "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-DiscoverabilityBySearch:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                "x-osdu-relationship": [
+                  {
+                    "GroupType": "reference-data",
+                    "EntityType": "DiscoverabilityBySearch"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "additionalProperties": false,
+      "title": "Using Kinds",
+      "description": "Dictionary {kind: using property name} listing comprehensive usages in OSDU schemas.",
+      "example": {
+        "osdu:wks:master-data--OperationsReport:1.0.0": [
+          {
+            "Path": "data.BitRecord[].TypeBit",
+            "SearchModeID": "namespace:reference-data--DiscoverabilityBySearch:None:"
+          }
+        ],
+        "osdu:wks:master-data--OperationsReport:1.1.0": [
+          {
+            "Path": "data.BitRecord[].TypeBit",
+            "SearchModeID": "namespace:reference-data--DiscoverabilityBySearch:None:"
+          }
+        ]
+      }
+    },
+    "LookUp": {
+      "type": "object",
+      "patternProperties": {
+        "^[\\w\\-\\.]+:reference-data\\-\\-[\\w\\-\\.]+:[\\w\\-\\.\\:\\%]+:[0-9]*$": {
+          "type": "object",
+          "title": "Key Value Dictionary",
+          "description": "Key is the old relationship value (record id relationship with trailing colon), value is the superseded value  (record id relationship with trailing colon).",
+          "additionalProperties": false,
+          "properties": {
+            "MigrateToKind": {
+              "type": "string",
+              "title": "Migrate to Kind",
+              "description": "Optional: Usually the mapping occurs in the same reference-data kind - then this property is absent. In exceptional cases, the different target kind is identified here. The UsingKinds of the target reference-data kind lists the respective property names, which should be populated. The kind can be given without or with partial semantic version numbers.",
+              "example": "osdu:wks:reference-data--BitType:",
+              "pattern": "^[\\w\\-\\.]+:[\\w\\-\\.]+:reference-data--[\\w\\-\\.]+:([0-9]+)?(.[0-9]+)?(.[0-9]+)?$"
+            },
+            "SupersededBy": {
+              "type": "string",
+              "title": "Superseded By",
+              "description": "Mandatory: The value (as reference-data relationship), which should be used instead.",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-[\\w\\-\\.]+:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data"
+                }
+              ]
+            }
+          },
+          "required": [
+            "SupersededBy"
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "title": "Reference Value Translation Dictionary",
+      "description": "The translation dictionary key/value pairs: old reference-data value = key, superseded reference value = value.",
+      "example": {
+        "namespace:reference-data--BitType:diamond%20core:": {
+          "SupersededBy": "namespace:reference-data--BitType:Core:",
+          "MigrateToKind": "osdu:wks:reference-data--BitType:1"
+        },
+        "namespace:reference-data--BitType:insert%20roller%20cone:": {
+          "SupersededBy": "namespace:reference-data--BitType:RollerCone:"
+        },
+        "namespace:reference-data--BitType:roller%20cone:": {
+          "SupersededBy": "namespace:reference-data--BitType:RollerCone:"
+        },
+        "namespace:reference-data--BitType:unknown:": {
+          "SupersededBy": "namespace:reference-data--BitType:Unknown:"
+        }
+      }
+    },
+    "IsComplexUpgrade": {
+      "type": "boolean",
+      "title": "Is Complex Upgrade",
+      "description": "Indicator whether the LookUp mappings are complex, i.e., require moving values to different properties with references to different reference-data types. If false or absent, the LookUp table refers only to a single reference-data type list, i.e., the values are simply swapped out in-place.",
+      "example": true
+    }
+  },
+  "x-osdu-inheriting-from-kind": []
+}

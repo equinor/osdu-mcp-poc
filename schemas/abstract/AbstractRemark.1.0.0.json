@@ -1,0 +1,36 @@
+{
+  "x-osdu-license": "Copyright 2023, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "x-osdu-review-status": "Accepted",
+  "$id": "https://schema.osdu.opengroup.org/json/abstract/AbstractRemark.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:AbstractRemark:1.0.0",
+  "title": "AbstractRemark",
+  "description": "A remark object, pairing a remark text with a source, e.g. an author, and a date, which is typically included in an array. The RemarkSequenceNumber acts as unique key in this case.",
+  "type": "object",
+  "properties": {
+    "RemarkSequenceNumber": {
+      "type": "integer",
+      "title": "Remark Sequence Number",
+      "description": "A unique identifier for each remark record. This identifier is used to uniquely identify a member in an array of remarks.",
+      "example": 1
+    },
+    "Remark": {
+      "type": "string",
+      "title": "Remark",
+      "description": "A descriptive comment for this remark."
+    },
+    "RemarkSource": {
+      "type": "string",
+      "title": "Remark Source",
+      "description": "The person, vendor, interpreter or other provider of information."
+    },
+    "RemarkDate": {
+      "type": "string",
+      "title": "Remark Date",
+      "description": "The date the remark was issued.",
+      "format": "date",
+      "x-osdu-frame-of-reference": "DateTime"
+    }
+  },
+  "x-osdu-inheriting-from-kind": []
+}

@@ -1,0 +1,322 @@
+{
+  "x-osdu-license": "Copyright 2022, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "$id": "https://schema.osdu.opengroup.org/json/work-product-component/PlannedLithology.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:work-product-component--PlannedLithology:1.0.0",
+  "title": "PlannedLithology",
+  "description": "Describes the sequence of expected lithologic intervals for the Wellbore",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "Previously called ResourceID or SRN which identifies this OSDU resource object without version.",
+      "title": "Entity ID",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-PlannedLithology:[\\w\\-\\.\\:\\%]+$",
+      "example": "namespace:work-product-component--PlannedLithology:19deee94-0650-50d2-959a-23b62657b3ff"
+    },
+    "kind": {
+      "description": "The schema identification for the OSDU resource object following the pattern {Namespace}:{Source}:{Type}:{VersionMajor}.{VersionMinor}.{VersionPatch}. The versioning scheme follows the semantic versioning, https://semver.org/.",
+      "title": "Entity Kind",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:[\\w\\-\\.]+:[\\w\\-\\.]+:[0-9]+.[0-9]+.[0-9]+$",
+      "example": "osdu:wks:work-product-component--PlannedLithology:1.0.0"
+    },
+    "version": {
+      "description": "The version number of this OSDU resource; set by the framework.",
+      "title": "Version Number",
+      "type": "integer",
+      "format": "int64",
+      "example": 1562066009929332
+    },
+    "acl": {
+      "description": "The access control tags associated with this entity.",
+      "title": "Access Control List",
+      "$ref": "../abstract/AbstractAccessControlList.1.0.0.json"
+    },
+    "legal": {
+      "description": "The entity's legal tags and compliance status. The actual contents associated with the legal tags is managed by the Compliance Service.",
+      "title": "Legal Tags",
+      "$ref": "../abstract/AbstractLegalTags.1.0.0.json"
+    },
+    "tags": {
+      "title": "Tag Dictionary",
+      "description": "A generic dictionary of string keys mapping to string value. Only strings are permitted as keys and values.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "example": {
+        "NameOfKey": "String value"
+      }
+    },
+    "createTime": {
+      "description": "Timestamp of the time at which initial version of this OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:46:20.163Z"
+    },
+    "createUser": {
+      "title": "Resource Object Creation User Reference",
+      "description": "The user reference, which created the first version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "modifyTime": {
+      "description": "Timestamp of the time at which this version of the OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Version Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:52:24.477Z"
+    },
+    "modifyUser": {
+      "title": "Resource Object Version Creation User Reference",
+      "description": "The user reference, which created this version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "ancestry": {
+      "description": "The links to data, which constitute the inputs, from which this record instance is derived.",
+      "title": "Ancestry",
+      "$ref": "../abstract/AbstractLegalParentList.1.0.0.json"
+    },
+    "meta": {
+      "description": "The Frame of Reference meta data section linking the named properties to self-contained definitions.",
+      "title": "Frame of Reference Meta Data",
+      "type": "array",
+      "items": {
+        "$ref": "../abstract/AbstractMetaItem.1.0.0.json"
+      }
+    },
+    "data": {
+      "allOf": [
+        {
+          "$ref": "../abstract/AbstractCommonResources.1.0.0.json"
+        },
+        {
+          "$ref": "../abstract/AbstractWPCGroupType.1.0.0.json"
+        },
+        {
+          "$ref": "../abstract/AbstractWorkProductComponent.1.0.0.json"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "WellName": {
+              "type": "string",
+              "title": "Well Name",
+              "description": "Human recognizable context for the well that contains the wellbore."
+            },
+            "WellboreName": {
+              "type": "string",
+              "title": "Wellbore Name",
+              "description": "Human recognizable context for the wellbore that contains the mud log"
+            },
+            "WellID": {
+              "type": "string",
+              "title": "Well ID",
+              "description": "Reference to the Well",
+              "pattern": "^[\\w\\-\\.]+:master-data\\-\\-WellPlanningWell:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "WellPlanningWell"
+                }
+              ]
+            },
+            "WellboreID": {
+              "type": "string",
+              "title": "Wellbore ID",
+              "description": "Reference to the Wellbore",
+              "pattern": "^[\\w\\-\\.]+:master-data\\-\\-WellPlanningWellbore:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "WellPlanningWellbore"
+                }
+              ]
+            },
+            "MeasuredDepthTop": {
+              "type": "number",
+              "title": "Measured Depth Top",
+              "description": "The minimum mdTop value for this object. This is an API \"structural-range\" query parameter for growing objects. See the relevant API specification for the query behavior related to this element."
+            },
+            "MeasuredDepthBase": {
+              "type": "number",
+              "title": "Measured Depth Base",
+              "description": "The maximum mdTop value for this object. This is an API \"structural-range\" query parameter for growing objects. See the relevant API specification for the query behavior related to this element."
+            },
+            "GeologyIntervals": {
+              "type": "array",
+              "title": "Geology Interval",
+              "description": "Set of geology and drilling information records for the wellbore. This is an API \"data-node\" query parameter for growing objects. See the relevant API specification for the query behavior related to this element.",
+              "items": {
+                "type": "object",
+                "title": "Geology Interval",
+                "description": "Geology Interval Component Schema",
+                "properties": {
+                  "IntervalMeasuredDepthTop": {
+                    "type": "number",
+                    "title": "Interval Measured Depth Top",
+                    "description": "Measured depth at top of interval.",
+                    "x-osdu-frame-of-reference": "UOM:length"
+                  },
+                  "IntervalMeasuredDepthBase": {
+                    "type": "number",
+                    "title": "Interval Measured Depth Base",
+                    "description": "Measured depth at base of interval.",
+                    "x-osdu-frame-of-reference": "UOM:length"
+                  },
+                  "IntervalTVDTop": {
+                    "type": "number",
+                    "title": "Interval True Vertical Depth Top",
+                    "description": "True vertical depth at top of the section.",
+                    "x-osdu-frame-of-reference": "UOM:length"
+                  },
+                  "IntervalTVDBase": {
+                    "type": "number",
+                    "title": "Interval True Vertical Depth Base",
+                    "description": "True vertical depth at base of interval.",
+                    "x-osdu-frame-of-reference": "UOM:length"
+                  },
+                  "LithostratigraphicIDs": {
+                    "type": "array",
+                    "title": "Lithostratigraphic",
+                    "description": "Name of lithostratigraphy, regionally dependent.",
+                    "items": {
+                      "type": "string",
+                      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-LithoStratigraphy:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                      "x-osdu-relationship": [
+                        {
+                          "GroupType": "reference-data",
+                          "EntityType": "LithoStratigraphy"
+                        }
+                      ]
+                    }
+                  },
+                  "ChronostratigraphicIDs": {
+                    "type": "array",
+                    "title": "Chronostratigraphic",
+                    "description": "Chronostratigraphic classification.",
+                    "items": {
+                      "type": "string",
+                      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-ChronoStratigraphy:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                      "x-osdu-relationship": [
+                        {
+                          "GroupType": "reference-data",
+                          "EntityType": "ChronoStratigraphy"
+                        }
+                      ]
+                    }
+                  },
+                  "Description": {
+                    "type": "string",
+                    "title": "Description",
+                    "description": "Description of item and details."
+                  },
+                  "ReferenceWellboreTrajectoryID": {
+                    "type": "string",
+                    "title": "Reference Wellbore Trajectory ID",
+                    "description": "Identifier of the reference trajectory for TVD measurements",
+                    "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-WellboreTrajectory:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "work-product-component",
+                        "EntityType": "WellboreTrajectory"
+                      }
+                    ]
+                  },
+                  "ReferenceDatum": {
+                    "type": "string",
+                    "title": "Reference Datum",
+                    "description": "Description of the Reference Datum used for Depth Measurement"
+                  },
+                  "LithologyTypeID": {
+                    "type": "string",
+                    "title": "Lithology Type IDs",
+                    "description": "The geological name for the type of lithology from the enum table listing a \n\t\t\t\t\tsubset of the OneGeology / CGI defined formation types.",
+                    "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-LithologyType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "reference-data",
+                        "EntityType": "LithologyType"
+                      }
+                    ]
+                  },
+                  "LithologyTypeIDs": {
+                    "type": "array",
+                    "title": "Lithology Type IDs",
+                    "description": "Array of lithological types - allowing for one or more lithological types.",
+                    "items": {
+                      "type": "string",
+                      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-LithologyType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                      "x-osdu-relationship": [
+                        {
+                          "GroupType": "reference-data",
+                          "EntityType": "LithologyType"
+                        }
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "IntervalMeasuredDepthTop",
+                  "IntervalMeasuredDepthBase",
+                  "LithologyTypeID"
+                ]
+              }
+            }
+          },
+          "required": [
+            "WellID",
+            "WellboreID"
+          ],
+          "title": "IndividualProperties"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "ExtensionProperties": {
+              "type": "object"
+            }
+          },
+          "title": "ExtensionProperties"
+        }
+      ]
+    }
+  },
+  "required": [
+    "kind",
+    "acl",
+    "legal"
+  ],
+  "additionalProperties": false,
+  "x-osdu-review-status": "Accepted",
+  "x-osdu-virtual-properties": {
+    "data.VirtualProperties.DefaultLocation": {
+      "type": "object",
+      "priority": [
+        {
+          "path": "data.SpatialArea"
+        },
+        {
+          "path": "data.SpatialPoint"
+        }
+      ]
+    },
+    "data.VirtualProperties.DefaultName": {
+      "type": "string",
+      "priority": [
+        {
+          "path": "data.Name"
+        }
+      ]
+    }
+  },
+  "x-osdu-inheriting-from-kind": [
+    {
+      "name": "WorkProductComponent",
+      "kind": "osdu:wks:AbstractWPCGroupType:1.0.0"
+    }
+  ]
+}

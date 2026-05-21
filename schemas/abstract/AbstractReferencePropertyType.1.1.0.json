@@ -1,0 +1,70 @@
+{
+  "x-osdu-license": "Copyright 2022, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "x-osdu-review-status": "Accepted",
+  "x-osdu-governance-authorities": [
+    "OSDU"
+  ],
+  "$id": "https://schema.osdu.opengroup.org/json/abstract/AbstractReferencePropertyType.1.1.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:AbstractReferencePropertyType:1.1.0",
+  "title": "AbstractReferencePropertyType",
+  "description": "The purpose of this schema is best understood in the context of a columnar dataset: the AbstractReferencePropertyType describes a column in a columnar dataset by declaring its value type (number, string), a UnitQuantity if the value type is a number, a kind if the string value is actually a relationship to a e.g. reference-data type.",
+  "type": "object",
+  "properties": {
+    "ValueType": {
+      "type": "string",
+      "title": "Value Type",
+      "description": "The type of value to expect for this reference property, either \"number\" (floating point number), \"integer\",  \"string\", or \"boolean\".",
+      "example": "string"
+    },
+    "ValueCount": {
+      "type": "integer",
+      "title": "Value Count",
+      "description": "The number of values in a tuple, e.g. For coordinates. The default is 1.",
+      "example": 1,
+      "default": 1
+    },
+    "UnitQuantityID": {
+      "type": "string",
+      "title": "Unit Quantity ID",
+      "description": "Only populated of the ValueType is \"number\". It holds the UnitQuantity associated with this reference property type. It is a relationship to UnitQuantity record.",
+      "example": "namespace:reference-data--UnitQuantity:plane%20angle:",
+      "x-osdu-existing-standard": "Energistics Unit of Measure V1.0",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-UnitQuantity:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "UnitQuantity"
+        }
+      ]
+    },
+    "PropertyType": {
+      "$ref": "../abstract/AbstractPropertyType.1.0.0.json",
+      "title": "Property Type",
+      "description": "It holds the PropertyType associated with this reference property type, further defining the semantics of the value. It contains a relationship to PropertyType record and its (de-normalized) name. String or number values can represent e.g. A date or a time by referring to the respective PropertyType record id.",
+      "example": {
+        "PropertyTypeID": "namespace:reference-data--PropertyType:ace68d4c-7400-431d-9a33-0541b8bfc4b4:",
+        "Name": "dip azimuth"
+      }
+    },
+    "RelationshipTargetKind": {
+      "type": "string",
+      "title": "Relationship Target Kind",
+      "description": "Only populated if ValueType==\"string\" and the values are expected to represent record ids, e.g. to a reference-data type, then this value holds the kind (optionally without the semantic version number).",
+      "example": "osdu:wks:reference-data--UnitOfMeasure:",
+      "pattern": "^[\\w\\-\\.]+:[\\w\\-\\.]+:[\\w\\-\\.]+:([0-9]+)?(\\.)?([0-9]+)?(\\.)?([0-9]+)?$"
+    },
+    "FacetIDs": {
+      "type": "array",
+      "title": "Facet IDs",
+      "description": "Ordered array with: FacetType, FacetRole, both calling specific references\n\nFacetType: Enumerations of the type of additional context about the nature of a property type (it may include conditions, direction, qualifiers, or statistics). \n\nFacetRole: Additional context about the nature of a property type. The purpose of such attribute is to minimize the need to create specialized property types by mutualizing some well known qualifiers such as \"maximum\", \"minimum\" which apply to a lot of different property types.",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "The OSDU Data Platform",
+      "x-osdu-existing-standard": "RESQML",
+      "items": {
+        "$ref": "../abstract/AbstractFacet.1.0.0.json"
+      }
+    }
+  },
+  "x-osdu-inheriting-from-kind": []
+}

@@ -1,0 +1,100 @@
+{
+  "x-osdu-license": "Copyright 2025, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "x-osdu-review-status": "Accepted",
+  "x-osdu-governance-model": "LOCAL",
+  "$id": "https://schema.osdu.opengroup.org/json/abstract/AbstractTubularComponentJar.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:AbstractTubularComponentJar:1.0.0",
+  "title": "Abstract Tubular Component Jar",
+  "description": "Captures information about drilling jars, which are mechanical or hydraulic devices used in the drill stem to deliver an impact load to another component of the drill stem, especially when that component is stuck.",
+  "type": "object",
+  "properties": {
+    "UpSetForce": {
+      "type": "number",
+      "title": "Up Set Force",
+      "description": "Specifies the force required to set the springs inside a mechanical jar into a position to trip the jar in an upward direction.",
+      "x-osdu-frame-of-reference": "UOM:force",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML Tubular.Jar.ForUpSet",
+      "x-osdu-attribution-revision": "V2.1"
+    },
+    "DownSetForce": {
+      "type": "number",
+      "title": "Down Set Force",
+      "description": "Specifies the force required to set the springs inside a mechanical jar into a position to trip the jar in a downward direction.",
+      "x-osdu-frame-of-reference": "UOM:force",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML Tubular.Jar.ForDownSet",
+      "x-osdu-attribution-revision": "V2.1"
+    },
+    "UpTripForce": {
+      "type": "number",
+      "title": "Up Trip Force",
+      "description": "Specifies the force required to trip the jar upwards.",
+      "x-osdu-frame-of-reference": "UOM:force",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML Tubular.Jar.ForUpTrip",
+      "x-osdu-attribution-revision": "V2.1"
+    },
+    "DownTripForce": {
+      "type": "number",
+      "title": "Down Trip Force",
+      "description": "Specifies the force required to trip the jar downward.",
+      "x-osdu-frame-of-reference": "UOM:force",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML Tubular.Jar.ForDownTrip",
+      "x-osdu-attribution-revision": "V2.1"
+    },
+    "PumpOpenForce": {
+      "type": "number",
+      "title": "Pump Open Force",
+      "description": "Specifies the force present when jarring while circulating, and if pressure is trapped below the bit.",
+      "x-osdu-frame-of-reference": "UOM:force",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML Tubular.Jar.ForPmpOpen",
+      "x-osdu-attribution-revision": "V2.1"
+    },
+    "SealFrictionForce": {
+      "type": "number",
+      "title": "Seal Friction Force",
+      "description": "Specifies the force required to move a hydraulic jar from the tripped position to the reset position so it can be tripped again. .",
+      "x-osdu-frame-of-reference": "UOM:force",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML Tubular.Jar.ForSealFric",
+      "x-osdu-attribution-revision": "V2.1"
+    },
+    "JarTypeID": {
+      "type": "string",
+      "title": "Jar Type ID",
+      "description": "Specifies the type of jar.",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML Tubular.Jar.TypeJar",
+      "x-osdu-attribution-revision": "V2.1",
+      "x-osdu-existing-standard": "N",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-JarType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "JarType"
+        }
+      ]
+    },
+    "JarActionTypeID": {
+      "type": "string",
+      "title": "Jar Action Type ID",
+      "description": "Specifies the type of jar action.",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML Tubular.Jar.JarAction",
+      "x-osdu-attribution-revision": "V2.1",
+      "x-osdu-existing-standard": "N",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-JarActionType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "JarActionType"
+        }
+      ]
+    }
+  },
+  "x-osdu-inheriting-from-kind": []
+}

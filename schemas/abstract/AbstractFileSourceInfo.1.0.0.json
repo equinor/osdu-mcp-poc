@@ -1,0 +1,96 @@
+{
+  "x-osdu-license": "Copyright 2022, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "x-osdu-review-status": "Accepted",
+  "$id": "https://schema.osdu.opengroup.org/json/abstract/AbstractFileSourceInfo.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:AbstractFileSourceInfo:1.0.0",
+  "title": "AbstractFileSourceInfo",
+  "description": "A schema fragment to describe file source information.",
+  "type": "object",
+  "properties": {
+    "FileSource": {
+      "type": "string",
+      "title": "File Source",
+      "description": "The location of the file. It can be a relative path. The actual access is provided via the File Service. When used in context of a FileCollection (dataset--FileCollection*) FileSource is a relative path from the FileCollectionPath. It can be used by consumers to pull an individual file if they so choose by concatenating the FileCollectionPath with the FileSource. This property is required.",
+      "example": "s3://default_bucket/r1/data/provided/documents/1000.witsml"
+    },
+    "PreloadFilePath": {
+      "type": "string",
+      "title": "Preload File Path",
+      "description": "File system path to the data file as it existed before loading to the data platform.",
+      "example": "s3://staging-area/r7/raw-data/provided/documents/1000.witsml"
+    },
+    "PreloadFileCreateUser": {
+      "type": "string",
+      "title": "Preload File Create User",
+      "description": "Optional user name or reference, who created the file prior to up-loading to the platform.",
+      "example": "somebody@acme.org"
+    },
+    "PreloadFileCreateDate": {
+      "type": "string",
+      "title": "Preload File Create Date",
+      "description": "Optional create date and time of the file prior to up-loading to the platform.",
+      "format": "date-time",
+      "example": "2019-12-16T11:46:20.163Z",
+      "x-osdu-frame-of-reference": "DateTime"
+    },
+    "PreloadFileModifyUser": {
+      "type": "string",
+      "title": "Preload File Modify User",
+      "description": "Optional user name or reference, who last modified the file prior to up-loading to the platform.",
+      "example": "somebody.else@acme.org"
+    },
+    "PreloadFileModifyDate": {
+      "type": "string",
+      "title": "Preload File Modify Date",
+      "description": "Optional last modified date and time of the file prior to up-loading to the platform.",
+      "format": "date-time",
+      "example": "2019-12-20T17:20:05.356Z",
+      "x-osdu-frame-of-reference": "DateTime"
+    },
+    "Name": {
+      "type": "string",
+      "title": "Name",
+      "description": "Optional, user-friendly file name.",
+      "example": "1000.witsml"
+    },
+    "FileSize": {
+      "type": "string",
+      "title": "File Size",
+      "description": "Length of file in bytes. Implemented as string. The value must be convertible to a long integer (sizes can become very large).",
+      "format": "integer",
+      "pattern": "^[0-9]+$",
+      "example": 95463
+    },
+    "EncodingFormatTypeID": {
+      "type": "string",
+      "title": "Encoding Format Type ID",
+      "description": "Only used in FileCollection where the EncodingFormatType differs from data DatasetDefault specified in data.EncodingFormatTypeID: the media type specification for this dataset.",
+      "example": "namespace:reference-data--EncodingFormatType:application%2Fgeo%2Bjson:",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-EncodingFormatType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "EncodingFormatType"
+        }
+      ]
+    },
+    "Checksum": {
+      "type": "string",
+      "title": "Checksum",
+      "description": "Checksum of file bytes - a hexadecimal number with even number of bytes.",
+      "example": "d41d8cd98f00b204e9800998ecf8427e",
+      "pattern": "^([0-9a-fA-F]{2})+$"
+    },
+    "ChecksumAlgorithm": {
+      "type": "string",
+      "title": "Checksum Algorithm",
+      "description": "The name of the checksum algorithm e.g. MD5, SHA-256.",
+      "example": "SHA-256"
+    }
+  },
+  "required": [
+    "FileSource"
+  ],
+  "x-osdu-inheriting-from-kind": []
+}

@@ -1,0 +1,46 @@
+{
+  "x-osdu-license": "Copyright 2022, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "x-osdu-review-status": "Accepted",
+  "$id": "https://schema.osdu.opengroup.org/json/abstract/AbstractIjkGridPatch.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:AbstractIjkGridPatch:1.0.0",
+  "title": "AbstractIjkGridPatch",
+  "description": "Definition of a collection of hexahedra which are organized and indexable by means of 3 (almost orthogonal) directions and called I, J and K. Only an abstract group type in order to be reused in GPGrid.",
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../abstract/AbstractColumnLayerGridPatch.1.0.0.json"
+    },
+    {
+      "type": "object",
+      "properties": {
+        "Ni": {
+          "type": "integer",
+          "title": "Count of cells in I direction",
+          "description": "Count of cells in the I-direction (aka first and/or fastest direction) in the grid. Must be positive.",
+          "example": 25
+        },
+        "Nj": {
+          "type": "integer",
+          "title": "Count of cells in J direction",
+          "description": "Count of cells in the J-direction (aka second direction) in the grid. Must be positive.",
+          "example": 50
+        },
+        "IsRightHanded": {
+          "type": "boolean",
+          "title": "Is Right Handed",
+          "description": "Indicates that the IJK grid is right handed, as determined by the triple product of tangent vectors in the I, J, and K directions.",
+          "example": "True"
+        },
+        "IsRadial": {
+          "type": "boolean",
+          "title": "Is Radial",
+          "description": "TRUE if the grid is periodic in J, i.e., has the topology of a complete 360 degree circle.",
+          "example": "False"
+        }
+      },
+      "title": "AbstractIjkGridPatch"
+    }
+  ],
+  "x-osdu-inheriting-from-kind": []
+}

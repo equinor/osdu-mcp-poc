@@ -1,0 +1,88 @@
+{
+  "x-osdu-license": "Copyright 2023, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "x-osdu-review-status": "Accepted",
+  "$id": "https://schema.osdu.opengroup.org/json/abstract/AbstractWellLicenseStatus.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:AbstractWellLicenseStatus:1.0.0",
+  "title": "WellLicenseArea",
+  "description": "A specific well license status value belonging to a well license status class facet, which is assigned by a business\nassociate and valid for a time interval. It identifies the facility the license status is valid for.",
+  "type": "object",
+  "properties": {
+    "LicenseStatusTypeID": {
+      "type": "string",
+      "title": "License Status Type ID",
+      "description": "The specific status that is applicable, which belongs to a status class.  They are selected from values organized in a faceted taxonomy, where the status class is the name of a facet. Each status class should represent an element in a faceted taxonomy that reflects one perspective of the state or condition of a data object.",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-WellLicenseStatusType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "WellLicenseStatusType"
+        }
+      ]
+    },
+    "IsActive": {
+      "type": "boolean",
+      "title": "Is Active",
+      "description": "A flag that indicates whether a particular status is currently in effect.  Historical status information can be retained for legal, administrative or analysis purposes.  Future status information can be projected based on the terms of a license and may also be captured in this data object."
+    },
+    "StatusAssignedByID": {
+      "type": "string",
+      "title": "Status Assigned By ID",
+      "description": "Identify the business associate who assigned this status.  A status is most commonly assigned by the operator, field contractor, contact for service or the regulatory agency.",
+      "pattern": "^[\\w\\-\\.]+:master-data\\-\\-BusinessAssociate:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "master-data",
+          "EntityType": "BusinessAssociate"
+        }
+      ]
+    },
+    "StatusEffectiveDate": {
+      "type": "string",
+      "title": "Status Effective Date",
+      "description": "The date on which this status was first valid.  Note that a data object can have more than one status in effect at the same time, provided that there is no conflict or confusion created by doing so.",
+      "format": "date"
+    },
+    "StatusTerminationDate": {
+      "type": "string",
+      "title": "Status Termination Date",
+      "description": "The date on which this status is no longer valid.  A status can become invalid based on events or activities, because they have been superseded by a different status or even because status information is no longer relevant.",
+      "format": "date"
+    },
+    "WellID": {
+      "type": "string",
+      "title": "Well ID",
+      "description": "Identify the well for which this status is valid, particularly useful when a status is applicable for the entire well configuration . Note that these are not well statuses, but license statuses.",
+      "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Well:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "master-data",
+          "EntityType": "Well"
+        }
+      ]
+    },
+    "WellboreID": {
+      "type": "string",
+      "title": "Wellbore ID",
+      "description": "Identify the wellbore for which this status is valid, particularly useful when a status is not applicable for the entire well configuration.  In the license, each wellbore may have a different status in terms of the license. Note that these are not well statuses, but license statuses.",
+      "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Wellbore:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "master-data",
+          "EntityType": "Wellbore"
+        }
+      ]
+    },
+    "StatusReason": {
+      "type": "string",
+      "title": "Status Reason",
+      "description": "The reason why this status has been assigned to a well license.  This is particularly important if a license has been cancelled, suspended or terminated by a regulatory authority."
+    },
+    "ElementIdentifier": {
+      "type": "string",
+      "title": "Element Identifier",
+      "description": "Unique identifier of this element in the parent's list of license states."
+    }
+  },
+  "x-osdu-inheriting-from-kind": []
+}

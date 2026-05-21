@@ -1,0 +1,382 @@
+{
+  "x-osdu-license": "Copyright 2022, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "$id": "https://schema.osdu.opengroup.org/json/work-product-component/ProcessedInSAR.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:work-product-component--ProcessedInSAR:1.0.0",
+  "title": "ProcessedInSAR",
+  "description": "Interferometric Synthetic Aperture Radar (InSAR) is a representation of surface or ground deformation from satellite radar image data over time",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "Previously called ResourceID or SRN which identifies this OSDU resource object without version.",
+      "title": "Entity ID",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-ProcessedInSAR:[\\w\\-\\.\\:\\%]+$",
+      "example": "namespace:work-product-component--ProcessedInSAR:aa958f99-d137-58fe-b80d-da0a2347865e"
+    },
+    "kind": {
+      "description": "The schema identification for the OSDU resource object following the pattern {Namespace}:{Source}:{Type}:{VersionMajor}.{VersionMinor}.{VersionPatch}. The versioning scheme follows the semantic versioning, https://semver.org/.",
+      "title": "Entity Kind",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:[\\w\\-\\.]+:[\\w\\-\\.]+:[0-9]+.[0-9]+.[0-9]+$",
+      "example": "osdu:wks:work-product-component--ProcessedInSAR:1.0.0"
+    },
+    "version": {
+      "description": "The version number of this OSDU resource; set by the framework.",
+      "title": "Version Number",
+      "type": "integer",
+      "format": "int64",
+      "example": 1562066009929332
+    },
+    "acl": {
+      "description": "The access control tags associated with this entity.",
+      "title": "Access Control List",
+      "$ref": "../abstract/AbstractAccessControlList.1.0.0.json"
+    },
+    "legal": {
+      "description": "The entity's legal tags and compliance status. The actual contents associated with the legal tags is managed by the Compliance Service.",
+      "title": "Legal Tags",
+      "$ref": "../abstract/AbstractLegalTags.1.0.0.json"
+    },
+    "tags": {
+      "title": "Tag Dictionary",
+      "description": "A generic dictionary of string keys mapping to string value. Only strings are permitted as keys and values.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "example": {
+        "NameOfKey": "String value"
+      }
+    },
+    "createTime": {
+      "description": "Timestamp of the time at which initial version of this OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:46:20.163Z"
+    },
+    "createUser": {
+      "title": "Resource Object Creation User Reference",
+      "description": "The user reference, which created the first version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "modifyTime": {
+      "description": "Timestamp of the time at which this version of the OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Version Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:52:24.477Z"
+    },
+    "modifyUser": {
+      "title": "Resource Object Version Creation User Reference",
+      "description": "The user reference, which created this version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "ancestry": {
+      "description": "The links to data, which constitute the inputs, from which this record instance is derived.",
+      "title": "Ancestry",
+      "$ref": "../abstract/AbstractLegalParentList.1.0.0.json"
+    },
+    "meta": {
+      "description": "The Frame of Reference meta data section linking the named properties to self-contained definitions.",
+      "title": "Frame of Reference Meta Data",
+      "type": "array",
+      "items": {
+        "$ref": "../abstract/AbstractMetaItem.1.0.0.json"
+      }
+    },
+    "data": {
+      "allOf": [
+        {
+          "$ref": "../abstract/AbstractCommonResources.1.0.0.json"
+        },
+        {
+          "$ref": "../abstract/AbstractWPCGroupType.1.0.0.json"
+        },
+        {
+          "$ref": "../abstract/AbstractWorkProductComponent.1.1.0.json"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "AcquisitionSite": {
+              "type": "string",
+              "title": "Acquisition Site",
+              "description": "Acquisition site for the data capture area which is not any of the Country, Field or Basin properties which are all captured within the Geocontext for a work product component. The site should be used as an additional identifier for items such as prominent landmarks, facilities, processing plant or structures that identify the area of interest.",
+              "example": "Gorgon"
+            },
+            "ApplicationID": {
+              "type": "string",
+              "title": "Application",
+              "description": "Use or purpose of data acquisition. For example: Biomass estimation, Ship Detection, Vegetation monitoring, Geomorphology, CCS Storage monitoring, Oil & Gas field injection, Wellbore Casing Failure",
+              "example": "namespace:reference-data--InSARApplication:VegetationMonitoring:",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-InSARApplication:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "InSARApplication"
+                }
+              ]
+            },
+            "ReferenceIdentifier": {
+              "type": "string",
+              "title": "ReferenceIdentifier",
+              "description": "Unique or distinctive Reference Number, Job Number, File Number, Identifier, Label, Name, etc as indicated on a report, file, etc.  \nUse this to allow correlation of the data back to the original source document, file, etc",
+              "example": "R-001"
+            },
+            "SatelliteMissionID": {
+              "type": "string",
+              "title": "Satellite Mission",
+              "description": "The name of the Satellite Mission that the individual Satellite belongs to. (See data.SatelliteName.) Examples include: Radarsat, Sentinel, COSMO-SkyMed, Kompsat",
+              "example": "namespace:reference-data--SatelliteMission:Sentinel:",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-SatelliteMission:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "SatelliteMission"
+                }
+              ]
+            },
+            "SatelliteName": {
+              "type": "string",
+              "title": "Satellite Name",
+              "description": "Name of the individual satellite belonging to the Satellite Mission. (See data.SatelliteMissionID.)\nExamples include: RADARSAT-1, SENTINEL-1C,  SENTINEL-1B, COSMO-4, CSG-3, KOMPSAT-6, RISAT-2B",
+              "example": "Sentinel-1C"
+            },
+            "Wavelength": {
+              "type": "number",
+              "title": "Wavelength",
+              "description": "The wavelength of the radar. This is related to the Frequency Band property (see data.FrequencyBandID). Examples include: 37.5, 50.5, 75",
+              "example": 37.5,
+              "x-osdu-frame-of-reference": "UOM:length"
+            },
+            "FrequencyBandID": {
+              "type": "string",
+              "title": "Frequency Band",
+              "description": "Image frequency band or resolution. For example: C / X / L / P. This is related to the wavelength. (See data.WavelengthID.)",
+              "example": "namespace:reference-data--InSARFrequencyBand:X:",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-InSARFrequencyBand:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "InSARFrequencyBand"
+                }
+              ]
+            },
+            "SatelliteGeometryID": {
+              "type": "string",
+              "title": "Satellite Geometry",
+              "description": "Geometry of the satellite which indicates the orbital path. For example in a Ascending geometry  the satellite is travelling North and imaging East. Descending is moving South and imaging West",
+              "example": "namespace:reference-data--SatelliteGeometry:Ascending:",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-SatelliteGeometry:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "SatelliteGeometry"
+                }
+              ]
+            },
+            "ImagingModeID": {
+              "type": "string",
+              "title": "Imaging Mode ID",
+              "description": "Imaging mode utilised. For example: Stripmap, Spotlight, ScanSAR, etc",
+              "example": "namespace:reference-data--InSARImageMode:ScanSAR:",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-InSARImageMode:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "InSARImageMode"
+                }
+              ]
+            },
+            "AcquisitionDateRanges": {
+              "type": "array",
+              "title": "Acquisition Date Ranges",
+              "description": "An array which lists the start and end date of the acquisition data which is used as the input for the processing",
+              "x-osdu-indexing": {
+                "type": "nested"
+              },
+              "items": {
+                "type": "object",
+                "title": "Acquisition Date Ranges",
+                "description": "Defines the start and end date of the processing completed on the dataset",
+                "properties": {
+                  "StartDate": {
+                    "type": "string",
+                    "title": "Start Date",
+                    "description": "Start date and time of images used  for processing",
+                    "format": "date-time",
+                    "x-osdu-frame-of-reference": "DateTime"
+                  },
+                  "EndDate": {
+                    "type": "string",
+                    "title": "End Date",
+                    "description": "end date and time of images used  for processing",
+                    "format": "date-time",
+                    "x-osdu-frame-of-reference": "DateTime"
+                  }
+                }
+              }
+            },
+            "NumberImages": {
+              "type": "integer",
+              "title": "Number of Images",
+              "description": "Number of Images which have been captured in the time/date range which are used as the input for processing",
+              "example": 50
+            },
+            "ImageArea": {
+              "type": "number",
+              "title": "Area",
+              "description": "The area as unit of measure covered by the images which are input for the processing. Must be the same unit as the Measure point Density. Interdependent with number of measured points and  measure point density",
+              "example": 300.78,
+              "x-osdu-frame-of-reference": "UOM:area"
+            },
+            "MeasuredPoints": {
+              "type": "integer",
+              "title": "Measured Points",
+              "description": "Number of measured points in an Image Area. Interdependent with Image Area and Measure Point density.",
+              "example": 386736
+            },
+            "MeasurePointDensity": {
+              "type": "number",
+              "title": "Measure Point Density",
+              "description": "Density of measured points in unit of measure. Must be the same unit as the Image Area. Interdependent with image area and number of measured points",
+              "example": 1189.5,
+              "x-osdu-frame-of-reference": "UOM:reciprocal area"
+            },
+            "ServiceCompanyID": {
+              "type": "string",
+              "title": "Service Company",
+              "description": "Company or organisation who processed the data",
+              "example": "namespace:master-data--Organisation:Dolphin:",
+              "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Organisation:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "Organisation"
+                }
+              ]
+            },
+            "ProcessingTypeID": {
+              "type": "string",
+              "title": "ProcessingType",
+              "description": "The type of processing used to produce the data set. For example: Coherence, Multilook, Interferometric SAR (InSAR), Differential (DInSAR), Polarimetric SAR (PolSAR), Polarimetric Interferometric SAR (PolInSAR), etc",
+              "example": "namespace:reference-data--InSARProcessingType:InSAR:",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-InSARProcessingType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "InSARProcessingType"
+                }
+              ]
+            },
+            "PolarisationID": {
+              "type": "string",
+              "title": "Polarisation",
+              "description": "Polarisation captures the longitudinal wave in a single plane. Two are commonly used, Horizontal (H), Vertical (V)  and combinations of the two. One represents the transmission and the  other the receiver. For example: VV, VH, HH, HV",
+              "example": "namespace:reference-data--InSARPolarisation:VH:",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-InSARPolarisation:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "InSARPolarisation"
+                }
+              ]
+            },
+            "IncidenceAngle": {
+              "type": "number",
+              "title": "Incidence Angle",
+              "description": "The single common angle or line of sight angle of the radiation on a flat horizontal terrain.",
+              "example": 21.76,
+              "x-osdu-frame-of-reference": "UOM:plane angle"
+            },
+            "GroundResolution": {
+              "type": "number",
+              "title": "Ground Resolution",
+              "description": "Horizontal resolution of the image. For example 1 metre or 10 meters",
+              "example": 1,
+              "x-osdu-frame-of-reference": "UOM:length"
+            },
+            "RawInSARID": {
+              "type": "string",
+              "title": "Raw InSAR ID",
+              "description": "An association to the raw acquired InSAR work product component this image is derived",
+              "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-[\\w\\-\\.]+:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "work-product-component"
+                }
+              ]
+            },
+            "SatelliteRevisitTime": {
+              "type": "number",
+              "title": "Satellite Revisit Time",
+              "description": "Time for the satellite to complete orbit and revisit the image area reference point. Unit of measure is time (Seconds)",
+              "example": 86400,
+              "x-osdu-frame-of-reference": "UOM:time"
+            },
+            "SurfaceReflectorCount": {
+              "type": "integer",
+              "title": "Surface Reflector Count",
+              "description": "The count of the surface reflectors in the image",
+              "example": 2
+            }
+          },
+          "title": "IndividualProperties"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "ExtensionProperties": {
+              "type": "object"
+            }
+          },
+          "title": "ExtensionProperties"
+        }
+      ]
+    }
+  },
+  "required": [
+    "kind",
+    "acl",
+    "legal"
+  ],
+  "additionalProperties": false,
+  "x-osdu-review-status": "Accepted",
+  "x-osdu-supported-file-formats": [
+    "shp",
+    "tiff",
+    "pdf",
+    "csv"
+  ],
+  "x-osdu-virtual-properties": {
+    "data.VirtualProperties.DefaultLocation": {
+      "type": "object",
+      "priority": [
+        {
+          "path": "data.SpatialArea"
+        },
+        {
+          "path": "data.SpatialPoint"
+        }
+      ]
+    },
+    "data.VirtualProperties.DefaultName": {
+      "type": "string",
+      "priority": [
+        {
+          "path": "data.Name"
+        }
+      ]
+    }
+  },
+  "x-osdu-inheriting-from-kind": [
+    {
+      "name": "WorkProductComponent",
+      "kind": "osdu:wks:AbstractWPCGroupType:1.0.0"
+    }
+  ]
+}

@@ -1,0 +1,181 @@
+{
+  "x-osdu-license": "Copyright 2025, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "x-osdu-review-status": "Accepted",
+  "x-osdu-governance-authorities": [
+    "OSDU"
+  ],
+  "$id": "https://schema.osdu.opengroup.org/json/content/DdmsFootprint.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:content--DdmsFootprint:1.0.0",
+  "title": "Ddms Footprint",
+  "description": "A content schema defining which group-type--EntityType a given DDMS instance can serve.",
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../abstract/AbstractContent.1.0.0.json",
+      "example": {
+        "SchemaKind": "osdu:wks:content--DdmsFootprint:1.0.0",
+        "Name": "Reservoir DDMS",
+        "Description": "The data footprint declared by the Reservoir DDMS as capability.",
+        "ExtensionProperties": {}
+      }
+    },
+    {
+      "type": "object",
+      "properties": {
+        "DdmsVersion": {
+          "type": "string",
+          "title": "DDMS Version",
+          "description": "The version number this footprint belongs to, typically an API version.",
+          "example": "DDMS Version 1.1"
+        },
+        "DocumentationURL": {
+          "type": "string",
+          "title": "Documentation URL",
+          "description": "The URL to the DDMS documentation.",
+          "format": "uri",
+          "example": "https://community.opengroup.org/osdu/platform/domain-data-mgmt-services/reservoir/home/-/blob/main/README.md"
+        },
+        "CoveredItems": {
+          "type": "array",
+          "title": "Covered Items",
+          "description": "The data footprint of the DDMS.",
+          "example": [
+            {
+              "WKS": "osdu:wks:work-product-component--Activity:1.",
+              "ContentTypes": [
+                "resqml20.obj_Activity",
+                "eml23.Activity"
+              ]
+            },
+            {
+              "WKS": "osdu:wks:master-data--ActivityTemplate:1.",
+              "ContentTypes": [
+                "resqml20.obj_ActivityTemplate",
+                "eml23.ActivityTemplate"
+              ]
+            }
+          ],
+          "items": {
+            "type": "object",
+            "title": "CoveredItem",
+            "description": "One group-type--EntityType 'catalog' item handled by the DDMS",
+            "properties": {
+              "WKS": {
+                "type": "string",
+                "title": "Well-Known-Schema",
+                "description": "The well-known schema expressed as `authority:wks:group-type--EntityType:N.M.`, where the major version number N and minor M are optional. This way DDMSs can express minimum required major and minor version numbers for a given DDMS instance. If no major version N is specified, the DDMS is insensitive to schema versions.",
+                "example": "osdu:wks:group-type--EntityName:2."
+              },
+              "ContentTypes": {
+                "type": "array",
+                "title": "Content Types",
+                "description": "The content types or schemas served by the DDMS, which are associated with the OSDU well-known schema WKS.",
+                "x-osdu-indexing": {
+                  "type": "flattened"
+                },
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "WKS"
+            ]
+          }
+        },
+        "AuthorityToContentTypes": {
+          "type": "array",
+          "title": "Authority to Content Types",
+          "description": "An optional association of governing authorities to content types.",
+          "example": [
+            {
+              "Authority": "Energistics RESQML",
+              "Description": "RESQML 2.0.1",
+              "AuthorityURL": "https://docs.energistics.org/#RESQML/RESQML_TOPICS/RESQML-000-000-titlepage.html",
+              "ContentTypeURLs": [
+                {
+                  "ContentType": "resqml20.obj_Activity",
+                  "URL": "https://docs.energistics.org/#RESQML/RESQML_TOPICS/RESQML-500-292-0-R-sv2010.html"
+                },
+                {
+                  "ContentType": "resqml20.obj_ActivityTemplate",
+                  "URL": "https://docs.energistics.org/#RESQML/RESQML_TOPICS/RESQML-500-293-0-R-sv2010.html"
+                }
+              ]
+            },
+            {
+              "Authority": "Energistics EML",
+              "Description": "EML 2.3, not published yet",
+              "ContentTypeURLs": [
+                {
+                  "ContentType": "eml23.Activity"
+                },
+                {
+                  "ContentType": "eml23.ActivityTemplate"
+                }
+              ]
+            }
+          ],
+          "items": {
+            "type": "object",
+            "title": "AuthorityItem",
+            "description": "Additional documentation based on the schema authority for the DDMS content.",
+            "properties": {
+              "Authority": {
+                "type": "string",
+                "title": "Authority",
+                "description": "The authority governing the content types."
+              },
+              "Description": {
+                "type": "string",
+                "title": "Description",
+                "description": "Optional description for the authority.",
+                "x-osdu-indexing": {
+                  "type": "flattened"
+                }
+              },
+              "AuthorityURL": {
+                "type": "string",
+                "title": "Authority URL",
+                "description": "An optional URL providing additional information or context about the authority.",
+                "format": "uri"
+              },
+              "ContentTypeURLs": {
+                "type": "array",
+                "title": "Content Type URLs",
+                "description": "The array of content type-documentation URL pairs for schemas served by the DDMS, governed by the Authority. The association to OSDU well-known schemas WKS is done via CoveredItems[].",
+                "items": {
+                  "type": "object",
+                  "title": "ContentTypeURL",
+                  "description": "A DDMS content type paired with a URL for further documentation.",
+                  "properties": {
+                    "ContentType": {
+                      "type": "string",
+                      "title": "Content Type",
+                      "description": "The content type or schema served by the DDMS."
+                    },
+                    "URL": {
+                      "type": "string",
+                      "title": "URL",
+                      "description": "An optional URL to provide more documentation about the content type.",
+                      "format": "uri"
+                    }
+                  },
+                  "required": [
+                    "ContentType"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "Authority"
+            ]
+          }
+        }
+      },
+      "title": "DdmsFootprint"
+    }
+  ],
+  "x-osdu-inheriting-from-kind": []
+}

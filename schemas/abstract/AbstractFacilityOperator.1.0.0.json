@@ -1,0 +1,40 @@
+{
+  "x-osdu-license": "Copyright 2022, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "$id": "https://schema.osdu.opengroup.org/json/abstract/AbstractFacilityOperator.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:AbstractFacilityOperator:1.0.0",
+  "title": "AbstractFacilityOperator",
+  "description": "The organisation that was responsible for a facility at some point in time.",
+  "type": "object",
+  "properties": {
+    "FacilityOperatorID": {
+      "description": "Internal, unique identifier for an item 'AbstractFacilityOperator'. This identifier is used by 'AbstractFacility.CurrentOperatorID' and 'AbstractFacility.InitialOperatorID'.",
+      "type": "string",
+      "title": "Facility Operator ID"
+    },
+    "FacilityOperatorOrganisationID": {
+      "description": "The company that currently operates, or previously operated the facility",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Organisation:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "master-data",
+          "EntityType": "Organisation"
+        }
+      ]
+    },
+    "EffectiveDateTime": {
+      "description": "The date and time at which the facility operator becomes effective.",
+      "type": "string",
+      "format": "date-time",
+      "x-osdu-frame-of-reference": "DateTime"
+    },
+    "TerminationDateTime": {
+      "description": "The date and time at which the facility operator is no longer in effect. If the operator is still effective, the 'TerminationDateTime' is left absent.",
+      "type": "string",
+      "format": "date-time",
+      "x-osdu-frame-of-reference": "DateTime"
+    }
+  },
+  "x-osdu-inheriting-from-kind": []
+}

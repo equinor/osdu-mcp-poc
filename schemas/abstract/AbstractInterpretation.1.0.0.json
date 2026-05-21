@@ -1,0 +1,80 @@
+{
+  "x-osdu-license": "Copyright 2022, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "x-osdu-review-status": "Accepted",
+  "$id": "https://schema.osdu.opengroup.org/json/abstract/AbstractInterpretation.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:AbstractInterpretation:1.0.0",
+  "title": "AbstractInterpretation",
+  "description": "The group of properties shared by different kinds of interpretations",
+  "type": "object",
+  "properties": {
+    "OlderPossibleAge": {
+      "type": "number",
+      "title": "OlderPossibleAge",
+      "description": "Represents the older possible age for the interpretation. Expressed in geological time as millions of years [Ma], and the value must be positive. The age value is not subject to normalization.",
+      "example": 100
+    },
+    "YoungerPossibleAge": {
+      "type": "number",
+      "title": "YoungerPossibleAge",
+      "description": "Represents the younger possible age for the interpretation. Expressed in geological time as millions of years [Ma], and the value must be positive. The age value is not subject to normalization.",
+      "example": 80
+    },
+    "DomainTypeID": {
+      "type": "string",
+      "title": "DomainTypeID",
+      "description": "Describes the domain of the interpretation: Depth, Time, Mixed",
+      "format": "uri-reference",
+      "example": "namespace:reference-data--DomainType:Time:",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-DomainType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "DomainType"
+        }
+      ]
+    },
+    "FeatureID": {
+      "type": "string",
+      "title": "FeatureID",
+      "description": "Reference to the Feature the Interpretation refers to. The actual type of the target is specified in the specialisation, i.e. the type, which includes this schema fragment.",
+      "pattern": "^[\\w\\-\\.]+:(master-data\\-\\-BoundaryFeature|master-data\\-\\-ModelFeature|master-data\\-\\-RockVolumeFeature|work-product-component\\-\\-LocalBoundaryFeature|work-product-component\\-\\-LocalModelFeature|work-product-component\\-\\-LocalRockVolumeFeature):[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "master-data",
+          "EntityType": "BoundaryFeature"
+        },
+        {
+          "GroupType": "master-data",
+          "EntityType": "ModelFeature"
+        },
+        {
+          "GroupType": "master-data",
+          "EntityType": "RockVolumeFeature"
+        },
+        {
+          "GroupType": "work-product-component",
+          "EntityType": "LocalBoundaryFeature"
+        },
+        {
+          "GroupType": "work-product-component",
+          "EntityType": "LocalModelFeature"
+        },
+        {
+          "GroupType": "work-product-component",
+          "EntityType": "LocalRockVolumeFeature"
+        }
+      ]
+    },
+    "FeatureName": {
+      "type": "string",
+      "title": "FeatureName",
+      "description": "Name of the feature the Interpretation refers to",
+      "x-osdu-is-derived": {
+        "RelationshipPropertyName": "FeatureID",
+        "TargetPropertyName": "Name"
+      }
+    }
+  },
+  "x-osdu-inheriting-from-kind": []
+}

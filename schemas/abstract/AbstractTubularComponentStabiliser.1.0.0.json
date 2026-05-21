@@ -1,0 +1,127 @@
+{
+  "x-osdu-license": "Copyright 2025, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "x-osdu-review-status": "Accepted",
+  "$id": "https://schema.osdu.opengroup.org/json/abstract/AbstractTubularComponentStabiliser.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:AbstractTubularComponentStabiliser:1.0.0",
+  "title": "Abstract Tubular Component Stabiliser",
+  "description": "Stabiliser Tubular Component specific properties. Based on the WITSML Tubular schema 'Stabiliser' ComplexType.",
+  "type": "object",
+  "properties": {
+    "StabiliserTypeID": {
+      "type": "string",
+      "title": "Stabiliser Type ID",
+      "description": "Stabiliser design classification.",
+      "example": "namespace:reference-data--StabiliserType:IntegralBladeStabilizer:",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML Tubular.Stabilizer.TypeBlade",
+      "x-osdu-attribution-revision": "V2.1",
+      "x-osdu-existing-standard": "N",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-StabiliserType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "StabiliserType"
+        }
+      ]
+    },
+    "StabiliserBladeDesignTypeID": {
+      "type": "string",
+      "title": "Stabiliser Blade Design Type ID",
+      "description": "Blade type classification.",
+      "example": "namespace:reference-data--StabiliserBladeDesignType:SpiralBlade:",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML Tubular.Stabilizer.ShapeBlade",
+      "x-osdu-attribution-revision": "V2.1",
+      "x-osdu-existing-standard": "N",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-StabiliserBladeDesignType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "StabiliserBladeDesignType"
+        }
+      ]
+    },
+    "StabiliserOperatingDesignID": {
+      "type": "string",
+      "title": "Stabiliser Operating Design ID",
+      "description": "Stabiliser operating design classification.",
+      "example": "namespace:reference-data--StabiliserOperatingDesign:Rotating:",
+      "x-osdu-attribution-authority": "OSDU",
+      "x-osdu-existing-standard": "N",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-StabiliserOperatingDesign:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "StabiliserOperatingDesign"
+        }
+      ]
+    },
+    "BladeOuterDiameterMinimum": {
+      "type": "number",
+      "title": "Minimum Blade OD",
+      "description": "Minimum Outer Diameter of the Blades.",
+      "example": "12.25 in",
+      "x-osdu-frame-of-reference": "UOM:length",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML Tubular.Stabilizer.ODBladeMin",
+      "x-osdu-attribution-revision": "V2.1"
+    },
+    "BladeOuterDiameterMaximum": {
+      "type": "number",
+      "title": "Maximum Blade OD",
+      "description": "Maximum Outer Diameter of the Blades.",
+      "example": "12.25 in",
+      "x-osdu-frame-of-reference": "UOM:length",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML Tubular.Stabilizer.ODBladeMax",
+      "x-osdu-attribution-revision": "V2.1"
+    },
+    "NumberBlades": {
+      "type": "integer",
+      "title": "Number of Blades",
+      "description": "Number of blades on the Stabiliser.",
+      "example": 3,
+      "x-osdu-attribution-authority": "OSDU"
+    },
+    "LengthBlade": {
+      "type": "number",
+      "title": "Blade Length",
+      "description": "Length of the blade.",
+      "example": "24 in",
+      "x-osdu-frame-of-reference": "UOM:length",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML Tubular.Stabilizer.LenBladeGauge",
+      "x-osdu-attribution-revision": "V2.1"
+    },
+    "LengthBladeGauge": {
+      "type": "number",
+      "title": "Length Blade Gauge",
+      "description": "Gauge Length of the blade. That is, the length of the blade measured at the OD Blade Max.",
+      "example": "26 in",
+      "x-osdu-frame-of-reference": "UOM:length",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML Tubular.Stabilizer.LenBladeGauge",
+      "x-osdu-attribution-revision": "V2.1"
+    },
+    "BladePadDiameter": {
+      "type": "number",
+      "title": "Blade Pad Diameter",
+      "description": "Width of the blade at the contact interval of the pad.",
+      "example": "2.5 in",
+      "x-osdu-frame-of-reference": "UOM:length",
+      "x-osdu-attribution-authority": "OSDU"
+    },
+    "FictionFactor": {
+      "type": "number",
+      "title": "Friction Factor",
+      "description": "Coefficient of Friction 0 - 1.",
+      "example": 0.2,
+      "x-osdu-frame-of-reference": "UOM:dimensionless",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML Tubular.Stabilizer.FactFric",
+      "x-osdu-attribution-revision": "V2.1"
+    }
+  },
+  "x-osdu-inheriting-from-kind": []
+}

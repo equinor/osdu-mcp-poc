@@ -1,0 +1,184 @@
+{
+  "x-osdu-license": "Copyright 2022, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "x-osdu-review-status": "Accepted",
+  "x-osdu-governance-authorities": [
+    "OSDU"
+  ],
+  "$id": "https://schema.osdu.opengroup.org/json/abstract/AbstractTechnicalAssurance.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:AbstractTechnicalAssurance:1.0.0",
+  "title": "AbstractTechnicalAssurance",
+  "description": "Describes a record's overall suitability for general business consumption based on level of trust.",
+  "type": "object",
+  "properties": {
+    "TechnicalAssuranceTypeID": {
+      "type": "string",
+      "title": "Technical Assurance Type ID",
+      "description": "Describes a record's overall suitability for general business consumption based on data quality. Clarifications: Since Certified is the highest classification of suitable quality, any further change or versioning of a Certified record should be carefully considered and justified. If a Technical Assurance value is not populated then one can assume the data has not been evaluated or its quality is unknown (=Unevaluated). Technical Assurance values are not intended to be used for the identification of a single \"preferred\" or \"definitive\" record by comparison with other records.",
+      "example": "namespace:reference-data--TechnicalAssuranceType:Trusted:",
+      "x-osdu-attribution-authority": "The Open Group",
+      "x-osdu-attribution-publication": "OSDU Data Platform",
+      "x-osdu-attribution-revision": "1.0.0",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-TechnicalAssuranceType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "TechnicalAssuranceType"
+        }
+      ]
+    },
+    "Reviewers": {
+      "type": "array",
+      "title": "Reviewers",
+      "description": "The individuals, or roles, that reviewed and determined the technical assurance value",
+      "example": [
+        {
+          "RoleTypeID": "namespace:reference-data--ContactRoleType:AccountOwner:",
+          "OrganisationID": "namespace:master-data--Organisation:SomeUniqueOrganisationID:",
+          "Name": "Example Name"
+        }
+      ],
+      "x-osdu-attribution-authority": "The Open Group",
+      "x-osdu-attribution-publication": "OSDU Data Platform",
+      "x-osdu-attribution-revision": "1.0.0",
+      "items": {
+        "$ref": "../abstract/AbstractContact.1.0.0.json"
+      }
+    },
+    "AcceptableUsage": {
+      "type": "array",
+      "title": "Acceptable Usage",
+      "description": "List of workflows and/or personas that the technical assurance value is valid for (e.g., This data is trusted for Seismic Processing)",
+      "example": [
+        {
+          "WorkflowUsage": "namespace:reference-data--WorkflowUsageType:SeismicProcessing:",
+          "WorkflowPersona": "namespace:reference-data--WorkflowPersonaType:SeismicProcessor:"
+        }
+      ],
+      "x-osdu-indexing": {
+        "type": "flattened"
+      },
+      "x-osdu-attribution-authority": "The Open Group",
+      "x-osdu-attribution-publication": "OSDU Data Platform",
+      "x-osdu-attribution-revision": "1.0.0",
+      "items": {
+        "type": "object",
+        "title": "AcceptableUsage",
+        "description": "Describes the workflows and/or personas that the technical assurance value is valid for (e.g., This data has a technical assurance property of \"trusted\" and it is suitable for Seismic Interpretation).",
+        "properties": {
+          "WorkflowUsage": {
+            "type": "string",
+            "title": "Workflow Usage",
+            "description": "Name of the business activities, processes, and/or workflows that the record is technical assurance value is valid for.",
+            "example": "namespace:reference-data--WorkflowUsageType:SeismicProcessing:",
+            "x-osdu-attribution-authority": "The Open Group",
+            "x-osdu-attribution-publication": "OSDU Data Platform",
+            "x-osdu-attribution-revision": "1.0.0",
+            "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-WorkflowUsageType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+            "x-osdu-relationship": [
+              {
+                "GroupType": "reference-data",
+                "EntityType": "WorkflowUsageType"
+              }
+            ]
+          },
+          "WorkflowPersona": {
+            "type": "string",
+            "title": "Workflow Persona",
+            "description": "Name of the role or personas that the record is technical assurance value is valid for.",
+            "example": "namespace:reference-data--WorkflowPersonaType:SeismicProcessor:",
+            "x-osdu-attribution-authority": "The Open Group",
+            "x-osdu-attribution-publication": "OSDU Data Platform",
+            "x-osdu-attribution-revision": "1.0.0",
+            "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-WorkflowPersonaType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+            "x-osdu-relationship": [
+              {
+                "GroupType": "reference-data",
+                "EntityType": "WorkflowPersonaType"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "UnacceptableUsage": {
+      "type": "array",
+      "title": "Unacceptable Usage",
+      "description": "List of workflows and/or personas that the technical assurance value is not valid for (e.g., This data is not trusted for seismic interpretation)",
+      "example": [
+        {
+          "WorkflowUsage": "namespace:reference-data--WorkflowUsageType:SeismicInterpretation:",
+          "WorkflowPersona": "namespace:reference-data--WorkflowPersonaType:SeismicInterpreter:"
+        }
+      ],
+      "x-osdu-indexing": {
+        "type": "flattened"
+      },
+      "x-osdu-attribution-authority": "The Open Group",
+      "x-osdu-attribution-publication": "OSDU Data Platform",
+      "x-osdu-attribution-revision": "1.0.0",
+      "items": {
+        "type": "object",
+        "title": "UnacceptableUsage",
+        "description": "Describes the workflows and/or personas that the technical assurance value is not valid for (e.g., This data has a technical assurance property of \"trusted\", but it is not suitable for Seismic Interpretation).",
+        "properties": {
+          "WorkflowUsage": {
+            "type": "string",
+            "title": "Workflow Usage",
+            "description": "Name of the business activities, processes, and/or workflows that the record is technical assurance value is not valid for.",
+            "example": "namespace:reference-data--WorkflowUsageType:SeismicInterpretation:",
+            "x-osdu-attribution-authority": "The Open Group",
+            "x-osdu-attribution-publication": "OSDU Data Platform",
+            "x-osdu-attribution-revision": "1.0.0",
+            "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-WorkflowUsageType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+            "x-osdu-relationship": [
+              {
+                "GroupType": "reference-data",
+                "EntityType": "WorkflowUsageType"
+              }
+            ]
+          },
+          "WorkflowPersona": {
+            "type": "string",
+            "title": "Workflow Persona",
+            "description": "Name of the role or personas that the record is technical assurance value is not valid for.",
+            "example": "namespace:reference-data--WorkflowPersonaType:SeismicInterpreter:",
+            "x-osdu-attribution-authority": "The Open Group",
+            "x-osdu-attribution-publication": "OSDU Data Platform",
+            "x-osdu-attribution-revision": "1.0.0",
+            "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-WorkflowPersonaType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+            "x-osdu-relationship": [
+              {
+                "GroupType": "reference-data",
+                "EntityType": "WorkflowPersonaType"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "EffectiveDate": {
+      "type": "string",
+      "title": "Effective Date",
+      "description": "Date when the technical assurance determination for this record has taken place",
+      "format": "date",
+      "example": "2020-02-13",
+      "x-osdu-attribution-authority": "The Open Group",
+      "x-osdu-attribution-publication": "OSDU Data Platform",
+      "x-osdu-attribution-revision": "1.0.0"
+    },
+    "Comment": {
+      "type": "string",
+      "title": "Comment",
+      "description": "Any additional context to support the determination of technical assurance",
+      "example": "This is free form text from reviewer, e.g. restrictions on use",
+      "x-osdu-attribution-authority": "The Open Group",
+      "x-osdu-attribution-publication": "OSDU Data Platform",
+      "x-osdu-attribution-revision": "1.0.0"
+    }
+  },
+  "required": [
+    "TechnicalAssuranceTypeID"
+  ],
+  "x-osdu-inheriting-from-kind": []
+}

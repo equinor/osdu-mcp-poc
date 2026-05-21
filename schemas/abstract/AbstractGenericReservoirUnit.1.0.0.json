@@ -1,0 +1,168 @@
+{
+  "x-osdu-license": "Copyright 2023, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "x-osdu-review-status": "Accepted",
+  "$id": "https://schema.osdu.opengroup.org/json/abstract/AbstractGenericReservoirUnit.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:AbstractGenericReservoirUnit:1.0.0",
+  "title": "Abstract Generic Reservoir Unit",
+  "description": "This abstract entity gathers all the properties universally required to describe any kind of reservoir - at any level considered (Reservoir, Reservoir Segment,\u2026.)",
+  "type": "object",
+  "x-osdu-virtual-properties": {
+    "data.VirtualProperties.DefaultName": {
+      "type": "string",
+      "priority": [
+        {
+          "path": "data.Name"
+        }
+      ]
+    },
+    "data.VirtualProperties.DefaultLocation": {
+      "type": "object",
+      "priority": [
+        {
+          "path": "data.SpatialLocation"
+        }
+      ]
+    }
+  },
+  "properties": {
+    "Name": {
+      "type": "string",
+      "title": "Name",
+      "description": "Name of the reservoir or reservoir segment."
+    },
+    "ReservoirUnitArea": {
+      "type": "number",
+      "title": "ReservoirUnitArea",
+      "description": "The productive area is the measured or estimated total area of the reservoir unit considered, usually the area within the hydrocarbon-water contact.",
+      "x-osdu-frame-of-reference": "UOM:area"
+    },
+    "ReservoirUnitPressureDatumTVDSS": {
+      "type": "number",
+      "title": "Reservoir Unit Pressure Datum True Vertical Depth Subsea",
+      "description": "This is the true vertical depth of the permanent reservoir unit datum used for pressure. This is measured vertically downwards from mean sea level.",
+      "x-osdu-frame-of-reference": "UOM:length"
+    },
+    "IsSegmented": {
+      "type": "boolean",
+      "title": "Is Segmented",
+      "description": "This flag indicates that this reservoir is composed of reservoir segments, and that the characteristics of the segments should be aggregated to best describe the characteristics of the reservoir. When not segmented, the single reservoir segment describes the properties of the entire reservoir. If more than one reservoir segment is defined for this reservoir, this flag should be set and the characteristics for the reservoir should be calculated as summary data over all its reservoir segments."
+    },
+    "Status": {
+      "type": "array",
+      "title": "Status",
+      "description": "Array of Historical Status of a production model element as exploration, appraisal and development. The operational or legal status of the reservoir.",
+      "items": {
+        "type": "object",
+        "title": "Status",
+        "description": "The operational or legal status of the reservoir",
+        "properties": {
+          "StatusTypeID": {
+            "type": "string",
+            "title": "Status Type Identifier",
+            "description": "Status description, e.g., Discovery, FirstProduction, Active, FirstInjection, Abandonned.",
+            "example": "namespace:reference-data--ReservoirStatusType:FirstProduction:",
+            "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-ReservoirStatusType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+            "x-osdu-relationship": [
+              {
+                "GroupType": "reference-data",
+                "EntityType": "ReservoirStatusType"
+              }
+            ]
+          },
+          "StatusDate": {
+            "type": "string",
+            "title": "Status Date",
+            "description": "Date of a status change",
+            "format": "date",
+            "x-osdu-frame-of-reference": "DateTime"
+          },
+          "EffectiveDateTime": {
+            "type": "string",
+            "title": "Effective Date Time",
+            "description": "The date and time at which the reservoir status type becomes effective.",
+            "format": "date",
+            "x-osdu-frame-of-reference": "DateTime"
+          },
+          "TerminationDateTime": {
+            "type": "string",
+            "title": "Termination Date Time",
+            "description": "The date and time at which the reservoir status type is no longer in effect.",
+            "format": "date",
+            "x-osdu-frame-of-reference": "DateTime"
+          }
+        }
+      }
+    },
+    "CurrentStatus": {
+      "type": "object",
+      "title": "Current Status",
+      "description": "Currently active Status of a production model element as exploration, appraisal and development. The operational or legal status of the reservoir.",
+      "properties": {
+        "StatusTypeID": {
+          "type": "string",
+          "title": "Status Type Identifier",
+          "description": "Status description, e.g., Discovery, FirstProduction, Active, FirstInjection, Abandonned.",
+          "example": "namespace:reference-data--ReservoirStatusType:FirstProduction:",
+          "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-ReservoirStatusType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+          "x-osdu-relationship": [
+            {
+              "GroupType": "reference-data",
+              "EntityType": "ReservoirStatusType"
+            }
+          ]
+        },
+        "StatusDate": {
+          "type": "string",
+          "title": "Status Date",
+          "description": "Date of a status change",
+          "format": "date",
+          "x-osdu-frame-of-reference": "DateTime"
+        },
+        "EffectiveDateTime": {
+          "type": "string",
+          "title": "Effective Date Time",
+          "description": "The date and time at which the reservoir status type becomes effective.",
+          "format": "date",
+          "x-osdu-frame-of-reference": "DateTime"
+        },
+        "TerminationDateTime": {
+          "type": "string",
+          "title": "Termination Date Time",
+          "description": "The date and time at which the reservoir status type is no longer in effect.",
+          "format": "date",
+          "x-osdu-frame-of-reference": "DateTime"
+        }
+      }
+    },
+    "SectorID": {
+      "type": "string",
+      "title": "Sector Identifier",
+      "description": "Identifier of the Persisted Collection in which are referred the whole set of child segments constituting a comprehensive sector.",
+      "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-PersistedCollection:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "work-product-component",
+          "EntityType": "PersistedCollection"
+        }
+      ]
+    },
+    "ParentReservoirEntityID": {
+      "type": "string",
+      "title": "Parent Reservoir Entity Identifier",
+      "description": "Identifier linking to the parent reservoir entity (It could be either a segment or a reservoir)",
+      "pattern": "^[\\w\\-\\.]+:(master-data\\-\\-Reservoir|master-data\\-\\-ReservoirSegment):[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "master-data",
+          "EntityType": "Reservoir"
+        },
+        {
+          "GroupType": "master-data",
+          "EntityType": "ReservoirSegment"
+        }
+      ]
+    }
+  },
+  "x-osdu-inheriting-from-kind": []
+}

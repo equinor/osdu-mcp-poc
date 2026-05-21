@@ -1,0 +1,200 @@
+{
+  "x-osdu-license": "Copyright 2023, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "x-osdu-review-status": "Accepted",
+  "$id": "https://schema.osdu.opengroup.org/json/abstract/AbstractWellLicenseCondition.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:AbstractWellLicenseCondition:1.0.0",
+  "title": "AbstractWellLicenseCondition",
+  "description": "The Well License Condition subset is necessarily abstract, because it is not possible to explicitly capture every kind of condition that may be imposed on a license by an authority, a partner or other stakeholder.  Conditions may be simple or complex, and are usually triggered by date or activity.  They also may specify requirements for how and when they must be completed.  License conditions are increasingly more rigorous,  and data submissions are  considered critical elements by most regulators. Some conditions are one time, and others are repeating.  In general, repeating conditions are tracked as obligations.  \n\nConditions often have to do with regulatory compliance, environmental stewardship, reporting operations, providing technical or business data, paying fees or obtaining additional approvals under specific circumstances. \n\nFailure to comply with license conditions can result in fines or other penalties, and license suspension or even revocation.",
+  "type": "object",
+  "properties": {
+    "IsActive": {
+      "type": "boolean",
+      "description": "A flag indicating whether this condition is currently either active / valid (true) or inactive / invalid (false).",
+      "x-osdu-attribution-authority": "ACTIVE INDICATOR",
+      "x-osdu-attribution-publication": "PPDM"
+    },
+    "ContactBusinessAssociateID": {
+      "type": "string",
+      "description": "The contact person or organization that provides support for this condition.  Normally this would be someone at the agency who imposed the condition.",
+      "pattern": "^[\\w\\-\\.]+:master-data\\-\\-BusinessAssociate:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "master-data",
+          "EntityType": "BusinessAssociate"
+        }
+      ]
+    },
+    "DueCondition": {
+      "type": "string",
+      "description": "The state that must be achieved for the condition to become effective. For example, a report may be due 60 days after operations commence (or cease)."
+    },
+    "DueDate": {
+      "type": "string",
+      "description": "The date that this condition must be fulfilled.",
+      "format": "date"
+    },
+    "DueFrequency": {
+      "type": "string",
+      "description": "The frequency with which this condition must be met, such as an annual review. Where conditions are cycling in this way, please use the project (for work flow) or obligations ( for payments) module to track completions."
+    },
+    "DueTerm": {
+      "type": "number",
+      "description": "The period within which this condition must be satisfied, usually following completion of operations.",
+      "example": "60 d",
+      "x-osdu-frame-of-reference": "UOM:time",
+      "x-osdu-attribution-authority": "PPDM",
+      "x-osdu-attribution-publication": "DUE TERM"
+    },
+    "EffectiveDate": {
+      "type": "string",
+      "description": "The date on which this row of data first came into effect from a business perspective.",
+      "format": "date",
+      "x-osdu-attribution-authority": "PPDM",
+      "x-osdu-attribution-publication": "EFFECTIVE DATE"
+    },
+    "IsExempt": {
+      "type": "string",
+      "description": "A Y/N flag indicating that the holder of the license is exempt from this condition."
+    },
+    "ExpiryDate": {
+      "type": "string",
+      "description": "The date on which this condition is no longer in effect for the well license.",
+      "format": "date"
+    },
+    "FulfilledBy": {
+      "type": "string",
+      "description": "The business associate who fulfilled this condition.",
+      "pattern": "^[\\w\\-\\.]+:master-data\\-\\-BusinessAssociate:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "master-data",
+          "EntityType": "BusinessAssociate"
+        }
+      ]
+    },
+    "FulfilledDate": {
+      "type": "string",
+      "description": "Fulfilled data is the date that this condition was entirely completed or fulfilled.   This date is assigned from the perspective of the business associate who fulfilled the condition.  Some conditions are ongoing, or repeat over time and are tracked as an obligation.",
+      "format": "date"
+    },
+    "IsFulfilled": {
+      "type": "boolean",
+      "description": "A flag indicating that this condition has been fulfilled. This is applicable when a condition is met once."
+    },
+    "StratigraphicColumnID": {
+      "type": "string",
+      "description": "A stratigraphic column aggregating StratigraphicColumnInterpretations and eventually StratigraphicUnitInterpretations.",
+      "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-StratigraphicColumn:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "work-product-component",
+          "EntityType": "StratigraphicColumn"
+        }
+      ]
+    },
+    "StratigraphicUnitInterpretationID": {
+      "type": "string",
+      "description": "The name of a stratigraphic unit that is named in a license condition.  This could be a formation in which aquifers must be protected, formations into which water or other waste disposal is authorized etc.",
+      "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-StratigraphicUnitInterpretation:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "work-product-component",
+          "EntityType": "StratigraphicUnitInterpretation"
+        }
+      ]
+    },
+    "StratigraphicRoleTypeID": {
+      "type": "string",
+      "description": "The type of stratigraphy, such as chronostratigraphic, lithostratigraphic, biostratigraphic or sequence stratigraphic.",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-StratigraphicRoleType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "StratigraphicRoleType"
+        }
+      ]
+    },
+    "StratigraphicColumnRankUnitTypeID": {
+      "type": "string",
+      "description": "The optional column rank or level of StratigraphicRoleType (see StratigraphicRoleTypeID) that is identified.",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-StratigraphicColumnRankUnitType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "StratigraphicColumnRankUnitType"
+        }
+      ]
+    },
+    "ConditionDescription": {
+      "type": "string",
+      "description": "Narrative descriptive remarks that accompany the license condition. Could include the definition at which the values apply (such as 101.325 kilopascals and 15 degrees Celsius)."
+    },
+    "ConditionNames": {
+      "type": "array",
+      "description": "Names or code values assigned to a well license condition. Can include any type of condition with the exception of values related to stratigraphic units (explicit), Products (explicit) or values (use numeric values).",
+      "items": {
+        "type": "string"
+      }
+    },
+    "ConditionTypeID": {
+      "type": "string",
+      "description": "The type of condition applied to the well license, such as flaring rate, venting rate, production rate, H2S content limit, emissions etc.",
+      "x-osdu-attribution-authority": "PPDM",
+      "x-osdu-attribution-publication": "WELL LICENSE CONDITION TYPE",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-WellLicenseConditionType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "WellLicenseConditionType"
+        }
+      ]
+    },
+    "ConditionValue": {
+      "type": "number",
+      "description": "The value applied to this condition. For example, an NOX emission limitation may be set at 0.02 kg / hr and the production rate for oil set at 10 m3/day.",
+      "example": "10 m3/d",
+      "x-osdu-frame-of-reference": "UOM",
+      "x-osdu-attribution-authority": "PPDM",
+      "x-osdu-attribution-publication": "CONDITION VALUE"
+    },
+    "SubstanceID": {
+      "type": "string",
+      "description": "When a product or other substance is named as an element in a well license condition, use this reference list to select the product or products.  Production, disposal, analysis, additives and other substances are valid as necessary to describe the condition.",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-WellLicenseSubstance:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "WellLicenseSubstance"
+        }
+      ]
+    },
+    "ElementIdentifier": {
+      "type": "string",
+      "description": "Unique identifier of this element in the parent's list of license conditions."
+    },
+    "SubstanceLossTypeID": {
+      "type": "string",
+      "description": "The type of loss experienced.  This may include fuel spills from a vehicle, gas emissions from a wellhead or feeder line, or any other substance.  This is an important part of carbon footprint analysis.",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-WellLicenseSubstanceLossType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "WellLicenseSubstanceLossType"
+        }
+      ]
+    },
+    "SubstanceLossID": {
+      "type": "string",
+      "description": "The identity of any substance that escapes or spills, particularly when unintended. Intended substances and volumes are recorded as production values.",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-WellLicenseSubstanceLoss:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "WellLicenseSubstanceLoss"
+        }
+      ]
+    }
+  },
+  "x-osdu-inheriting-from-kind": []
+}

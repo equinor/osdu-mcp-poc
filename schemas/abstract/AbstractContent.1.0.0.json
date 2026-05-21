@@ -1,0 +1,47 @@
+{
+  "x-osdu-license": "Copyright 2023, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "x-osdu-review-status": "Accepted",
+  "$id": "https://schema.osdu.opengroup.org/json/abstract/AbstractContent.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:AbstractContent:1.0.0",
+  "title": "AbstractContent",
+  "description": "The common properties used in content schemas.",
+  "type": "object",
+  "x-osdu-virtual-properties": {
+    "data.VirtualProperties.DefaultName": {
+      "type": "string",
+      "priority": [
+        {
+          "path": "data.Name"
+        }
+      ]
+    }
+  },
+  "properties": {
+    "SchemaKind": {
+      "type": "string",
+      "title": "Schema Kind",
+      "description": "The schema id, aka. Kind, which this record is conforming to.",
+      "example": "osd:wks:content--SomeExampleContent:1.0.0"
+    },
+    "Name": {
+      "type": "string",
+      "title": "Name",
+      "description": "The name of this record."
+    },
+    "Description": {
+      "type": "string",
+      "title": "Description",
+      "description": "A description or remark about this content record."
+    },
+    "ExtensionProperties": {
+      "type": "object",
+      "title": "Extension Properties",
+      "description": "The standard OSDU extension point for customizations. It is good practice to declare the schema fragment kind(s) for the extension(s) in the object."
+    }
+  },
+  "required": [
+    "SchemaKind"
+  ],
+  "x-osdu-inheriting-from-kind": []
+}

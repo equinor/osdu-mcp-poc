@@ -1,0 +1,152 @@
+{
+  "x-osdu-license": "Copyright 2022, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "x-osdu-review-status": "Accepted",
+  "$id": "https://schema.osdu.opengroup.org/json/abstract/AbstractGridRepresentation.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:AbstractGridRepresentation:1.0.0",
+  "title": "AbstractGridRepresentation",
+  "description": "The group of elements contained by all different kind of grids",
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../abstract/AbstractRepresentation.1.0.0.json"
+    },
+    {
+      "type": "object",
+      "properties": {
+        "InterpretationID": {
+          "type": "string",
+          "title": "ID of the interpretation",
+          "description": "The reference to the EarthModelInterpretation this grid belongs to.",
+          "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-EarthModelInterpretation:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+          "x-osdu-relationship": [
+            {
+              "GroupType": "work-product-component",
+              "EntityType": "EarthModelInterpretation"
+            }
+          ]
+        },
+        "ActiveCellCount": {
+          "type": "integer",
+          "title": "Total count of active cells",
+          "description": "Total count of active cells in the grid. It is an approximation since the real count of active cells can be modified with some properties.",
+          "example": 800000
+        },
+        "HasNaNGeometry": {
+          "type": "boolean",
+          "title": "Has NaN Geometry",
+          "description": "Indicate that at least on coordinate of one node of the grid is NaN. It is different than a dead cell which may have a geometry while it is disabled.",
+          "example": "False"
+        },
+        "ParentGridID": {
+          "type": "string",
+          "title": "Parent Grid ID",
+          "description": "Reference to the parent grid. If present, it means that this grid is a Local GridRefinement.",
+          "format": "uri-reference",
+          "example": "namespace:work-product-component--IjkGridRepresentation:85348741-3433-406B-9189-22B298C3E2D2:",
+          "pattern": "^[\\w\\-\\.]+:(work-product-component\\-\\-GpGridRepresentation|work-product-component\\-\\-IjkGridRepresentation|work-product-component\\-\\-UnstructuredColumnLayerGridRepresentation|work-product-component\\-\\-UnstructuredGridRepresentation):[\\w\\-\\.\\:\\%]+:[0-9]*$",
+          "x-osdu-relationship": [
+            {
+              "GroupType": "work-product-component",
+              "EntityType": "GpGridRepresentation"
+            },
+            {
+              "GroupType": "work-product-component",
+              "EntityType": "IjkGridRepresentation"
+            },
+            {
+              "GroupType": "work-product-component",
+              "EntityType": "UnstructuredColumnLayerGridRepresentation"
+            },
+            {
+              "GroupType": "work-product-component",
+              "EntityType": "UnstructuredGridRepresentation"
+            }
+          ]
+        },
+        "StratigraphicUnits": {
+          "type": "object",
+          "title": "Stratigraphic Units",
+          "description": "Allow to link the K layers (or the \"geologic k\" property for example in case of K expansion or unstructured grid) of this grid with some stratigraphic units of a stratigraphic organization.",
+          "properties": {
+            "StratigraphicUnitsIndices": {
+              "type": "array",
+              "title": "StratigraphicUnitsIndices",
+              "description": "For each K layer, indicate the corresponding stratigraphic unit indices within the associated Stratigraphic Organization. A negative value means that a K layer is not related to any stratigraphic unit (salt for example)",
+              "example": [
+                [
+                  0,
+                  1,
+                  2
+                ],
+                [
+                  3,
+                  4
+                ],
+                [
+                  5
+                ]
+              ],
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "integer"
+                }
+              }
+            },
+            "StratigraphicColumnRankInterpretationID": {
+              "type": "string",
+              "title": "Stratigraphic Column Rank Interpretation ID",
+              "description": "Reference to the stratigraphic column rank interpretation which this grid is derived from.",
+              "format": "uri-reference",
+              "example": "namespace:work-product-component--StratigraphicColumnRankInterpretation:85348741-3433-406B-9189-22B298C3E2D2:",
+              "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-StratigraphicColumnRankInterpretation:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "work-product-component",
+                  "EntityType": "StratigraphicColumnRankInterpretation"
+                }
+              ]
+            }
+          },
+          "required": [
+            "StratigraphicUnitsIndices",
+            "StratigraphicColumnRankInterpretationID"
+          ]
+        },
+        "RockFluidOrganizationInterpretationIDS": {
+          "type": "array",
+          "title": "Array of references to RockFluidOrganizationInterpretation",
+          "description": "References to the RockFluid organization interpretations which this grid relates to.",
+          "example": [
+            "namespace:work-product-component--RockFluidOrganizationInterpretation:85348741-3433-406B-9189-22B298C3E2D2:"
+          ],
+          "items": {
+            "type": "string",
+            "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-RockFluidOrganizationInterpretation:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+            "x-osdu-relationship": [
+              {
+                "GroupType": "work-product-component",
+                "EntityType": "RockFluidOrganizationInterpretation"
+              }
+            ]
+          }
+        },
+        "HasFiniteElementSubnodes": {
+          "type": "boolean",
+          "title": "Has Finite Element Subnodes",
+          "description": "Indicate if the grid has got some finite element subnodes for defining higher order grid geometry and properties. This is mainly used in geomechanical context.",
+          "example": "False"
+        },
+        "HasNoGeometry": {
+          "type": "boolean",
+          "title": "Has no geometry",
+          "description": "Indicate that the grid has no geometry. It is common when one wants a grid only as a collection of cell connections (i.e. pipe network).",
+          "example": "False"
+        }
+      },
+      "title": "AbstractGridRepresentation"
+    }
+  ],
+  "x-osdu-inheriting-from-kind": []
+}

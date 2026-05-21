@@ -1,0 +1,53 @@
+{
+  "x-osdu-license": "Copyright 2022, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "x-osdu-review-status": "Accepted",
+  "$id": "https://schema.osdu.opengroup.org/json/abstract/AbstractStorageLocation.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:AbstractStorageLocation:1.0.0",
+  "title": "AbstractStorageLocation",
+  "description": "A record about the storage location of an item, e.g. a rock or fluid sample, seismic tape, where (facility), by whom (organisation), when (dates) and how (description).",
+  "type": "object",
+  "properties": {
+    "StorageLocationDescription": {
+      "type": "string",
+      "description": "The name of the location where the item is stored. It can be stored in more than one location over time."
+    },
+    "StorageFacilityID": {
+      "type": "string",
+      "description": "Identifies the warehouse in which the item is stored.",
+      "pattern": "^[\\w\\-\\.]+:master-data\\-\\-StorageFacility:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "master-data",
+          "EntityType": "StorageFacility"
+        }
+      ]
+    },
+    "StorageOrganisationID": {
+      "type": "string",
+      "description": "Identifies the organisation with which the item is stored.",
+      "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Organisation:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "master-data",
+          "EntityType": "Organisation"
+        }
+      ]
+    },
+    "EffectiveDateTime": {
+      "type": "string",
+      "description": "The date the item arrived at the storage location.",
+      "format": "date"
+    },
+    "TerminationDateTime": {
+      "type": "string",
+      "description": "The date and time at which the item is  no longer stored in the given location.  If the item is still in this storage, the 'TerminationDateTime' is left absent.",
+      "format": "date"
+    },
+    "SampleIdentifier": {
+      "type": "string",
+      "description": "The item (sample, tape)  identifier, for example a barcode, which identifies the item in the StorageFacility."
+    }
+  },
+  "x-osdu-inheriting-from-kind": []
+}

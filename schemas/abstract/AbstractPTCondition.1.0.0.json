@@ -1,0 +1,31 @@
+{
+  "x-osdu-license": "Copyright 2024, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "x-osdu-review-status": "Accepted",
+  "$id": "https://schema.osdu.opengroup.org/json/abstract/AbstractPTCondition.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:AbstractPTCondition:1.0.0",
+  "title": "AbstractPTCondition",
+  "description": "The pair of absolute pressure and temperature values describing the condition for a particular volume measurement or estimation. The unit of measure context is defined via the meta[] block in the record. Search responses will return pressure in Pa (Pascal) and temperature in K (Kelvin).",
+  "type": "object",
+  "properties": {
+    "Pressure": {
+      "type": "number",
+      "title": "Pressure",
+      "description": "The recorded absolute pressure condition. The unit of measure context is defined via meta[] in the Storage record while the Search responses return the value in base SI unit Pa (Pascal).",
+      "example": "1 bar",
+      "x-osdu-frame-of-reference": "UOM:pressure"
+    },
+    "Temperature": {
+      "type": "number",
+      "title": "Temperature",
+      "description": "The recorded temperature condition. The unit of measure context is defined via meta[] in the Storage record while the Search responses return the value in base SI unit K (Kelvin).",
+      "example": "15 degC",
+      "x-osdu-frame-of-reference": "UOM:thermodynamic temperature"
+    }
+  },
+  "required": [
+    "Pressure",
+    "Temperature"
+  ],
+  "x-osdu-inheriting-from-kind": []
+}

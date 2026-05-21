@@ -1,0 +1,357 @@
+{
+  "x-osdu-license": "Copyright 2022, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "$id": "https://schema.osdu.opengroup.org/json/master-data/RockSample.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:master-data--RockSample:1.0.0",
+  "title": "RockSample",
+  "description": "A rock sample retrieved from an outcrop or Well.  It can be core, sample cut from core, cutting, outcrop, slide etc.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "Previously called ResourceID or SRN which identifies this OSDU resource object without version.",
+      "title": "Entity ID",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:master-data\\-\\-RockSample:[\\w\\-\\.\\:\\%]+$",
+      "example": "namespace:master-data--RockSample:c69cf08a-ae35-5984-b855-f9b36ce1ea21"
+    },
+    "kind": {
+      "description": "The schema identification for the OSDU resource object following the pattern {Namespace}:{Source}:{Type}:{VersionMajor}.{VersionMinor}.{VersionPatch}. The versioning scheme follows the semantic versioning, https://semver.org/.",
+      "title": "Entity Kind",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:[\\w\\-\\.]+:[\\w\\-\\.]+:[0-9]+.[0-9]+.[0-9]+$",
+      "example": "osdu:wks:master-data--RockSample:1.0.0"
+    },
+    "version": {
+      "description": "The version number of this OSDU resource; set by the framework.",
+      "title": "Version Number",
+      "type": "integer",
+      "format": "int64",
+      "example": 1562066009929332
+    },
+    "acl": {
+      "description": "The access control tags associated with this entity.",
+      "title": "Access Control List",
+      "$ref": "../abstract/AbstractAccessControlList.1.0.0.json"
+    },
+    "legal": {
+      "description": "The entity's legal tags and compliance status. The actual contents associated with the legal tags is managed by the Compliance Service.",
+      "title": "Legal Tags",
+      "$ref": "../abstract/AbstractLegalTags.1.0.0.json"
+    },
+    "tags": {
+      "title": "Tag Dictionary",
+      "description": "A generic dictionary of string keys mapping to string value. Only strings are permitted as keys and values.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "example": {
+        "NameOfKey": "String value"
+      }
+    },
+    "createTime": {
+      "description": "Timestamp of the time at which initial version of this OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:46:20.163Z"
+    },
+    "createUser": {
+      "title": "Resource Object Creation User Reference",
+      "description": "The user reference, which created the first version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "modifyTime": {
+      "description": "Timestamp of the time at which this version of the OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Version Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:52:24.477Z"
+    },
+    "modifyUser": {
+      "title": "Resource Object Version Creation User Reference",
+      "description": "The user reference, which created this version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "ancestry": {
+      "description": "The links to data, which constitute the inputs, from which this record instance is derived.",
+      "title": "Ancestry",
+      "$ref": "../abstract/AbstractLegalParentList.1.0.0.json"
+    },
+    "meta": {
+      "description": "The Frame of Reference meta data section linking the named properties to self-contained definitions.",
+      "title": "Frame of Reference Meta Data",
+      "type": "array",
+      "items": {
+        "$ref": "../abstract/AbstractMetaItem.1.0.0.json"
+      }
+    },
+    "data": {
+      "allOf": [
+        {
+          "$ref": "../abstract/AbstractCommonResources.1.0.0.json"
+        },
+        {
+          "$ref": "../abstract/AbstractMaster.1.1.0.json"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "RockSampleIdentifier": {
+              "type": "string",
+              "title": "Rock Sample Identifier",
+              "description": "Native identifier from a Master Data Management System or other trusted source external to OSDU - stored here in order to allow for multi-system connection and synchronization. If used, the \"Source\" property should identify that source system. i.e. this item is optional."
+            },
+            "WellboreID": {
+              "type": "string",
+              "title": "Wellbore ID",
+              "description": "Unique wellbore identifier. Not required for outcrops.",
+              "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Wellbore:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "Wellbore"
+                }
+              ]
+            },
+            "CoringID": {
+              "type": "string",
+              "title": "Coring ID",
+              "description": "Identifies the Coring from which this sample is created from it directly. Not populated for outcrops and cuttings.",
+              "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Coring:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "Coring"
+                }
+              ]
+            },
+            "ParentSampleID": {
+              "type": "string",
+              "title": "Parent Sample ID",
+              "description": "Identifies the RockSample from which this sample is created from it directly.",
+              "pattern": "^[\\w\\-\\.]+:master-data\\-\\-RockSample:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "RockSample"
+                }
+              ]
+            },
+            "Name": {
+              "type": "string",
+              "title": "Name",
+              "description": "The name of this RockSample."
+            },
+            "VerticalMeasurement": {
+              "$ref": "../abstract/AbstractFacilityVerticalMeasurement.1.0.0.json",
+              "title": "Vertical Measurement",
+              "description": "References an entry in the VerticalMeasurements array for the Wellbore identified by WellboreID, or a standalone vertical reference which defines the vertical reference datum for all measured depths of the RockSample record. If this is not populated, the VerticalMeasurement is derived from the Coring."
+            },
+            "LabSampleIdentifier": {
+              "type": "string",
+              "title": "Laboratory Sample Identifier",
+              "description": "The data vendor assigned sample ID or number."
+            },
+            "DataSource": {
+              "type": "string",
+              "title": "Data Source",
+              "description": "The person, vendor or other provider of this information."
+            },
+            "SampleTypeID": {
+              "type": "string",
+              "title": "Sample Type ID",
+              "description": "Identifies a rock sample type.  E.g. Core, Cuttings, Core Slab, Core Plug, Core Chip, Slides. Considered mandatory.",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-RockSampleType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "RockSampleType"
+                }
+              ]
+            },
+            "TopDepth": {
+              "type": "number",
+              "title": "Top Depth",
+              "description": "The depth of the top of the rock sample. For point measurements (slides, sidewall cores), the same value is assigned to TopDepth and BottomDepth.",
+              "x-osdu-frame-of-reference": "UOM:length"
+            },
+            "BottomDepth": {
+              "type": "number",
+              "title": "Bottom Depth",
+              "description": "The depth of the base of the rock sample. For point measurements (slides, sidewall cores), the same value is assigned to TopDepth and BottomDepth.",
+              "x-osdu-frame-of-reference": "UOM:length"
+            },
+            "SampleInterval": {
+              "type": "number",
+              "title": "Sample Interval",
+              "description": "The interval between the top depth and bottom depth.",
+              "x-osdu-frame-of-reference": "UOM:length"
+            },
+            "SampleAcquiredDate": {
+              "type": "string",
+              "title": "Sample Acquired Date",
+              "description": "The date that the sample was acquired.",
+              "format": "date-time"
+            },
+            "SampleStorageLocations": {
+              "type": "array",
+              "title": "Sample Storage Location",
+              "description": "An array containing the name of the locations where the material sample is stored. It can be stored in more than one location over time.",
+              "x-osdu-indexing": {
+                "type": "flattened"
+              },
+              "items": {
+                "$ref": "../abstract/AbstractStorageLocation.1.0.0.json"
+              }
+            },
+            "SampleRemarks": {
+              "type": "array",
+              "title": "Sample Remarks",
+              "description": "An array containing operational or quality comments pertaining to a rock sample.",
+              "example": [
+                {
+                  "RemarkID": "1",
+                  "Remark": "Shaker not functioning properly.",
+                  "RemarkSource": "Mud Logger"
+                }
+              ],
+              "x-osdu-indexing": {
+                "type": "flattened"
+              },
+              "items": {
+                "type": "object",
+                "description": "An array containing narrative remarks pertaining to a rock sample.",
+                "properties": {
+                  "RemarkID": {
+                    "type": "string",
+                    "title": "Remark ID",
+                    "description": "A unique identifier for each remark record."
+                  },
+                  "Remark": {
+                    "type": "string",
+                    "title": "Remark",
+                    "description": "A descriptive comment for this remark."
+                  },
+                  "RemarkSource": {
+                    "type": "string",
+                    "title": "Remark Source",
+                    "description": "The person, vendor, interpreter or other provider of information."
+                  }
+                }
+              }
+            },
+            "SampleOwnerID": {
+              "type": "string",
+              "title": "Sample Owner ID",
+              "description": "Company and/or organization that owns the sample.",
+              "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Organisation:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "Organisation"
+                }
+              ]
+            },
+            "SampleWeight": {
+              "type": "number",
+              "title": "Sample Weight",
+              "description": "Weight of sample",
+              "x-osdu-frame-of-reference": "UOM:mass"
+            },
+            "SampleLength": {
+              "type": "number",
+              "title": "Sample Length",
+              "description": "The length of rock sample. Not applicable to cuttings",
+              "x-osdu-frame-of-reference": "UOM:length"
+            },
+            "SampleDiameter": {
+              "type": "number",
+              "title": "Sample Diameter",
+              "description": "The diameter of rock sample. Not applicable to cuttings",
+              "x-osdu-frame-of-reference": "UOM:length"
+            },
+            "IsCoreSlabbed": {
+              "type": "boolean",
+              "title": "Is Core Slabbed?",
+              "description": "A flag to denote whether a particular core has been slabbed or not."
+            },
+            "IsPlugCleaned": {
+              "type": "boolean",
+              "title": "Is Plug Cleaned",
+              "description": "For sample plugs: a flag indicating whether the plug has been cleaned. More details in the associated RockSampleAnalysis."
+            },
+            "AreCuttingsWashedAndDried": {
+              "type": "boolean",
+              "title": "Are Cuttings Washed and Dried",
+              "description": "For cuttings: a flag indication whether the cuttings were washed and dried. More details in the associated RockSampleAnalysis."
+            },
+            "PreservationTypeID": {
+              "type": "string",
+              "title": "Preservation Type ID",
+              "description": "The kind of preservation applied to this sample.",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-CorePreservationType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "CorePreservationType"
+                }
+              ]
+            },
+            "SampleOrientationID": {
+              "type": "string",
+              "title": "Sample Orientation ID",
+              "description": "The kind of orientation of this sample with respect to the bedding or drilling direction. Typical values are Horizontal, Vertical, Axial.",
+              "example": "namespace:reference-data--SampleOrientationType:Horizontal:",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-SampleOrientationType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "SampleOrientationType"
+                }
+              ]
+            }
+          },
+          "title": "IndividualProperties"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "ExtensionProperties": {
+              "type": "object"
+            }
+          },
+          "title": "ExtensionProperties"
+        }
+      ]
+    }
+  },
+  "required": [
+    "kind",
+    "acl",
+    "legal"
+  ],
+  "additionalProperties": false,
+  "x-osdu-review-status": "Accepted",
+  "x-osdu-virtual-properties": {
+    "data.VirtualProperties.DefaultLocation": {
+      "type": "object",
+      "priority": [
+        {
+          "path": "data.SpatialLocation"
+        }
+      ]
+    },
+    "data.VirtualProperties.DefaultName": {
+      "type": "string",
+      "priority": [
+        {
+          "path": "data.Name"
+        }
+      ]
+    }
+  },
+  "x-osdu-inheriting-from-kind": []
+}

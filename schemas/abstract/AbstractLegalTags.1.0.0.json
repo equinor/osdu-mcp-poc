@@ -1,0 +1,40 @@
+{
+  "x-osdu-license": "Copyright 2022, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "$id": "https://schema.osdu.opengroup.org/json/abstract/AbstractLegalTags.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:AbstractLegalTags:1.0.0",
+  "title": "Legal Meta Data",
+  "description": "Legal meta data like legal tags, relevant other countries, legal status. This structure is included by the SystemProperties \"legal\", which is part of all OSDU records. Not extensible.",
+  "type": "object",
+  "properties": {
+    "legaltags": {
+      "title": "Legal Tags",
+      "description": "The list of legal tags, which resolve to legal properties (like country of origin, export classification code, etc.) and rules with the help of the Compliance Service.",
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "otherRelevantDataCountries": {
+      "title": "Other Relevant Data Countries",
+      "description": "The list of other relevant data countries as an array of two-letter country codes, see https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2.",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[A-Z]{2}$"
+      }
+    },
+    "status": {
+      "title": "Legal Status",
+      "description": "The legal status. Set by the system after evaluation against the compliance rules associated with the \"legaltags\" using the Compliance Service.",
+      "type": "string",
+      "pattern": "^(compliant|uncompliant)$"
+    }
+  },
+  "required": [
+    "legaltags",
+    "otherRelevantDataCountries"
+  ],
+  "additionalProperties": false,
+  "x-osdu-inheriting-from-kind": []
+}

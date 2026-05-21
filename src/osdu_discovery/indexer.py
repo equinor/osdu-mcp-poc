@@ -24,7 +24,13 @@ import sys
 import chromadb
 import yaml
 from rich.console import Console
-from rich.progress import Progress, SpinnerColumn, TextColumn
+from rich.progress import (
+    BarColumn,
+    MofNCompleteColumn,
+    Progress,
+    SpinnerColumn,
+    TextColumn,
+)
 from rich.table import Table
 
 console = Console()
@@ -70,6 +76,97 @@ def resolve_refs(obj: dict | list, root: dict) -> dict | list:
         return {k: resolve_refs(v, root) for k, v in obj.items()}
 
     return obj
+
+
+class SchemaResolver:
+    """Resolves JSON-Schema ``$ref`` pointers, including cross-file refs.
+
+    Every OSDU entity puts its real payload inside ``data``, which is an
+    ``allOf`` of cross-file ``$ref``s into ``../abstract/*.json``. This
+    resolver follows those refs (relative to each referencing file), inlines
+    the target, and guards against circular references. Loaded files are
+    cached, so resolving the whole tree stays cheap.
+    """
+
+    def __init__(self) -> None:
+        self._cache: dict[str, dict] = {}
+
+    def _load(self, path: str) -> dict:
+        path = os.path.abspath(path)
+        if path not in self._cache:
+            self._cache[path] = load_file(path)
+        return self._cache[path]
+
+    def resolve(
+        self,
+        obj: dict | list,
+        *,
+        base_dir: str,
+        root: dict,
+        _seen: frozenset[str] = frozenset(),
+    ) -> dict | list:
+        if isinstance(obj, list):
+            return [
+                self.resolve(item, base_dir=base_dir, root=root, _seen=_seen)
+                for item in obj
+            ]
+        if not isinstance(obj, dict):
+            return obj
+
+        if "$ref" in obj:
+            ref = obj["$ref"]
+            file_part, _, fragment = ref.partition("#")
+            if file_part:
+                target_path = os.path.normpath(os.path.join(base_dir, file_part))
+                ref_key = f"{target_path}#{fragment}"
+            else:
+                ref_key = f"{id(root)}#{fragment}"
+
+            if ref_key in _seen:
+                return {"type": "object", "description": f"[recursive ref: {ref}]"}
+
+            if file_part:
+                try:
+                    new_root = self._load(target_path)
+                except (OSError, ValueError) as exc:
+                    return {"description": f"[unresolved ref: {ref} ({exc})]"}
+                new_base = os.path.dirname(target_path)
+            else:
+                new_root, new_base = root, base_dir
+
+            node: object = new_root
+            for part in (p for p in fragment.lstrip("/").split("/") if p):
+                try:
+                    node = node[part]  # type: ignore[index]
+                except (KeyError, TypeError, IndexError):
+                    return {"description": f"[unresolved ref: {ref}]"}
+
+            resolved = self.resolve(
+                node, base_dir=new_base, root=new_root, _seen=_seen | {ref_key}
+            )
+            # Keep ref-site siblings (title/description) — they are more contextual.
+            siblings = {k: v for k, v in obj.items() if k != "$ref"}
+            if isinstance(resolved, dict) and siblings:
+                return {**resolved, **siblings}
+            return resolved
+
+        return {
+            k: self.resolve(v, base_dir=base_dir, root=root, _seen=_seen)
+            for k, v in obj.items()
+        }
+
+
+def merged_properties(schema: dict) -> dict:
+    """Return ``properties`` with every ``allOf`` subschema merged in.
+
+    Assumes ``$ref``s were already inlined by :class:`SchemaResolver`, so the
+    ``allOf`` members carry real ``properties`` instead of bare ``$ref`` dicts.
+    """
+    props: dict = dict(schema.get("properties", {}))
+    for sub in schema.get("allOf", []):
+        if isinstance(sub, dict):
+            props.update(merged_properties(sub))
+    return props
 
 
 # ---------------------------------------------------------------------------
@@ -261,6 +358,12 @@ def index_specs(specs_folder: str, collection: chromadb.Collection) -> int:
 
 def extract_kind_string(schema_doc: dict, filename: str) -> str:
     """Extract the full kind identifier from an OSDU schema document."""
+    # Generated OSDU schemas carry the canonical kind here, e.g.
+    # "osdu:wks:dataset--File.Generic:1.1.0".
+    source = schema_doc.get("x-osdu-schema-source", "")
+    if source:
+        return source
+
     schema_info = schema_doc.get("schemaInfo", {})
     identity = schema_info.get("schemaIdentity", {})
     kind_id = identity.get("id", "")
@@ -278,26 +381,71 @@ def extract_kind_string(schema_doc: dict, filename: str) -> str:
     return re.sub(r"\.(yaml|yml|json)$", "", filename, flags=re.IGNORECASE)
 
 
+def extract_semantic_keywords(prop_name: str, prop_schema: dict) -> list[str]:
+    """
+    Extract semantic keywords that help with domain-specific retrieval.
+    Examples: "ID" suffix → relationship; URLs → dataset linking; arrays → collections
+    """
+    keywords = []
+
+    # Property name heuristics
+    if prop_name.endswith("ID"):
+        keywords.append("relationship")
+        keywords.append("reference")
+        # Try to extract entity type from pattern
+        pattern = prop_schema.get("pattern", "")
+        if "dataset" in pattern.lower():
+            keywords.extend(["dataset", "file", "resource"])
+        if "acquisition" in pattern.lower():
+            keywords.extend(["acquisition", "collection"])
+
+    if "url" in prop_name.lower() or "uri" in prop_name.lower():
+        keywords.extend(["external", "link", "reference", "file"])
+
+    if "path" in prop_name.lower():
+        keywords.extend(["file", "location", "path", "reference"])
+
+    if "file" in prop_name.lower():
+        keywords.extend(["file", "external", "data", "storage"])
+
+    if "data" in prop_name.lower():
+        keywords.extend(["data", "content", "storage"])
+
+    # Type based
+    prop_type = prop_schema.get("type", "")
+    if prop_type == "array":
+        keywords.append("collection")
+        keywords.append("multiple")
+
+    # Description keywords
+    description = prop_schema.get("description", "").lower()
+    for keyword in ["dataset", "file", "external", "link", "reference", "relationship",
+                     "connection", "resource", "data", "metadata", "las", "curve"]:
+        if keyword in description:
+            keywords.append(keyword)
+
+    return list(set(keywords))  # Remove duplicates
+
+
 def flatten_schema_properties(
     schema: dict,
     prefix: str = "",
     depth: int = 0,
-    max_depth: int = 4,
+    max_depth: int = 6,
 ) -> list[dict]:
     """
     Walk a JSON Schema object and return a flat list of property entries,
-    each with its dotted path, type, and description.
+    each with its dotted path, type, and description, enriched with semantic keywords.
+
+    Expects ``$ref``s to have been inlined by :class:`SchemaResolver` first, so
+    cross-file ``allOf`` members (the OSDU ``Abstract*`` schemas) contribute
+    their real properties.
     """
     results = []
     if depth > max_depth:
         return results
 
-    properties = schema.get("properties", {})
-
-    # Merge allOf subschemas
-    for sub in schema.get("allOf", []):
-        if isinstance(sub, dict):
-            properties.update(sub.get("properties", {}))
+    properties = merged_properties(schema)
 
     for prop_name, prop_schema in properties.items():
         if not isinstance(prop_schema, dict):
@@ -308,6 +456,21 @@ def flatten_schema_properties(
         units = prop_schema.get("x-osdu-uom-quantity", prop_schema.get("x-unit", ""))
         enum_vals = prop_schema.get("enum", [])
         pattern = prop_schema.get("pattern", "")
+        
+        # Extract semantic keywords for better retrieval
+        semantic_keywords = extract_semantic_keywords(prop_name, prop_schema)
+        
+        # Extract OSDU relationships if present
+        relationships = prop_schema.get("x-osdu-relationship", [])
+        related_types = []
+        if relationships:
+            for rel in relationships:
+                if isinstance(rel, dict):
+                    entity_type = rel.get("EntityType", "")
+                    group_type = rel.get("GroupType", "")
+                    if entity_type:
+                        related_types.append(f"{group_type}/{entity_type}".lower())
+                        semantic_keywords.append(entity_type.lower())
 
         results.append({
             "path": path,
@@ -316,6 +479,8 @@ def flatten_schema_properties(
             "units": units,
             "enum": enum_vals,
             "pattern": pattern,
+            "semantic_keywords": semantic_keywords,
+            "related_types": related_types,
         })
 
         # Recurse into nested objects
@@ -331,29 +496,17 @@ def flatten_schema_properties(
     return results
 
 
-def format_kind_summary(schema_doc: dict, kind: str) -> str:
-    schema_info = schema_doc.get("schemaInfo", {})
+def format_kind_summary(resolved_doc: dict, kind: str) -> str:
+    """Build the kind-level summary text. ``resolved_doc`` must already have
+    its ``$ref``s inlined by :class:`SchemaResolver`."""
     description = (
-        schema_info.get("description", "")
-        or schema_doc.get("description", "")
+        resolved_doc.get("schemaInfo", {}).get("description", "")
+        or resolved_doc.get("description", "")
     ).strip()
 
-    # Resolve the inner schema
-    inner_schema = schema_doc.get("schema", schema_doc)
-    inner_schema = resolve_refs(inner_schema, inner_schema)
-
-    # Gather top-level data properties (one level only for summary)
-    data_schema = (
-        inner_schema.get("properties", {})
-                    .get("data", {})
-    )
-    data_schema = resolve_refs(data_schema, inner_schema)
-
-    top_level_props = []
-    for sub in data_schema.get("allOf", []):
-        top_level_props.extend(sub.get("properties", {}).keys())
-    top_level_props.extend(data_schema.get("properties", {}).keys())
-    props_str = ", ".join(top_level_props[:20])  # cap for readability
+    data_schema = resolved_doc.get("properties", {}).get("data", {})
+    top_level_props = list(merged_properties(data_schema).keys())
+    props_str = ", ".join(top_level_props[:25])  # cap for readability
 
     return "\n".join(filter(None, [
         f"Kind: {kind}",
@@ -362,11 +515,24 @@ def format_kind_summary(schema_doc: dict, kind: str) -> str:
     ]))
 
 
-def extract_schema_entries(schema_doc: dict, kind: str) -> list[dict]:
+def extract_schema_entries(
+    schema_doc: dict,
+    kind: str,
+    resolver: SchemaResolver,
+    file_path: str,
+) -> list[dict]:
     entries = []
 
+    # Inline every $ref (including cross-file refs into ../abstract/*.json)
+    # once, up front, so both the summary and the property walk see the
+    # fully-expanded data model.
+    base_dir = os.path.dirname(os.path.abspath(file_path))
+    resolved = resolver.resolve(schema_doc, base_dir=base_dir, root=schema_doc)
+    if not isinstance(resolved, dict):
+        resolved = schema_doc
+
     # Kind-level entry (for broad queries)
-    kind_text = format_kind_summary(schema_doc, kind)
+    kind_text = format_kind_summary(resolved, kind)
     entries.append({
         "id": f"kind__{kind}",
         "text": kind_text,
@@ -378,13 +544,7 @@ def extract_schema_entries(schema_doc: dict, kind: str) -> list[dict]:
     })
 
     # Property-level entries (for specific queries)
-    inner_schema = schema_doc.get("schema", schema_doc)
-    inner_schema = resolve_refs(inner_schema, inner_schema)
-
-    data_schema = (
-        inner_schema.get("properties", {})
-                    .get("data", inner_schema)
-    )
+    data_schema = resolved.get("properties", {}).get("data", resolved)
     flat_props = flatten_schema_properties(data_schema)
 
     for prop in flat_props:
@@ -393,6 +553,8 @@ def extract_schema_entries(schema_doc: dict, kind: str) -> list[dict]:
         description = prop["description"]
         units = prop["units"]
         enum_vals = prop["enum"]
+        semantic_keywords = prop.get("semantic_keywords", [])
+        related_types = prop.get("related_types", [])
 
         text_parts = [
             f"Kind: {kind}",
@@ -405,6 +567,14 @@ def extract_schema_entries(schema_doc: dict, kind: str) -> list[dict]:
             text_parts.append(f"Unit of measure: {units}")
         if enum_vals:
             text_parts.append(f"Allowed values: {enum_vals}")
+        
+        # Add semantic keywords to improve retrieval
+        if semantic_keywords:
+            text_parts.append(f"Keywords: {', '.join(semantic_keywords)}")
+        
+        # Add relationship information for better domain discovery
+        if related_types:
+            text_parts.append(f"Relates to: {', '.join(related_types)}")
 
         prop_id = f"prop__{kind}__{path.replace('.', '_').replace('[]', '_arr')}"
         # ChromaDB ids must be under 512 chars
@@ -424,37 +594,57 @@ def extract_schema_entries(schema_doc: dict, kind: str) -> list[dict]:
     return entries
 
 
-def index_schemas(schemas_folder: str, collection: chromadb.Collection) -> int:
+def index_schemas(
+    schemas_folder: str,
+    collection: chromadb.Collection,
+    resolver: SchemaResolver,
+) -> int:
     total = 0
-    files = [f for f in os.listdir(schemas_folder) if is_spec_file(f)]
+
+    # Walk recursively — Generated OSDU schemas are laid out in per-group
+    # folders (dataset/, master-data/, ...). The abstract/ folder is skipped:
+    # those schemas are inlined into every entity that $refs them.
+    files: list[str] = []
+    for dirpath, dirnames, filenames in os.walk(schemas_folder):
+        if os.path.basename(dirpath) == "abstract":
+            dirnames[:] = []
+            continue
+        files.extend(
+            os.path.join(dirpath, fn) for fn in filenames if is_spec_file(fn)
+        )
+
     if not files:
         console.print(f"[yellow]No schema files found in {schemas_folder}[/yellow]")
         return 0
 
-    with Progress(SpinnerColumn(), TextColumn("{task.description}"), console=console) as progress:
-        for filename in files:
-            task = progress.add_task(f"Indexing schema: {filename}", total=None)
-            filepath = os.path.join(schemas_folder, filename)
+    errors: list[str] = []
+    with Progress(
+        SpinnerColumn(),
+        TextColumn("[progress.description]{task.description}"),
+        BarColumn(),
+        MofNCompleteColumn(),
+        console=console,
+    ) as progress:
+        task = progress.add_task("Indexing schemas", total=len(files))
+        for filepath in files:
+            filename = os.path.basename(filepath)
             try:
                 schema_doc = load_file(filepath)
                 kind = extract_kind_string(schema_doc, filename)
-                entries = extract_schema_entries(schema_doc, kind)
-
+                entries = extract_schema_entries(schema_doc, kind, resolver, filepath)
                 if entries:
                     collection.upsert(
                         ids=[e["id"] for e in entries],
                         documents=[e["text"] for e in entries],
                         metadatas=[e["metadata"] for e in entries],
                     )
-                    progress.update(
-                        task,
-                        description=f"[green]✓[/green] {kind}: {len(entries)} entries"
-                    )
                     total += len(entries)
-                else:
-                    progress.update(task, description=f"[yellow]⚠[/yellow] {filename}: no entries extracted")
             except Exception as e:
-                progress.update(task, description=f"[red]✗[/red] {filename}: {e}")
+                errors.append(f"{filename}: {e}")
+            progress.advance(task)
+
+    for err in errors:
+        console.print(f"[red]✗[/red] {err}")
 
     return total
 
@@ -507,7 +697,7 @@ def main():
             metadata={"hnsw:space": "cosine"},
         )
         console.rule("[bold cyan]Indexing schema properties[/bold cyan]")
-        count = index_schemas(args.schemas, schema_col)
+        count = index_schemas(args.schemas, schema_col, SchemaResolver())
         summary.add_row("osdu_schema_properties", str(count))
 
     console.print()

@@ -1,0 +1,105 @@
+{
+  "x-osdu-license": "Copyright 2022, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "$id": "https://schema.osdu.opengroup.org/json/abstract/AbstractBinGrid.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:AbstractBinGrid:1.0.0",
+  "title": "AbstractBinGrid",
+  "description": "The shared properties for a bin grid.",
+  "type": "object",
+  "properties": {
+    "BinGridName": {
+      "description": "Name of bin grid (e.g., GEOCO_GREENCYN_PHV_2012).  Probably the name as it exists in a separate corporate store if OSDU is not main system.",
+      "type": "string"
+    },
+    "BinGridTypeID": {
+      "description": "Type of bin grid (Acquisition, Processing, Velocity, MagGrav, Magnetics, Gravity, GeologicModel, Reprojected, etc.)",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-SeismicBinGridType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "SeismicBinGridType"
+        }
+      ]
+    },
+    "SourceBinGridID": {
+      "description": "Identifier of the source bin grid as stored in a corporate database/application if OSDU is not main system.",
+      "type": "integer"
+    },
+    "SourceBinGridAppID": {
+      "description": "Identifier (name) of the corporate database/application that stores the source bin grid definitions if OSDU is not main system.",
+      "type": "string"
+    },
+    "CoveragePercent": {
+      "type": "number",
+      "description": "Nominal design fold as intended by the bin grid definition, expressed as the mode in percentage points (60 fold = 6000%)."
+    },
+    "BinGridDefinitionMethodTypeID": {
+      "description": "This identifies how the Bin Grid is defined:  4=ABCD four-points method was used to define the grid (P6 parameters are optional and can contain derived values; P6BinNodeIncrementOnIAxis and P6BinNodeIncrementOnJaxis can be used as part of four-point method).  Use a perspective transformation to map between map coordinates and bin coordinates. Note point order.  6=P6 definition method was used to define the bin grid (ABCD points are optional and can contain derived values; ABCDBinGridSpatialLocation must specify the projected CRS).  Use an affine transformation to map between map coordinates and bin coordinates.",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-BinGridDefinitionMethodType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "BinGridDefinitionMethodType"
+        }
+      ]
+    },
+    "ABCDBinGridLocalCoordinates": {
+      "type": "array",
+      "items": {
+        "$ref": "AbstractCoordinates.1.0.0.json"
+      },
+      "description": "Array of 4 corner points for bin grid in local coordinates: Point A (min inline, min crossline); Point B (min inline, max crossline); Point C (max inline, min crossline); Point D (max inline, max crossline).  If Point D is not given and BinGridDefinitionMethodTypeID=4, it must be supplied, with its spatial location, before ingestion to create a parallelogram in map coordinate space.  Note correspondence of inline=x, crossline=y."
+    },
+    "ABCDBinGridSpatialLocation": {
+      "description": "Bin Grid ABCD points containing the projected coordinates, projected CRS and quality metadata.  This attribute is required also for the P6 definition method to define the projected CRS, even if the ABCD coordinates would be optional (recommended to be always calculated).",
+      "$ref": "AbstractSpatialLocation.1.0.0.json"
+    },
+    "P6TransformationMethod": {
+      "description": "EPSG code: 9666 for right-handed, 1049 for left-handed.  See IOGP Guidance Note 373-07-2 and 483-6.",
+      "type": "integer"
+    },
+    "P6BinGridOriginI": {
+      "description": "Inline coordinate of tie point (e.g., center or A point)",
+      "type": "number"
+    },
+    "P6BinGridOriginJ": {
+      "description": "Crossline coordinate of tie point (e.g., center or A point)",
+      "type": "number"
+    },
+    "P6BinGridOriginEasting": {
+      "description": "Easting coordinate of tie point (e.g., center or A point)",
+      "type": "number"
+    },
+    "P6BinGridOriginNorthing": {
+      "description": "Northing coordinate of tie point (e.g., center or A point)",
+      "type": "number"
+    },
+    "P6ScaleFactorOfBinGrid": {
+      "description": "Scale factor for Bin Grid.  If not provided then 1 is assumed. Unit is unity.",
+      "type": "number"
+    },
+    "P6BinWidthOnIaxis": {
+      "description": "Distance between two inlines at the given increment apart, e.g., 30 m with P6BinNodeIncrementOnIaxis=1.  Unit from projected CRS in ABCDBinGridSpatialLocation",
+      "type": "number"
+    },
+    "P6BinWidthOnJaxis": {
+      "description": "Distance between two crosslines at the given increment apart, e.g., 25 m with P6BinNodeIncrementOnJaxis=4.  Unit from projected CRS in ABCDBinGridSpatialLocation",
+      "type": "number"
+    },
+    "P6MapGridBearingOfBinGridJaxis": {
+      "description": "Clockwise angle from grid north (in projCRS) in degrees from 0 to 360 of the direction of increasing crosslines (constant inline), i.e., of the vector from point A to B. ",
+      "type": "number"
+    },
+    "P6BinNodeIncrementOnIaxis": {
+      "description": "Increment (positive integer) for the inline coordinate. If not provided then 1 is assumed.  The bin grid definition is expected to have increment 1 and the increment stored with the SeismicTraceData (\u201cinline increment\u201d) takes precedence over the increment set at the BinGrid.  Alternatively the increments are allowed to be defined with the BinGrid, but this should be avoided to allow for variations in sampling in trace data sets.",
+      "type": "integer"
+    },
+    "P6BinNodeIncrementOnJaxis": {
+      "description": "Increment (positive integer) for the crossline coordinate. If not provided then 1 is assumed.  The bin grid definition is expected to have increment 1 and the increment stored with the SeismicTraceData (\u201ccrossline increment\u201d) takes precedence over the increment set at the BinGrid. Alternatively the increments are allowed to be defined with the BinGrid, but this should be avoided to allow for variations in sampling in trace data sets.",
+      "type": "integer"
+    }
+  },
+  "x-osdu-inheriting-from-kind": []
+}

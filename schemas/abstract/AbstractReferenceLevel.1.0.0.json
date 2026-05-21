@@ -1,0 +1,110 @@
+{
+  "x-osdu-license": "Copyright 2022, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "x-osdu-review-status": "Accepted",
+  "$id": "https://schema.osdu.opengroup.org/json/abstract/AbstractReferenceLevel.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:AbstractReferenceLevel:1.0.0",
+  "title": "AbstractReferenceLevel",
+  "description": "A reference level or horizontal reference surface definition, which can be used embedded in other schemas.",
+  "type": "object",
+  "properties": {
+    "Height": {
+      "type": "number",
+      "title": "Height",
+      "description": "The height above the reference surface defined by the VerticalCoordinateReferenceSystemID positive upwards.",
+      "example": 0.0,
+      "x-osdu-frame-of-reference": "UOM:length"
+    },
+    "VerticalCoordinateReferenceSystemID": {
+      "type": "string",
+      "title": "Vertical Coordinate Reference System ID",
+      "description": "The relationship to the vertical CRS defining the absolute reference surface.",
+      "example": "namespace:reference-data--CoordinateReferenceSystem:Vertical:EPSG::5714:",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-CoordinateReferenceSystem:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "CoordinateReferenceSystem"
+        }
+      ]
+    },
+    "EffectiveDateTime": {
+      "type": "string",
+      "title": "Effective Date Time",
+      "description": "The date and time at which this reference level instance becomes effective.",
+      "format": "date-time",
+      "x-osdu-frame-of-reference": "DateTime"
+    },
+    "TerminationDateTime": {
+      "type": "string",
+      "title": "Termination Date Time",
+      "description": "The date and time at which a reference level instance is no longer in effect.",
+      "format": "date-time",
+      "x-osdu-frame-of-reference": "DateTime"
+    },
+    "VerticalMeasurementTypeID": {
+      "type": "string",
+      "title": "Vertical Measurement Type ID",
+      "description": "Specifies the type of vertical measurement (SRD, ES, GR, MSL,and many more).",
+      "example": "namespace:reference-data--VerticalMeasurementType:SRD:",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-VerticalMeasurementType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "VerticalMeasurementType"
+        }
+      ]
+    },
+    "VerticalMeasurementPathID": {
+      "type": "string",
+      "title": "Vertical Measurement Path ID",
+      "description": "When used in context of a Wellbore, this specifies Measured Depth, True Vertical Depth, or Elevation.",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-VerticalMeasurementPath:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "VerticalMeasurementPath"
+        }
+      ]
+    },
+    "VerticalMeasurementSourceID": {
+      "type": "string",
+      "title": "Vertical Measurement Source ID",
+      "description": "When used in context of a Wellbore this specifies Driller vs Logger measurements.",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-VerticalMeasurementSource:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "VerticalMeasurementSource"
+        }
+      ]
+    },
+    "WellboreTVDTrajectoryID": {
+      "type": "string",
+      "title": "Wellbore TVD Trajectory ID",
+      "description": "When used in context of a Wellbore this specifies what directional survey or wellpath was used to calculate the TVD.",
+      "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-WellboreTrajectory:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "work-product-component",
+          "EntityType": "WellboreTrajectory"
+        }
+      ]
+    },
+    "VerticalUncertainty": {
+      "type": "number",
+      "title": "Vertical Uncertainty",
+      "description": "The positional uncertainty in the vertical direction.",
+      "example": 0.3,
+      "x-osdu-frame-of-reference": "UOM:length"
+    },
+    "SeismicReplacementVelocity": {
+      "type": "number",
+      "title": "Seismic Replacement Velocity",
+      "description": "The replacement velocity value used to produce vertical static shifts in seismic data.",
+      "example": 1480,
+      "x-osdu-frame-of-reference": "UOM:length per time"
+    }
+  },
+  "x-osdu-inheriting-from-kind": []
+}

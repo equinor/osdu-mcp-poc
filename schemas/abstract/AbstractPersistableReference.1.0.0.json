@@ -1,0 +1,683 @@
+{
+  "x-osdu-license": "Copyright 2022, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "$id": "https://schema.osdu.opengroup.org/json/abstract/AbstractPersistableReference.1.0.0.json",
+  "title": "Persistable Reference",
+  "type": "object",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:AbstractPersistableReference:1.0.0",
+  "description": "So-called persistable reference strings carry a serialized JSON structure simply for convenience of transport; the carrier does not need to understand the internal details. This schema declares the structure of this self-contained reference value payload. PersistableReferences come in various specializations. All variants contain a property \"type\", which can be used to parse into a specific class. The JSON string-serialized structures are used e.g. in abstract/AbstractMetaItem and in some reference-data entities.",
+  "oneOf": [
+    {
+      "type": "object",
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "title": "Type of Persistable Reference",
+          "description": "The type identifier and discriminator, fixed for a specific type'.",
+          "enum": [
+            "LBC",
+            "EBC",
+            "CC",
+            "ST",
+            "CT",
+            "AOU",
+            "UM",
+            "USO",
+            "UAD",
+            "DTM",
+            "DAT",
+            "AZR"
+          ]
+        }
+      }
+    },
+    {
+      "$ref": "#/definitions/genericCRS"
+    },
+    {
+      "$ref": "#/definitions/unit"
+    },
+    {
+      "$ref": "#/definitions/measurement"
+    },
+    {
+      "$ref": "#/definitions/date"
+    },
+    {
+      "$ref": "#/definitions/dateTime"
+    },
+    {
+      "$ref": "#/definitions/azimuthReference"
+    }
+  ],
+  "definitions": {
+    "genericCRS": {
+      "oneOf": [
+        {
+          "$ref": "#/definitions/lateBoundCRS"
+        },
+        {
+          "$ref": "#/definitions/earlyBoundCRS"
+        },
+        {
+          "$ref": "#/definitions/compoundCRS"
+        }
+      ]
+    },
+    "unit": {
+      "oneOf": [
+        {
+          "$ref": "#/definitions/unitSO"
+        },
+        {
+          "$ref": "#/definitions/unitABCD"
+        }
+      ]
+    },
+    "authCode": {
+      "type": "object",
+      "title": "Authority Code",
+      "description": "The AuthorityCode for this item.",
+      "required": [
+        "auth",
+        "code"
+      ],
+      "properties": {
+        "auth": {
+          "type": "string",
+          "title": "Authority",
+          "description": "The name of the authority issuing the code.",
+          "example": "EPSG"
+        },
+        "code": {
+          "type": "string",
+          "example": "4326",
+          "title": "Code",
+          "description": "The code issued by the authority."
+        }
+      }
+    },
+    "boundBox": {
+      "type": "object",
+      "title": "WGS 84 Bounding Box",
+      "description": "WGS 84 bounding box in latitude longitude.",
+      "properties": {
+        "lonMin": {
+          "type": "number",
+          "title": "Longitude Left",
+          "description": "The left longitude limit in degrees; the longitude can wrap around the datum line - then 'lonMin' is not the minimum longitude. Value range [-180,...,180] degrees from Greenwich."
+        },
+        "lonMax": {
+          "type": "number",
+          "title": "Longitude Right",
+          "description": "The right longitude limit in degrees; the longitude can wrap around the datum line - then 'lonMax' is not the maximum longitude. Value range [-180,...,180] degrees from Greenwich."
+        },
+        "latMin": {
+          "type": "number",
+          "title": "Latitude Lower",
+          "description": "The lower or minimum latitude limit in degrees. Value range from South -90 to 90 North."
+        },
+        "latMax": {
+          "type": "number",
+          "title": "Latitude Upper",
+          "description": "The upper or maximum latitude limit in degrees. Value range from South -90 to 90 North."
+        }
+      },
+      "required": [
+        "lonMin",
+        "lonMax",
+        "latMin",
+        "latMax"
+      ]
+    },
+    "scaleOffset": {
+      "type": "object",
+      "title": "Scale Offset",
+      "description": "Scale Offset parameter container.",
+      "required": [
+        "scale",
+        "offset"
+      ],
+      "properties": {
+        "scale": {
+          "type": "number",
+          "title": "Scale Factor",
+          "example": "0.5555555555555556",
+          "description": "The scale factor; formula:  y = scale*(x-offset)"
+        },
+        "offset": {
+          "type": "number",
+          "title": "offset",
+          "example": "-459.67",
+          "description": "The offset; formula:  y = scale*(x-offset)"
+        }
+      }
+    },
+    "abcd": {
+      "type": "object",
+      "title": "ABCD",
+      "description": "ABCD parameter container.",
+      "required": [
+        "a",
+        "b",
+        "c",
+        "d"
+      ],
+      "properties": {
+        "a": {
+          "type": "number",
+          "title": "A",
+          "example": "2298.35",
+          "description": "The A parameter; formula: y = (A+B*x)/(C+D*x)"
+        },
+        "b": {
+          "type": "number",
+          "title": "B",
+          "example": "5.0",
+          "description": "The B parameter; formula: y = (A+B*x)/(C+D*x)"
+        },
+        "c": {
+          "type": "number",
+          "title": "C",
+          "example": "9.0",
+          "description": "The C parameter; formula: y = (A+B*x)/(C+D*x)"
+        },
+        "d": {
+          "type": "number",
+          "title": "D",
+          "example": "0.0",
+          "description": "The D parameter; formula: y = (A+B*x)/(C+D*x)"
+        }
+      }
+    },
+    "measurement": {
+      "type": "object",
+      "title": "Measurement",
+      "description": "A measurement. It is a base measurement, also called dimension, if the 'ancestry' is 'root', a child measurement if the 'ancestry' contains more than one '.'-separated measurement names.",
+      "required": [
+        "type",
+        "ancestry"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "title": "Type of Persistable Reference",
+          "enum": [
+            "UM"
+          ],
+          "default": "UM",
+          "example": "UM",
+          "description": "The type identifier, fixed to 'UM'."
+        },
+        "ancestry": {
+          "type": "string",
+          "title": "Measurement Ancestry",
+          "description": "The ancestry of this dimension, unit quantity or measurement. Parent and child measurements are separated by a '.' symbol. An ancestry without a '.' is a base measurement or dimension.",
+          "example": "L.length"
+        }
+      }
+    },
+    "unitSO": {
+      "type": "object",
+      "title": "Unit Scale Offset",
+      "description": "A unit of measure, scale, offset parameterized.",
+      "required": [
+        "type",
+        "symbol",
+        "baseMeasurement",
+        "scaleOffset"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "title": "Type of Persistable Reference",
+          "enum": [
+            "USO"
+          ],
+          "default": "USO",
+          "example": "USO",
+          "description": "The type identifier, fixed to 'USO'."
+        },
+        "baseMeasurement": {
+          "$ref": "#/definitions/measurement",
+          "title": "Base Measurement",
+          "description": "The unit's base measurement."
+        },
+        "symbol": {
+          "type": "string",
+          "title": "Unit Symbol",
+          "description": "The unit symbol or short name.",
+          "example": "degF"
+        },
+        "scaleOffset": {
+          "$ref": "#/definitions/scaleOffset",
+          "title": "Scale Offset",
+          "description": "Scale Offset parameter container."
+        }
+      }
+    },
+    "unitABCD": {
+      "type": "object",
+      "title": "Unit Energistics",
+      "description": "A unit of measure in Energistics ABCD parameterization.",
+      "required": [
+        "type",
+        "symbol",
+        "baseMeasurement",
+        "abcd"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "title": "Type of Persistable Reference",
+          "enum": [
+            "UAD"
+          ],
+          "default": "UAD",
+          "example": "UAD",
+          "description": "The type identifier, fixed to 'UAD'."
+        },
+        "baseMeasurement": {
+          "$ref": "#/definitions/measurement",
+          "title": "Base Measurement",
+          "description": "The unit's base measurement."
+        },
+        "symbol": {
+          "type": "string",
+          "title": "Unit Symbol",
+          "description": "The unit symbol or short name.",
+          "example": "degF"
+        },
+        "abcd": {
+          "$ref": "#/definitions/abcd",
+          "title": "ABCD",
+          "description": "ABCD parameter container."
+        }
+      }
+    },
+    "area": {
+      "type": "object",
+      "title": "Area of Use",
+      "description": "Area of use consisting of a bounding box in latitude and longitude WGS 84.",
+      "required": [
+        "type",
+        "boundBox"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "title": "Type of Persistable Reference",
+          "enum": [
+            "AOU"
+          ],
+          "default": "AOU",
+          "example": "AOU",
+          "description": "The type identifier, fixed to 'AOU'."
+        },
+        "boundBox": {
+          "$ref": "#/definitions/boundBox",
+          "title": "Bounding Box",
+          "description": "The bounding box in latitude and longitude WGS 84 based."
+        },
+        "authCode": {
+          "$ref": "#/definitions/authCode",
+          "title": "Authority Code",
+          "description": "The authority code for this item."
+        }
+      }
+    },
+    "lateBoundCRS": {
+      "type": "object",
+      "title": "Late-bound CRS",
+      "description": "Late-bound coordinate reference system, i.e. a CRS without a transformation binding to WGS 84.",
+      "required": [
+        "type",
+        "name",
+        "wkt"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "title": "Type of Persistable Reference",
+          "enum": [
+            "LBC"
+          ],
+          "default": "LBC",
+          "example": "LBC",
+          "description": "The type identifier, fixed to 'LBC'."
+        },
+        "name": {
+          "type": "string",
+          "title": "CRS Name",
+          "description": "The name of the late-bound coordinate reference system.",
+          "example": "GCS_WGS_1984"
+        },
+        "ver": {
+          "type": "string",
+          "title": "Version",
+          "description": "The engine version issuing the definition.",
+          "example": "PE_10_3_1"
+        },
+        "wkt": {
+          "type": "string",
+          "title": "Late-bound CRS WKT",
+          "description": "Well-known text (Esri style) of the late-bound coordinate reference system.",
+          "example": "GEOGCS[\"GCS_WGS_1984\",DATUM[\"D_WGS_1984\",SPHEROID[\"WGS_1984\",6378137.0,298.257223563]],PRIMEM[\"Greenwich\",0.0],UNIT[\"Degree\",0.0174532925199433],AUTHORITY[\"EPSG\",4326]]"
+        },
+        "authCode": {
+          "$ref": "#/definitions/authCode",
+          "title": "Authority Code",
+          "description": "The authority code for this item."
+        }
+      }
+    },
+    "singleCT": {
+      "type": "object",
+      "title": "Single CT",
+      "description": "Single cartographic transformation.",
+      "required": [
+        "type",
+        "name",
+        "wkt"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "title": "Type of Persistable Reference",
+          "enum": [
+            "ST"
+          ],
+          "default": "ST",
+          "example": "ST",
+          "description": "The type identifier, fixed to 'ST'."
+        },
+        "name": {
+          "type": "string",
+          "title": "Single CT Name",
+          "description": "The name of the simple cartographic transformation.",
+          "example": "ED_1950_UTM_Zone_31N"
+        },
+        "ver": {
+          "type": "string",
+          "title": "Version",
+          "description": "The engine version issuing the definition.",
+          "example": "PE_10_3_1"
+        },
+        "wkt": {
+          "type": "string",
+          "title": "Well-known Text",
+          "description": "The well-known text (Esri style) defining this transformation.",
+          "example": "GEOGTRAN[\"ED_1950_To_WGS_1984_23\",GEOGCS[\"GCS_European_1950\",DATUM[\"D_European_1950\",SPHEROID[\"International_1924\",6378388.0,297.0]],PRIMEM[\"Greenwich\",0.0],UNIT[\"Degree\",0.0174532925199433]],GEOGCS[\"GCS_WGS_1984\",DATUM[\"D_WGS_1984\",SPHEROID[\"WGS_1984\",6378137.0,298.257223563]],PRIMEM[\"Greenwich\",0.0],UNIT[\"Degree\",0.0174532925199433]],METHOD[\"Position_Vector\"],PARAMETER[\"X_Axis_Translation\",-116.641],PARAMETER[\"Y_Axis_Translation\",-56.931],PARAMETER[\"Z_Axis_Translation\",-110.559],PARAMETER[\"X_Axis_Rotation\",0.893],PARAMETER[\"Y_Axis_Rotation\",0.921],PARAMETER[\"Z_Axis_Rotation\",-0.917],PARAMETER[\"Scale_Difference\",-3.52],AUTHORITY[\"EPSG\",1612]]"
+        },
+        "authCode": {
+          "$ref": "#/definitions/authCode",
+          "title": "Authority Code",
+          "description": "The authority code for this item."
+        }
+      }
+    },
+    "compoundCT": {
+      "type": "object",
+      "title": "Compound CT",
+      "description": "Compound cartographic transformation.",
+      "required": [
+        "type",
+        "name",
+        "policy",
+        "cts"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "title": "Type of Persistable Reference",
+          "enum": [
+            "CT"
+          ],
+          "default": "CT",
+          "example": "CT",
+          "description": "The type identifier, fixed to 'CT'."
+        },
+        "name": {
+          "type": "string",
+          "title": "Compound CT Name",
+          "description": "The name of the compound cartographic transformation.",
+          "example": "Fallback NAD27 to WGS 84 (79)/NAD27 to WGS 84 (33)"
+        },
+        "ver": {
+          "type": "string",
+          "title": "Version",
+          "description": "The engine version issuing the definition.",
+          "example": "PE_10_3_1"
+        },
+        "policy": {
+          "type": "string",
+          "title": "Policy",
+          "description": "The transformation policy - concatenated or fallback.",
+          "example": "Concatenated",
+          "enum": [
+            "Fallback",
+            "Concatenated"
+          ]
+        },
+        "cts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/singleCT",
+            "title": "Transformation List",
+            "description": "The ordered list of cartographic transformations."
+          },
+          "title": "Transformation List ",
+          "description": "The ordered list of cartographic transformations."
+        },
+        "authCode": {
+          "$ref": "#/definitions/authCode",
+          "title": "Authority Code",
+          "description": "The authority code for this item."
+        }
+      }
+    },
+    "earlyBoundCRS": {
+      "type": "object",
+      "title": "Early-bound CRS",
+      "description": "Early-bound coordinate reference system, i.e. a CRS with a transformation binding to WGS 84",
+      "required": [
+        "type",
+        "name",
+        "lateBoundCRS"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "title": "Type of Persistable Reference",
+          "enum": [
+            "EBC"
+          ],
+          "example": "EBC",
+          "default": "EBC",
+          "description": "The type identifier, fixed to 'EBC'."
+        },
+        "name": {
+          "type": "string",
+          "title": "CRS Name",
+          "description": "The name of the early-bound coordinate reference system.",
+          "example": "ED50 * EPSG-Nor N62 2001 / UTM zone 31N [23031,1612]"
+        },
+        "ver": {
+          "type": "string",
+          "title": "Version",
+          "description": "The engine version issuing the definition.",
+          "example": "PE_10_3_1"
+        },
+        "lateBoundCRS": {
+          "$ref": "#/definitions/lateBoundCRS",
+          "title": "Late-bound CRS",
+          "description": "Late-bound CRS, which is bound to a single (singleCT) or compound (compoundCT) transformation to WGS 84."
+        },
+        "singleCT": {
+          "$ref": "#/definitions/singleCT",
+          "title": "Single Transformation",
+          "description": "Single Transformation, which binds the late-bound CRS (lbCRS) to WGS 84. If absent, a compound transformation (compoundCT) must be present."
+        },
+        "compoundCT": {
+          "$ref": "#/definitions/compoundCT",
+          "title": "Compound Transformation",
+          "description": "Compound transformation, which binds the late-bound CRS (lbCRS) to WGS 84. If absent, a single transformation (singleCT) must be present."
+        },
+        "authCode": {
+          "$ref": "#/definitions/authCode",
+          "title": "Authority Code",
+          "description": "The authority code for this item."
+        }
+      }
+    },
+    "compoundCRS": {
+      "type": "object",
+      "title": "Compound CRS",
+      "description": "Compound coordinate reference system aggregating a horizontal to a vertical CRS.",
+      "required": [
+        "type",
+        "name"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "title": "Type of Persistable Reference",
+          "enum": [
+            "CC"
+          ],
+          "example": "CC",
+          "default": "CC",
+          "description": "The type identifier. fixed to 'CC'."
+        },
+        "name": {
+          "type": "string",
+          "title": "CRS Name",
+          "description": "The name of the compound coordinate reference system.",
+          "example": "WGS 84 / UTM zone 35N + EGM96 height"
+        },
+        "ver": {
+          "type": "string",
+          "title": "Version",
+          "description": "The engine version issuing the definition.",
+          "example": "PE_10_3_1"
+        },
+        "horzLateBoundCRS": {
+          "$ref": "#/definitions/lateBoundCRS",
+          "title": "Horizontal late-bound CRS",
+          "description": "The horizontal CRS of a Compound CRS as late-bound CRS. If 'horzLateBoundCRS' is non-null, 'horzEarlyBoundCRS' must be null."
+        },
+        "horzEarlyBoundCRS": {
+          "$ref": "#/definitions/earlyBoundCRS",
+          "title": "Horizontal early-bound CRS",
+          "description": "The horizontal CRS of a Compound CRS as early-bound CRS. If 'horzEarlyBoundCRS' is non-null, 'horzLateBoundCRS' must be null."
+        },
+        "vertLateBoundCRS": {
+          "$ref": "#/definitions/lateBoundCRS",
+          "title": "Vertical late-bound CRS",
+          "description": "The vertical CRS of the Compound CRS as late-bound CRS. If 'vertLateBoundCRS' is non-null, 'vertEarlyBoundCRS' must be null."
+        },
+        "vertEarlyBoundCRS": {
+          "$ref": "#/definitions/earlyBoundCRS",
+          "title": "Vertical early-bound CRS",
+          "description": "The vertical CRS of the Compound CRS as early-bound CRS. If 'vertEarlyBoundCRS' is non-null, 'vertLateBoundCRS' must be null."
+        },
+        "authCode": {
+          "$ref": "#/definitions/authCode",
+          "title": "Authority Code",
+          "description": "The authority code for this item."
+        }
+      }
+    },
+    "date": {
+      "type": "object",
+      "title": "Date",
+      "description": "A set of references describing date reference.",
+      "required": [
+        "type",
+        "format"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "title": "Type of Persistable Reference",
+          "enum": [
+            "DAT"
+          ],
+          "example": "DAT",
+          "default": "DAT",
+          "description": "The type identifier. Fixed to 'DAT'."
+        },
+        "format": {
+          "type": "string",
+          "title": "Date Format",
+          "description": "The date format specification follows https://docs.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings.",
+          "example": "yyyy-MM-dd"
+        }
+      }
+    },
+    "dateTime": {
+      "type": "object",
+      "title": "Date Time",
+      "description": "A set of references describing date-time and time zone references.",
+      "required": [
+        "type",
+        "format"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "title": "Type of Persistable Reference",
+          "enum": [
+            "DTM"
+          ],
+          "example": "DTM",
+          "default": "DTM",
+          "description": "The type identifier. Fixed to 'DTM'."
+        },
+        "format": {
+          "type": "string",
+          "title": "Date/Time Format",
+          "description": "The date-time format specification follows https://docs.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings.",
+          "example": "yyyy-MM-ddTHH:mm:ss.ffffffZ"
+        },
+        "timeZone": {
+          "type": "string",
+          "title": "Time Zone",
+          "description": "The time zone reference specification. For data in UTC or with UTC offset this is 'UTC' or the serialized Windows TimeZoneInfo.",
+          "example": "Antarctica/South Pole Standard Time;720;(GMT+12:00) Antarctica/South Pole;Antarctica/South Pole Standard Time;Antarctica/South Pole Daylight Time;[10:01:1989;12:31:9999;60;[0;02:00:00;10;1;0;];[0;02:00:00;3;3;0;];];"
+        }
+      }
+    },
+    "azimuthReference": {
+      "type": "object",
+      "title": "Azimuth Reference",
+      "description": "A set of parameters defining an azimuth reference. This type definition is a place-holder covering only TrueNorth at the moment. GridNorth and MagneticNorth references require specific properties, which are yet to be declared.",
+      "required": [
+        "type",
+        "code"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "title": "Type of Persistable Reference",
+          "enum": [
+            "AZR"
+          ],
+          "example": "AZR",
+          "default": "AZR",
+          "description": "The type identifier. Fixed to 'AZR'."
+        },
+        "code": {
+          "type": "string",
+          "title": "Azimuth Reference Code",
+          "description": "The azimuth reference code, e.g. TrueNorth, GridNorth, MagneticNorth. Depending on the code other properties required like projected CRS and geo-magnetic model with observation date. Only TrueNorth does not require any additional properties.",
+          "example": "TrueNorth"
+        }
+      }
+    }
+  },
+  "x-osdu-inheriting-from-kind": []
+}

@@ -1,0 +1,197 @@
+{
+  "x-osdu-license": "Copyright 2025, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "x-osdu-review-status": "Accepted",
+  "$id": "https://schema.osdu.opengroup.org/json/abstract/AbstractTubularComponentRSS.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:AbstractTubularComponentRSS:1.0.0",
+  "title": "Abstract Tubular Component RSS",
+  "description": "Rotary Steerable Tool Tubular Component specific properties. Based on WITSML Tubular  Component 'RotarySteerableTool' ComplexType.",
+  "type": "object",
+  "properties": {
+    "BendAngle": {
+      "type": "number",
+      "title": "Bend Angle",
+      "description": "Bend Angle.",
+      "x-osdu-frame-of-reference": "UOM:plane angle",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML Tubular.BendAngle.BendAngle",
+      "x-osdu-attribution-revision": "V2.1"
+    },
+    "BendOffset": {
+      "type": "number",
+      "title": "Bend Offset",
+      "description": "Offset distance from the bottom connection to the bend,",
+      "x-osdu-frame-of-reference": "UOM:length",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML Tubular.BendOffset.BendOffset",
+      "x-osdu-attribution-revision": "V2.1"
+    },
+    "DeflectionMethodID": {
+      "type": "string",
+      "title": "Deflection Method ID",
+      "description": "Method used to direct the deviation of the trajectory: point bit or push bit",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML Tubular.RotarySteerableTool.DeflectionMethod",
+      "x-osdu-attribution-revision": "V2.1",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-RotarySteerableDeflectionMethod:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "RotarySteerableDeflectionMethod"
+        }
+      ]
+    },
+    "DownlinkFlowrateMinimum": {
+      "type": "number",
+      "title": "Downlink Flowrate Minimum",
+      "description": "Minimum flow rate for programming the tool.",
+      "x-osdu-frame-of-reference": "UOM:volume per time",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML Tubular.RotarySteerableTool.DownLinkFlowRateMn",
+      "x-osdu-attribution-revision": "V2.1"
+    },
+    "DownlinkFlowrateMaximum": {
+      "type": "number",
+      "title": "Downlink Flowrate Maximum",
+      "description": "Maximum flow rate for programming the tool.",
+      "x-osdu-frame-of-reference": "UOM:volume per time",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML Tubular.RotarySteerableTool.DownLinkFlowRateMx",
+      "x-osdu-attribution-revision": "V2.1"
+    },
+    "FlowRateMinimum": {
+      "type": "number",
+      "title": "Flow Rate Minimum",
+      "description": "Minimum flow rate for tool operation.",
+      "x-osdu-frame-of-reference": "UOM:volume per time",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML Tubular.RotarySteerableTool.FlowRateMn",
+      "x-osdu-attribution-revision": "V2.1"
+    },
+    "FlowRateMaximum": {
+      "type": "number",
+      "title": "Flow Rate Maximum",
+      "description": "Maximum flow rate for tool operation.",
+      "x-osdu-frame-of-reference": "UOM:volume per time",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML Tubular.RotarySteerableTool.FlowRateMx",
+      "x-osdu-attribution-revision": "V2.1"
+    },
+    "HoleSizeMininum": {
+      "type": "number",
+      "title": "Hole Size Mininum",
+      "description": "Minimum size of the hole in which the tool can operate.",
+      "x-osdu-frame-of-reference": "UOM:length",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML Tubular.RotarySteerableTool.HoleSizeMn",
+      "x-osdu-attribution-revision": "V2.1"
+    },
+    "HoleSizeMaximum": {
+      "type": "number",
+      "title": "Hole Size Maximum",
+      "description": "Maximum size of the hole in which the tool can operate.",
+      "x-osdu-frame-of-reference": "UOM:length",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML Tubular.RotarySteerableTool.HoleSizeMx",
+      "x-osdu-attribution-revision": "V2.1"
+    },
+    "OperatingSpeed": {
+      "type": "number",
+      "title": "Operating Speed",
+      "description": "Suggested operating speed.",
+      "x-osdu-frame-of-reference": "UOM:angular velocity",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML Tubular.RotarySteerableTool.OperatingSpeed",
+      "x-osdu-attribution-revision": "V2.1"
+    },
+    "PressureLossFactor": {
+      "type": "number",
+      "title": "Pressure Loss Factor",
+      "description": "Pressure drop across the tool.",
+      "x-osdu-frame-of-reference": "UOM:dimensionless",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML Tubular.RotarySteerableTool.PressLossFact",
+      "x-osdu-attribution-revision": "V2.1"
+    },
+    "SpeedMaximum": {
+      "type": "number",
+      "title": "Speed Maximum",
+      "description": "Maximum rotation speed.",
+      "x-osdu-frame-of-reference": "UOM:angular velocity",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML Tubular.RotarySteerableTool.SpeedMx",
+      "x-osdu-attribution-revision": "V2.1"
+    },
+    "WobMaximum": {
+      "type": "number",
+      "title": "WOB Maximum",
+      "description": "Maximum weight on the bit.",
+      "x-osdu-frame-of-reference": "UOM:force",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML Tubular.RotarySteerableTool.WobMx",
+      "x-osdu-attribution-revision": "V2.1"
+    },
+    "PadCount": {
+      "type": "integer",
+      "title": "Pad Count",
+      "description": "The number of contact pads.",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML Tubular.RotarySteerableTool.PadCount",
+      "x-osdu-attribution-revision": "V2.1"
+    },
+    "PadLength": {
+      "type": "number",
+      "title": "Pad Length",
+      "description": "Length of the contact pad.",
+      "x-osdu-frame-of-reference": "UOM:length",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML Tubular.RotarySteerableTool.PadLen",
+      "x-osdu-attribution-revision": "V2.1"
+    },
+    "PadWidth": {
+      "type": "number",
+      "title": "Pad Width",
+      "description": "Width of the contact pad.",
+      "x-osdu-frame-of-reference": "UOM:length",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML Tubular.RotarySteerableTool.PadWidth",
+      "x-osdu-attribution-revision": "V2.1"
+    },
+    "PadOffset": {
+      "type": "number",
+      "title": "Pad Offset",
+      "description": "Offset distance from the bottom of the pad to the bottom connector.",
+      "x-osdu-frame-of-reference": "UOM:length",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML Tubular.RotarySteerableTool.PadOffset",
+      "x-osdu-attribution-revision": "V2.1"
+    },
+    "OpenPadOuterDiameter": {
+      "type": "number",
+      "title": "Open Pad Outer Diameter",
+      "description": "Outside diameter of the tool when the pads are activated.",
+      "x-osdu-frame-of-reference": "UOM:length",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML Tubular.RotarySteerableTool.OpenPadOd",
+      "x-osdu-attribution-revision": "V2.1"
+    },
+    "ClosePadOuterDiameter": {
+      "type": "number",
+      "title": "Close Pad Outer Diameter",
+      "description": "Outside diameter of the tool when the pads are closed.",
+      "x-osdu-frame-of-reference": "UOM:length",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML Tubular.RotarySteerableTool.ClosePadOd",
+      "x-osdu-attribution-revision": "V2.1"
+    },
+    "PressureLossCurve": {
+      "type": "array",
+      "title": "PressureLossCurve",
+      "description": "Array of one or more pressure loss versus flowrate points used to interpolate pressure loss across the MWD/LWD tool.",
+      "items": {
+        "$ref": "../abstract/AbstractTubularComponentPressureLoss.1.0.0.json"
+      }
+    }
+  },
+  "x-osdu-inheriting-from-kind": []
+}

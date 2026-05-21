@@ -1,0 +1,159 @@
+{
+  "x-osdu-license": "Copyright 2022, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "x-osdu-review-status": "Accepted",
+  "$id": "https://schema.osdu.opengroup.org/json/abstract/AbstractRepresentation.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:AbstractRepresentation:1.0.0",
+  "title": "AbstractRepresentation",
+  "description": "The group of properties shared by all different kinds of representations.",
+  "type": "object",
+  "properties": {
+    "InterpretationID": {
+      "type": "string",
+      "title": "ID of the interpretation",
+      "description": "Allow to link an interpretation with this representation",
+      "format": "uri-reference",
+      "pattern": "^[\\w\\-\\.]+:(work-product-component\\-\\-EarthModelInterpretation|work-product-component\\-\\-GeobodyBoundaryInterpretation|work-product-component\\-\\-GeobodyInterpretation|work-product-component\\-\\-HorizonInterpretation|work-product-component\\-\\-RockFluidOrganizationInterpretation|work-product-component\\-\\-RockFluidUnitInterpretation|work-product-component\\-\\-StratigraphicUnitInterpretation|work-product-component\\-\\-StructuralOrganizationInterpretation|work-product-component\\-\\-FaultInterpretation|work-product-component\\-\\-AquiferInterpretation):[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "work-product-component",
+          "EntityType": "EarthModelInterpretation"
+        },
+        {
+          "GroupType": "work-product-component",
+          "EntityType": "GeobodyBoundaryInterpretation"
+        },
+        {
+          "GroupType": "work-product-component",
+          "EntityType": "GeobodyInterpretation"
+        },
+        {
+          "GroupType": "work-product-component",
+          "EntityType": "HorizonInterpretation"
+        },
+        {
+          "GroupType": "work-product-component",
+          "EntityType": "RockFluidOrganizationInterpretation"
+        },
+        {
+          "GroupType": "work-product-component",
+          "EntityType": "RockFluidUnitInterpretation"
+        },
+        {
+          "GroupType": "work-product-component",
+          "EntityType": "StratigraphicUnitInterpretation"
+        },
+        {
+          "GroupType": "work-product-component",
+          "EntityType": "StructuralOrganizationInterpretation"
+        },
+        {
+          "GroupType": "work-product-component",
+          "EntityType": "FaultInterpretation"
+        },
+        {
+          "GroupType": "work-product-component",
+          "EntityType": "AquiferInterpretation"
+        }
+      ]
+    },
+    "InterpretationName": {
+      "type": "string",
+      "title": "Name of the interpretation",
+      "description": "Name of the interpretation the representation refers to",
+      "example": "My Interpretation",
+      "x-osdu-is-derived": {
+        "RelationshipPropertyName": "InterpretationID",
+        "TargetPropertyName": "Name"
+      }
+    },
+    "TimeSeries": {
+      "type": "object",
+      "title": "Time Series",
+      "description": "Allow to link the geometry of the representation to a particular index of a time series. This is particularly useful for IJK grids used in geomechanical or basin context where the topology and geometry varies against the time.",
+      "properties": {
+        "TimeIndex": {
+          "type": "integer",
+          "title": "TimeIndices",
+          "description": "Index of the timestamp of the representation in the associated TimeSeries",
+          "example": 3
+        },
+        "TimeSeriesID": {
+          "type": "string",
+          "title": "TimeSeriesID",
+          "description": "Time series the representation is associated to",
+          "format": "uri-reference",
+          "example": "namespace:work-product-component--TimeSeries:85348741-3433-406B-9189-22B298C3E2D2:",
+          "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-TimeSeries:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+          "x-osdu-relationship": [
+            {
+              "GroupType": "work-product-component",
+              "EntityType": "TimeSeries"
+            }
+          ]
+        }
+      },
+      "required": [
+        "TimeIndex",
+        "TimeSeriesID"
+      ]
+    },
+    "RealizationIndex": {
+      "type": "integer",
+      "title": "Realization Index",
+      "description": "The index of the realization of this representation",
+      "example": 10
+    },
+    "IndexableElementCount": {
+      "type": "array",
+      "title": "Counts of Indexable element",
+      "description": "Several optional indexable element counts",
+      "items": {
+        "type": "object",
+        "title": "IndexableElementCount",
+        "description": "Defines the count of a particular indexable element in a representation",
+        "properties": {
+          "Count": {
+            "type": "integer",
+            "title": "Count",
+            "description": "The count of indexable element",
+            "example": 10000
+          },
+          "IndexableElementID": {
+            "type": "string",
+            "title": "IndexableElementID",
+            "description": "The indexable element which is counted",
+            "format": "uri-reference",
+            "x-osdu-attribution-authority": "Energistics",
+            "x-osdu-attribution-publication": "The OSDU Data Platform",
+            "x-osdu-existing-standard": "RESQML",
+            "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-IndexableElement:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+            "x-osdu-relationship": [
+              {
+                "GroupType": "reference-data",
+                "EntityType": "IndexableElement"
+              }
+            ]
+          }
+        },
+        "required": [
+          "Count"
+        ]
+      }
+    },
+    "LocalModelCompoundCrsID": {
+      "type": "string",
+      "title": "ID of the compound CRS where this representation is given",
+      "description": "Allow to link a local CRS with this representation",
+      "format": "uri-reference",
+      "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-LocalModelCompoundCrs:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "work-product-component",
+          "EntityType": "LocalModelCompoundCrs"
+        }
+      ]
+    }
+  },
+  "x-osdu-inheriting-from-kind": []
+}

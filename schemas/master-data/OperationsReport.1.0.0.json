@@ -1,0 +1,3430 @@
+{
+  "x-osdu-license": "Copyright 2022, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "$id": "https://schema.osdu.opengroup.org/json/master-data/OperationsReport.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:master-data--OperationsReport:1.0.0",
+  "title": "OperationsReport",
+  "description": "Information about a series of drilling activities.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "Previously called ResourceID or SRN which identifies this OSDU resource object without version.",
+      "title": "Entity ID",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:master-data\\-\\-OperationsReport:[\\w\\-\\.\\:\\%]+$",
+      "example": "namespace:master-data--OperationsReport:292b3eb6-4e71-5b07-939a-fc50bfdabe3a"
+    },
+    "kind": {
+      "description": "The schema identification for the OSDU resource object following the pattern {Namespace}:{Source}:{Type}:{VersionMajor}.{VersionMinor}.{VersionPatch}. The versioning scheme follows the semantic versioning, https://semver.org/.",
+      "title": "Entity Kind",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:[\\w\\-\\.]+:[\\w\\-\\.]+:[0-9]+.[0-9]+.[0-9]+$",
+      "example": "osdu:wks:master-data--OperationsReport:1.0.0"
+    },
+    "version": {
+      "description": "The version number of this OSDU resource; set by the framework.",
+      "title": "Version Number",
+      "type": "integer",
+      "format": "int64",
+      "example": 1562066009929332
+    },
+    "acl": {
+      "description": "The access control tags associated with this entity.",
+      "title": "Access Control List",
+      "$ref": "../abstract/AbstractAccessControlList.1.0.0.json"
+    },
+    "legal": {
+      "description": "The entity's legal tags and compliance status. The actual contents associated with the legal tags is managed by the Compliance Service.",
+      "title": "Legal Tags",
+      "$ref": "../abstract/AbstractLegalTags.1.0.0.json"
+    },
+    "tags": {
+      "title": "Tag Dictionary",
+      "description": "A generic dictionary of string keys mapping to string value. Only strings are permitted as keys and values.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "example": {
+        "NameOfKey": "String value"
+      }
+    },
+    "createTime": {
+      "description": "Timestamp of the time at which initial version of this OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:46:20.163Z"
+    },
+    "createUser": {
+      "title": "Resource Object Creation User Reference",
+      "description": "The user reference, which created the first version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "modifyTime": {
+      "description": "Timestamp of the time at which this version of the OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Version Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:52:24.477Z"
+    },
+    "modifyUser": {
+      "title": "Resource Object Version Creation User Reference",
+      "description": "The user reference, which created this version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "ancestry": {
+      "description": "The links to data, which constitute the inputs, from which this record instance is derived.",
+      "title": "Ancestry",
+      "$ref": "../abstract/AbstractLegalParentList.1.0.0.json"
+    },
+    "meta": {
+      "description": "The Frame of Reference meta data section linking the named properties to self-contained definitions.",
+      "title": "Frame of Reference Meta Data",
+      "type": "array",
+      "items": {
+        "$ref": "../abstract/AbstractMetaItem.1.0.0.json"
+      }
+    },
+    "data": {
+      "allOf": [
+        {
+          "$ref": "../abstract/AbstractCommonResources.1.0.0.json"
+        },
+        {
+          "$ref": "../abstract/AbstractMaster.1.0.0.json"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "StartDateTime": {
+              "type": "string",
+              "title": "Start Date Time",
+              "description": "Date and time that the reporting period started. A report period is commonly 24 hours.",
+              "format": "date-time",
+              "x-osdu-frame-of-reference": "DateTime",
+              "x-osdu-attribution-authority": "The Open Group",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-attribution-revision": "evergreen"
+            },
+            "EndDateTime": {
+              "type": "string",
+              "title": "End Date Time",
+              "description": "Date and time that the reporting period ended. A report period is commonly 24 hours.",
+              "format": "date-time",
+              "x-osdu-frame-of-reference": "DateTime",
+              "x-osdu-attribution-authority": "The Open Group",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-attribution-revision": "evergreen"
+            },
+            "BitRecord": {
+              "type": "array",
+              "title": "Bit Record",
+              "description": "Information about a bit.",
+              "x-osdu-attribution-authority": "The Open Group",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-attribution-revision": "evergreen",
+              "items": {
+                "type": "object",
+                "title": "BitRecord",
+                "description": "Information on the condition of the Drill Bit as recorded during an operations report",
+                "properties": {
+                  "NumBit": {
+                    "type": "string",
+                    "title": "Identifier",
+                    "description": "Bit number and rerun number e.g. \"4.1\" for the first rerun of bit 4.",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "DiameterBit": {
+                    "type": "number",
+                    "title": "Bit Diameter",
+                    "description": "Diameter of drilled hole.",
+                    "x-osdu-frame-of-reference": "UOM:length",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "DiameterPassThrough": {
+                    "type": "number",
+                    "title": "Authority",
+                    "description": "Minimum hole or tubing which bit will pass through (for bi-center bits).",
+                    "x-osdu-frame-of-reference": "UOM:length",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "DiameterPilot": {
+                    "type": "number",
+                    "title": "Pilot Diameter",
+                    "description": "Diameter of pilot bit (for bi-center bits).",
+                    "x-osdu-frame-of-reference": "UOM:length",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "Manufacturer": {
+                    "type": "string",
+                    "title": "Manufacturer",
+                    "description": "Manufacturer / supplier of the item.",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "TypeBit": {
+                    "type": "string",
+                    "title": "Bit Type",
+                    "description": "Type of bit.",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen",
+                    "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-BitType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "reference-data",
+                        "EntityType": "BitType"
+                      }
+                    ]
+                  },
+                  "Cost": {
+                    "type": "number",
+                    "title": "Cost",
+                    "description": "Bit cost in local currency.",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "CostCurrency": {
+                    "type": "string",
+                    "title": "Cost Currency",
+                    "description": "The name of the local currency"
+                  },
+                  "MfgCode": {
+                    "type": "string",
+                    "title": "Manufacturer Code",
+                    "description": "The manufacturers code for the bit.",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "IADCCode": {
+                    "type": "string",
+                    "title": "IADC code",
+                    "description": "IADC bit code.",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "InitialConditionInner": {
+                    "type": "number",
+                    "title": "Initial Inner Condition",
+                    "description": "Condition of inner tooth rows (inner 2/3 of bit) (0-8).",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "InitialConditionOuter": {
+                    "type": "number",
+                    "title": "Initial Outer Condition",
+                    "description": "Condition of outer tooth rows (outer 1/3 of bit) (0-8).",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "InitialConditionDull": {
+                    "type": "string",
+                    "title": "Initial Dull Condition",
+                    "description": "Overall dull condition from IADC bit wear 2 character codes.",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen",
+                    "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-BitDullCode:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "reference-data",
+                        "EntityType": "BitDullCode"
+                      }
+                    ]
+                  },
+                  "InitialConditionLocation": {
+                    "type": "string",
+                    "title": "Initial Condition Location",
+                    "description": "Row and cone numbers for items which need location information (e.g. Cracked Cone, Lost Cone etc).",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "InitialConditionBearing": {
+                    "type": "string",
+                    "title": "Initial Condition Bearing",
+                    "description": "Condition of bit bearings (integer 0-8 or E, F, N or X)).",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "InitialConditionGauge": {
+                    "type": "string",
+                    "title": "Initial Condition Gauge",
+                    "description": "Condition of bit gauge in 1/16 of an inch. I = in gauge, else number of 16ths out of gauge.",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "InitialConditionOther": {
+                    "type": "string",
+                    "title": "Initial Condition Other",
+                    "description": "Other comments on bit condition from IADC list (BitDullCode in standard list).",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "InitialConditionReason": {
+                    "type": "string",
+                    "title": "Initial Condition Reason",
+                    "description": "Reason bit was pulled from IADC codes.",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen",
+                    "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-BitReasonPulled:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "reference-data",
+                        "EntityType": "BitReasonPulled"
+                      }
+                    ]
+                  },
+                  "FinalConditionInner": {
+                    "type": "number",
+                    "title": "Final Condition Inner",
+                    "description": "Condition of inner tooth rows (inner 2/3 of bit) (0-8).",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "FinalConditionOuter": {
+                    "type": "number",
+                    "title": "Final Condition Outer",
+                    "description": "Condition of outer tooth rows (outer 1/3 of bit) (0-8).",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "FinalConditionDull": {
+                    "type": "string",
+                    "title": "Final Condition Dull",
+                    "description": "Overall dull condition from IADC bit wear 2 character codes.",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen",
+                    "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-BitDullCode:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "reference-data",
+                        "EntityType": "BitDullCode"
+                      }
+                    ]
+                  },
+                  "FinalConditionLocation": {
+                    "type": "string",
+                    "title": "Final Condition Location",
+                    "description": "Row and cone numbers for items which need location information (e.g. Cracked Cone, Lost Cone etc).",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "FinalConditionBearing": {
+                    "type": "string",
+                    "title": "Final Condition Bearing",
+                    "description": "Condition of bit bearings (integer 0-8 or E, F, N or X).",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "FinalConditionGauge": {
+                    "type": "string",
+                    "title": "Final Condition Gauge",
+                    "description": "Condition of bit gauge in 1/16 of a inch. I = in gauge, else number of 16ths out of gauge.",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "FinalConditionOther": {
+                    "type": "string",
+                    "title": "Final Condition Other",
+                    "description": "Other comments on bit condition from IADC list (BitDullCode in Standard LISTS).",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "FinalConditionReason": {
+                    "type": "string",
+                    "title": "Final Condition Reason",
+                    "description": "Reason bit was pulled from IADC codes.",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen",
+                    "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-BitReasonPulled:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "reference-data",
+                        "EntityType": "BitReasonPulled"
+                      }
+                    ]
+                  },
+                  "DriveType": {
+                    "type": "string",
+                    "title": "Drive Type",
+                    "description": "Bit drive type (Motor, rotary table etc).",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "BitClass": {
+                    "type": "string",
+                    "title": "Bit Class",
+                    "description": "N = new, U = used.",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  }
+                },
+                "required": [
+                  "NumBit"
+                ]
+              }
+            },
+            "DrillActivity": {
+              "type": "array",
+              "title": "Drill Activity",
+              "description": "An Array of drilling activities performed during this reporting period.",
+              "x-osdu-attribution-authority": "The Open Group",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-attribution-revision": "evergreen",
+              "items": {
+                "type": "object",
+                "title": "Drilling Activity",
+                "description": "Information regarding an individual activity that is part of the Drilling Report",
+                "properties": {
+                  "ActivityID": {
+                    "type": "string",
+                    "title": "Activity ID",
+                    "description": "Identifier of the activity",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "StartDateTime": {
+                    "type": "string",
+                    "title": "Start Date Time",
+                    "description": "Date and time that activities started.",
+                    "format": "date-time",
+                    "x-osdu-frame-of-reference": "DateTime",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "EndDateTime": {
+                    "type": "string",
+                    "title": "End Date Time",
+                    "description": "Date and time that activities ended.",
+                    "format": "date-time",
+                    "x-osdu-frame-of-reference": "DateTime",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "Duration": {
+                    "type": "string",
+                    "title": "Duration",
+                    "description": "The activity duration (commonly in hours).",
+                    "format": "date-time",
+                    "x-osdu-frame-of-reference": "DateTime",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "MeasuredDepth": {
+                    "type": "number",
+                    "title": "Measured Depth",
+                    "description": "The measured depth to the drilling activity/operation.",
+                    "x-osdu-frame-of-reference": "UOM:length",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "TVD": {
+                    "type": "number",
+                    "title": "TVD",
+                    "description": "True vertical depth to the drilling activity/operation.",
+                    "x-osdu-frame-of-reference": "UOM:length",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "Phase": {
+                    "type": "string",
+                    "title": "Phase",
+                    "description": "Phase refers to a large activity classification, e.g., drill surface hole.",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "ActivityCodeID": {
+                    "type": "string",
+                    "title": "Activity Code",
+                    "description": "The activity code of the activity",
+                    "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-ActivityCode:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "reference-data",
+                        "EntityType": "ActivityCode"
+                      }
+                    ]
+                  },
+                  "DetailActivity": {
+                    "type": "string",
+                    "title": "Detail Activity",
+                    "description": "Custom string to further define an activity.",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "TypeActivityClassID": {
+                    "type": "string",
+                    "title": "Type Activity Class ID",
+                    "description": "Classifier (planned, unplanned, downtime).",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen",
+                    "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-DrillingActivityClassType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "reference-data",
+                        "EntityType": "DrillingActivityClassType"
+                      }
+                    ]
+                  },
+                  "ActivityMDTop": {
+                    "type": "number",
+                    "title": "Activity MD Top",
+                    "description": "Measured depth at the top of interval over which the activity was conducted.",
+                    "x-osdu-frame-of-reference": "UOM:length",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "ActivityMDBase": {
+                    "type": "number",
+                    "title": "Activity MD Base",
+                    "description": "Measured depth at the base of interval over which the activity was conducted.",
+                    "x-osdu-frame-of-reference": "UOM:length",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "ActivityTVDTop": {
+                    "type": "number",
+                    "title": "Activity TVD Top",
+                    "description": "TVD at the top of interval over which the activity was conducted.",
+                    "x-osdu-frame-of-reference": "UOM:length",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "ActivityTVDBase": {
+                    "type": "number",
+                    "title": "Activity TVD Base",
+                    "description": "TVD at the base of interval over which the activity was conducted.",
+                    "x-osdu-frame-of-reference": "UOM:length",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "BitMDTop": {
+                    "type": "number",
+                    "title": "Bit MD Top",
+                    "description": "Measured depth of the bit at the top of interval over which the activity was conducted.",
+                    "x-osdu-frame-of-reference": "UOM:length",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "BitMDBase": {
+                    "type": "number",
+                    "title": "Bit MD Base",
+                    "description": "Measured depth of the bit at the ase of interval over which the activity was conducted.",
+                    "x-osdu-frame-of-reference": "UOM:length",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "ActivityOutcomeID": {
+                    "type": "string",
+                    "title": "Activity Outcome",
+                    "description": "OK, Finish, interrupted, failed, etc.",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen",
+                    "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-ActivityOutcome:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "reference-data",
+                        "EntityType": "ActivityOutcome"
+                      }
+                    ]
+                  },
+                  "ActivityOutcomeDetailID": {
+                    "type": "string",
+                    "title": "Activity Outcome Detail",
+                    "description": "More detail on the outcome of the activity. For Example Injury, Operation Failed, Kick, Circulation Loss, Mud Loss",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen",
+                    "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-ActivityOutcomeDetail:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "reference-data",
+                        "EntityType": "ActivityOutcomeDetail"
+                      }
+                    ]
+                  },
+                  "OperatorID": {
+                    "type": "string",
+                    "title": "Operator ID",
+                    "description": "Reference to the Organisation that represents the Operator",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen",
+                    "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Organisation:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "master-data",
+                        "EntityType": "Organisation"
+                      }
+                    ]
+                  },
+                  "ServiceProviderID": {
+                    "type": "string",
+                    "title": "Service Provider ID",
+                    "description": "Reference to the Organisation that represents the Service Provider",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen",
+                    "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Organisation:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "master-data",
+                        "EntityType": "Organisation"
+                      }
+                    ]
+                  },
+                  "TubularID": {
+                    "type": "string",
+                    "title": "Tubular ID",
+                    "description": "A pointer to the tubular object related to this activity. Not the Hole Section that you are operating within.",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen",
+                    "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-TubularAssembly:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "work-product-component",
+                        "EntityType": "TubularAssembly"
+                      }
+                    ]
+                  },
+                  "IsOptimum": {
+                    "type": "boolean",
+                    "title": "Is Optimum",
+                    "description": "Is the activity optimum? Values are \"true\" (or \"1\") and \"false\" (or \"0\").",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "IsProductive": {
+                    "type": "boolean",
+                    "title": "Is Productive",
+                    "description": "Does activity bring closer to objective?  Values are \"true\" (or \"1\") and \"false\" (or \"0\").",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "IsOffline": {
+                    "type": "boolean",
+                    "title": "Is Offline",
+                    "description": "Is the activity an Offline activity, Values are \"true\" (or \"1\") and \"false\" (or \"0\").",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "ItemState": {
+                    "type": "string",
+                    "title": "Item State",
+                    "description": "The item state for the data object. (Actual, Planned, Unknown and Modeled)",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "Comments": {
+                    "type": "string",
+                    "title": "Comments",
+                    "description": "Comments and remarks.",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "ProprietaryActivityCode": {
+                    "type": "array",
+                    "title": "Proprietary Activity Code",
+                    "description": "Alternate proprietary activity code. For example contractor specific activity code",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen",
+                    "items": {
+                      "type": "object",
+                      "title": "Object Alias",
+                      "description": "Definition of an alias",
+                      "properties": {
+                        "Identifier": {
+                          "type": "string",
+                          "title": "Identifier",
+                          "description": "Identifier property",
+                          "x-osdu-attribution-authority": "The Open Group",
+                          "x-osdu-attribution-publication": "The OSDU Data Platform",
+                          "x-osdu-attribution-revision": "evergreen"
+                        },
+                        "Description": {
+                          "type": "string",
+                          "title": "Description",
+                          "description": "Description Property",
+                          "x-osdu-attribution-authority": "The Open Group",
+                          "x-osdu-attribution-publication": "The OSDU Data Platform",
+                          "x-osdu-attribution-revision": "evergreen"
+                        },
+                        "Authority": {
+                          "type": "string",
+                          "title": "Authority",
+                          "description": "Authority property",
+                          "x-osdu-attribution-authority": "The Open Group",
+                          "x-osdu-attribution-publication": "The OSDU Data Platform",
+                          "x-osdu-attribution-revision": "evergreen"
+                        }
+                      },
+                      "required": [
+                        "Identifier",
+                        "Authority"
+                      ]
+                    }
+                  },
+                  "ParentID": {
+                    "type": "string",
+                    "title": "Parent ID",
+                    "description": "The UID of the parent activity",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "PredecessorID": {
+                    "type": "string",
+                    "title": "Predecessor ID",
+                    "description": "The UID of the preceding activity",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "PlannedHoleDepthIn": {
+                    "type": "number",
+                    "title": "Planned Hole Depth In",
+                    "description": "The planned hole depth at the start of the activity",
+                    "x-osdu-frame-of-reference": "UOM:length",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "PlannedHoleDepthOut": {
+                    "type": "number",
+                    "title": "Planned Hole Depth Out",
+                    "description": "The planned hole depth at the end of the activity",
+                    "x-osdu-frame-of-reference": "UOM:length",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "PlannedDuration": {
+                    "type": "number",
+                    "title": "Planned Duration",
+                    "description": "The planned duration for the activity.",
+                    "x-osdu-frame-of-reference": "UOM:time",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "TargetDepth": {
+                    "type": "number",
+                    "title": "Target Depth",
+                    "description": "The target depth of the activity",
+                    "x-osdu-frame-of-reference": "UOM:length",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "OperationalNotes": {
+                    "type": "string",
+                    "title": "Operational Notes",
+                    "description": "Notes associated with the operation",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "AttachmentIDs": {
+                    "type": "array",
+                    "title": "Attachment IDs",
+                    "description": "Attachments associated with the activity",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen",
+                    "items": {
+                      "type": "string",
+                      "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-Document:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                      "x-osdu-relationship": [
+                        {
+                          "GroupType": "work-product-component",
+                          "EntityType": "Document"
+                        }
+                      ]
+                    }
+                  },
+                  "SectionDiameter": {
+                    "type": "number",
+                    "title": "Section Diameter",
+                    "description": "The Diameter of the section in which the activity took place",
+                    "x-osdu-frame-of-reference": "UOM:length",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "ObjectReference": {
+                    "type": "string",
+                    "title": "Object Reference",
+                    "description": "link to an external object or document. For example Regulatory submission, Tour sheet.",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  }
+                }
+              }
+            },
+            "WellboreID": {
+              "type": "string",
+              "title": "Wellbore ID",
+              "description": "A link to the wellbore in which these activities took place",
+              "x-osdu-attribution-authority": "The Open Group",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-attribution-revision": "evergreen",
+              "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Wellbore:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "Wellbore"
+                }
+              ]
+            },
+            "WellAlias": {
+              "type": "object",
+              "title": "Well Alias",
+              "description": "Local name defined for the Well",
+              "x-osdu-attribution-authority": "The Open Group",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-attribution-revision": "evergreen",
+              "properties": {
+                "Identifier": {
+                  "type": "string",
+                  "title": "Identifier",
+                  "description": "Identifier property",
+                  "x-osdu-attribution-authority": "The Open Group",
+                  "x-osdu-attribution-publication": "The OSDU Data Platform",
+                  "x-osdu-attribution-revision": "evergreen"
+                },
+                "Description": {
+                  "type": "string",
+                  "title": "Description",
+                  "description": "Description Property",
+                  "x-osdu-attribution-authority": "The Open Group",
+                  "x-osdu-attribution-publication": "The OSDU Data Platform",
+                  "x-osdu-attribution-revision": "evergreen"
+                },
+                "Authority": {
+                  "type": "string",
+                  "title": "Authority",
+                  "description": "Authority property",
+                  "x-osdu-attribution-authority": "The Open Group",
+                  "x-osdu-attribution-publication": "The OSDU Data Platform",
+                  "x-osdu-attribution-revision": "evergreen"
+                }
+              },
+              "required": [
+                "Identifier",
+                "Authority"
+              ]
+            },
+            "WellboreAlias": {
+              "type": "array",
+              "title": "Wellbore Alias",
+              "description": "Local name defined for the wellbore",
+              "x-osdu-attribution-authority": "The Open Group",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-attribution-revision": "evergreen",
+              "items": {
+                "type": "object",
+                "title": "Object Alias",
+                "description": "Definition of an alias",
+                "properties": {
+                  "Identifier": {
+                    "type": "string",
+                    "title": "Identifier",
+                    "description": "Identifier property",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "Description": {
+                    "type": "string",
+                    "title": "Description",
+                    "description": "Description Property",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "Authority": {
+                    "type": "string",
+                    "title": "Authority",
+                    "description": "Authority property",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  }
+                },
+                "required": [
+                  "Identifier",
+                  "Authority"
+                ]
+              }
+            },
+            "StatusInfo": {
+              "type": "array",
+              "title": "Status Info",
+              "description": "Information regarding the status of the wellbore during this reporting period",
+              "x-osdu-attribution-authority": "The Open Group",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-attribution-revision": "evergreen",
+              "items": {
+                "type": "object",
+                "title": "DrillingReportStatusInfo",
+                "description": "Status information related to a Drilling Report",
+                "properties": {
+                  "StatusDateTime": {
+                    "type": "string",
+                    "title": "Status Date Time",
+                    "description": "The date and time for which the well status is reported.",
+                    "format": "date-time",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "ReportEndMD": {
+                    "type": "number",
+                    "title": "Report End MD",
+                    "description": "Wellbore measured depth at the end of the report period.",
+                    "x-osdu-frame-of-reference": "UOM:length",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "ReportEndTVD": {
+                    "type": "number",
+                    "title": "Report End TVD",
+                    "description": "Wellbore true vertical depth at the end of the report.",
+                    "x-osdu-frame-of-reference": "UOM:length",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "PlugTopMD": {
+                    "type": "number",
+                    "title": "Plug Top MD",
+                    "description": "The measured plug back depth.",
+                    "x-osdu-frame-of-reference": "UOM:length",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "DiameterHole": {
+                    "type": "number",
+                    "title": "Hole Diameter",
+                    "description": "Hole nominal inside diameter.",
+                    "x-osdu-frame-of-reference": "UOM:length",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "DiameterHoleStartMD": {
+                    "type": "number",
+                    "title": "Diameter Hole Start MD",
+                    "description": "Measured depth to the start of the current hole diameter.",
+                    "x-osdu-frame-of-reference": "UOM:length",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "DiameterPilot": {
+                    "type": "number",
+                    "title": "Pilot Diameter",
+                    "description": "Pilot hole nominal inside diameter.",
+                    "x-osdu-frame-of-reference": "UOM:length",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "DiameterPilotPlanMD": {
+                    "type": "number",
+                    "title": "Pilot Diameter Plan MD",
+                    "description": "The planned measured depth of the pilot hole.",
+                    "x-osdu-frame-of-reference": "UOM:length",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "DiameterPilotPlanTVD": {
+                    "type": "number",
+                    "title": "Pilot Diameter Plan TVD",
+                    "description": "The planned true vertical depth of the pilot hole.",
+                    "x-osdu-frame-of-reference": "UOM:length",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "TypeWellbore": {
+                    "type": "string",
+                    "title": "Wellbore Type",
+                    "description": "Type of wellbore.",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "KickoffMD": {
+                    "type": "number",
+                    "title": "Kickoff MD",
+                    "description": "Measured depth to the kickoff point of the wellbore.",
+                    "x-osdu-frame-of-reference": "UOM:length",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "KickoffTVD": {
+                    "type": "number",
+                    "title": "Kickoff TVD",
+                    "description": "True vertical depth to the kickoff point of the wellbore.",
+                    "x-osdu-frame-of-reference": "UOM:length",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "FormationStrength": {
+                    "type": "number",
+                    "title": "Formation Strength",
+                    "description": "The measured formation strength. This should be the final measurement before the end of the report period.",
+                    "x-osdu-frame-of-reference": "UOM:mass per volume",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "FormationStrengthMD": {
+                    "type": "number",
+                    "title": "Formation Strength MD",
+                    "description": "The measured depth of the formation strength measurement.",
+                    "x-osdu-frame-of-reference": "UOM:length",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "FormationStrengthTVD": {
+                    "type": "number",
+                    "title": "Formation Strength TVD",
+                    "description": "The true vertical depth of the formation strength measurement.",
+                    "x-osdu-frame-of-reference": "UOM:length",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "CasingDiameterLast": {
+                    "type": "number",
+                    "title": "Last Casing Diameter",
+                    "description": "Diameter of the last casing joint.",
+                    "x-osdu-frame-of-reference": "UOM:length",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "CasingMDLast": {
+                    "type": "number",
+                    "title": "Last Casing MD",
+                    "description": "Measured depth of the last casing joint.",
+                    "x-osdu-frame-of-reference": "UOM:length",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "CasingTVDLast": {
+                    "type": "number",
+                    "title": "Last Casing TVD",
+                    "description": "True vertical depth of last casing joint.",
+                    "x-osdu-frame-of-reference": "UOM:length",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "PresTestType": {
+                    "type": "string",
+                    "title": "Pressure Test Type",
+                    "description": "The type of pressure test that was run.",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "MdPlanned": {
+                    "type": "number",
+                    "title": "Planned MD",
+                    "description": "The measured depth planned to be reached.",
+                    "x-osdu-frame-of-reference": "UOM:length",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "DrilledDistance": {
+                    "type": "number",
+                    "title": "Drilled Distance",
+                    "description": "Distance drilled.  This should be measured along the centerline of the wellbore.",
+                    "x-osdu-frame-of-reference": "UOM:length",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "Summary24Hr": {
+                    "type": "string",
+                    "title": "24Hr Summary",
+                    "description": "A summary of the activities performed and the status of the ongoing activities.",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "Forecast24Hr": {
+                    "type": "string",
+                    "title": "24Hr Forecast",
+                    "description": "A summary of  planned activities for the next reporting period.",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "RopCurrent": {
+                    "type": "number",
+                    "title": "Current ROP",
+                    "description": "Rate of penetration at the end of the reporting period.",
+                    "x-osdu-frame-of-reference": "UOM:length per time",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "Rig": {
+                    "type": "string",
+                    "title": "Rig",
+                    "description": "A pointer to the rig used.",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "ElapsedTimeStart": {
+                    "type": "number",
+                    "title": "Elapsed Start Time",
+                    "description": "Time from the start of operations (commonly in days).",
+                    "x-osdu-frame-of-reference": "UOM:time",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "ElapsedTimeSpud": {
+                    "type": "number",
+                    "title": "Elapsed Spud Time",
+                    "description": "Time since the bit broke ground (commonly in days).",
+                    "x-osdu-frame-of-reference": "UOM:time",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "ElapsedTimeLoc": {
+                    "type": "number",
+                    "title": "Elapsed Time Location",
+                    "description": "Time the rig has been on location (commonly in days).",
+                    "x-osdu-frame-of-reference": "UOM:time",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "ElapsedTimeDrill": {
+                    "type": "number",
+                    "title": "Elapsed Drilling Time",
+                    "description": "Drilling time.",
+                    "x-osdu-frame-of-reference": "UOM:time",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "RopAverage": {
+                    "type": "number",
+                    "title": "Average ROP",
+                    "description": "Average rate of penetration.",
+                    "x-osdu-frame-of-reference": "UOM:length per time",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "Supervisor": {
+                    "type": "string",
+                    "title": "Supervisor",
+                    "description": "Name of the rig supervisor",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "Engineer": {
+                    "type": "string",
+                    "title": "Engineer",
+                    "description": "Name of the operator's drilling engineer.",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "Geologist": {
+                    "type": "string",
+                    "title": "Geologist",
+                    "description": "Name of operator's wellsite geologist.",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "ElapsedTimeDrillRot": {
+                    "type": "number",
+                    "title": "Elapsed Time Rotary Drilling",
+                    "description": "Time spent rotary drilling.",
+                    "x-osdu-frame-of-reference": "UOM:time",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "ElapsedTimeDrillSlid": {
+                    "type": "number",
+                    "title": "Elapsed Time Sliding Drilling",
+                    "description": "Time spent slide drilling from the start of the bit run.",
+                    "x-osdu-frame-of-reference": "UOM:time",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "ElapsedTimeCirc": {
+                    "type": "number",
+                    "title": "Elapsed Time Circulating",
+                    "description": "Time spent circulating from the start of the bit run.",
+                    "x-osdu-frame-of-reference": "UOM:time",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "ElapsedTimeReam": {
+                    "type": "number",
+                    "title": "Elapsed Time Reaming",
+                    "description": "Time spent reaming from the start of the bit run.",
+                    "x-osdu-frame-of-reference": "UOM:time",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "ElapsedTimeHold": {
+                    "type": "number",
+                    "title": "Relapsed Time Holding",
+                    "description": "Time spent with no directional drilling work (commonly in hours).",
+                    "x-osdu-frame-of-reference": "UOM:time",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "ElapsedTimeSteering": {
+                    "type": "number",
+                    "title": "Elapsed Time Steering",
+                    "description": "Time spent steering the bottomhole assembly (commonly in hours).",
+                    "x-osdu-frame-of-reference": "UOM:time",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "DistDrillRot": {
+                    "type": "number",
+                    "title": "Drilled Distance Rotating",
+                    "description": "Distance drilled: rotating.",
+                    "x-osdu-frame-of-reference": "UOM:length",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "DistDrillSlid": {
+                    "type": "number",
+                    "title": "Drilled Distance Sliding",
+                    "description": "Distance drilled: sliding.",
+                    "x-osdu-frame-of-reference": "UOM:length",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "DistReam": {
+                    "type": "number",
+                    "title": "Drilled Distance Reaming",
+                    "description": "Distance reamed.",
+                    "x-osdu-frame-of-reference": "UOM:length",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "DistHold": {
+                    "type": "number",
+                    "title": "Drilled Distance Holding Angle",
+                    "description": "Distance covered while holding angle with a steerable drilling assembly.",
+                    "x-osdu-frame-of-reference": "UOM:length",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "DistSteering": {
+                    "type": "number",
+                    "title": "Drilled Distance Steering",
+                    "description": "Distance covered while actively steering with a steerable drilling assembly.",
+                    "x-osdu-frame-of-reference": "UOM:length",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "NumPOB": {
+                    "type": "integer",
+                    "title": "Number POB",
+                    "description": "Total number of personnel on board the rig.",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "NumContract": {
+                    "type": "integer",
+                    "title": "Number of contractors",
+                    "description": "Number of contractor personnel on the rig.",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "NumOperator": {
+                    "type": "integer",
+                    "title": "Number of operator personnel",
+                    "description": "Number of operator personnel on the rig.",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "NumService": {
+                    "type": "integer",
+                    "title": "Number of Service Personnel",
+                    "description": "Number of service company personnel on the rig.",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "NumAFE": {
+                    "type": "string",
+                    "title": "AFE number",
+                    "description": "Authorization for expenditure (AFE) number that this cost item applies to.",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "ConditionHole": {
+                    "type": "string",
+                    "title": "Hole Condition",
+                    "description": "Description of the hole condition.",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "TvdLot": {
+                    "type": "number",
+                    "title": "LOT TVD",
+                    "description": "True vertical depth of a leak off test point.",
+                    "x-osdu-frame-of-reference": "UOM:length",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "PresLotEmw": {
+                    "type": "number",
+                    "title": "Pressure LOT EMW",
+                    "description": "Leak off test equivalent mud weight.",
+                    "x-osdu-frame-of-reference": "UOM:mass per volume",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "PresKickTol": {
+                    "type": "number",
+                    "title": "Kick Tolerance Pressure",
+                    "description": "Kick tolerance pressure.",
+                    "x-osdu-frame-of-reference": "UOM:pressure",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "VolKickTol": {
+                    "type": "number",
+                    "title": "Kick Tolerance Volume",
+                    "description": "Kick tolerance volume.",
+                    "x-osdu-frame-of-reference": "UOM:volume",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "MAASP": {
+                    "type": "number",
+                    "title": "MAASP",
+                    "description": "Maximum allowable shut-in casing pressure.",
+                    "x-osdu-frame-of-reference": "UOM:pressure",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "Tubular": {
+                    "type": "string",
+                    "title": "Tubular",
+                    "description": "A pointer to the tubular (assembly) used in this report period.",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "CostDayMud": {
+                    "type": "number",
+                    "title": "Daily Mud Cost",
+                    "description": "The cost per day of the mud used",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  }
+                },
+                "required": [
+                  "StatusDateTime"
+                ]
+              }
+            },
+            "FluidsIDs": {
+              "type": "array",
+              "title": "Fluid IDs",
+              "description": "References to the Fluids Reports generated during this reporting period.",
+              "x-osdu-attribution-authority": "The Open Group",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-attribution-revision": "evergreen",
+              "items": {
+                "type": "string",
+                "pattern": "^[\\w\\-\\.]+:master-data\\-\\-FluidsReport:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                "x-osdu-relationship": [
+                  {
+                    "GroupType": "master-data",
+                    "EntityType": "FluidsReport"
+                  }
+                ]
+              }
+            },
+            "PorePressure": {
+              "type": "array",
+              "title": "Pore Pressure",
+              "description": "A reference to the PPFG information for this reporting period",
+              "x-osdu-attribution-authority": "The Open Group",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-attribution-revision": "evergreen",
+              "items": {
+                "type": "string",
+                "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-PPFGDataset:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                "x-osdu-relationship": [
+                  {
+                    "GroupType": "work-product-component",
+                    "EntityType": "PPFGDataset"
+                  }
+                ]
+              }
+            },
+            "TimedComments": {
+              "type": "array",
+              "title": "TimedComments",
+              "description": "A series of time stamped comments which comprise part of this operations report.",
+              "x-osdu-attribution-authority": "The Open Group",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-attribution-revision": "evergreen",
+              "items": {
+                "type": "object",
+                "title": "Timed Comment",
+                "description": "Information about a series of drilling activities.",
+                "properties": {
+                  "Comment": {
+                    "type": "string",
+                    "title": "Comment",
+                    "description": "A comment that has been recorded at a particular time",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  },
+                  "CommentTime": {
+                    "type": "string",
+                    "title": "Comment Time",
+                    "description": "The time that the comment was made",
+                    "format": "date-time",
+                    "x-osdu-frame-of-reference": "DateTime",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": "evergreen"
+                  }
+                }
+              }
+            },
+            "CustomerId": {
+              "type": "string",
+              "title": "Customer ID",
+              "description": "Reference to the Organisation that represents the Customer",
+              "x-osdu-attribution-authority": "The Open Group",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-attribution-revision": "evergreen",
+              "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Organisation:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "Organisation"
+                }
+              ]
+            },
+            "StewardingCompanyID": {
+              "type": "string",
+              "title": "Stewarding Company ID",
+              "description": "Reference to the Organisation that represents the Stewarding Company",
+              "x-osdu-attribution-authority": "The Open Group",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-attribution-revision": "evergreen",
+              "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Organisation:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "Organisation"
+                }
+              ]
+            },
+            "StewardingCompanyTeamID": {
+              "type": "string",
+              "title": "Stewarding Company Team ID",
+              "description": "Reference to the Organisation that represents the Stewarding Company Team",
+              "x-osdu-attribution-authority": "The Open Group",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-attribution-revision": "evergreen",
+              "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Organisation:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "Organisation"
+                }
+              ]
+            },
+            "Weather": {
+              "type": "array",
+              "title": "Weather",
+              "description": "Meteorological readings for the defined time period on an operations report",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML",
+              "x-osdu-attribution-revision": "1.0.0",
+              "items": {
+                "type": "object",
+                "title": "Weather",
+                "description": "Meteorological readings for the defined time period on an operations report",
+                "properties": {
+                  "Agency": {
+                    "type": "string",
+                    "title": "Agency",
+                    "description": "Name of company that supplied the weather data.",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "PrecipitationAmount": {
+                    "type": "number",
+                    "title": "Precipitation Amount",
+                    "description": "Amount of precipitation.",
+                    "x-osdu-frame-of-reference": "UOM:length",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "SeaCurrentDirection": {
+                    "type": "number",
+                    "title": "Sea Current Direction",
+                    "description": "Azimuth of current.",
+                    "x-osdu-frame-of-reference": "UOM:plane angle",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "WaveDirection": {
+                    "type": "number",
+                    "title": "Wave Direction",
+                    "description": "The direction from which the waves are coming, measured from true north.",
+                    "x-osdu-frame-of-reference": "UOM:plane angle",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "WindDirection": {
+                    "type": "number",
+                    "title": "Wind Direction",
+                    "description": "The direction from which the wind is blowing, measured from true north.",
+                    "x-osdu-frame-of-reference": "UOM:plane angle",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "BarometricPressure": {
+                    "type": "number",
+                    "title": "Barometric Pressure",
+                    "description": "Atmospheric pressure.",
+                    "x-osdu-frame-of-reference": "UOM:pressure",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "BeaufortScaleNumber": {
+                    "type": "number",
+                    "title": "Beaufort Scale Number",
+                    "description": "The Beaufort wind force scale is a system used to estimate and report wind speeds when no measuring apparatus is available. It was invented in the early 19th century by Admiral Sir Francis Beaufort of the British Navy as a way to interpret winds from conditions. Values range from 0 (calm) to 12 (hurricane force).",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "CloudCeiling": {
+                    "type": "number",
+                    "title": "Cloud Ceiling",
+                    "description": "Height of cloud cover.",
+                    "x-osdu-frame-of-reference": "UOM:length",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "Comments": {
+                    "type": "string",
+                    "title": "Comments",
+                    "description": "Comments and remarks",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "CloudCover": {
+                    "type": "string",
+                    "title": "CloudCover",
+                    "description": "Description of cloud cover.",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "CurrentSeaSpeed": {
+                    "type": "number",
+                    "title": "Current Sea Speed",
+                    "description": "The speed of the ocean current.",
+                    "x-osdu-frame-of-reference": "UOM:length per time",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "DateTime": {
+                    "type": "string",
+                    "title": "Date Time",
+                    "description": "Date and time that weather was observed",
+                    "format": "date-time",
+                    "x-osdu-frame-of-reference": "DateTime",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "WaveHeightAverage": {
+                    "type": "number",
+                    "title": "Wave Height Average",
+                    "description": "Average height of the sea waves.",
+                    "x-osdu-frame-of-reference": "UOM:length",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "WaveHeightMax": {
+                    "type": "number",
+                    "title": "Wave Height Maximum",
+                    "description": "The maximum wave height.",
+                    "x-osdu-frame-of-reference": "UOM:length",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "WavePeriod": {
+                    "type": "string",
+                    "title": "Wave Period",
+                    "description": "The elapsed time between the passing of two wave tops.",
+                    "format": "time",
+                    "x-osdu-frame-of-reference": "DateTime",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "WaveSignificant": {
+                    "type": "number",
+                    "title": "Wave Significant",
+                    "description": "An average of the higher 1/3 of the wave heights passing during a sample period (typically 20 to 30 minutes).",
+                    "x-osdu-frame-of-reference": "UOM:length",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "SeaTemp": {
+                    "type": "number",
+                    "title": "Sea Temperature",
+                    "description": "Sea temperature.",
+                    "x-osdu-frame-of-reference": "UOM:thermodynamic temperature",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "SurfaceTempMin": {
+                    "type": "number",
+                    "title": "Surface Temperature Minimum",
+                    "description": "Minimum temperature above ground. Temperature of the atmosphere.",
+                    "x-osdu-frame-of-reference": "UOM:thermodynamic temperature",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "SurfaceTempMax": {
+                    "type": "number",
+                    "title": "Surface Temperature Maximum",
+                    "description": "Maximum temperature above ground.",
+                    "x-osdu-frame-of-reference": "UOM:thermodynamic temperature",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "WindChillTemp": {
+                    "type": "number",
+                    "title": "Wind Chill Temperature",
+                    "description": "A measure of the combined chilling effect of wind and low temperature on living things, also named chill factor, e.g., according to the US weather service table, an air temperature of 30 degF with a 10 mph corresponds to a windchill of 22 degF.",
+                    "x-osdu-frame-of-reference": "UOM:thermodynamic temperature",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "WeatherType": {
+                    "type": "string",
+                    "title": "Weather Type",
+                    "description": "Type of weather.",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2,
+                    "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-WeatherType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "reference-data",
+                        "EntityType": "WeatherType"
+                      }
+                    ]
+                  },
+                  "WindSpeed": {
+                    "type": "number",
+                    "title": "Wind Speed",
+                    "description": "Wind speed.",
+                    "x-osdu-frame-of-reference": "UOM:length per time",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "Visibility": {
+                    "type": "number",
+                    "title": "Horizontal Visibility",
+                    "description": "Horizontal visibility.",
+                    "x-osdu-frame-of-reference": "UOM:length",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  }
+                },
+                "required": [
+                  "DateTime"
+                ]
+              }
+            },
+            "Personnel": {
+              "type": "array",
+              "title": "Personnel",
+              "description": "Snapshot of operations personnel broken down by each company on the rig at the time of the report.",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML",
+              "x-osdu-attribution-revision": "1.0.0",
+              "items": {
+                "type": "object",
+                "title": "Personnel",
+                "description": "Snapshot of operations personnel broken down by each company on the rig at the time of the report.",
+                "properties": {
+                  "OrganizationID": {
+                    "type": "string",
+                    "title": "Organization ID",
+                    "description": "A Reference to the organization for which have their headcount measured during this report",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": 2,
+                    "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Organisation:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "master-data",
+                        "EntityType": "Organisation"
+                      }
+                    ]
+                  },
+                  "HeadCount": {
+                    "type": "number",
+                    "title": "Head Count",
+                    "description": "Number of people on board for that company.",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "TotalTime": {
+                    "type": "number",
+                    "title": "Total Time",
+                    "description": "Total time worked by the company (commonly in hours).",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "OrganizationRole": {
+                    "type": "string",
+                    "title": "Organization Role",
+                    "description": "Role the organization is playing for the service being provided",
+                    "example": "namespace:reference-data--PersonnelOrganisationRole:rig_contractor:",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-PersonnelOrganisationRole:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "reference-data",
+                        "EntityType": "PersonnelOrganisationRole"
+                      }
+                    ]
+                  },
+                  "ServiceType": {
+                    "type": "string",
+                    "title": "Service Type",
+                    "description": "Service provided by the company.",
+                    "example": "namespace:reference-data--PersonnelServiceType:cementing:",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2,
+                    "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-PersonnelServiceType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "reference-data",
+                        "EntityType": "PersonnelServiceType"
+                      }
+                    ]
+                  },
+                  "Comments": {
+                    "type": "string",
+                    "title": "Comments",
+                    "description": "Comments and remarks",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform"
+                  }
+                },
+                "required": [
+                  "OrganizationID",
+                  "HeadCount"
+                ]
+              }
+            },
+            "PumpOp": {
+              "type": "array",
+              "title": "Pump Operations",
+              "description": "Information related to pump operations on a drilling/operations report",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML",
+              "x-osdu-attribution-revision": "1.0.0",
+              "items": {
+                "type": "object",
+                "title": "Pump Operations",
+                "description": "Information related to pump operations on a drilling/operations report",
+                "properties": {
+                  "DateTime": {
+                    "type": "string",
+                    "title": "Date Time",
+                    "description": "Date and time when the pump operation occurred",
+                    "format": "date-time",
+                    "x-osdu-frame-of-reference": "DateTime",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "LinerInnerDiameter": {
+                    "type": "number",
+                    "title": "Liner Inner Diameter",
+                    "description": "Liner inside diameter.",
+                    "x-osdu-frame-of-reference": "UOM:length",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "StrokeLength": {
+                    "type": "number",
+                    "title": "Stroke Length",
+                    "description": "Pump stroke length.",
+                    "x-osdu-frame-of-reference": "UOM:length",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "MeasuredDepthBit": {
+                    "type": "number",
+                    "title": "Bit Measure Depth",
+                    "description": "Along-hole measured depth of the measurement from the drill datum.",
+                    "x-osdu-frame-of-reference": "UOM:length",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "PumpEfficiency": {
+                    "type": "number",
+                    "title": "Pump Efficiency",
+                    "description": "Pump efficiency.",
+                    "x-osdu-frame-of-reference": "UOM:power per power",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "PumpPressure": {
+                    "type": "number",
+                    "title": "Pump Pressure",
+                    "description": "Pump pressure recorded.",
+                    "x-osdu-frame-of-reference": "UOM:pressure",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "PumpNumber": {
+                    "type": "string",
+                    "title": "Pump Number",
+                    "description": "The sequence number of the pump (e.g., pump 1)",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "PumpOutput": {
+                    "type": "number",
+                    "title": "Pump Output",
+                    "description": "Pump output (included for efficiency).",
+                    "x-osdu-frame-of-reference": "UOM:volume per time",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "StrokeRate": {
+                    "type": "number",
+                    "title": "Pump Stroke Rate",
+                    "description": "Pump rate (strokes per minute).",
+                    "x-osdu-frame-of-reference": "UOM:angular velocity",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "OperationType": {
+                    "type": "string",
+                    "title": "Pump Operation Type",
+                    "description": "Type of pump operation.",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2,
+                    "x-osdu-existing-standard": "Energistics",
+                    "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-PumpOpType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "reference-data",
+                        "EntityType": "PumpOpType"
+                      }
+                    ]
+                  },
+                  "Comments": {
+                    "type": "string",
+                    "title": "Comments",
+                    "description": "Comments and remarks",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform"
+                  },
+                  "PumpDisplacement": {
+                    "type": "number",
+                    "title": "Pump Displacement",
+                    "description": "how much fluid is moved by the pump in one cycle",
+                    "x-osdu-frame-of-reference": "UOM:volume per rotation",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform"
+                  },
+                  "PumpModelName": {
+                    "type": "string",
+                    "title": "Pump Model Name",
+                    "description": "The model name for the pump",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform"
+                  }
+                },
+                "required": [
+                  "DateTime"
+                ]
+              }
+            },
+            "MudVolume": {
+              "type": "array",
+              "title": "Mud Volume",
+              "description": "Information related to mud volumes for drilling/operations report",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML",
+              "x-osdu-attribution-revision": "1.0.0",
+              "items": {
+                "type": "object",
+                "title": "MudVolume",
+                "description": "Information related to mud volumes for drilling/operations report",
+                "properties": {
+                  "MudVolumeStart": {
+                    "type": "number",
+                    "title": "Mud Volume Start",
+                    "description": "Volume of mud at start of report interval (including pits and hole).",
+                    "x-osdu-frame-of-reference": "UOM:volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "MudVolumeEnd": {
+                    "type": "number",
+                    "title": "Mud Volume End",
+                    "description": "Volume of mud at the end of the report interval (including pits and hole).",
+                    "x-osdu-frame-of-reference": "UOM:volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "DateTime": {
+                    "type": "string",
+                    "title": "Date Time",
+                    "description": "Date and time of the mud volume",
+                    "format": "date-time",
+                    "x-osdu-frame-of-reference": "Datetime",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform"
+                  },
+                  "MudVolumeMeasureDepthTop": {
+                    "type": "number",
+                    "title": "Mud Volume Measure Depth Top",
+                    "description": "Top measured depth for which the mud volume reading was conducted",
+                    "x-osdu-frame-of-reference": "UOM:length",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform"
+                  },
+                  "MudVolumeMeasureDepthBase": {
+                    "type": "number",
+                    "title": "Mud Volume Measure Depth Base",
+                    "description": "Bottom measured depth for which the mud volume reading was conducted",
+                    "x-osdu-frame-of-reference": "UOM:length",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform"
+                  },
+                  "MudVolumeTvdTop": {
+                    "type": "number",
+                    "title": "Mud Volume TVD Top",
+                    "description": "Top  true vertical depth interval over which the mud volume reading was conducted.",
+                    "x-osdu-frame-of-reference": "UOM:length",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform"
+                  },
+                  "MudVolumeTvdBase": {
+                    "type": "number",
+                    "title": "Mud Volume TVD Base",
+                    "description": "Bottom true vertical depth interval over which the mud volume reading was conducted.",
+                    "x-osdu-frame-of-reference": "UOM:length",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform"
+                  },
+                  "MudVolumeBuilt": {
+                    "type": "string",
+                    "title": "Mud Volume Built",
+                    "description": "Volume of mud built.",
+                    "x-osdu-frame-of-reference": "UOM:volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "MudVolumeCasing": {
+                    "type": "number",
+                    "title": "Mud Volume Casing",
+                    "description": "Volume of mud contained in casing annulus.",
+                    "x-osdu-frame-of-reference": "UOM:volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "MudVolumeDumped": {
+                    "type": "number",
+                    "title": "Mud Volume Dumped",
+                    "description": "Volume of mud dumped.",
+                    "x-osdu-frame-of-reference": "UOM:volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "MudVolumeHole": {
+                    "type": "number",
+                    "title": "Mud Volume Hole",
+                    "description": "Volume of mud contained in the openhole annulus.",
+                    "x-osdu-frame-of-reference": "UOM:volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "MudVolumeReceived": {
+                    "type": "number",
+                    "title": "Mud Volume Received",
+                    "description": "Volume of mud received from mud warehouse.",
+                    "x-osdu-frame-of-reference": "UOM:volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "MudVolumeReturned": {
+                    "type": "number",
+                    "title": "Mud Volume Returned",
+                    "description": "Volume of mud returned to mud warehouse.",
+                    "x-osdu-frame-of-reference": "UOM:volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "MudVolumeRiser": {
+                    "type": "number",
+                    "title": "Mud Volume Riser",
+                    "description": "Volume of mud contained in riser section annulus.",
+                    "x-osdu-frame-of-reference": "UOM:volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "MudVolumeString": {
+                    "type": "number",
+                    "title": "Mud Volume String",
+                    "description": "Volume of mud contained within active string.",
+                    "x-osdu-frame-of-reference": "UOM:volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "TotalMudVolume": {
+                    "type": "number",
+                    "title": "Total Mud Volume",
+                    "description": "Actual total mud volume that was measured",
+                    "x-osdu-frame-of-reference": "UOM:volume",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform"
+                  },
+                  "ExpectedMudVolume": {
+                    "type": "number",
+                    "title": "Expected Mud Volume",
+                    "description": "Total mud volume that was expected",
+                    "x-osdu-frame-of-reference": "UOM:volume",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform"
+                  },
+                  "Comments": {
+                    "type": "string",
+                    "title": "Comments",
+                    "description": "Comments and remarks",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform"
+                  }
+                },
+                "required": [
+                  "DateTime"
+                ]
+              }
+            },
+            "Inventory": {
+              "type": "array",
+              "title": "Inventory",
+              "description": "Quantity of items inventoried during drilling and/or operations",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML",
+              "x-osdu-attribution-revision": "1.0.0",
+              "items": {
+                "type": "object",
+                "title": "Inventory",
+                "description": "Quantity of items inventoried during drilling and/or operations",
+                "properties": {
+                  "CostItem": {
+                    "type": "string",
+                    "title": "Item Cost",
+                    "description": "Cost for the product for the report interval.",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "VolumeItem": {
+                    "type": "number",
+                    "title": "Volume Item",
+                    "description": "Item volume per unit.",
+                    "x-osdu-frame-of-reference": "UOM:volume",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform"
+                  },
+                  "WeightItem": {
+                    "type": "number",
+                    "title": "WeightItem",
+                    "description": "Item weight per unit.",
+                    "x-osdu-frame-of-reference": "UOM:mass",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform"
+                  },
+                  "ItemName": {
+                    "type": "number",
+                    "title": "Item Name",
+                    "description": "Name or type of inventory item.",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "PricePerUnit": {
+                    "type": "number",
+                    "title": "Item Price Per Unit",
+                    "description": "Price per item unit, assume same currency for all items.",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "TotalQuantityAdjustment": {
+                    "type": "number",
+                    "title": "Total Quantity Adjustment",
+                    "description": "Daily quantity adjustment/correction.",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "TotalQuantityOnLocation": {
+                    "type": "number",
+                    "title": "Total Quantity on Location",
+                    "description": "Amount of the item remaining on location after all adjustments for the report interval.",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "TotalQuantityReceived": {
+                    "type": "number",
+                    "title": "Total Quantity Received",
+                    "description": "Quantity received at the site.",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "TotalQuantityReturned": {
+                    "type": "number",
+                    "title": "Total Quantity Returned",
+                    "description": "Quantity returned to base from site.",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "TotalQuantityStart": {
+                    "type": "number",
+                    "title": "Total Quantity Start",
+                    "description": "Start quantity for report interval.",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "TotalQuantityUsed": {
+                    "type": "number",
+                    "title": "Total Quantity Used",
+                    "description": "Quantity used for the report interval.",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "Comments": {
+                    "type": "string",
+                    "title": "Comments",
+                    "description": "Comments and remarks",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform"
+                  },
+                  "ItemDescription": {
+                    "type": "string",
+                    "title": "Item Description",
+                    "description": "Description of the inventory item",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform"
+                  }
+                }
+              }
+            },
+            "Cost": {
+              "type": "array",
+              "title": "Cost",
+              "description": "Cost information captured for a defined time period during operations and/or drilling",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML",
+              "x-osdu-attribution-revision": "1.0.0",
+              "items": {
+                "type": "object",
+                "title": "Cost",
+                "description": "Cost information captured for a defined time period during operations and/or drilling",
+                "properties": {
+                  "Comments": {
+                    "type": "string",
+                    "title": "Comments",
+                    "description": "Comments and remarks",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform"
+                  },
+                  "TotalCostAmount": {
+                    "type": "number",
+                    "title": "Total Cost Amount",
+                    "description": "Total cost for the item for this period",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform"
+                  },
+                  "CostCurrency": {
+                    "type": "string",
+                    "title": "Cost Currency",
+                    "description": "Currency used for Cost Amount",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform"
+                  },
+                  "CostClass": {
+                    "type": "string",
+                    "title": "Cost Class Code",
+                    "description": "Cost class code.",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "CostCode": {
+                    "type": "string",
+                    "title": "Cost Code",
+                    "description": "Cost code.",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "CostGroup": {
+                    "type": "string",
+                    "title": "Cost Group",
+                    "description": "Cost group code.",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "ItemDescription": {
+                    "type": "string",
+                    "title": "Item Description",
+                    "description": "Description of the cost item.",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "UnitCost": {
+                    "type": "number",
+                    "title": "Unit Cost",
+                    "description": "Cost per item, assume same currency.",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "CostSubCode": {
+                    "type": "string",
+                    "title": "Cost Subcode",
+                    "description": "Cost subcode.",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "IsEstimated": {
+                    "type": "boolean",
+                    "title": "Estimated Flag",
+                    "description": "Is this an estimated cost?",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "IsCarryOver": {
+                    "type": "boolean",
+                    "title": "Carry Over Flag",
+                    "description": "Is this item carried from day to day?",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "IsRental": {
+                    "type": "boolean",
+                    "title": "Rental Flag",
+                    "description": "Is this item a rental?",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "UnitKind": {
+                    "type": "string",
+                    "title": "Unit Kind",
+                    "description": "The kind of cost item specified (e.g., barrel, sack, gallon)",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "UnitSize": {
+                    "type": "number",
+                    "title": "Unit Size",
+                    "description": "Quantity of the unit kind (e.g., 50)",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "TagName": {
+                    "type": "string",
+                    "title": "Item Identification Tag",
+                    "description": "An identification tag for the item. A serial number is a type of identification tag; however, some tags contain many pieces of information. This element only identifies the tag and does not describe the contents.",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "VendorName": {
+                    "type": "string",
+                    "title": "Item Vendor Name",
+                    "description": "Name of the vendor.",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "AFENumber": {
+                    "type": "string",
+                    "title": "AFE Number",
+                    "description": "AFE number that this cost item applies to.",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "InvoiceNumber": {
+                    "type": "string",
+                    "title": "Invoice Number",
+                    "description": "Invoice number for cost item; the bill is sent to the operator.",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "PONumber": {
+                    "type": "string",
+                    "title": "Purchase Order Number",
+                    "description": "Purchase order number provided by the operator.",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "ItemSerialNumber": {
+                    "type": "string",
+                    "title": "Item Serial Number",
+                    "description": "Serial number.",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "TicketNumber": {
+                    "type": "string",
+                    "title": "Ticket Number",
+                    "description": "The field ticket number issued by the service company on location.",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "VendorNumber": {
+                    "type": "string",
+                    "title": "Vendor Number",
+                    "description": "Vendor number.",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "CostPoolName": {
+                    "type": "string",
+                    "title": "Cost Pool Name",
+                    "description": "Name of pool/reservoir that this cost item can be accounted to.",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "TotalQuantityItemsUsed": {
+                    "type": "integer",
+                    "title": "Total Quantity Items Used",
+                    "description": "Number of cost items used that day, e.g., 1 rig dayrate, 30 joints of casing.",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "ActivityPhaseID": {
+                    "type": "string",
+                    "title": "Activity Phase",
+                    "description": "Activity code classification describing higher level steps in the Well Activity",
+                    "example": "namespace:reference-data--WellActivityPhaseType:LCOMP:",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-WellActivityPhaseType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "reference-data",
+                        "EntityType": "WellActivityPhaseType"
+                      }
+                    ]
+                  },
+                  "InUse": {
+                    "type": "boolean",
+                    "title": "In Use",
+                    "description": "Used to indicate if Equipment or Service in scope for the Cost Item is being used. Can drive different Standby/In Use Rental Rates where applicable.",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform"
+                  },
+                  "ProductType": {
+                    "type": "string",
+                    "title": "Product Type",
+                    "description": "High Level cost category qualifier",
+                    "example": "namespace:reference-data--WellSiteProductType:cement:",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-WellSiteProductType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "reference-data",
+                        "EntityType": "WellSiteProductType"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "TotalCostAmount",
+                  "CostCurrency"
+                ]
+              }
+            },
+            "HSE": {
+              "type": "array",
+              "title": "HSE",
+              "description": "Health Safety or Environment events that occurred since the last drilling/operation report. Captures data related to HSE events (e.g., tests, inspections, meetings, and drills), test values (e.g., pressure tested to), and/or incidents (e.g., discharges, non-compliance notices received, etc.).",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML",
+              "x-osdu-attribution-revision": "1.0.0",
+              "items": {
+                "type": "object",
+                "title": "Health Safety Environment",
+                "description": "Health Safety or Environment events that occurred since the last drilling/operation report. Captures data related to HSE events (e.g., tests, inspections, meetings, and drills), test values (e.g., pressure tested to), and/or incidents (e.g., discharges, non-compliance notices received, etc.).",
+                "properties": {
+                  "Comments": {
+                    "type": "string",
+                    "title": "Comments",
+                    "description": "Comments and remarks",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform"
+                  },
+                  "DaysIncidentFree": {
+                    "type": "integer",
+                    "title": "Days Incident Free",
+                    "description": "Incident free duration (commonly in days).",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "VolumeFluidDischarged": {
+                    "type": "number",
+                    "title": "Volume Fluid Discharged",
+                    "description": "Daily whole mud discarded.",
+                    "x-osdu-frame-of-reference": "UOM:volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "LastAbandonDrillDate": {
+                    "type": "string",
+                    "title": "Last Abandon Drill Date",
+                    "description": "Last abandonment drill.",
+                    "format": "date-time",
+                    "x-osdu-frame-of-reference": "DateTime",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "LastBopDrillDate": {
+                    "type": "string",
+                    "title": "Last BOP Drill Date",
+                    "description": "Last blow out preventer drill.",
+                    "format": "date-time",
+                    "x-osdu-frame-of-reference": "DateTime",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "LastBopPressureTestDate": {
+                    "type": "string",
+                    "title": "Last BOP Pressure Test Date",
+                    "description": "Last blow out preventer pressure test.",
+                    "format": "date-time",
+                    "x-osdu-frame-of-reference": "DateTime",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "LastCasingPressureTestDate": {
+                    "type": "string",
+                    "title": "Last Casing Pressure Test Date",
+                    "description": "Last casing pressure test date and time.",
+                    "format": "date-time",
+                    "x-osdu-frame-of-reference": "DateTime",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "LastDiverterDrillDate": {
+                    "type": "string",
+                    "title": "Last Diverter Drill Date",
+                    "description": "Last diverter drill.",
+                    "format": "date-time",
+                    "x-osdu-frame-of-reference": "DateTime",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "LastFireBoatDrillDate": {
+                    "type": "string",
+                    "title": "Last Fire Boat Drill Date",
+                    "description": "Last fire or life boat drill.",
+                    "format": "date-time",
+                    "x-osdu-frame-of-reference": "DateTime",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "LastRigInspectionDate": {
+                    "type": "string",
+                    "title": "Last Rig Inspection Date",
+                    "description": "Last rig inspection/check.",
+                    "format": "date-time",
+                    "x-osdu-frame-of-reference": "DateTime",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "LastSafetyInspectionDate": {
+                    "type": "string",
+                    "title": "Last Safety Inspection Date",
+                    "description": "Last safety inspection.",
+                    "format": "date-time",
+                    "x-osdu-frame-of-reference": "DateTime",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "LastSafetyMeetingDate": {
+                    "type": "string",
+                    "title": "Last Safety Meeting Date",
+                    "description": "Last safety meeting.",
+                    "format": "date-time",
+                    "x-osdu-frame-of-reference": "DateTime",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "LastTripDrillDate": {
+                    "type": "string",
+                    "title": "Last Trip Drill Date",
+                    "description": "Last trip drill.",
+                    "format": "date-time",
+                    "x-osdu-frame-of-reference": "DateTime",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "NextBopPresTestDate": {
+                    "type": "string",
+                    "title": "Next BOP Pressure Test Date",
+                    "description": "Next blow out preventer pressure test.",
+                    "format": "date-time",
+                    "x-osdu-frame-of-reference": "DateTime",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "NonComplianceIssued": {
+                    "type": "boolean",
+                    "title": "Non-Compliance Issued",
+                    "description": "Inspection non-compliance notice served?",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "TotalStopCards": {
+                    "type": "integer",
+                    "title": "Total Stop Cards",
+                    "description": "Number of health, safety and environment incidents reported.",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "PressureAnnular": {
+                    "type": "number",
+                    "title": "Pressure Annular",
+                    "description": "Blow out preventer annular preventer pressure tested to.",
+                    "x-osdu-frame-of-reference": "UOM:pressure",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "PressureChokeLine": {
+                    "type": "number",
+                    "title": "Pressure Choke Line",
+                    "description": "Choke line pressure tested to.",
+                    "x-osdu-frame-of-reference": "UOM:pressure",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "PressureChokeMan": {
+                    "type": "number",
+                    "title": "Pressure Choke Man",
+                    "description": "Choke line manifold pressure tested to.",
+                    "x-osdu-frame-of-reference": "UOM:pressure",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "PressureDiverter": {
+                    "type": "number",
+                    "title": "Pressure Diverter",
+                    "description": "Blow out preventer diverter pressure tested to.",
+                    "x-osdu-frame-of-reference": "UOM:pressure",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "PressureKellyHose": {
+                    "type": "number",
+                    "title": "Pressure Kelly Hose",
+                    "description": "Kelly hose pressure tested to.",
+                    "x-osdu-frame-of-reference": "UOM:pressure",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "PressureLastCasing": {
+                    "type": "number",
+                    "title": "Pressure Last Casing",
+                    "description": "Last casing pressure test pressure.",
+                    "x-osdu-frame-of-reference": "UOM:pressure",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "PressureBOPRam": {
+                    "type": "number",
+                    "title": "Pressure BOP Ram",
+                    "description": "Blow out preventer ram pressure tested to.",
+                    "x-osdu-frame-of-reference": "UOM:pressure",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "PressureStandPipeManifold": {
+                    "type": "number",
+                    "title": "Pressure Standpipe Manifold",
+                    "description": "Standpipe manifold pressure tested to.",
+                    "x-osdu-frame-of-reference": "UOM:pressure",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "RegulatoryAgencyInspection": {
+                    "type": "boolean",
+                    "title": "Regulatory Agency Inspection",
+                    "description": "Governmental regulatory inspection agency inspection?",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "VolumeCuttingDischarged": {
+                    "type": "number",
+                    "title": "Volume Cuttings Discharge",
+                    "description": "Volume of cuttings discharged.",
+                    "x-osdu-frame-of-reference": "UOM:volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "VolumeOilCuttingDischarge": {
+                    "type": "number",
+                    "title": "Oil Cuttings Discharge",
+                    "description": "Oil on cuttings daily discharge.",
+                    "x-osdu-frame-of-reference": "UOM:volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "VolumeWasteDischarged": {
+                    "type": "number",
+                    "title": "Volume Waste Discharged",
+                    "description": "Volume of sanitary waste discharged.",
+                    "x-osdu-frame-of-reference": "UOM:volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  }
+                }
+              }
+            },
+            "Incident": {
+              "type": "array",
+              "title": "Incident",
+              "description": "Description of incidents that have occurred during the last drilling/operations report",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML",
+              "x-osdu-attribution-revision": "1.0.0",
+              "items": {
+                "type": "object",
+                "title": "Incident",
+                "description": "Description of incidents that have occurred during the last drilling/operations report",
+                "properties": {
+                  "Comments": {
+                    "type": "string",
+                    "title": "Comments",
+                    "description": "Comments and remarks",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform"
+                  },
+                  "DateTime": {
+                    "type": "string",
+                    "title": "Date Time",
+                    "description": "Date and time that incident occurred",
+                    "format": "date-time",
+                    "x-osdu-frame-of-reference": "DateTime",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform"
+                  },
+                  "CauseDescription": {
+                    "type": "string",
+                    "title": "Cause Description",
+                    "description": "Cause description.",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "CostLossEstimate": {
+                    "type": "number",
+                    "title": "Cost Loss Estimate",
+                    "description": "Gross estimate of the cost incurred due to the incident.",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "AccidentDescription": {
+                    "type": "string",
+                    "title": "Accident Description",
+                    "description": "Accident description.",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "LocationDescription": {
+                    "type": "string",
+                    "title": "Location Description",
+                    "description": "Location description.",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "EstimateHoursLost": {
+                    "type": "number",
+                    "title": "Estimate Hours Lost",
+                    "description": "Number of hours lost due to the incident.",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "IsNearMiss": {
+                    "type": "boolean",
+                    "title": "Near Miss Flag",
+                    "description": "Near miss incident occurrence?",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "TotalFatality": {
+                    "type": "integer",
+                    "title": "Total Fatalities",
+                    "description": "Number of personnel killed due to the incident.",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "TotalMajorInjury": {
+                    "type": "integer",
+                    "title": "Total Major Injuries",
+                    "description": "Number of personnel with major injuries.",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "TotalMinorInjury": {
+                    "type": "integer",
+                    "title": "Total Minor Injuries",
+                    "description": "Number of personnel with minor injuries.",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "RemedialActionDescription": {
+                    "type": "string",
+                    "title": "Remedial Action Description",
+                    "description": "Remedial action description.",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "IncidentReporterName": {
+                    "type": "string",
+                    "title": "Incident Reporter Name",
+                    "description": "Name of the person who prepared the incident report.",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "OrganisationID": {
+                    "type": "string",
+                    "title": "Organisation ID",
+                    "description": "A reference to the organisation for which is the company primarily involved in managing the incident.",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform",
+                    "x-osdu-attribution-revision": 2,
+                    "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Organisation:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "master-data",
+                        "EntityType": "Organisation"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "DateTime"
+                ]
+              }
+            },
+            "MudLosses": {
+              "type": "array",
+              "title": "Mud Losses",
+              "description": "Mud that has been lost during drilling / operations",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML",
+              "x-osdu-attribution-revision": "1.0.0",
+              "items": {
+                "type": "object",
+                "title": "Mud Losses",
+                "description": "Mud that has been lost during drilling / operations",
+                "properties": {
+                  "Comments": {
+                    "type": "string",
+                    "title": "Comments",
+                    "description": "Comments and remarks",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform"
+                  },
+                  "DateTime": {
+                    "type": "string",
+                    "title": "Date Time",
+                    "description": "Date and time that the mud loss occurred",
+                    "format": "date-time",
+                    "x-osdu-frame-of-reference": "DateTime",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform"
+                  },
+                  "MudLostVolumeMeasureDepthTop": {
+                    "type": "number",
+                    "title": "Mud Lost Measure Depth Top",
+                    "description": "Top measured depth for which the mud loss reading was occurred",
+                    "x-osdu-frame-of-reference": "UOM:length",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform"
+                  },
+                  "MudLostVolumeMeasureDepthBase": {
+                    "type": "number",
+                    "title": "Mud Lost Measure Depth Base",
+                    "description": "Bottom measured depth for which the mud loss reading was occurred",
+                    "x-osdu-frame-of-reference": "UOM:length",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform"
+                  },
+                  "MudLostVolumeTvdTop": {
+                    "type": "number",
+                    "title": "Mud Lost TVD Top",
+                    "description": "Top  true vertical depth interval over which the mud loss reading was occurred",
+                    "x-osdu-frame-of-reference": "UOM:length",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform"
+                  },
+                  "MudLostVolumeTvdBase": {
+                    "type": "number",
+                    "title": "Mud Lost TVD Base",
+                    "description": "Bottom true vertical depth interval over which the mud loss reading was occurred",
+                    "x-osdu-frame-of-reference": "UOM:length",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform"
+                  },
+                  "MudLostVolumeAbandonDownhole": {
+                    "type": "number",
+                    "title": "Mud Lost Volume Abandon Downhole",
+                    "description": "Mud volume lost downhole during abandonment.",
+                    "x-osdu-frame-of-reference": "UOM:volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "MudLostVolumeBehindCasingDownhole": {
+                    "type": "number",
+                    "title": "Mud Lost Volume Behind Casing Downhole",
+                    "description": "Mud volume lost downhole behind casing.",
+                    "x-osdu-frame-of-reference": "UOM:volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "MudLostVolumeCirculatingDownhole": {
+                    "type": "number",
+                    "title": "Mud Lost Volume Circulating Downhole",
+                    "description": "Mud volume lost downhole while circulating.",
+                    "x-osdu-frame-of-reference": "UOM:volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "MudLostVolumeCementingDownhole": {
+                    "type": "number",
+                    "title": "Mud Lost Volume Cementing Downhole",
+                    "description": "Mud volume lost downhole while cementing.",
+                    "x-osdu-frame-of-reference": "UOM:volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "MudLostVolumeCasingHole": {
+                    "type": "number",
+                    "title": "Mud Lost Volume Casing Hole",
+                    "description": "Mud volume lost at the time of the report. Captures volumes of mud lost for specific activities or onsite locations and total volumes for surface and down hole.",
+                    "x-osdu-frame-of-reference": "UOM:volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "MudLostVolumeMudCleanerSurface": {
+                    "type": "number",
+                    "title": "Mud Lost Volume Cleaner Surface",
+                    "description": "Volume of mud lost in mud cleaning equipment (at surface).",
+                    "x-osdu-frame-of-reference": "UOM:volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "MudLostVolumeOtherLocationDownhole": {
+                    "type": "number",
+                    "title": "Mud Lost Volume Other Location Downhole",
+                    "description": "Mud volume lost downhole from other location.",
+                    "x-osdu-frame-of-reference": "UOM:volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "MudLostVolumeOtherLocationSurface": {
+                    "type": "number",
+                    "title": "Mud Lost Volume Other Location Surface",
+                    "description": "Surface volume lost other location.",
+                    "x-osdu-frame-of-reference": "UOM:volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "MudLostVolumePitsSurface": {
+                    "type": "number",
+                    "title": "Mud Lost Volume Surface",
+                    "description": "Volume of mud lost in pit room (at surface).",
+                    "x-osdu-frame-of-reference": "UOM:volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "MudLostVolumeShakerSurface": {
+                    "type": "number",
+                    "title": "Mud Lost Volume Shaker Surface",
+                    "description": "Volume of mud lost at shakers (at surface).",
+                    "x-osdu-frame-of-reference": "UOM:volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "MudLostVolumeTrippingSurface": {
+                    "type": "number",
+                    "title": "Mud Lost Volume Tripping Surface",
+                    "description": "Volume of mud lost while tripping (at surface).",
+                    "x-osdu-frame-of-reference": "UOM:volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "TotalMudLostVolumeDownhole": {
+                    "type": "number",
+                    "title": "Total Mud Lost Volume Downhole",
+                    "description": "Total volume of mud lost downhole.",
+                    "x-osdu-frame-of-reference": "UOM:volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "TotalMudLostVolumeSurface": {
+                    "type": "number",
+                    "title": "Total Mud Lost Volume Surface",
+                    "description": "Total volume of mud lost at surface.",
+                    "x-osdu-frame-of-reference": "UOM:volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  }
+                },
+                "required": [
+                  "DateTime"
+                ]
+              }
+            },
+            "JobContact": {
+              "type": "array",
+              "title": "JobContact",
+              "description": "Operator personnel contact information on an operations report",
+              "x-osdu-attribution-authority": "The Open Group",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-attribution-revision": "evergreen",
+              "items": {
+                "$ref": "../abstract/AbstractContact.1.0.0.json"
+              }
+            },
+            "GasReading": {
+              "type": "array",
+              "title": "GasReading",
+              "description": "General information about a gas reading taken during the drill report period",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML",
+              "x-osdu-attribution-revision": "1.0.0",
+              "items": {
+                "type": "object",
+                "title": "GasReading",
+                "description": "General information about a gas reading taken during the drill report period",
+                "properties": {
+                  "DateTime": {
+                    "type": "string",
+                    "title": "Datetime",
+                    "description": "Date and time of the gas reading.",
+                    "format": "date-time",
+                    "x-osdu-frame-of-reference": "DateTime",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "TotalGasMax": {
+                    "type": "number",
+                    "title": "Total Gas Max",
+                    "description": "The highest gas reading.",
+                    "x-osdu-frame-of-reference": "UOM:volume per volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "TotalGasMin": {
+                    "type": "number",
+                    "title": "Total Gas Min",
+                    "description": "The lowest gas reading.",
+                    "x-osdu-frame-of-reference": "UOM:volume per volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "TotalGasAverage": {
+                    "type": "number",
+                    "title": "Total Gas Average",
+                    "description": "The average gas reading",
+                    "x-osdu-frame-of-reference": "UOM:volume per volume",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform"
+                  },
+                  "GasReadingMeasureDepthTop": {
+                    "type": "number",
+                    "title": "Gas Reading Measure Depth Top",
+                    "description": "Top measured depth for which the gas reading was conducted",
+                    "x-osdu-frame-of-reference": "UOM:length",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform"
+                  },
+                  "GasReadingTvdBase": {
+                    "type": "number",
+                    "title": "Gas Reading TVD Base",
+                    "description": "Bottom true vertical depth interval over which the gas reading was conducted.",
+                    "x-osdu-frame-of-reference": "UOM:length",
+                    "x-osdu-attribution-authority": "The Open Group",
+                    "x-osdu-attribution-publication": "The OSDU Data Platform"
+                  },
+                  "Methane": {
+                    "type": "number",
+                    "title": "Methane",
+                    "description": "Methane (C1) concentration",
+                    "x-osdu-frame-of-reference": "UOM:volume per volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "Ethane": {
+                    "type": "number",
+                    "title": "Ethane",
+                    "description": "Ethane (C2) concentration.",
+                    "x-osdu-frame-of-reference": "UOM:volume per volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "Propane": {
+                    "type": "number",
+                    "title": "Propane",
+                    "description": "Propane (C3) concentration.",
+                    "x-osdu-frame-of-reference": "UOM:volume per volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "Isobutane": {
+                    "type": "number",
+                    "title": "Isobutane",
+                    "description": "Iso-butane (iC4) concentration.",
+                    "x-osdu-frame-of-reference": "UOM:volume per volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "Norbutane": {
+                    "type": "number",
+                    "title": "Norbutane",
+                    "description": "Nor-butane (nC4) concentration.",
+                    "x-osdu-frame-of-reference": "UOM:volume per volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "Isopentane": {
+                    "type": "number",
+                    "title": "Isopentane",
+                    "description": "Iso-pentane (iC5) concentration",
+                    "x-osdu-frame-of-reference": "UOM:volume per volume",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2
+                  },
+                  "ReadingType": {
+                    "type": "string",
+                    "title": "Reading Type",
+                    "description": "Type of gas reading, e.g.circulating, background gas, connection gas, drilling background, gas, drilling gas peak, flow check gas, no readings, other, shut down gas, trip gas, unknown.",
+                    "example": "namespace:reference-data--GasReadingType:background_gas:",
+                    "x-osdu-attribution-authority": "Energistics",
+                    "x-osdu-attribution-publication": "WITSML",
+                    "x-osdu-attribution-revision": 2,
+                    "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-GasReadingType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "reference-data",
+                        "EntityType": "GasReadingType"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "DateTime"
+                ]
+              }
+            },
+            "ConditionHole": {
+              "type": "string",
+              "title": "Hole Condition",
+              "description": "Hole condition description.",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML",
+              "x-osdu-attribution-revision": "1.0.0"
+            },
+            "CostDay": {
+              "type": "number",
+              "title": "Daily Cost",
+              "description": "Daily cost.",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML",
+              "x-osdu-attribution-revision": "1.0.0"
+            },
+            "CostDayMud": {
+              "type": "number",
+              "title": "Daily Mud Cost",
+              "description": "Daily mud cost.",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML",
+              "x-osdu-attribution-revision": "1.0.0"
+            },
+            "Forecast24Hr": {
+              "type": "string",
+              "title": "Next 24hr Activity Forecast",
+              "description": "Forecast of activities for the next 24 hrs.",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML",
+              "x-osdu-attribution-revision": "1.0.0"
+            },
+            "Lithology": {
+              "type": "string",
+              "title": "Lithology Description",
+              "description": "Description of the lithology for the interval.",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML",
+              "x-osdu-attribution-revision": "1.0.0"
+            },
+            "Customer": {
+              "type": "string",
+              "title": "Customer",
+              "description": "Individual, company, or corporate division that work is being executed on behalf of",
+              "x-osdu-attribution-authority": "The Open Group",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-attribution-revision": "1.0.0"
+            },
+            "StewardingCompany": {
+              "type": "string",
+              "title": "Stewarding Company",
+              "description": "Company or corporate division that is responsible for executing the work",
+              "x-osdu-attribution-authority": "The Open Group",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-attribution-revision": "1.0.0"
+            },
+            "StewardingCompanyTeam": {
+              "type": "string",
+              "title": "Stewarding Company Team",
+              "description": "Team within a company or corporate division that is responsible for executing the work",
+              "x-osdu-attribution-authority": "The Open Group",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-attribution-revision": "1.0.0"
+            },
+            "TotalCost": {
+              "type": "number",
+              "title": "Total Cost",
+              "description": "Cumulative cost for the job through the end of current report",
+              "x-osdu-attribution-authority": "The Open Group",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-attribution-revision": "1.0.0"
+            },
+            "TargetCost": {
+              "type": "number",
+              "title": "Target Cost",
+              "description": "Authorized cost for the total job",
+              "x-osdu-attribution-authority": "The Open Group",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-attribution-revision": "1.0.0"
+            },
+            "TargetDays": {
+              "type": "number",
+              "title": "Target Days",
+              "description": "Planned days for the total job",
+              "x-osdu-frame-of-reference": "UOM:time",
+              "x-osdu-attribution-authority": "The Open Group",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-attribution-revision": "1.0.0"
+            },
+            "TotalDays": {
+              "type": "number",
+              "title": "Total Days",
+              "description": "Cumulative days for the job through the end of the current report",
+              "x-osdu-frame-of-reference": "UOM:time",
+              "x-osdu-attribution-authority": "The Open Group",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-attribution-revision": "1.0.0"
+            },
+            "TotalNPT": {
+              "type": "number",
+              "title": "Total Non-Productive Time",
+              "description": "Total days of non-productive time through the end of the current report",
+              "x-osdu-frame-of-reference": "UOM:time",
+              "x-osdu-attribution-authority": "The Open Group",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-attribution-revision": "1.0.0"
+            },
+            "Name": {
+              "type": "string",
+              "title": "Name",
+              "description": "Name of Operations Report"
+            }
+          },
+          "required": [
+            "StartDateTime",
+            "EndDateTime",
+            "WellboreID"
+          ],
+          "title": "IndividualProperties"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "ExtensionProperties": {
+              "type": "object"
+            }
+          },
+          "title": "ExtensionProperties"
+        }
+      ]
+    }
+  },
+  "required": [
+    "kind",
+    "acl",
+    "legal"
+  ],
+  "additionalProperties": false,
+  "x-osdu-review-status": "Accepted",
+  "x-osdu-virtual-properties": {
+    "data.VirtualProperties.DefaultLocation": {
+      "type": "object",
+      "priority": [
+        {
+          "path": "data.SpatialLocation"
+        }
+      ]
+    },
+    "data.VirtualProperties.DefaultName": {
+      "type": "string",
+      "priority": [
+        {
+          "path": "data.Name"
+        }
+      ]
+    }
+  },
+  "x-osdu-inheriting-from-kind": []
+}

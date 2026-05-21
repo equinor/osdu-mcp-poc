@@ -1,0 +1,35 @@
+{
+  "x-osdu-license": "Copyright 2022, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "$id": "https://schema.osdu.opengroup.org/json/abstract/AbstractFacilityEvent.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:AbstractFacilityEvent:1.0.0",
+  "title": "AbstractFacilityEvent",
+  "description": "A significant occurrence in the life of a facility, which often changes its state, or the state of one of its components. It can describe a point-in-time (event) or a time interval of a specific type (FacilityEventType).",
+  "type": "object",
+  "properties": {
+    "FacilityEventTypeID": {
+      "description": "The facility event type is a picklist. Examples: 'Permit', 'Spud', 'Abandon', etc.",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-FacilityEventType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "FacilityEventType"
+        }
+      ]
+    },
+    "EffectiveDateTime": {
+      "description": "The date and time at which the event took place or takes effect.",
+      "type": "string",
+      "format": "date-time",
+      "x-osdu-frame-of-reference": "DateTime"
+    },
+    "TerminationDateTime": {
+      "description": "The date and time at which the event is no longer in effect. For point-in-time events the 'TerminationDateTime' must be set equal to 'EffectiveDateTime'. Open time intervals have an absent 'TerminationDateTime'.",
+      "type": "string",
+      "format": "date-time",
+      "x-osdu-frame-of-reference": "DateTime"
+    }
+  },
+  "x-osdu-inheriting-from-kind": []
+}

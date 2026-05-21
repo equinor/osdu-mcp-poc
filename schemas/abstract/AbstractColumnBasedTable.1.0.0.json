@@ -1,0 +1,143 @@
+{
+  "x-osdu-license": "Copyright 2022, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "x-osdu-review-status": "Accepted",
+  "$id": "https://schema.osdu.opengroup.org/json/abstract/AbstractColumnBasedTable.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:AbstractColumnBasedTable:1.0.0",
+  "title": "AbstractColumnBasedTable",
+  "description": "The ColumnBasedTable is a set of columns, which have equal length (data.ColumnSize) included by types carrying embedded table properties. Columns have a Property Kind, UnitOfMeasure and Facet. There are KeyColumns (index columns) and Columns (for look-up values). Examples are KrPc, PVT and Facies tables.",
+  "type": "object",
+  "properties": {
+    "KeyColumns": {
+      "type": "array",
+      "title": "Key columns",
+      "description": "A column whose values are considered as keys/indices. Do not use this attribute if you want to follow a given ColumnBasedTableType.",
+      "x-osdu-indexing": {
+        "type": "nested"
+      },
+      "items": {
+        "$ref": "../abstract/AbstractReferencePropertyType.1.1.0.json"
+      }
+    },
+    "Columns": {
+      "type": "array",
+      "title": "Common columns",
+      "description": "A common column storing values of a particular property kind. Do not use this attribute if you want to follow a given ColumnBasedTableType.",
+      "x-osdu-indexing": {
+        "type": "nested"
+      },
+      "items": {
+        "$ref": "../abstract/AbstractReferencePropertyType.1.1.0.json"
+      }
+    },
+    "ColumnSize": {
+      "type": "integer",
+      "title": "Size of columns",
+      "description": "The count of elements in each column",
+      "example": 5
+    },
+    "ColumnValues": {
+      "type": "array",
+      "title": "The values of each column",
+      "description": "First column values are related to first key column, second column values are related to the second key column, etc\u2026\nColumn values at index KeyColumns count are related to first (non key) column, Column values at index KeyColumns count + 1 are related to second (non key) column, etc...",
+      "items": {
+        "type": "object",
+        "title": "ColumnValues",
+        "description": "Value of the column. Generally only one of the attribute should be instantiated.",
+        "properties": {
+          "BooleanColumn": {
+            "type": "array",
+            "title": "Boolean Column",
+            "description": "A column of only boolean values",
+            "example": [
+              true,
+              false,
+              true,
+              true,
+              false
+            ],
+            "items": {
+              "type": "boolean"
+            }
+          },
+          "IntegerColumn": {
+            "type": "array",
+            "title": "Integer Column",
+            "description": "A column of only integer values",
+            "format": "integer",
+            "pattern": "^[0-9]+$",
+            "example": [
+              0,
+              1,
+              2,
+              3,
+              4
+            ],
+            "items": {
+              "type": "integer"
+            }
+          },
+          "NumberColumn": {
+            "type": "array",
+            "title": "Number Column",
+            "description": "A column of only number values",
+            "example": [
+              0.1,
+              2.3,
+              4.5,
+              6.7,
+              8.9
+            ],
+            "items": {
+              "type": "number"
+            }
+          },
+          "StringColumn": {
+            "type": "array",
+            "title": "String Column",
+            "description": "A column of only string values",
+            "example": [
+              "foo",
+              "bar",
+              "foo again",
+              "bar again",
+              "foo bar"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "UndefinedValueRows": {
+            "type": "array",
+            "title": "Undefined value rows",
+            "description": "The row indexes for which the values are flagged as undefined.",
+            "format": "integer",
+            "pattern": "^[0-9]+$",
+            "example": [
+              3,
+              4
+            ],
+            "items": {
+              "type": "integer"
+            }
+          }
+        }
+      }
+    },
+    "ColumnBasedTableType": {
+      "type": "string",
+      "title": "The type of the column based table",
+      "description": "Quickly indicate the type of the column based table (KrPc, PVT, Facies, ...) and its standard columns definition. It is supposed to be used when you don't use KeyColumns neither Columns as attributes of this WPC.",
+      "format": "uri-reference",
+      "example": "namespace:reference-data--ColumnBasedTableType:Facies:",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-ColumnBasedTableType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "ColumnBasedTableType"
+        }
+      ]
+    }
+  },
+  "x-osdu-inheriting-from-kind": []
+}

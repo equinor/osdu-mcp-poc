@@ -1,0 +1,105 @@
+{
+  "x-osdu-license": "Copyright 2024, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "x-osdu-review-status": "Accepted",
+  "$id": "https://schema.osdu.opengroup.org/json/abstract/AbstractStimMaterialQuantity.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:AbstractStimMaterialQuantity:1.0.0",
+  "title": "AbstractStimMaterialQuantity",
+  "description": "Usage and maximum mass or flow rates for a material used in the Stage.",
+  "type": "object",
+  "properties": {
+    "MaterialReferenceID": {
+      "type": "string",
+      "title": "Material Reference ID",
+      "description": "This is a reference to the name of the proppant or fluid additive in the StimJob Material Catalog.",
+      "example": "70 Ottawa Sand",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML  StimMaterialQuantity.MaterialReference",
+      "x-osdu-attribution-revision": "V2.0"
+    },
+    "MaterialKindID": {
+      "type": "string",
+      "title": "Material Kind Identifier",
+      "description": "Additive or Proppant when referenced to the Job Material Catalog",
+      "example": "namespace:reference-data--StimMaterialType:ProppantAgent:",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-StimMaterialType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "StimMaterialType"
+        }
+      ]
+    },
+    "Density": {
+      "type": "number",
+      "title": "Density",
+      "description": "The density of the material used.",
+      "example": "22.15 lbm/gal[US]",
+      "x-osdu-frame-of-reference": "UOM:mass per volume",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML  StimMaterialQuantity.Density",
+      "x-osdu-attribution-revision": "V2.0"
+    },
+    "Mass": {
+      "type": "number",
+      "title": "Mass",
+      "description": "The mass of material used.  This should be used without specifying any of the other material measures (e.g. volume, standard volume, etc.).",
+      "example": "200000 lbm",
+      "x-osdu-frame-of-reference": "UOM:mass",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML  StimMaterialQuantity.Mass",
+      "x-osdu-attribution-revision": "V2.0"
+    },
+    "MassFlowRate": {
+      "type": "number",
+      "title": "MassFlowRate",
+      "description": "Rate at which mass of material is pumped/added to the fluid.",
+      "example": "2000 lbm/min",
+      "x-osdu-frame-of-reference": "UOM:mass per time",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML  StimMaterialQuantity.MassFlowRate",
+      "x-osdu-attribution-revision": "V2.0"
+    },
+    "StdVolume": {
+      "type": "number",
+      "title": "Std Volume",
+      "description": "The standard volume of material used. Standard volume is the volume measured under the same conditions. This should be used without specifying any of the other material measures (e.g., mass, volume, etc.).",
+      "x-osdu-frame-of-reference": "UOM:volume",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML  StimMaterialQuantity.StdVolume",
+      "x-osdu-attribution-revision": "V2.0"
+    },
+    "Volume": {
+      "type": "number",
+      "title": "Volume",
+      "description": "The volume of material used.  This should be used without specifying any of the other material measures (e.g. mass, standard volume, etc.).",
+      "x-osdu-frame-of-reference": "UOM:volume",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML  StimMaterialQuantity.Volume",
+      "x-osdu-attribution-revision": "V2.0"
+    },
+    "VolumeConcentration": {
+      "type": "number",
+      "title": "Volume Concentration",
+      "description": "The volume per volume measure of material used.  This should be used without specifying any of the other material measures (e.g. mass, density, standard volume, etc.).",
+      "x-osdu-frame-of-reference": "UOM:volume per volume",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML  StimMaterialQuantity.VolumeConcentration",
+      "x-osdu-attribution-revision": "V2.0"
+    },
+    "VolumetricFlowRate": {
+      "type": "number",
+      "title": "Volumetric Flow Rate",
+      "description": "Rate at which the volume of material is pumped/added to the fluid.",
+      "example": "1500 gal/min",
+      "x-osdu-frame-of-reference": "UOM:volume per time",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML  StimMaterialQuantity.VolumetricFlowRate",
+      "x-osdu-attribution-revision": "V2.0"
+    }
+  },
+  "required": [
+    "MaterialReferenceID"
+  ],
+  "x-osdu-inheriting-from-kind": []
+}

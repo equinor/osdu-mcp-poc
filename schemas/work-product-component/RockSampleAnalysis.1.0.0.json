@@ -1,0 +1,549 @@
+{
+  "x-osdu-license": "Copyright 2022, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "$id": "https://schema.osdu.opengroup.org/json/work-product-component/RockSampleAnalysis.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:work-product-component--RockSampleAnalysis:1.0.0",
+  "title": "RockSampleAnalysis",
+  "description": "The meta-data about a rock sample analysis related to core or outcrop rock samples.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "Previously called ResourceID or SRN which identifies this OSDU resource object without version.",
+      "title": "Entity ID",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-RockSampleAnalysis:[\\w\\-\\.\\:\\%]+$",
+      "example": "namespace:work-product-component--RockSampleAnalysis:dd76cf6c-226f-5636-ad1b-1ca0f8249cc8"
+    },
+    "kind": {
+      "description": "The schema identification for the OSDU resource object following the pattern {Namespace}:{Source}:{Type}:{VersionMajor}.{VersionMinor}.{VersionPatch}. The versioning scheme follows the semantic versioning, https://semver.org/.",
+      "title": "Entity Kind",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:[\\w\\-\\.]+:[\\w\\-\\.]+:[0-9]+.[0-9]+.[0-9]+$",
+      "example": "osdu:wks:work-product-component--RockSampleAnalysis:1.0.0"
+    },
+    "version": {
+      "description": "The version number of this OSDU resource; set by the framework.",
+      "title": "Version Number",
+      "type": "integer",
+      "format": "int64",
+      "example": 1562066009929332
+    },
+    "acl": {
+      "description": "The access control tags associated with this entity.",
+      "title": "Access Control List",
+      "$ref": "../abstract/AbstractAccessControlList.1.0.0.json"
+    },
+    "legal": {
+      "description": "The entity's legal tags and compliance status. The actual contents associated with the legal tags is managed by the Compliance Service.",
+      "title": "Legal Tags",
+      "$ref": "../abstract/AbstractLegalTags.1.0.0.json"
+    },
+    "tags": {
+      "title": "Tag Dictionary",
+      "description": "A generic dictionary of string keys mapping to string value. Only strings are permitted as keys and values.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "example": {
+        "NameOfKey": "String value"
+      }
+    },
+    "createTime": {
+      "description": "Timestamp of the time at which initial version of this OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:46:20.163Z"
+    },
+    "createUser": {
+      "title": "Resource Object Creation User Reference",
+      "description": "The user reference, which created the first version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "modifyTime": {
+      "description": "Timestamp of the time at which this version of the OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Version Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:52:24.477Z"
+    },
+    "modifyUser": {
+      "title": "Resource Object Version Creation User Reference",
+      "description": "The user reference, which created this version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "ancestry": {
+      "description": "The links to data, which constitute the inputs, from which this record instance is derived.",
+      "title": "Ancestry",
+      "$ref": "../abstract/AbstractLegalParentList.1.0.0.json"
+    },
+    "meta": {
+      "description": "The Frame of Reference meta data section linking the named properties to self-contained definitions.",
+      "title": "Frame of Reference Meta Data",
+      "type": "array",
+      "items": {
+        "$ref": "../abstract/AbstractMetaItem.1.0.0.json"
+      }
+    },
+    "data": {
+      "allOf": [
+        {
+          "$ref": "../abstract/AbstractCommonResources.1.0.0.json"
+        },
+        {
+          "$ref": "../abstract/AbstractWPCGroupType.1.0.0.json"
+        },
+        {
+          "$ref": "../abstract/AbstractWorkProductComponent.1.1.0.json"
+        },
+        {
+          "$ref": "../abstract/AbstractWPCActivity.1.0.0.json"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "WellboreID": {
+              "type": "string",
+              "title": "Wellbore ID",
+              "description": "Unique wellbore identifier. Required\u00a0when\u00a0RockSampleAnalysis does not have relationship with master-data Core.  E.g. analysis for sidewall core.",
+              "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Wellbore:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "Wellbore"
+                }
+              ]
+            },
+            "CoringID": {
+              "type": "string",
+              "title": "Coring ID",
+              "description": "Identifies the Core on which this batch of analysis was performed.",
+              "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Coring:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "Coring"
+                }
+              ]
+            },
+            "RockSampleID": {
+              "type": "string",
+              "title": "Rock Sample ID",
+              "description": "Identifies the RockSample on which this batch of analysis was performed.",
+              "pattern": "^[\\w\\-\\.]+:master-data\\-\\-RockSample:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "RockSample"
+                }
+              ]
+            },
+            "VerticalMeasurement": {
+              "$ref": "../abstract/AbstractFacilityVerticalMeasurement.1.0.0.json",
+              "title": "Vertical Measurement",
+              "description": "References an entry in the VerticalMeasurements array for the Wellbore identified by WellboreID, or a standalone vertical reference which defines the vertical reference datum for all measured depths of the RockSample record. If this is not populated, the VerticalMeasurement is derived from the Coring."
+            },
+            "AnalysisDate": {
+              "type": "string",
+              "description": "The date the batch of rock sample analysis was performed.",
+              "format": "date"
+            },
+            "TopDepth": {
+              "type": "number",
+              "description": "The first depth index from the analysis result.",
+              "x-osdu-frame-of-reference": "UOM:length"
+            },
+            "BottomDepth": {
+              "type": "number",
+              "description": "The last depth index from the analysis result.",
+              "x-osdu-frame-of-reference": "UOM:length"
+            },
+            "DepthShiftsID": {
+              "type": "string",
+              "title": "Depth Shifts ID",
+              "description": "The WellLog representation carrying the core-depth to logging-depth correction or mapping used or to be used with this analysis.",
+              "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-WellLog:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "work-product-component",
+                  "EntityType": "WellLog"
+                }
+              ]
+            },
+            "RoutineCoreAnalysis": {
+              "type": "object",
+              "title": "Routine Core Analysis",
+              "description": "Conditions and results of a routine core analysis.",
+              "properties": {
+                "RCAMeasurements": {
+                  "type": "array",
+                  "title": "RCA Measurements",
+                  "description": "The conditions under which this analysis has been carried out",
+                  "x-osdu-indexing": {
+                    "type": "nested"
+                  },
+                  "items": {
+                    "type": "object",
+                    "title": "RCAMeasurement",
+                    "description": "A Routine Core Analysis Measurement.",
+                    "properties": {
+                      "Conditions": {
+                        "type": "object",
+                        "title": "Conditions",
+                        "description": "The conditions under which this analysis has been carried out",
+                        "properties": {
+                          "Pressure": {
+                            "type": "number",
+                            "title": "Pressure",
+                            "description": "The pressure condition for the analysis.",
+                            "x-osdu-frame-of-reference": "UOM:pressure"
+                          },
+                          "Temperature": {
+                            "type": "number",
+                            "title": "Temperature",
+                            "description": "The temperature condition for the analysis.",
+                            "x-osdu-frame-of-reference": "UOM:thermodynamic temperature"
+                          },
+                          "PressureMeasurementTypeID": {
+                            "type": "string",
+                            "title": "Pressure Measurement Type ID",
+                            "description": "Identifies the environment where the pressure was measured. E.g. Ambient, Overburden",
+                            "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-PressureMeasurementType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                            "x-osdu-relationship": [
+                              {
+                                "GroupType": "reference-data",
+                                "EntityType": "PressureMeasurementType"
+                              }
+                            ]
+                          },
+                          "MeanPressure": {
+                            "type": "number",
+                            "title": "Mean Pressure",
+                            "description": "The average pressure in which the gas permeability has been measured.",
+                            "x-osdu-frame-of-reference": "UOM:pressure"
+                          },
+                          "PorePressure": {
+                            "type": "number",
+                            "title": "Pore Pressure",
+                            "description": "The pressure of the fluid in the pore space.",
+                            "x-osdu-frame-of-reference": "UOM:pressure"
+                          }
+                        }
+                      },
+                      "Permeability": {
+                        "type": "number",
+                        "title": "Permeability",
+                        "description": "The measured sample permeability.",
+                        "x-osdu-frame-of-reference": "UOM:permeability rock"
+                      },
+                      "Porosity": {
+                        "type": "number",
+                        "title": "Porosity",
+                        "description": "The measured sample porosity.",
+                        "x-osdu-frame-of-reference": "UOM:volume per volume"
+                      },
+                      "OtherMeasurements": {
+                        "type": "array",
+                        "title": "Other Measurements",
+                        "description": "Other measurements made in the context of this analysis",
+                        "x-osdu-indexing": {
+                          "type": "flattened"
+                        },
+                        "items": {
+                          "type": "object",
+                          "title": "AbstractSpecification",
+                          "description": "An array element of an analysis specifying the numeric, text or date-time value associated with a ParameterType.",
+                          "properties": {
+                            "EffectiveDateTime": {
+                              "type": "string",
+                              "description": "The date and time at which this specification becomes effective.",
+                              "format": "date-time"
+                            },
+                            "TerminationDateTime": {
+                              "type": "string",
+                              "description": "The first point in time when this specification is no longer in effect.",
+                              "format": "date-time"
+                            },
+                            "SpecificationQuantity": {
+                              "type": "number",
+                              "description": "The numeric value of the parameter.",
+                              "x-osdu-frame-of-reference": "UOM_via_property:UnitOfMeasureID"
+                            },
+                            "SpecificationDate": {
+                              "type": "string",
+                              "description": "The date value of the parameter.",
+                              "format": "date"
+                            },
+                            "SpecificationDateTime": {
+                              "type": "string",
+                              "description": "The date and time value of the parameter.",
+                              "format": "date-time"
+                            },
+                            "SpecificationIndicator": {
+                              "type": "boolean",
+                              "description": "The indicator value of the parameter."
+                            },
+                            "SpecificationText": {
+                              "type": "string",
+                              "description": "The text value of the parameter."
+                            },
+                            "SpecificationTime": {
+                              "type": "string",
+                              "description": "The time value of the parameter.",
+                              "format": "time"
+                            },
+                            "UnitOfMeasureID": {
+                              "type": "string",
+                              "description": "The unit for the quantity parameter, like metre (m in SI units system) for quantity Length.",
+                              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-UnitOfMeasure:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                              "x-osdu-relationship": [
+                                {
+                                  "GroupType": "reference-data",
+                                  "EntityType": "UnitOfMeasure"
+                                }
+                              ]
+                            },
+                            "ParameterTypeID": {
+                              "type": "string",
+                              "description": "Parameter representing a property or characteristic.",
+                              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-ParameterType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                              "x-osdu-relationship": [
+                                {
+                                  "GroupType": "reference-data",
+                                  "EntityType": "ParameterType"
+                                }
+                              ]
+                            }
+                          }
+                        }
+                      },
+                      "Remarks": {
+                        "type": "array",
+                        "title": "Analysis Remarks",
+                        "description": "An array containing operational or quality comments pertaining to a rock sample analysis.",
+                        "x-osdu-indexing": {
+                          "type": "flattened"
+                        },
+                        "items": {
+                          "type": "object",
+                          "title": "Remark",
+                          "description": "An array containing narrative remarks pertaining to a rock sample analysis.",
+                          "properties": {
+                            "RemarkID": {
+                              "type": "string",
+                              "title": "Remark ID",
+                              "description": "A unique identifier for each remark record."
+                            },
+                            "Remark": {
+                              "type": "string",
+                              "title": "Remark",
+                              "description": "A descriptive comment for this remark."
+                            },
+                            "RemarkSource": {
+                              "type": "string",
+                              "title": "Remark Source",
+                              "description": "The person, vendor, interpreter or other provider of information."
+                            }
+                          }
+                        }
+                      },
+                      "PermeabilityMeasurementTypeID": {
+                        "type": "string",
+                        "title": "Permeability Measurement Type ID",
+                        "description": "The measurement type used to obtain the Permeability values.",
+                        "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-PermeabilityMeasurementType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                        "x-osdu-relationship": [
+                          {
+                            "GroupType": "reference-data",
+                            "EntityType": "PermeabilityMeasurementType"
+                          }
+                        ]
+                      },
+                      "PorosityMeasurementTypeID": {
+                        "type": "string",
+                        "title": "Porosity Measurement Type ID",
+                        "description": "The measurement type used to obtain the Porosity values.",
+                        "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-PorosityMeasurementType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                        "x-osdu-relationship": [
+                          {
+                            "GroupType": "reference-data",
+                            "EntityType": "PorosityMeasurementType"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                },
+                "GrainDensity": {
+                  "type": "number",
+                  "title": "Grain Density",
+                  "description": "Th measured grain density",
+                  "x-osdu-frame-of-reference": "UOM:mass per volume"
+                },
+                "GrainDensityMeasurementTypeID": {
+                  "type": "string",
+                  "title": "Grain Density Measurement Type ID",
+                  "description": "The measurement type used to obtain the GrainDensity value.",
+                  "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-GrainDensityMeasurementType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                  "x-osdu-relationship": [
+                    {
+                      "GroupType": "reference-data",
+                      "EntityType": "GrainDensityMeasurementType"
+                    }
+                  ]
+                },
+                "SaturationOil": {
+                  "type": "number",
+                  "title": "Saturation Oil",
+                  "description": "The fraction of oil volume compared to the total pore volume.",
+                  "x-osdu-frame-of-reference": "UOM:volume per volume"
+                },
+                "SaturationWater": {
+                  "type": "number",
+                  "title": "Saturation Water",
+                  "description": "The fraction of water volume compared to the total pore volume.",
+                  "x-osdu-frame-of-reference": "UOM:volume per volume"
+                },
+                "SaturationGas": {
+                  "type": "number",
+                  "title": "Saturation Gas",
+                  "description": "The fraction of gas volume compared to the total pore volume.",
+                  "x-osdu-frame-of-reference": "UOM:volume per volume"
+                },
+                "SaturationMethodTypeID": {
+                  "type": "string",
+                  "title": "Saturation Method Type ID",
+                  "description": "The saturation method type, like Dean Stark, Retort, Karl Fischer.",
+                  "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-SaturationMethodType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                  "x-osdu-relationship": [
+                    {
+                      "GroupType": "reference-data",
+                      "EntityType": "SaturationMethodType"
+                    }
+                  ]
+                },
+                "WeightOfSalt": {
+                  "type": "number",
+                  "title": "Weight Of Salt",
+                  "description": "The weight of salt in the brine, needed in conjunction with SaturationWater.",
+                  "x-osdu-frame-of-reference": "UOM:mass"
+                }
+              }
+            },
+            "LaboratoryName": {
+              "type": "string",
+              "description": "Name or branch of the laboratory performing the analysis."
+            },
+            "AnalysisOrganisationID": {
+              "type": "string",
+              "description": "Identifies the Organisation that produces/produced this analysis.",
+              "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Organisation:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "Organisation"
+                }
+              ]
+            },
+            "SampleOrientationID": {
+              "type": "string",
+              "description": "The de-normalized Sample Orientation derived from the RockSample.",
+              "x-osdu-is-derived": {
+                "RelationshipPropertyName": "RockSampleID",
+                "TargetPropertyName": "SampleOrientationID"
+              },
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-SampleOrientationType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "SampleOrientationType"
+                }
+              ]
+            },
+            "Remarks": {
+              "type": "array",
+              "title": "Analysis Remarks",
+              "description": "An array containing operational or quality comments pertaining to a rock sample analysis.",
+              "x-osdu-indexing": {
+                "type": "flattened"
+              },
+              "items": {
+                "type": "object",
+                "title": "Remark",
+                "description": "An array containing narrative remarks pertaining to a rock sample analysis.",
+                "properties": {
+                  "RemarkID": {
+                    "type": "string",
+                    "title": "Remark ID",
+                    "description": "A unique identifier for each remark record."
+                  },
+                  "Remark": {
+                    "type": "string",
+                    "title": "Remark",
+                    "description": "A descriptive comment for this remark."
+                  },
+                  "RemarkSource": {
+                    "type": "string",
+                    "title": "Remark Source",
+                    "description": "The person, vendor, interpreter or other provider of information."
+                  }
+                }
+              }
+            }
+          },
+          "title": "IndividualProperties"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "ExtensionProperties": {
+              "type": "object"
+            }
+          },
+          "title": "ExtensionProperties"
+        }
+      ]
+    }
+  },
+  "required": [
+    "kind",
+    "acl",
+    "legal"
+  ],
+  "additionalProperties": false,
+  "x-osdu-review-status": "Accepted",
+  "x-osdu-virtual-properties": {
+    "data.VirtualProperties.DefaultLocation": {
+      "type": "object",
+      "priority": [
+        {
+          "path": "data.SpatialArea"
+        },
+        {
+          "path": "data.SpatialPoint"
+        }
+      ]
+    },
+    "data.VirtualProperties.DefaultName": {
+      "type": "string",
+      "priority": [
+        {
+          "path": "data.Name"
+        }
+      ]
+    }
+  },
+  "x-osdu-inheriting-from-kind": [
+    {
+      "name": "WorkProductComponent",
+      "kind": "osdu:wks:AbstractWPCGroupType:1.0.0"
+    },
+    {
+      "name": "Activity",
+      "kind": "osdu:wks:AbstractWPCActivity:1.0.0"
+    }
+  ]
+}

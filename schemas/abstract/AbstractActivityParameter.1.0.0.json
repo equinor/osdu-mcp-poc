@@ -1,0 +1,137 @@
+{
+  "x-osdu-license": "Copyright 2022, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "x-osdu-review-status": "Accepted",
+  "$id": "https://schema.osdu.opengroup.org/json/abstract/AbstractActivityParameter.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:AbstractActivityParameter:1.0.0",
+  "title": "AbstractActivityParameter",
+  "description": "General parameter value used in one instance of activity.\n[Without inheritance, combined specializations.]",
+  "type": "object",
+  "properties": {
+    "Title": {
+      "type": "string",
+      "title": "Title",
+      "description": "Name of the parameter, used to identify it in the activity. It must have an equivalent in the ActivityTemplate parameters."
+    },
+    "Index": {
+      "type": "integer",
+      "title": "Index",
+      "description": "When parameter is an array, used to indicate the index in the array."
+    },
+    "Selection": {
+      "type": "string",
+      "title": "Selection",
+      "description": "Textual description about how this parameter was selected."
+    },
+    "Keys": {
+      "type": "array",
+      "title": "Keys",
+      "description": "A nested array describing keys used to identify a parameter value. When multiple values are provided for a given parameter, the key provides a way to identify the parameter through its association with an object, a time index or a parameter array member via ParameterKey value.",
+      "items": {
+        "type": "object",
+        "title": "Parameter Key",
+        "description": "Abstract class describing a key used to identify a parameter value. When multiple values are provided for a given parameter, provides a way to identify the parameter through its association with an object, a time index, an integer... \n[Without inheritance, combined specializations.] Note: floating point numbers are not supported as key values; the numbers have to be formatted as strings for robust equality operations, which are necessary for keys.",
+        "properties": {
+          "ObjectParameterKey": {
+            "type": "string",
+            "title": "Object Parameter Key",
+            "description": "Relationship to an object ID, which acts as the parameter.",
+            "pattern": "^[\\w\\-\\.]+:[\\w\\-\\.]+:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+            "x-osdu-relationship": []
+          },
+          "TimeIndexParameterKey": {
+            "type": "string",
+            "title": "Time Index Parameter Key",
+            "description": "The time index acting as parameter key value.",
+            "format": "time"
+          },
+          "ParameterKey": {
+            "type": "string",
+            "title": "Internal Parameter Key",
+            "description": "The key name, which establishes an association between parameters."
+          },
+          "IntegerParameterKey": {
+            "type": "integer",
+            "title": "Integer Parameter Key",
+            "description": "Integer value from \"ParameterKey\" parameter, associated with this parameter. Example: {\"ParameterKey\": \"index\", \"StringParameterKey: 2}."
+          },
+          "StringParameterKey": {
+            "type": "string",
+            "title": "String Parameter Key",
+            "description": "String value from \"ParameterKey\" parameter, associated with this parameter. Can be used to associate with parameter values of type string or data quantity. In the later case, the string representation of the quantity value will be used. Example: {\"ParameterKey\": \"facies\", \"StringParameterKey: \"shale\"}, {\"ParameterKey\":\"depth\", \"StringParameterKey\":\"1545.43m\"}."
+          }
+        }
+      }
+    },
+    "DataObjectParameter": {
+      "type": "string",
+      "title": "Data Object Parameter",
+      "description": "Parameter referencing to a top level object.",
+      "pattern": "^[\\w\\-\\.]+:[\\w\\-\\.]+:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": []
+    },
+    "DataQuantityParameter": {
+      "type": "number",
+      "title": "Data Quantity Parameter",
+      "description": "Parameter containing a double value.",
+      "x-osdu-frame-of-reference": "UOM_via_property:DataQuantityParameterUOMID"
+    },
+    "IntegerQuantityParameter": {
+      "type": "integer",
+      "title": "Integer Quantity Parameter",
+      "description": "Parameter containing an integer value."
+    },
+    "StringParameter": {
+      "type": "string",
+      "title": "String Parameter",
+      "description": "Parameter containing a string value."
+    },
+    "TimeIndexParameter": {
+      "type": "string",
+      "title": "Time Index Parameter",
+      "description": "Parameter containing a time index value.  It is assumed that all TimeIndexParameters within an Activity have the same date-time format, which is then described by the FrameOfReference mechanism.",
+      "format": "date-time",
+      "x-osdu-frame-of-reference": "DateTime"
+    },
+    "ParameterKindID": {
+      "type": "string",
+      "description": "[Added to cover lack of inheritance]",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-ParameterKind:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "ParameterKind"
+        }
+      ]
+    },
+    "ParameterRoleID": {
+      "type": "string",
+      "title": "Parameter Role",
+      "description": "Reference data describing how the parameter was used by the activity, such as input, output, control, constraint, agent, predecessor activity, successor activity.",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-ParameterRole:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "ParameterRole"
+        }
+      ]
+    },
+    "DataQuantityParameterUOMID": {
+      "type": "string",
+      "title": "Data Quantity Parameter UoM ID",
+      "description": "Identifies unit of measure for floating point value.",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-UnitOfMeasure:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "UnitOfMeasure"
+        }
+      ]
+    }
+  },
+  "required": [
+    "Title",
+    "ParameterKindID"
+  ],
+  "x-osdu-inheriting-from-kind": []
+}

@@ -1,0 +1,424 @@
+{
+  "x-osdu-license": "Copyright 2025, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "x-osdu-review-status": "Accepted",
+  "$id": "https://schema.osdu.opengroup.org/json/abstract/AbstractTubularComponentBitRecord.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:AbstractTubularComponentBitRecord:1.0.0",
+  "title": "Abstract Tubular Component Bit Record",
+  "description": "Tubular Component Bit Record specific properties. Based on WITSML Tubular  Component 'BitRecord' ComplexType.",
+  "type": "object",
+  "properties": {
+    "NumBit": {
+      "type": "string",
+      "title": "Identifier",
+      "description": "Bit number and rerun number e.g. \"4.1\" for the first rerun of bit 4.",
+      "example": 4.1,
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML Tubular.TubularComponent.BitRecord.NumBit",
+      "x-osdu-attribution-revision": "V2.1"
+    },
+    "DiameterBit": {
+      "type": "number",
+      "title": "Bit Diameter",
+      "description": "Diameter of drilled hole.",
+      "example": "8.5 in",
+      "x-osdu-frame-of-reference": "UOM:length",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML Tubular.TubularComponent.BitRecord.DiaBit",
+      "x-osdu-attribution-revision": "V2.1"
+    },
+    "DiameterPassThrough": {
+      "type": "number",
+      "title": "Pass Through Diameter",
+      "description": "Minimum hole or tubing which bit will pass through (for bi-centre bits).",
+      "x-osdu-frame-of-reference": "UOM:length",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML Tubular.TubularComponent.BitRecord.DiaPassthru",
+      "x-osdu-attribution-revision": "V2.1"
+    },
+    "DiameterPilot": {
+      "type": "number",
+      "title": "Pilot Diameter",
+      "description": "Diameter of pilot bit (for bi-centre bits).",
+      "x-osdu-frame-of-reference": "UOM:length",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML Tubular.TubularComponent.BitRecord.DiaPilot",
+      "x-osdu-attribution-revision": "V2.1"
+    },
+    "TypeBitID": {
+      "type": "string",
+      "title": "Bit Type Identifier",
+      "description": "Type of bit.",
+      "example": "namespace:reference-data--BitType:PDC:",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML Tubular.TubularComponent.BitRecord.TypeBit",
+      "x-osdu-attribution-revision": "V2.1",
+      "x-osdu-existing-standard": "Y",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-BitType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "BitType"
+        }
+      ]
+    },
+    "Cost": {
+      "type": "number",
+      "title": "Cost",
+      "description": "Bit cost in local currency.",
+      "example": "12500 USD",
+      "x-osdu-frame-of-reference": "UOM:currency",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML Tubular.TubularComponent.BitRecord.Cost",
+      "x-osdu-attribution-revision": "V2.1"
+    },
+    "MfgCode": {
+      "type": "string",
+      "title": "Manufacturer Code",
+      "description": "The manufacturer's code for the bit e.g. model number",
+      "example": "QD506HX",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML Tubular.TubularComponent.BitRecord.CodeMfg",
+      "x-osdu-attribution-revision": "V2.1"
+    },
+    "IADCCode": {
+      "type": "string",
+      "title": "IADC code",
+      "description": "IADC bit code for PDC/Roller Cone Bits",
+      "example": 837,
+      "x-osdu-attribution-authority": "Energistics/IADC",
+      "x-osdu-attribution-publication": "WITSML Tubular.TubularComponent.BitRecord.CodeIADC",
+      "x-osdu-attribution-revision": "V2.1"
+    },
+    "InitialConditionInnerID": {
+      "type": "string",
+      "title": "Initial Inner Condition Identifier",
+      "description": "As run bit IADC Dull Grade (I) Condition of Inner tooth rows (inner 2/3 of bit) (0-8).",
+      "example": "namespace:reference-data--BitDullInnerOuter:1:",
+      "x-osdu-attribution-authority": "Energistics/IADC",
+      "x-osdu-attribution-publication": "WITSML Tubular.TubularComponent.BitRecord.CondInitInner",
+      "x-osdu-attribution-revision": "V2.1",
+      "x-osdu-existing-standard": "Y",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-BitDullInnerOuter:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "BitDullInnerOuter"
+        }
+      ]
+    },
+    "InitialConditionOuterID": {
+      "type": "string",
+      "title": "Initial Outer Condition Identifier",
+      "description": "As run bit IADC Dull Grade (O) Condition of Outer tooth rows (outer 1/3 of bit) (0-8).",
+      "example": "namespace:reference-data--BitDullInnerOuter:0:",
+      "x-osdu-attribution-authority": "Energistics/IADC",
+      "x-osdu-attribution-publication": "WITSML Tubular.TubularComponent.BitRecord.CondInitOuter",
+      "x-osdu-attribution-revision": "V2.1",
+      "x-osdu-existing-standard": "Y",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-BitDullInnerOuter:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "BitDullInnerOuter"
+        }
+      ]
+    },
+    "InitialConditionDullID": {
+      "type": "string",
+      "title": "Initial Dull Condition Identifier",
+      "description": "As run bit IADC Dull Grade (D) Overall dull condition from IADC bit wear 2 character codes.",
+      "example": "namespace:reference-data--BitDullCode:WT:",
+      "x-osdu-attribution-authority": "Energistics/IADC",
+      "x-osdu-attribution-publication": "WITSML Tubular.TubularComponent.BitRecord.CondInitDull",
+      "x-osdu-attribution-revision": "V2.1",
+      "x-osdu-existing-standard": "Y",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-BitDullCode:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "BitDullCode"
+        }
+      ]
+    },
+    "InitialConditionLocationID": {
+      "type": "string",
+      "title": "Initial Condition Location Identifier",
+      "description": "As run bit IADC Dull Grade (L) Location Row and cone numbers where wear located (e.g. Cracked Cone, Lost Cone etc).",
+      "example": "namespace:reference-data--BitDullLocationCode:A:",
+      "x-osdu-attribution-authority": "Energistics/IADC",
+      "x-osdu-attribution-publication": "WITSML Tubular.TubularComponent.BitRecord.CondInitLocation",
+      "x-osdu-attribution-revision": "V2.1",
+      "x-osdu-existing-standard": "Y",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-BitDullLocationCode:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "BitDullLocationCode"
+        }
+      ]
+    },
+    "InitialConditionBearingID": {
+      "type": "string",
+      "title": "Initial Condition Bearing Identifier",
+      "description": "As run bit IADC Dull Grade (B) Condition of bit Bearings (integer 0-8 or E, F, N or X)).",
+      "example": "namespace:reference-data--BitDullBearingCode:0:",
+      "x-osdu-attribution-authority": "Energistics/IADC",
+      "x-osdu-attribution-publication": "WITSML Tubular.TubularComponent.BitRecord.CondInitBearing",
+      "x-osdu-attribution-revision": "V2.1",
+      "x-osdu-existing-standard": "Y",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-BitDullBearingCode:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "BitDullBearingCode"
+        }
+      ]
+    },
+    "InitialConditionGaugeID": {
+      "type": "string",
+      "title": "Initial Condition Gauge Identifier",
+      "description": "As run bit IADC Dull Grade (G) Condition of bit Gauge in 1/16 of an inch. I = in gauge, else number of 16ths out of gauge.",
+      "example": "namespace:reference-data--BitDullGaugeCode:I:",
+      "x-osdu-attribution-authority": "Energistics/IADC",
+      "x-osdu-attribution-publication": "WITSML Tubular.TubularComponent.BitRecord.CondInitGauge",
+      "x-osdu-attribution-revision": "V2.1",
+      "x-osdu-existing-standard": "Y",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-BitDullGaugeCode:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "BitDullGaugeCode"
+        }
+      ]
+    },
+    "InitialConditionOtherID": {
+      "type": "string",
+      "title": "Initial Condition Other Identifier",
+      "description": "As run bit IADC Dull Grade (O) Other comments on bit condition from IADC list (BitDullCode in standard list).",
+      "example": "namespace:reference-data--BitDullCode:O:",
+      "x-osdu-attribution-authority": "Energistics/IADC",
+      "x-osdu-attribution-publication": "WITSML Tubular.TubularComponent.BitRecord.CondInitOther",
+      "x-osdu-attribution-revision": "V2.1",
+      "x-osdu-existing-standard": "Y",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-BitDullCode:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "BitDullCode"
+        }
+      ]
+    },
+    "InitialConditionReasonID": {
+      "type": "string",
+      "title": "Initial Condition Reason Identifier",
+      "description": "As run bit IADC Dull Grade (R) Reason bit was pulled",
+      "example": "namespace:reference-data--BitReasonPulledCode:TD:",
+      "x-osdu-attribution-authority": "Energistics/IADC",
+      "x-osdu-attribution-publication": "WITSML Tubular.TubularComponent.BitRecord.CondInitReason",
+      "x-osdu-attribution-revision": "V2.1",
+      "x-osdu-existing-standard": "Y",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-BitReasonPulledCode:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "BitReasonPulledCode"
+        }
+      ]
+    },
+    "FinalConditionInnerID": {
+      "type": "string",
+      "title": "Final Condition Inner Identifier",
+      "description": "Pulled bit IADC Dull Grade (I) Condition of Inner tooth rows (inner 2/3 of bit) (0-8).",
+      "example": "namespace:reference-data--BitDullInnerOuter:1:",
+      "x-osdu-attribution-authority": "Energistics/IADC",
+      "x-osdu-attribution-publication": "WITSML Tubular.TubularComponent.BitRecord.CondFinalInner",
+      "x-osdu-attribution-revision": "V2.1",
+      "x-osdu-existing-standard": "Y",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-BitDullInnerOuter:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "BitDullInnerOuter"
+        }
+      ]
+    },
+    "FinalConditionOuterID": {
+      "type": "string",
+      "title": "Final Condition Outer Identifier",
+      "description": "Pulled bit IADC Dull Grade (O) Condition of Outer tooth rows (outer 1/3 of bit) (0-8).",
+      "example": "namespace:reference-data--BitDullInnerOuter:0:",
+      "x-osdu-attribution-authority": "Energistics/IADC",
+      "x-osdu-attribution-publication": "WITSML Tubular.TubularComponent.BitRecord.CondFinalOuter",
+      "x-osdu-attribution-revision": "V2.1",
+      "x-osdu-existing-standard": "Y",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-BitDullInnerOuter:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "BitDullInnerOuter"
+        }
+      ]
+    },
+    "FinalConditionDullID": {
+      "type": "string",
+      "title": "Final Condition Dull Identifier",
+      "description": "Pulled bit IADC Dull Grade (D) Overall Dull condition from IADC bit wear 2 character codes.",
+      "example": "namespace:reference-data--BitDullCode:WT:",
+      "x-osdu-attribution-authority": "Energistics/IADC",
+      "x-osdu-attribution-publication": "WITSML Tubular.TubularComponent.BitRecord.CondFinalDull",
+      "x-osdu-attribution-revision": "V2.1",
+      "x-osdu-existing-standard": "Y",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-BitDullCode:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "BitDullCode"
+        }
+      ]
+    },
+    "FinalConditionLocationID": {
+      "type": "string",
+      "title": "Final Condition Location Identifier",
+      "description": "Pulled bit IADC Dull Grade (L) Location Row and cone numbers where wear located (e.g. Cracked Cone, Lost Cone etc).",
+      "example": "namespace:reference-data--BitDullLocationCode:A:",
+      "x-osdu-attribution-authority": "Energistics/IADC",
+      "x-osdu-attribution-publication": "WITSML Tubular.TubularComponent.BitRecord.CondFinalLocation",
+      "x-osdu-attribution-revision": "V2.1",
+      "x-osdu-existing-standard": "Y",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-BitDullLocationCode:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "BitDullLocationCode"
+        }
+      ]
+    },
+    "FinalConditionBearingID": {
+      "type": "string",
+      "title": "Final Condition Bearing Identifier",
+      "description": "Pulled bit IADC Dull Grade (B) Condition of bit Bearings (integer 0-8 or E, F, N or X).",
+      "example": "namespace:reference-data--BitDullBearingCode:0:",
+      "x-osdu-attribution-authority": "Energistics/IADC",
+      "x-osdu-attribution-publication": "WITSML Tubular.TubularComponent.BitRecord.CondFinalBearing",
+      "x-osdu-attribution-revision": "V2.1",
+      "x-osdu-existing-standard": "Y",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-BitDullBearingCode:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "BitDullBearingCode"
+        }
+      ]
+    },
+    "FinalConditionGaugeID": {
+      "type": "string",
+      "title": "Final Condition Gauge Identifier",
+      "description": "Pulled bit IADC Dull Grade (G) Condition of bit Gauge in 1/16 of a inch. I = in gauge, else number of 16ths out of gauge.",
+      "example": "namespace:reference-data--BitDullGaugeCode:I:",
+      "x-osdu-attribution-authority": "Energistics/IADC",
+      "x-osdu-attribution-publication": "WITSML Tubular.TubularComponent.BitRecord.CondFinalGauge",
+      "x-osdu-attribution-revision": "V2.1",
+      "x-osdu-existing-standard": "Y",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-BitDullGaugeCode:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "BitDullGaugeCode"
+        }
+      ]
+    },
+    "FinalConditionOtherID": {
+      "type": "string",
+      "title": "Final Condition Other Identifier",
+      "description": "Pulled bit IADC Dull Grade (O) Other comments on bit condition.",
+      "example": "namespace:reference-data--BitDullCode:O:",
+      "x-osdu-attribution-authority": "Energistics/IADC",
+      "x-osdu-attribution-publication": "WITSML Tubular.TubularComponent.BitRecord.CondFinalOther",
+      "x-osdu-attribution-revision": "V2.1",
+      "x-osdu-existing-standard": "Y",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-BitDullCode:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "BitDullCode"
+        }
+      ]
+    },
+    "FinalConditionReasonID": {
+      "type": "string",
+      "title": "Final Condition Reason Identifier",
+      "description": "Pulled bit  IADC Dull Grade (R) Reason bit was pulled.",
+      "example": "namespace:reference-data--BitReasonPulledCode:TD:",
+      "x-osdu-attribution-authority": "Energistics/IADC",
+      "x-osdu-attribution-publication": "WITSML Tubular.TubularComponent.BitRecord.CondFinalReason",
+      "x-osdu-attribution-revision": "V2.1",
+      "x-osdu-existing-standard": "Y",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-BitReasonPulledCode:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "BitReasonPulledCode"
+        }
+      ]
+    },
+    "BitDullComments": {
+      "type": "string",
+      "title": "Bit Dull Comments",
+      "description": "Any other Bit Dull comments/description, older T-B-G code or full formatted dull grade e.g.  0-2-WT-N/S-X-I-LN-TD",
+      "example": "1-0-WT-A-0-I-O-TD"
+    },
+    "DriveType": {
+      "type": "string",
+      "title": "Drive Type",
+      "description": "Bit drive type (Motor, rotary table etc).",
+      "example": "Motor",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML Tubular.TubularComponent.BitRecord.Drive",
+      "x-osdu-attribution-revision": "V2.1"
+    },
+    "BitClass": {
+      "type": "string",
+      "title": "Bit Class",
+      "description": "N = new, U = used.",
+      "example": "R",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML Tubular.TubularComponent.BitRecord.BitClass",
+      "x-osdu-attribution-revision": "V2.1"
+    },
+    "ReRunBitNumber": {
+      "type": "string",
+      "title": "Re-run Bit Number",
+      "description": "Re-run Bit Number to describe bit number when previously run",
+      "example": 1
+    },
+    "HardAbrasiveFormationID": {
+      "type": "string",
+      "title": "Hard/Abrasive Formation Identifier",
+      "description": "Hard/Abrasive Formation",
+      "example": "namespace:reference-data--BitFormationType:Hard:",
+      "x-osdu-existing-standard": "N",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-BitFormationType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "BitFormationType"
+        }
+      ]
+    },
+    "HoursOnBit": {
+      "type": "number",
+      "title": "Hours On Bit",
+      "description": "Cumulative Hours on Bit",
+      "example": "266 h",
+      "x-osdu-frame-of-reference": "UOM:elapsedtime"
+    },
+    "Remarks": {
+      "type": "string",
+      "title": "Remarks",
+      "description": "Remarks",
+      "example": "Bit 4.1 pulled at 8-1/2 section TD. Bit was clean at surface graded by tool hand."
+    }
+  },
+  "x-osdu-inheriting-from-kind": []
+}

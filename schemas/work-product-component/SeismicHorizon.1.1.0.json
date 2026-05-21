@@ -1,0 +1,430 @@
+{
+  "x-osdu-license": "Copyright 2022, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "$id": "https://schema.osdu.opengroup.org/json/work-product-component/SeismicHorizon.1.1.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:work-product-component--SeismicHorizon:1.1.0",
+  "title": "SeismicHorizon",
+  "description": "A set of picks related to seismic processing geometry which define a surface.  The geometry used is referenced by the Interpretation Project.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "Previously called ResourceID or SRN which identifies this OSDU resource object without version.",
+      "title": "Entity ID",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-SeismicHorizon:[\\w\\-\\.\\:\\%]+$",
+      "example": "namespace:work-product-component--SeismicHorizon:a7a81843-9bea-5ce4-913c-f67e4ea154ff"
+    },
+    "kind": {
+      "description": "The schema identification for the OSDU resource object following the pattern {Namespace}:{Source}:{Type}:{VersionMajor}.{VersionMinor}.{VersionPatch}. The versioning scheme follows the semantic versioning, https://semver.org/.",
+      "title": "Entity Kind",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:[\\w\\-\\.]+:[\\w\\-\\.]+:[0-9]+.[0-9]+.[0-9]+$",
+      "example": "osdu:wks:work-product-component--SeismicHorizon:1.1.0"
+    },
+    "version": {
+      "description": "The version number of this OSDU resource; set by the framework.",
+      "title": "Version Number",
+      "type": "integer",
+      "format": "int64",
+      "example": 1562066009929332
+    },
+    "acl": {
+      "description": "The access control tags associated with this entity.",
+      "title": "Access Control List",
+      "$ref": "../abstract/AbstractAccessControlList.1.0.0.json"
+    },
+    "legal": {
+      "description": "The entity's legal tags and compliance status. The actual contents associated with the legal tags is managed by the Compliance Service.",
+      "title": "Legal Tags",
+      "$ref": "../abstract/AbstractLegalTags.1.0.0.json"
+    },
+    "tags": {
+      "title": "Tag Dictionary",
+      "description": "A generic dictionary of string keys mapping to string value. Only strings are permitted as keys and values.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "example": {
+        "NameOfKey": "String value"
+      }
+    },
+    "createTime": {
+      "description": "Timestamp of the time at which initial version of this OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:46:20.163Z"
+    },
+    "createUser": {
+      "title": "Resource Object Creation User Reference",
+      "description": "The user reference, which created the first version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "modifyTime": {
+      "description": "Timestamp of the time at which this version of the OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Version Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:52:24.477Z"
+    },
+    "modifyUser": {
+      "title": "Resource Object Version Creation User Reference",
+      "description": "The user reference, which created this version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "ancestry": {
+      "description": "The links to data, which constitute the inputs, from which this record instance is derived.",
+      "title": "Ancestry",
+      "$ref": "../abstract/AbstractLegalParentList.1.0.0.json"
+    },
+    "meta": {
+      "description": "The Frame of Reference meta data section linking the named properties to self-contained definitions.",
+      "title": "Frame of Reference Meta Data",
+      "type": "array",
+      "items": {
+        "$ref": "../abstract/AbstractMetaItem.1.0.0.json"
+      }
+    },
+    "data": {
+      "allOf": [
+        {
+          "$ref": "../abstract/AbstractCommonResources.1.0.0.json"
+        },
+        {
+          "$ref": "../abstract/AbstractWPCGroupType.1.0.0.json"
+        },
+        {
+          "$ref": "../abstract/AbstractWorkProductComponent.1.0.0.json"
+        },
+        {
+          "$ref": "../abstract/AbstractRepresentation.1.0.0.json"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "Seismic3DInterpretationSetID": {
+              "type": "string",
+              "description": "For picks on 3D datasets, reference to the 3D interpretation set (not the application project nor an acquisition survey) that supported this interpretation.  The seismic geometry (bin grid) needed to interpret the location references is inferred through the interpretation survey and no longer explicitly through this object.  The WPC SpatialArea may reflect the survey area that has the horizon picked on it for shallow search purposes.  Only this or Seismic2DInterpretationSetID may be used, but not both.",
+              "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Seismic3DInterpretationSet:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "Seismic3DInterpretationSet"
+                }
+              ]
+            },
+            "Seismic2DInterpretationSetID": {
+              "type": "string",
+              "description": "For picks on 2D datasets, reference to the 2D interpretation set (not the application project nor an acquisition survey) that supported this interpretation.  The seismic geometries (seismic line geometries) needed to interpret the location references are inferred through the interpretation survey.  The WPC SpatialArea may reflect the lines that have the horizon picked on it for shallow search purposes.  Only this or Seismic3DInterpretationSetID may be used, but not both.",
+              "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Seismic2DInterpretationSet:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "Seismic2DInterpretationSet"
+                }
+              ]
+            },
+            "SeismicPickingTypeID": {
+              "type": "string",
+              "description": "Picking method used for horizon e.g. Primary seed pick (seed), Interpolated seed pick (int), Autotracked seed pick (aut), Mixed, etc.",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-SeismicPickingType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "SeismicPickingType"
+                }
+              ]
+            },
+            "SeismicDomainTypeID": {
+              "type": "string",
+              "description": "Vertical domain of faults.  E.g. Time, Depth",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-SeismicDomainType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "SeismicDomainType"
+                }
+              ]
+            },
+            "SeismicDomainUOM": {
+              "type": "string",
+              "description": "Unit of measurement for vertical domain",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-UnitOfMeasure:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "UnitOfMeasure"
+                }
+              ]
+            },
+            "VerticalDatumOffset": {
+              "type": "number",
+              "description": "Vertical reference datum points are stored in.",
+              "x-osdu-frame-of-reference": "UOM:length"
+            },
+            "VerticalMeasurementTypeID": {
+              "type": "string",
+              "description": "Identifies a vertical reference datum type. E.g. mean sea level, ground level, mudline.",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-VerticalMeasurementType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "VerticalMeasurementType"
+                }
+              ]
+            },
+            "ReplacementVelocity": {
+              "type": "number",
+              "description": "Value used to produce vertical static shifts in data",
+              "x-osdu-frame-of-reference": "UOM:length per time"
+            },
+            "SeismicHorizonTypeID": {
+              "type": "string",
+              "description": "e.g. Peak (pk), Trough (tr), Plus to Minus Zero Crossing, Minus to Plus Zero Crossing, Envelope (env), Not Applicable (na)",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-SeismicHorizonType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "SeismicHorizonType"
+                }
+              ]
+            },
+            "GeologicalUnitName": {
+              "type": "string",
+              "description": "Geological Unit (formation, bioevent, etc.) Name"
+            },
+            "GeologicalUnitAgeYear": {
+              "type": "string",
+              "description": "Age of Geologic unit (geochronological).  Number expected but is a string type to be consistent with wellbore marker."
+            },
+            "GeologicalUnitAgePeriod": {
+              "type": "string",
+              "description": "Age period of geologic unit (geochronological name of stage, etc.)"
+            },
+            "PetroleumSystemElementTypeID": {
+              "type": "string",
+              "description": "A petroleum system element such as Reservoir, Source, Seal, etc.",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-PetroleumSystemElementType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "PetroleumSystemElementType"
+                }
+              ]
+            },
+            "SeismicVelocityModelID": {
+              "type": "string",
+              "description": "Velocity model used in depth conversion",
+              "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-VelocityModeling:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "work-product-component",
+                  "EntityType": "VelocityModeling"
+                }
+              ]
+            },
+            "SeismicAttributes": {
+              "type": "array",
+              "description": "Summary of measurements included with horizon in addition to depth attribute.",
+              "x-osdu-indexing": {
+                "type": "flattened"
+              },
+              "items": {
+                "type": "object",
+                "title": "SeismicAttributes",
+                "description": "Summary of measurements included with horizon in addition to depth attribute.",
+                "properties": {
+                  "SeismicAttributeTypeID": {
+                    "type": "string",
+                    "description": "The type of attribute value captured",
+                    "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-SeismicAttributeType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "reference-data",
+                        "EntityType": "SeismicAttributeType"
+                      }
+                    ]
+                  },
+                  "SeismicAttributeUOM": {
+                    "type": "string",
+                    "description": "Unit of Measurement for attribute",
+                    "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-UnitOfMeasure:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "reference-data",
+                        "EntityType": "UnitOfMeasure"
+                      }
+                    ]
+                  },
+                  "SeismicAttributeMaxNumber": {
+                    "type": "number",
+                    "description": "Max value of attribute",
+                    "x-osdu-frame-of-reference": "UOM_via_property:SeismicAttributeUOM"
+                  },
+                  "SeismicAttributeMinNumber": {
+                    "type": "number",
+                    "description": "Min value of attribute",
+                    "x-osdu-frame-of-reference": "UOM_via_property:SeismicAttributeUOM"
+                  },
+                  "SeismicAttributeMeanNumber": {
+                    "type": "number",
+                    "description": "Mean value of attribute",
+                    "x-osdu-frame-of-reference": "UOM_via_property:SeismicAttributeUOM"
+                  }
+                }
+              }
+            },
+            "BinGridCoveragePercent": {
+              "type": "number",
+              "description": "Portion of bin grid covered by picked surface expressed in percent."
+            },
+            "InlineMin": {
+              "type": "number",
+              "description": "Smallest inline picked in surface."
+            },
+            "InlineMax": {
+              "type": "number",
+              "description": "Largest inline picked in surface."
+            },
+            "CrosslineMin": {
+              "type": "number",
+              "description": "Smallest crossline picked in surface."
+            },
+            "CrosslineMax": {
+              "type": "number",
+              "description": "Largest crossline picked in surface."
+            },
+            "Remark": {
+              "type": "string",
+              "description": "Optional comment providing thoughts from the interpreter.  Description is to provide a general explanation of the horizon."
+            },
+            "Interpreter": {
+              "type": "string",
+              "description": "The person or team who interpreted the fault data."
+            },
+            "SeismicTraceDataID": {
+              "type": "array",
+              "description": "Seismic Volumes picked against.  Only applies to 3D.",
+              "items": {
+                "type": "string",
+                "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-SeismicTraceData:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                "x-osdu-relationship": [
+                  {
+                    "GroupType": "work-product-component",
+                    "EntityType": "SeismicTraceData"
+                  }
+                ]
+              }
+            },
+            "BinGridID": {
+              "type": "string",
+              "title": "Bin Grid ID",
+              "description": "The explicit bin grid geometry for this horizon overriding the geometry defined by the parent Seismic3DInterpretationSet. If empty and Seismic3DInterpretationSetID is populated, the Seismic3DInterpretationSet.SeismicBinGridID applies.",
+              "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-SeismicBinGrid:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "work-product-component",
+                  "EntityType": "SeismicBinGrid"
+                }
+              ]
+            },
+            "SeismicLineGeometryIDs": {
+              "type": "array",
+              "title": "Seismic Line Geometry IDs",
+              "description": "The list of explicit 2D seismic line geometries overriding any definitions inferred from Seismic2DInterpretationSet. If empty and Seismic2DInterpretationSetID is populated, Seismic2DInterpretationSet.SeismicLineGeometries[].SeismicLineGeometryID apply.",
+              "items": {
+                "type": "string",
+                "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-SeismicLineGeometry:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                "x-osdu-relationship": [
+                  {
+                    "GroupType": "work-product-component",
+                    "EntityType": "SeismicLineGeometry"
+                  }
+                ]
+              }
+            },
+            "Role": {
+              "type": "string",
+              "title": "Representation Role",
+              "description": "The RepresentationRole assigned to this SeismicHorizon. Examples: Pick, Map.",
+              "format": "uri-reference",
+              "example": "namespace:reference-data--RepresentationRole:Pick:",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-RepresentationRole:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "RepresentationRole"
+                }
+              ]
+            },
+            "Type": {
+              "type": "string",
+              "title": "Representation Type",
+              "description": "The RepresentationType for this SeismicHorizon. Examples: PointSet, PolylineSet, Regular2DGrid, Irregular2DGrid, TriangulatedSurface.",
+              "format": "uri-reference",
+              "example": "namespace:reference-data--RepresentationType:Regular2DGrid:",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-RepresentationType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "RepresentationType"
+                }
+              ]
+            }
+          },
+          "title": "IndividualProperties"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "ExtensionProperties": {
+              "type": "object"
+            }
+          },
+          "title": "ExtensionProperties"
+        }
+      ]
+    }
+  },
+  "required": [
+    "kind",
+    "acl",
+    "legal"
+  ],
+  "additionalProperties": false,
+  "x-osdu-review-status": "Accepted",
+  "x-osdu-supported-file-formats": [
+    "RESQML",
+    "csv"
+  ],
+  "x-osdu-virtual-properties": {
+    "data.VirtualProperties.DefaultLocation": {
+      "type": "object",
+      "priority": [
+        {
+          "path": "data.SpatialArea"
+        },
+        {
+          "path": "data.SpatialPoint"
+        }
+      ]
+    },
+    "data.VirtualProperties.DefaultName": {
+      "type": "string",
+      "priority": [
+        {
+          "path": "data.Name"
+        }
+      ]
+    }
+  },
+  "x-osdu-inheriting-from-kind": [
+    {
+      "name": "WorkProductComponent",
+      "kind": "osdu:wks:AbstractWPCGroupType:1.0.0"
+    }
+  ]
+}

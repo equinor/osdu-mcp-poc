@@ -1,0 +1,107 @@
+{
+  "x-osdu-license": "Copyright 2022, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "x-osdu-review-status": "Accepted",
+  "$id": "https://schema.osdu.opengroup.org/json/abstract/AbstractWPCActivity.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:AbstractWPCActivity:1.0.0",
+  "title": "AbstractWPCActivity",
+  "description": "The activity abstraction included by projects (master-data) and work-product-component group-type specialisations.",
+  "type": "object",
+  "properties": {
+    "ActivityTemplateID": {
+      "type": "string",
+      "title": "Activity Template ID",
+      "description": "The relation to the ActivityTemplate carrying expected parameter definitions and default values.",
+      "pattern": "^[\\w\\-\\.]+:master-data\\-\\-ActivityTemplate:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "master-data",
+          "EntityType": "ActivityTemplate"
+        }
+      ]
+    },
+    "ParentProjectID": {
+      "type": "string",
+      "title": "Parent Project ID",
+      "description": "The relationship to a parent project acting as a parent activity.",
+      "pattern": "^[\\w\\-\\.]+:(master-data\\-\\-[\\w\\-\\.]*Project[\\w\\-\\.]*|master-data\\-\\-[\\w\\-\\.]*Survey[\\w\\-\\.]*):[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "master-data",
+          "EntityType": "*Project*"
+        },
+        {
+          "GroupType": "master-data",
+          "EntityType": "*Survey*"
+        }
+      ]
+    },
+    "ParentActivityID": {
+      "type": "string",
+      "title": "Parent Activity ID",
+      "description": "The relationship to a parent activity.",
+      "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-[\\w\\-\\.]*Activity[\\w\\-\\.]*:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "work-product-component",
+          "EntityType": "*Activity*"
+        }
+      ]
+    },
+    "Parameters": {
+      "type": "array",
+      "title": "Parameters",
+      "description": "General parameter value used in one instance of activity.  Includes reference to data objects which are inputs and outputs of the activity.",
+      "x-osdu-indexing": {
+        "type": "nested"
+      },
+      "items": {
+        "$ref": "../abstract/AbstractActivityParameter.1.0.0.json"
+      }
+    },
+    "PriorActivityIDs": {
+      "type": "array",
+      "title": "Prior Activity IDs",
+      "description": "The activity or activities feeding results into this activity instance.",
+      "items": {
+        "type": "string",
+        "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-[\\w\\-\\.]*Activity[\\w\\-\\.]*:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+        "x-osdu-relationship": [
+          {
+            "GroupType": "work-product-component",
+            "EntityType": "*Activity*"
+          }
+        ]
+      }
+    },
+    "SoftwareSpecifications": {
+      "type": "array",
+      "title": "Software Specifications",
+      "description": "Software names and versions used.",
+      "x-osdu-indexing": {
+        "type": "flattened"
+      },
+      "items": {
+        "type": "object",
+        "title": "Software",
+        "description": "The name and version of the software being executed in the context of this activity",
+        "properties": {
+          "SoftwareName": {
+            "type": "string",
+            "title": "Software Name",
+            "description": "The name of the software, application or plug-in used while performing this activity."
+          },
+          "Version": {
+            "type": "string",
+            "title": "Software Version",
+            "description": "The version of the software, application or plug-in used while performing this activity."
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "Parameters"
+  ],
+  "x-osdu-inheriting-from-kind": []
+}

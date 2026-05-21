@@ -1,0 +1,44 @@
+{
+  "x-osdu-license": "Copyright 2022, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "x-osdu-review-status": "Accepted",
+  "$id": "https://schema.osdu.opengroup.org/json/abstract/AbstractActivityState.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:AbstractActivityState:1.0.0",
+  "title": "AbstractActivityState",
+  "description": "One step/interval in an Activity's or ProjectActivity's state.",
+  "type": "object",
+  "properties": {
+    "EffectiveDateTime": {
+      "type": "string",
+      "title": "Effective Date Time",
+      "description": "The date and time at which the activity status becomes effective.",
+      "format": "date-time",
+      "x-osdu-frame-of-reference": "DateTime"
+    },
+    "TerminationDateTime": {
+      "type": "string",
+      "title": "Termination Date Time",
+      "description": "The date and time at which the activity status is no longer in effect. For still effective activity states, the TerminationDateTime is left absent. For zero-duration intervals (events), the TerminationDateTime set to the same value as EffectiveDateTime.",
+      "format": "date-time",
+      "x-osdu-frame-of-reference": "DateTime"
+    },
+    "ActivityStatusID": {
+      "type": "string",
+      "title": "Activity Status ID",
+      "description": "The ActivityStatus is a set of major activity phases that are significant to business stakeholders.",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-ActivityStatus:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "ActivityStatus"
+        }
+      ]
+    },
+    "Remark": {
+      "type": "string",
+      "title": "Remark",
+      "description": "An optional remark associated with the ActivityStatus and time interval."
+    }
+  },
+  "x-osdu-inheriting-from-kind": []
+}

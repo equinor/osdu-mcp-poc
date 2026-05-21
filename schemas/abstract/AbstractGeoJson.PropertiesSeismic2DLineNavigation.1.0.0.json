@@ -1,0 +1,124 @@
+{
+  "x-osdu-license": "Copyright 2023, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "x-osdu-review-status": "Pending",
+  "$id": "https://schema.osdu.opengroup.org/json/abstract/AbstractGeoJson.PropertiesSeismic2DLineNavigation.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:AbstractGeoJson.PropertiesSeismic2DLineNavigation:1.0.0",
+  "title": "AbstractGeoJson.PropertiesSeismic2DLineNavigation",
+  "description": "The schema fragment for OSDU seismic 2D line navigation annotation in GeoJSON or GeoJSON like structures.",
+  "type": "object",
+  "properties": {
+    "Kind": {
+      "type": "string",
+      "title": "Kind",
+      "description": "The actual Kind of schema fragment AbstractGeoJson.PropertiesSeismic2DLineNavigation.",
+      "enum": [
+        "osdu:wks:AbstractGeoJson.PropertiesSeismic2DLineNavigation:1.0.0"
+      ]
+    },
+    "PointsProperties": {
+      "type": "object",
+      "title": "Points Properties",
+      "description": "Contains trace annotation value arrays for each point each point in the Feature/AnyCrsFeature.",
+      "properties": {
+        "ShotPointNumbers": {
+          "type": "array",
+          "title": "Shot Point Numbers",
+          "description": "The array of shot point numbers, one number for each coordinate in the LineString or MultiLineString feature.",
+          "example": [
+            954,
+            954.5,
+            955.0,
+            955.5,
+            956.0,
+            956.5,
+            957.0,
+            957.5,
+            958.0,
+            958.5,
+            959.0
+          ],
+          "items": {
+            "type": "number"
+          }
+        },
+        "CommonMidPointNumbers": {
+          "type": "array",
+          "title": "Common Mid-Point Numbers",
+          "description": "The array of common mid-point numbers, one number for each coordinate in the LineString or MultiLineString feature.",
+          "example": [
+            2100,
+            2101,
+            2102,
+            2103,
+            2104,
+            2105,
+            2106,
+            2107,
+            2108,
+            2109,
+            2110
+          ],
+          "items": {
+            "type": "number"
+          }
+        },
+        "Labels": {
+          "type": "array",
+          "title": "Labels",
+          "description": "The array of trace labels one number for each coordinate in the LineString or MultiLineString feature.",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "LineStringProperties": {
+      "type": "array",
+      "title": "Line String Properties",
+      "description": "Used if the line feature consists of multiple segments (MultiLineString). If only one segment/LineString is present this property is not populated and the content is covered by FeatureProperties.",
+      "items": {
+        "type": "object",
+        "title": "LineStringProperties",
+        "description": "The object containing the line segment label",
+        "properties": {
+          "LineSegmentName": {
+            "type": "string",
+            "title": "Line Segment Name",
+            "description": "The line segment name used as LineString label. For lines consisting of a single LineString, this property group is redundant and can stay absent. The LineName of the FeatureProperties applies instead.",
+            "example": "ST0299-05005"
+          }
+        }
+      }
+    },
+    "FeatureProperties": {
+      "type": "object",
+      "title": "Feature Properties",
+      "description": "The line annotation for the line in the Feature/AnyCrsFeature. If the feature is a MultiLineString, this applies to all parts.",
+      "properties": {
+        "LineName": {
+          "type": "string",
+          "title": "Line Name",
+          "description": "The line name used as label for the entire feature.",
+          "example": "ST0299-05005"
+        },
+        "PointTypes": {
+          "type": "array",
+          "title": "PointTypes",
+          "description": "The names of the populated PointsProperties arrays.",
+          "example": [
+            "ShotPointNumbers",
+            "CommonMidPointNumbers"
+          ],
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "Kind"
+  ],
+  "x-osdu-inheriting-from-kind": []
+}

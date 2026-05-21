@@ -85,15 +85,32 @@ Inside the query session, type `stats` to see index counts or `quit` to exit.
 
 Distance is cosine distance (0 = identical meaning, 2 = opposite).
 
+## Schema resolution
+
+OSDU entity schemas put their real payload inside `data`, which is an `allOf`
+of cross-file `$ref`s into `../abstract/*.json`. The `schemas/` folder therefore
+mirrors the OSDU `Generated/` layout (`abstract/`, `dataset/`, `master-data/`,
+`reference-data/`, `work-product-component/`, …) and the indexer:
+
+- walks it **recursively**;
+- **resolves cross-file `$ref`s** (relative to each referencing file) and inlines
+  the abstract schemas, with circular-reference guarding;
+- merges nested `allOf` chains to whatever depth they reach.
+
+This is what lets a query like *"which attribute links file metadata to its
+content"* surface `data.DatasetProperties.FileSourceInfo.FileSource` — a property
+that lives two cross-file `$ref` hops deep inside `AbstractFile` / `AbstractDataset`.
+The `abstract/` schemas are not indexed as standalone kinds; they appear inlined
+in every entity that references them.
+
 ## Known limitations
 
-- Cross-file `$ref` pointers in specs are not resolved (noted as `[external ref: ...]`).
-  If your specs use `$ref` to separate schema files, consider bundling them first
-  with a tool like [Redocly CLI](https://redocly.com/docs/cli/commands/bundle/):
-  `redocly bundle openapi.yaml -o bundled.yaml`
-
-- OSDU schema files with deeply nested `allOf` chains may not fully resolve.
-  The indexer handles one level of `allOf` merging; deeper chains are left partial.
+- Cross-file `$ref` pointers **in the OpenAPI specs** are not resolved (noted as
+  `[external ref: ...]`). If your specs use `$ref` to separate schema files,
+  bundle them first with a tool like
+  [Redocly CLI](https://redocly.com/docs/cli/commands/bundle/):
+  `redocly bundle openapi.yaml -o bundled.yaml`. (Schema-file cross-refs *are*
+  resolved — see above.)
 
 - ChromaDB's default embedding model (all-MiniLM-L6-v2) is fast and good enough
   for a PoC. For production, consider switching to a larger model or an API-based
@@ -106,16 +123,34 @@ The MCP server exposes OSDU semantic search as a tool for AI assistants (Claude 
 **Prerequisite:** build the index first (see above).
 
 ```bash
-osdu-mcp --db ./chroma_db
+osdu-mcp --db ./chroma_db --schemas ./schemas
 ```
 
+`--schemas` is optional but recommended: it enables the `get_schema` tool.
+Without it, only `search_osdu` is available.
+
 ### Tool: `search_osdu`
+
+Semantic search — finds *candidate* operations and properties for a need.
 
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
 | `query` | string | required | Natural language description, e.g. *"get wireline log curves for a wellbore"* |
 | `mode` | string | `"both"` | `"api"`, `"schema"`, or `"both"` |
 | `top_k` | integer | `5` | Results returned per collection |
+
+### Tool: `get_schema`
+
+Returns the **full** JSON Schema for a kind — the reliable way to confirm
+*which attribute, in which schema* does something, and what sibling attributes
+travel with it. Use it after `search_osdu` to see a matched property in context.
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `kind` | string | required | Full id (`osdu:wks:dataset--File.Generic:1.1.0`), versioned name (`File.Generic.1.1.0`), or bare name (`File.Generic`, → highest version) |
+| `resolved` | boolean | `true` | `true` inlines cross-file `$ref`s into the abstract schemas; `false` returns the raw on-disk doc |
+
+Requires the server to be started with `--schemas`.
 
 ### Client configuration
 
@@ -131,7 +166,7 @@ See `claude_desktop_config.example.json` for the full file.
   "mcpServers": {
     "osdu-discovery": {
       "command": "/opt/homebrew/bin/uv",
-      "args": ["run", "--project", "/path/to/osdu-mcp-poc", "osdu-mcp", "--db", "/path/to/osdu-mcp-poc/chroma_db"]
+      "args": ["run", "--project", "/path/to/osdu-mcp-poc", "osdu-mcp", "--db", "/path/to/osdu-mcp-poc/chroma_db", "--schemas", "/path/to/osdu-mcp-poc/schemas"]
     }
   }
 }
@@ -152,7 +187,7 @@ Copy `opencode.example.json` to `opencode.json` in the project root (or merge in
     "osdu-discovery": {
       "type": "local",
       "command": "/opt/homebrew/bin/uv",
-      "args": ["run", "--project", "/path/to/osdu-mcp-poc", "osdu-mcp", "--db", "/path/to/osdu-mcp-poc/chroma_db"],
+      "args": ["run", "--project", "/path/to/osdu-mcp-poc", "osdu-mcp", "--db", "/path/to/osdu-mcp-poc/chroma_db", "--schemas", "/path/to/osdu-mcp-poc/schemas"],
       "enabled": true
     }
   }
@@ -161,5 +196,8 @@ Copy `opencode.example.json` to `opencode.json` in the project root (or merge in
 
 ## Next steps
 
-1. Add a `get_spec` tool that returns the full OpenAPI spec or schema document for a result
-2. Add a `find_workflow` tool for stitching multi-service paths
+1. Add a `get_spec` tool that returns the full OpenAPI spec for an API result
+   (the schema-side equivalent, `get_schema`, now exists)
+2. Add a `find_workflow` tool for stitching multi-service paths — e.g. tying a
+   `File.Generic` metadata record to the File-service operations that produce
+   and consume its `FileSource`

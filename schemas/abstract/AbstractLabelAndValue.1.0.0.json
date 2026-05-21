@@ -1,0 +1,147 @@
+{
+  "x-osdu-license": "Copyright 2024, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "x-osdu-review-status": "Accepted",
+  "$id": "https://schema.osdu.opengroup.org/json/abstract/AbstractLabelAndValue.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:AbstractLabelAndValue:1.0.0",
+  "title": "AbstractLabelAndValue",
+  "description": "One LabelType, e.g., GeoLabelType, associated with a value. The value type (number, integer, boolean, string, relationship) is implied by the label type (related via LabelTypeID). If the label type's ValueCount is greater than 1, then arrays of number, integer, boolean, string or relationships are expected to be populated.",
+  "type": "object",
+  "properties": {
+    "LabelTypeID": {
+      "type": "string",
+      "title": "Label Type ID",
+      "description": "The reference to a label type record, e.g., a GeoLabelType, describing the details and facets. The content of the referenced label type determines, which properties are expected to be populated.",
+      "example": "namespace:reference-data--GeoLabelType:Thickness.Average.Net.TrueStratigraphic.Sand:",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-GeoLabelType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "GeoLabelType"
+        }
+      ]
+    },
+    "ValueAsNumber": {
+      "type": "number",
+      "title": "Value As Number",
+      "description": "A numeric, floating point label value. Only populated if the associated labelType data.ValueType is 'number'. The label type's ValueCount must be 1."
+    },
+    "ValueAsInteger": {
+      "type": "integer",
+      "title": "Value As Integer",
+      "description": "An integer label value. Only populated if the associated labelType data.ValueType is 'integer'. The label type's ValueCount must be 1."
+    },
+    "ValueAsBoolean": {
+      "type": "boolean",
+      "title": "Value As Boolean",
+      "description": "A Boolean label value. Only populated if the associated labelType data.ValueType is 'boolean'. The label type's ValueCount must be 1.",
+      "example": true
+    },
+    "ValueAsString": {
+      "type": "string",
+      "title": "Value As String",
+      "description": "A textual label value. Only populated if the associated labelType data.ValueType is 'string'. Not to be used for relationships, see ValueAsRelatedID. The label type's ValueCount must be 1.",
+      "example": "Reef pinnacle"
+    },
+    "ValueAsRelatedID": {
+      "type": "string",
+      "title": "Value As Related ID",
+      "description": "A label relationship to another record via its record id:version, where version is optional. The expected target type is defined in labelType.RelationshipTargetKind. Only populated if the associated labelType data.ValueType is 'string'. The label type's ValueCount must be 1.",
+      "example": "namespace:work-product-component--StratigraphicUnitInterpretation:Volve-NORDLAND-GP.:",
+      "pattern": "^[\\w\\-\\.]+:[\\w\\-\\.]+:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": []
+    },
+    "ValueAsDateTime": {
+      "type": "string",
+      "title": "Value As Date-Time",
+      "description": "A label value as date or date time. Only populated if the associated labelType data.ValueType is 'string'. The label type's ValueCount must be 1.",
+      "format": "date-time"
+    },
+    "ValueAsNumberArray": {
+      "type": "array",
+      "title": "Value As Number Array",
+      "description": "A numeric, floating point label value. Only populated if the associated labelType data.ValueType is 'number'. The label type's ValueCount is greater than 1.",
+      "example": [
+        1.2,
+        3.4,
+        5.6
+      ],
+      "items": {
+        "type": "number"
+      }
+    },
+    "ValueAsIntegerArray": {
+      "type": "array",
+      "title": "Value As Integer Array",
+      "description": "An integer label value. Only populated if the associated labelType data.ValueType is 'integer'. The label type's ValueCount is greater than 1.",
+      "format": "integer",
+      "pattern": "^[0-9]+$",
+      "example": [
+        1,
+        2,
+        3
+      ],
+      "items": {
+        "type": "integer"
+      }
+    },
+    "ValueAsBooleanArray": {
+      "type": "array",
+      "title": "Value As Boolean Array",
+      "description": "A Boolean label value. Only populated if the associated labelType data.ValueType is 'boolean'. The label type's ValueCount is greater than 1.",
+      "example": [
+        false,
+        true,
+        true
+      ],
+      "items": {
+        "type": "boolean"
+      }
+    },
+    "ValueAsStringArray": {
+      "type": "array",
+      "title": "Value As String Array",
+      "description": "A textual label value. Only populated if the associated labelType data.ValueType is 'string'. Not to be used for relationships, see ValueAsRelatedID. The label type's ValueCount is greater than 1.",
+      "example": [
+        "Text 1",
+        "Text 2",
+        "Text 3"
+      ],
+      "items": {
+        "type": "string"
+      }
+    },
+    "ValueAsRelatedIDs": {
+      "type": "array",
+      "title": "Value As Related ID Array",
+      "description": "A label relationship to another record via its record id:version, where version is optional. The expected target type is defined in labelType.RelationshipTargetKind. Only populated if the associated labelType data.ValueType is 'string'. The label type's ValueCount is greater than 1.",
+      "example": [
+        "namespace:work-product-component--StratigraphicUnitInterpretation:Sleipner-:",
+        "namespace:work-product-component--StratigraphicUnitInterpretation:Skagerrak-:",
+        "namespace:work-product-component--StratigraphicUnitInterpretation:Smith-Bank-:"
+      ],
+      "items": {
+        "type": "string",
+        "pattern": "^[\\w\\-\\.]+:[\\w\\-\\.]+:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+        "x-osdu-relationship": []
+      }
+    },
+    "ValueAsDateTimeArray": {
+      "type": "array",
+      "title": "Value As Date-Time Array",
+      "description": "A label value as date or date time. Only populated if the associated labelType data.ValueType is 'string'. The label type's ValueCount is greater than 1.",
+      "example": [
+        "2024-01-02",
+        "2024-01-09",
+        "2024-01-16"
+      ],
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "LabelTypeID"
+  ],
+  "x-osdu-inheriting-from-kind": []
+}

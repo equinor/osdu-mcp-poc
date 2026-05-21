@@ -1,0 +1,355 @@
+{
+  "x-osdu-license": "Copyright 2022, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "$id": "https://schema.osdu.opengroup.org/json/master-data/Well.1.1.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:master-data--Well:1.1.0",
+  "title": "Well",
+  "description": "The origin of a set of wellbores.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "Previously called ResourceID or SRN which identifies this OSDU resource object without version.",
+      "title": "Entity ID",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Well:[\\w\\-\\.\\:\\%]+$",
+      "example": "namespace:master-data--Well:6c60ceb0-3521-57b7-9bd8-e1d7c9f66230"
+    },
+    "kind": {
+      "description": "The schema identification for the OSDU resource object following the pattern {Namespace}:{Source}:{Type}:{VersionMajor}.{VersionMinor}.{VersionPatch}. The versioning scheme follows the semantic versioning, https://semver.org/.",
+      "title": "Entity Kind",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:[\\w\\-\\.]+:[\\w\\-\\.]+:[0-9]+.[0-9]+.[0-9]+$",
+      "example": "osdu:wks:master-data--Well:1.1.0"
+    },
+    "version": {
+      "description": "The version number of this OSDU resource; set by the framework.",
+      "title": "Version Number",
+      "type": "integer",
+      "format": "int64",
+      "example": 1562066009929332
+    },
+    "acl": {
+      "description": "The access control tags associated with this entity.",
+      "title": "Access Control List",
+      "$ref": "../abstract/AbstractAccessControlList.1.0.0.json"
+    },
+    "legal": {
+      "description": "The entity's legal tags and compliance status. The actual contents associated with the legal tags is managed by the Compliance Service.",
+      "title": "Legal Tags",
+      "$ref": "../abstract/AbstractLegalTags.1.0.0.json"
+    },
+    "tags": {
+      "title": "Tag Dictionary",
+      "description": "A generic dictionary of string keys mapping to string value. Only strings are permitted as keys and values.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "example": {
+        "NameOfKey": "String value"
+      }
+    },
+    "createTime": {
+      "description": "Timestamp of the time at which initial version of this OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:46:20.163Z"
+    },
+    "createUser": {
+      "title": "Resource Object Creation User Reference",
+      "description": "The user reference, which created the first version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "modifyTime": {
+      "description": "Timestamp of the time at which this version of the OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Version Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:52:24.477Z"
+    },
+    "modifyUser": {
+      "title": "Resource Object Version Creation User Reference",
+      "description": "The user reference, which created this version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "ancestry": {
+      "description": "The links to data, which constitute the inputs, from which this record instance is derived.",
+      "title": "Ancestry",
+      "$ref": "../abstract/AbstractLegalParentList.1.0.0.json"
+    },
+    "meta": {
+      "description": "The Frame of Reference meta data section linking the named properties to self-contained definitions.",
+      "title": "Frame of Reference Meta Data",
+      "type": "array",
+      "items": {
+        "$ref": "../abstract/AbstractMetaItem.1.0.0.json"
+      }
+    },
+    "data": {
+      "allOf": [
+        {
+          "$ref": "../abstract/AbstractCommonResources.1.0.0.json"
+        },
+        {
+          "$ref": "../abstract/AbstractMaster.1.1.0.json"
+        },
+        {
+          "$ref": "../abstract/AbstractFacility.1.0.0.json"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "DefaultVerticalMeasurementID": {
+              "type": "string",
+              "description": "The default datum reference point, or zero depth point, used to determine other points vertically in a well.  References an entry in the VerticalMeasurements array."
+            },
+            "DefaultVerticalCRSID": {
+              "type": "string",
+              "description": "The default vertical coordinate reference system used in the vertical measurements for a well or wellbore if absent from input vertical measurements and there is no other recourse for obtaining a valid CRS.",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-CoordinateReferenceSystem:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "CoordinateReferenceSystem"
+                }
+              ]
+            },
+            "VerticalMeasurements": {
+              "type": "array",
+              "description": "List of all depths and elevations pertaining to the well, like, water depth, mud line elevation, etc.",
+              "x-osdu-indexing": {
+                "type": "nested"
+              },
+              "items": {
+                "allOf": [
+                  {
+                    "type": "object",
+                    "title": "Vertical Measurement ID",
+                    "properties": {
+                      "VerticalMeasurementID": {
+                        "type": "string",
+                        "description": "The ID for a distinct vertical measurement within the Wellbore VerticalMeasurements array so that it may be referenced by other vertical measurements if necessary."
+                      },
+                      "RigID": {
+                        "type": "string",
+                        "title": "Rig ID",
+                        "description": "The relationship to the rig, which was used while this vertical measurement was in active use.",
+                        "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Rig:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                        "x-osdu-relationship": [
+                          {
+                            "GroupType": "master-data",
+                            "EntityType": "Rig"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "$ref": "../abstract/AbstractFacilityVerticalMeasurement.1.0.0.json"
+                  }
+                ],
+                "title": "Vertical Measurement ID"
+              }
+            },
+            "InterestTypeID": {
+              "type": "string",
+              "description": "Business Interest [Well Interest Type] describes whether a company currently considers a well or its data to be a real or planned asset, and if so, the nature of and motivation for that company's interest.",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-WellInterestType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "WellInterestType"
+                }
+              ]
+            },
+            "BusinessIntentionID": {
+              "type": "string",
+              "title": "Business Intention ID",
+              "description": "Business Intention [Well Business Intention] is the general purpose for which resources are approved for drilling a new well or subsequent wellbore(s).",
+              "x-osdu-attribution-authority": "PPDM Association",
+              "x-osdu-attribution-publication": "Well Status and Classification",
+              "x-osdu-attribution-revision": "v3 (June 2020)",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-WellBusinessIntention:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "WellBusinessIntention"
+                }
+              ]
+            },
+            "RoleID": {
+              "type": "string",
+              "title": "Role ID",
+              "description": "Role [Well Role] is the current purpose, whether planned or actual. If there are multiple Roles among a well's components, the well may be assigned the facet value with the highest significance. The value of Role may change over the Life Cycle.",
+              "x-osdu-attribution-authority": "PPDM Association",
+              "x-osdu-attribution-publication": "Well Status and Classification",
+              "x-osdu-attribution-revision": "v3 (June 2020)",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-WellRole:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "WellRole"
+                }
+              ]
+            },
+            "HistoricalInterests": {
+              "type": "array",
+              "title": "Historical Interests",
+              "description": "The list of past and present interests associated with the time period they were/are valid",
+              "items": {
+                "type": "object",
+                "title": "HistoricalInterest",
+                "description": "A 'well interest' at some time period as defined by effective and termination date.",
+                "properties": {
+                  "InterestTypeID": {
+                    "type": "string",
+                    "title": "Interest Type ID",
+                    "description": "Business Interest [Well Interest Type] describes whether a company currently considers a well or its data to be a real or planned asset, and if so, the nature of and motivation for that company's interest.",
+                    "x-osdu-attribution-authority": "PPDM Association",
+                    "x-osdu-attribution-publication": "Well Status and Classification",
+                    "x-osdu-attribution-revision": "v3 (June 2020)",
+                    "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-WellInterestType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "reference-data",
+                        "EntityType": "WellInterestType"
+                      }
+                    ]
+                  },
+                  "EffectiveDateTime": {
+                    "type": "string",
+                    "title": "Effective Date Time",
+                    "description": "The date and time at which the well interest type becomes effective.",
+                    "format": "date",
+                    "x-osdu-frame-of-reference": "DateTime"
+                  },
+                  "TerminationDateTime": {
+                    "type": "string",
+                    "title": "Termination Date Time",
+                    "description": "The date and time at which the well interest type is no longer in effect.",
+                    "format": "date",
+                    "x-osdu-frame-of-reference": "DateTime"
+                  }
+                }
+              }
+            },
+            "WasBusinessInterestFinancialOperated": {
+              "type": "boolean",
+              "title": "BusinessInterestFinancialOperatedFormerly",
+              "description": "Identifies, for the purpose of current use, if the Business Interest [Well Interest Type] for this well has ever been FinancialOperated in the past.",
+              "x-osdu-attribution-authority": "PPDM Association",
+              "x-osdu-attribution-publication": "Well Status and Classification",
+              "x-osdu-attribution-revision": "v3 (June 2020)"
+            },
+            "WasBusinessInterestFinancialNonOperated": {
+              "type": "boolean",
+              "title": "BusinessInterestFinancialNonOperatedFormerly",
+              "description": "Identifies, for the purpose of current use, if the Business Interest [Well Interest Type] for this well has ever been FinancialNonOperated in the past.",
+              "x-osdu-attribution-authority": "PPDM Association",
+              "x-osdu-attribution-publication": "Well Status and Classification",
+              "x-osdu-attribution-revision": "v3 (June 2020)"
+            },
+            "WasBusinessInterestObligatory": {
+              "type": "boolean",
+              "title": "BusinessInterestObligatoryFormerly",
+              "description": "Identifies, for the purpose of current use, if the Business Interest [Well Interest Type] for this well has ever been Obligatory in the past.",
+              "x-osdu-attribution-authority": "PPDM Association",
+              "x-osdu-attribution-publication": "Well Status and Classification",
+              "x-osdu-attribution-revision": "v3 (June 2020)"
+            },
+            "WasBusinessInterestTechnical": {
+              "type": "boolean",
+              "title": "BusinessInterestTechnicalFormerly",
+              "description": "Identifies, for the purpose of current use, if the Business Interest [Well Interest Type] for this well has ever been Technical in the past.",
+              "x-osdu-attribution-authority": "PPDM Association",
+              "x-osdu-attribution-publication": "Well Status and Classification",
+              "x-osdu-attribution-revision": "v3 (June 2020)"
+            },
+            "ConditionID": {
+              "type": "string",
+              "title": "ConditionID",
+              "description": "Condition [Well Condition] is the operational state of a well component relative to the Role [Well Role].",
+              "x-osdu-attribution-authority": "PPDM Association",
+              "x-osdu-attribution-publication": "Well Status and Classification",
+              "x-osdu-attribution-revision": "v3 (June 2020)",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-WellCondition:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "WellCondition"
+                }
+              ]
+            },
+            "OutcomeID": {
+              "type": "string",
+              "title": "OutcomeID",
+              "description": "Outcome [Well Drilling Outcome] is the result of attempting to accomplish the Business Intention [Well Business Intention].",
+              "x-osdu-attribution-authority": "PPDM Association",
+              "x-osdu-attribution-publication": "Well Status and Classification",
+              "x-osdu-attribution-revision": "v3 (June 2020)",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-WellBusinessIntentionOutcome:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "WellBusinessIntentionOutcome"
+                }
+              ]
+            },
+            "StatusSummaryID": {
+              "type": "string",
+              "title": "StatusSummaryID",
+              "description": "Identifies the status of a well component in a way that may combine and-or summarize concepts found in other status facets. For example, a Well Status Summary of Gas Injector Shut-in, which contains commonly desired business information, combines concepts from Product Type, Fluid Direction, and Condition.",
+              "x-osdu-attribution-authority": "OSDU",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-WellStatusSummary:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "WellStatusSummary"
+                }
+              ]
+            }
+          },
+          "title": "IndividualProperties"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "ExtensionProperties": {
+              "type": "object"
+            }
+          },
+          "title": "ExtensionProperties"
+        }
+      ]
+    }
+  },
+  "required": [
+    "kind",
+    "acl",
+    "legal"
+  ],
+  "additionalProperties": false,
+  "x-osdu-review-status": "Accepted",
+  "x-osdu-virtual-properties": {
+    "data.VirtualProperties.DefaultLocation": {
+      "type": "object",
+      "priority": [
+        {
+          "path": "data.SpatialLocation"
+        }
+      ]
+    },
+    "data.VirtualProperties.DefaultName": {
+      "type": "string",
+      "priority": [
+        {
+          "path": "data.FacilityName"
+        }
+      ]
+    }
+  },
+  "x-osdu-inheriting-from-kind": []
+}

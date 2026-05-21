@@ -1,0 +1,26 @@
+{
+  "x-osdu-license": "Copyright 2024, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "x-osdu-review-status": "Accepted",
+  "$id": "https://schema.osdu.opengroup.org/json/abstract/AbstractLocationUncertainty.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:AbstractLocationUncertainty:1.0.0",
+  "title": "AbstractLocationUncertainty",
+  "description": "A simple uncertainty quantification for a point location.",
+  "type": "object",
+  "properties": {
+    "Radius3D": {
+      "type": "number",
+      "title": "Radius3D",
+      "description": "Position uncertainty refers to the radius around a given location that is likely to contain the true value of the measurement with a specified confidence level. The position is defined in three-dimensional space with x, y, and z coordinates. For instance, if the location uncertainty radius is 1.5 meters and the confidence level is 1 sigma (approximately 61% using Rayleigh distribution), it means that the actual location is expected to be within a sphere of 1.5 meters radius from the reported position 61% of the time.",
+      "example": 1.5,
+      "x-osdu-frame-of-reference": "UOM:length"
+    },
+    "ConfidenceLevel": {
+      "type": "number",
+      "title": "ConfidenceLevel",
+      "description": "The confidence level, expressed as sigma and using Rayleigh distribution, indicates the degree of certainty that the predicted three-dimensional location is accurate. For example, if the location uncertainty radius is 1.5 meters and the confidence level is 1 sigma, it means that the actual position is expected to fall within a sphere with a radius of 1.5 meters from the reported position 61% of the time. The radius represents the extent of this sphere, defined by the location uncertainty. For a three-dimensional position given in x, y, and z coordinates, the rule of thumb for sigma levels is as follows when using Rayleigh distribution: 1 sigma corresponds to a 61% confidence level, 2 sigma corresponds to a 99% confidence level and 3 sigma corresponds to nearly a 100% confidence level. In comparison, for a one-dimensional case assuming Gaussian distribution, these sigma levels represent: 1 sigma corresponds to a 68% confidence level, 2 sigma corresponds to a 95% confidence level and 3 sigma corresponds to a 99.7% confidence level.",
+      "example": 1
+    }
+  },
+  "x-osdu-inheriting-from-kind": []
+}

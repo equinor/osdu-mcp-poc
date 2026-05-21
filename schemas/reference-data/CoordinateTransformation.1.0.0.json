@@ -1,0 +1,644 @@
+{
+  "x-osdu-license": "Copyright 2022, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "$id": "https://schema.osdu.opengroup.org/json/reference-data/CoordinateTransformation.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:reference-data--CoordinateTransformation:1.0.0",
+  "title": "CoordinateTransformation",
+  "description": "Used to describe a coordinate operation between two geodetic CRSs. The type is identified by CoordinateTransformationType (used by the system) and Kind facing the end-user. The Code is according to OSDU standard a string, the EPSG standard number is available via the CodeAsNumber property. Description carries EPSG's Remark. AttributionAuthority carries EPSG's DataSource. AliasNames carry the EPSG Alias contents.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "Previously called ResourceID or SRN which identifies this OSDU resource object without version.",
+      "title": "Entity ID",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-CoordinateTransformation:[\\w\\-\\.\\:\\%]+$",
+      "example": "namespace:reference-data--CoordinateTransformation:88a85be1-ed8f-5069-91df-661128f45708"
+    },
+    "kind": {
+      "description": "The schema identification for the OSDU resource object following the pattern {Namespace}:{Source}:{Type}:{VersionMajor}.{VersionMinor}.{VersionPatch}. The versioning scheme follows the semantic versioning, https://semver.org/.",
+      "title": "Entity Kind",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:[\\w\\-\\.]+:[\\w\\-\\.]+:[0-9]+.[0-9]+.[0-9]+$",
+      "example": "osdu:wks:reference-data--CoordinateTransformation:1.0.0"
+    },
+    "version": {
+      "description": "The version number of this OSDU resource; set by the framework.",
+      "title": "Version Number",
+      "type": "integer",
+      "format": "int64",
+      "example": 1562066009929332
+    },
+    "acl": {
+      "description": "The access control tags associated with this entity.",
+      "title": "Access Control List",
+      "$ref": "../abstract/AbstractAccessControlList.1.0.0.json"
+    },
+    "legal": {
+      "description": "The entity's legal tags and compliance status. The actual contents associated with the legal tags is managed by the Compliance Service.",
+      "title": "Legal Tags",
+      "$ref": "../abstract/AbstractLegalTags.1.0.0.json"
+    },
+    "tags": {
+      "title": "Tag Dictionary",
+      "description": "A generic dictionary of string keys mapping to string value. Only strings are permitted as keys and values.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "example": {
+        "NameOfKey": "String value"
+      }
+    },
+    "createTime": {
+      "description": "Timestamp of the time at which initial version of this OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:46:20.163Z"
+    },
+    "createUser": {
+      "title": "Resource Object Creation User Reference",
+      "description": "The user reference, which created the first version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "modifyTime": {
+      "description": "Timestamp of the time at which this version of the OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Version Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:52:24.477Z"
+    },
+    "modifyUser": {
+      "title": "Resource Object Version Creation User Reference",
+      "description": "The user reference, which created this version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "ancestry": {
+      "description": "The links to data, which constitute the inputs, from which this record instance is derived.",
+      "title": "Ancestry",
+      "$ref": "../abstract/AbstractLegalParentList.1.0.0.json"
+    },
+    "meta": {
+      "description": "The Frame of Reference meta data section linking the named properties to self-contained definitions.",
+      "title": "Frame of Reference Meta Data",
+      "type": "array",
+      "items": {
+        "$ref": "../abstract/AbstractMetaItem.1.0.0.json"
+      }
+    },
+    "data": {
+      "allOf": [
+        {
+          "$ref": "../abstract/AbstractCommonResources.1.0.0.json"
+        },
+        {
+          "$ref": "../abstract/AbstractReferenceType.1.0.0.json"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "CoordTfmVersion": {
+              "title": "Transformation Version Name",
+              "description": "The name of the transformation version or variant",
+              "type": "string",
+              "example": "EPSG-Nor S62 2001"
+            },
+            "Variant": {
+              "title": "Variant Number",
+              "description": "The Transformation variant number.",
+              "type": "integer",
+              "example": 24
+            },
+            "Accuracy": {
+              "title": "Transformation Accuracy",
+              "description": "The accuracy of the transformation expressed in meters.",
+              "type": "number",
+              "example": 1.0
+            },
+            "Method": {
+              "title": "Transformation Method",
+              "description": "The Transformation method; \"Concatenated\" for CoordinateTransformationType == ConcatenatedOperation; EPSG method code and name for CoordinateTransformationType == Transformation.",
+              "type": "object",
+              "properties": {
+                "AuthorityCode": {
+                  "title": "Method Authority Code",
+                  "description": "The method authority code, corresponding to the ISO19111 ID and 'projjson' id.",
+                  "type": "object",
+                  "properties": {
+                    "Authority": {
+                      "title": "Method Authority",
+                      "description": "The authority governing the 'Code'.",
+                      "type": "string",
+                      "example": "EPSG"
+                    },
+                    "Code": {
+                      "title": "Method Code",
+                      "description": "EPSG Method code in case of CoordinateTransformationType == Transformation",
+                      "type": "integer",
+                      "example": 9606
+                    }
+                  }
+                },
+                "Name": {
+                  "title": "Transformation Method Name",
+                  "description": "The Transformation method name; \"Concatenated\" for CoordinateTransformationType == ConcatenatedOperation; EPSG method code and name for CoordinateTransformationType == Transformation.",
+                  "type": "string",
+                  "example": "Position Vector transformation (geog2D domain)"
+                }
+              }
+            },
+            "CodeSpace": {
+              "title": "Transformation CodeSpace",
+              "description": "The namespace or authority name governing this Transformation definition, e.g. EPSG for contents from the EPSG Geodetic Parameter Dataset.",
+              "type": "string"
+            },
+            "ConcatenatedTransformations": {
+              "title": "Concatenated Transformation List",
+              "description": "Only populated for CoordinateTransformationType == ConcatenatedOperation: the ordered list of chained transformations.",
+              "type": "array",
+              "items": {
+                "title": "ConcatenatedTransformation",
+                "type": "object",
+                "properties": {
+                  "AuthorityCode": {
+                    "title": "Concatenated Transformation Authority Code",
+                    "description": "The Transformation authority code, corresponding to the ISO19111 ID and 'projjson' id.",
+                    "type": "object",
+                    "properties": {
+                      "Authority": {
+                        "title": "Transformation Authority",
+                        "description": "The transformation authority governing the 'Code'.",
+                        "type": "string",
+                        "example": "EPSG"
+                      },
+                      "Code": {
+                        "title": "Transformation Code",
+                        "description": "The transformation code assigned by the 'Authority'.",
+                        "type": "integer",
+                        "format": "int32",
+                        "example": 1613
+                      }
+                    }
+                  },
+                  "Name": {
+                    "title": "Transformation Name",
+                    "description": "The Transformation name as part of this concatenated operation list.",
+                    "type": "string",
+                    "example": "Position Vector transformation (geog2D domain)"
+                  },
+                  "TransformationID": {
+                    "title": "Transformation Reference",
+                    "description": "The relationship to the single Transformation item in the list of concatenated transformations.",
+                    "type": "string",
+                    "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-CoordinateTransformation:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "example": "namespace:reference-data--CoordinateTransformation:EPSG::1613:",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "reference-data",
+                        "EntityType": "CoordinateTransformation"
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            "InformationSource": {
+              "title": "Transformation InformationSource",
+              "description": "The InformationSource providing the Transformation definition if different from AttributionAuthority.",
+              "type": "string",
+              "example": "EPSG Guidance Note #10"
+            },
+            "RevisionDate": {
+              "title": "Transformation Revision Date",
+              "description": "The revision date of this Transformation.",
+              "type": "string",
+              "format": "date-time",
+              "example": "2020-03-14T00:00:00Z"
+            },
+            "Kind": {
+              "title": "Transformation Kind",
+              "description": "The kind of Transformation, e.g. Transformation, Concatenated Transformation.",
+              "type": "string",
+              "example": "Transformation"
+            },
+            "CodeAsNumber": {
+              "title": "Code (int32)",
+              "type": "integer",
+              "format": "int32",
+              "description": "The code as number as opposed to the Code defined as a string.",
+              "example": 1613
+            },
+            "CoordinateTransformationType": {
+              "type": "string",
+              "title": "CT Type",
+              "description": "The type of coordinate transformation. This is an enumeration of concrete sub-types. Transformation is a single operation between a source and a target geodetic CRS; ConcatenatedOperation is a chained set of Transformations.",
+              "enum": [
+                "Transformation",
+                "ConcatenatedOperation"
+              ]
+            },
+            "SourceCRS": {
+              "title": "Source CRS",
+              "description": "The source CRS of the Transformation.",
+              "type": "object",
+              "properties": {
+                "AuthorityCode": {
+                  "title": "Source CRS Authority Code",
+                  "description": "The source CRS authority code, corresponding to the ISO19111 ID and 'projjson' id.",
+                  "type": "object",
+                  "properties": {
+                    "Authority": {
+                      "title": "Source CRS Authority",
+                      "description": "The authority governing the 'Code'.",
+                      "type": "string",
+                      "example": "EPSG"
+                    },
+                    "Code": {
+                      "title": "Source CRS Code",
+                      "description": "The code assigned by the 'Authority'.",
+                      "type": "integer",
+                      "format": "int32",
+                      "example": 4230
+                    }
+                  }
+                },
+                "Name": {
+                  "title": "Source CRS Name.",
+                  "type": "string",
+                  "description": "The name of the source CRS.",
+                  "example": "ED50"
+                },
+                "SourceCRSID": {
+                  "title": "Source CRS Reference",
+                  "type": "string",
+                  "description": "The relationship to the source CoordinateReferenceSystem.",
+                  "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-CoordinateReferenceSystem:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                  "example": "namespace:reference-data--CoordinateReferenceSystem:Geographic2D:EPSG::4230:",
+                  "x-osdu-relationship": [
+                    {
+                      "GroupType": "reference-data",
+                      "EntityType": "CoordinateReferenceSystem"
+                    }
+                  ]
+                }
+              }
+            },
+            "TargetCRS": {
+              "title": "Target CRS",
+              "description": "The target CRS of this Transformation.",
+              "type": "object",
+              "properties": {
+                "AuthorityCode": {
+                  "title": "Target CRS Authority Code",
+                  "description": "The target CRS authority code, corresponding to the ISO19111 ID and 'projjson' id.",
+                  "type": "object",
+                  "properties": {
+                    "Authority": {
+                      "title": "Target CRS Authority",
+                      "description": "The authority governing the 'Code'.",
+                      "type": "string",
+                      "example": "EPSG"
+                    },
+                    "Code": {
+                      "title": "Target CRS Code",
+                      "description": "The code assigned by the 'Authority'.",
+                      "type": "integer",
+                      "format": "int32",
+                      "example": 4326
+                    }
+                  }
+                },
+                "Name": {
+                  "title": "Target CRS Name.",
+                  "type": "string",
+                  "description": "The name of the target CRS.",
+                  "example": "WGS 84"
+                },
+                "TargetCRSID": {
+                  "title": "Target CRS Reference",
+                  "type": "string",
+                  "description": "The relationship to the target CRS.",
+                  "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-CoordinateReferenceSystem:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                  "example": "namespace:reference-data--CoordinateReferenceSystem:Geographic2D:EPSG::4326:",
+                  "x-osdu-relationship": [
+                    {
+                      "GroupType": "reference-data",
+                      "EntityType": "CoordinateReferenceSystem"
+                    }
+                  ]
+                }
+              }
+            },
+            "Usages": {
+              "title": "Usages",
+              "description": "Contextual information about scope and extent/area of use.",
+              "type": "array",
+              "items": {
+                "title": "Usage",
+                "description": "Scope and extent information about the described transformation.",
+                "type": "object",
+                "properties": {
+                  "AuthorityCode": {
+                    "title": "Usage Authority Code",
+                    "description": "The Usage authority code, corresponding to the ISO19111 ID and 'projjson' id.",
+                    "type": "object",
+                    "properties": {
+                      "Authority": {
+                        "title": "Usage Authority",
+                        "description": "The authority governing the 'Code'.",
+                        "type": "string",
+                        "example": "EPSG"
+                      },
+                      "Code": {
+                        "title": "Usage Code",
+                        "description": "The code assigned by the 'Authority'.",
+                        "type": "integer",
+                        "format": "int32",
+                        "example": 6394
+                      }
+                    }
+                  },
+                  "Name": {
+                    "title": "Usage Name.",
+                    "type": "string",
+                    "description": "The name of the Usage.",
+                    "example": "Europe - 0\u00b0E to 6\u00b0E and ED50 by country"
+                  },
+                  "Extent": {
+                    "title": "Extent",
+                    "description": "Extent or area of use information.",
+                    "type": "object",
+                    "properties": {
+                      "AuthorityCode": {
+                        "title": "Extent Authority Code",
+                        "description": "The Extent authority code, corresponding to the ISO19111 ID and 'projjson' id.",
+                        "type": "object",
+                        "properties": {
+                          "Authority": {
+                            "title": "Extent Authority",
+                            "description": "The authority governing the 'Code'.",
+                            "type": "string",
+                            "example": "EPSG"
+                          },
+                          "Code": {
+                            "title": "Extent Code",
+                            "description": "The code assigned by the 'Authority'.",
+                            "type": "integer",
+                            "format": "int32",
+                            "example": 2334
+                          }
+                        }
+                      },
+                      "Name": {
+                        "title": "Extent Name.",
+                        "type": "string",
+                        "description": "The name of the Extent.",
+                        "example": "Norway - North Sea - offshore south of 62\u00b0N"
+                      },
+                      "Description": {
+                        "title": "Extent Description.",
+                        "type": "string",
+                        "description": "The description of the Extent.",
+                        "example": "Norway - North Sea - offshore south of 62\u00b0N"
+                      },
+                      "BoundingBoxSouthBoundLatitude": {
+                        "title": "South Latitude",
+                        "description": "Southern latitude limit of the bounding box in degrees based on WGS 84",
+                        "type": "number",
+                        "example": 56.08
+                      },
+                      "BoundingBoxWestBoundLongitude": {
+                        "title": "West Longitude",
+                        "description": "Western longitude limit of the bounding box in degrees based on WGS 84",
+                        "type": "number",
+                        "example": 1.37
+                      },
+                      "BoundingBoxEastBoundLongitude": {
+                        "title": "East Longitude",
+                        "description": "Eastern longitude limit of the bounding box in degrees based on WGS 84",
+                        "type": "number",
+                        "example": 11.14
+                      },
+                      "BoundingBoxNorthBoundLatitude": {
+                        "title": "North Latitude",
+                        "description": "Northern latitude limit of the bounding box in degrees based on WGS 84",
+                        "type": "number",
+                        "example": 62.0
+                      }
+                    }
+                  },
+                  "Scope": {
+                    "title": "Scope",
+                    "description": "",
+                    "type": "object",
+                    "properties": {
+                      "AuthorityCode": {
+                        "title": "Scope Authority Code",
+                        "description": "The Scope authority code, corresponding to the ISO19111 ID and 'projjson' id.",
+                        "type": "object",
+                        "properties": {
+                          "Authority": {
+                            "title": "Scope Authority",
+                            "description": "The authority governing the 'Code'.",
+                            "type": "string",
+                            "example": "EPSG"
+                          },
+                          "Code": {
+                            "title": "Scope Code",
+                            "description": "The code assigned by the 'Authority'.",
+                            "type": "integer",
+                            "format": "int32",
+                            "example": 1253
+                          }
+                        }
+                      },
+                      "Name": {
+                        "title": "Scope Name.",
+                        "type": "string",
+                        "description": "The name of the Scope.",
+                        "example": "Approximation at the 1m level."
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "PreferredUsage": {
+              "title": "Preferred Usage",
+              "description": "Scope and extent information about the described transformation.",
+              "type": "object",
+              "properties": {
+                "AuthorityCode": {
+                  "title": "Preferred Usage Authority Code",
+                  "description": "The Preferred Usage authority code, corresponding to the ISO19111 ID and 'projjson' id.",
+                  "type": "object",
+                  "properties": {
+                    "Authority": {
+                      "title": "Preferred Usage Authority",
+                      "description": "The authority governing the 'Code'.",
+                      "type": "string",
+                      "example": "EPSG"
+                    },
+                    "Code": {
+                      "title": "Preferred Usage Code",
+                      "description": "The code assigned by the 'Authority'.",
+                      "type": "integer",
+                      "format": "int32",
+                      "example": 6394
+                    }
+                  }
+                },
+                "Name": {
+                  "title": "Preferred Usage Name.",
+                  "type": "string",
+                  "description": "The name of the Usage.",
+                  "example": "Europe - 0\u00b0E to 6\u00b0E and ED50 by country"
+                },
+                "Extent": {
+                  "title": "Preferred Extent",
+                  "description": "Extent or area of use information.",
+                  "type": "object",
+                  "properties": {
+                    "AuthorityCode": {
+                      "title": "Preferred Extent Authority Code",
+                      "description": "The Preferred Extent authority code, corresponding to the ISO19111 ID and 'projjson' id.",
+                      "type": "object",
+                      "properties": {
+                        "Authority": {
+                          "title": "Preferred Extent Authority",
+                          "description": "The authority governing the 'Code'.",
+                          "type": "string",
+                          "example": "EPSG"
+                        },
+                        "Code": {
+                          "title": "Preferred Extent Code",
+                          "description": "The code assigned by the 'Authority'.",
+                          "type": "integer",
+                          "format": "int32",
+                          "example": 2334
+                        }
+                      }
+                    },
+                    "Name": {
+                      "title": "Preferred Extent Name.",
+                      "type": "string",
+                      "description": "The name of the Extent.",
+                      "example": "Norway - North Sea - offshore south of 62\u00b0N"
+                    },
+                    "Description": {
+                      "title": "Preferred Extent Description.",
+                      "type": "string",
+                      "description": "The description of the Extent.",
+                      "example": "Norway - North Sea - offshore south of 62\u00b0N"
+                    },
+                    "BoundingBoxSouthBoundLatitude": {
+                      "title": "Preferred Extent South Latitude",
+                      "description": "Southern latitude limit of the bounding box in degrees based on WGS 84",
+                      "type": "number",
+                      "example": 56.08
+                    },
+                    "BoundingBoxWestBoundLongitude": {
+                      "title": "Preferred Extent West Longitude",
+                      "description": "Western longitude limit of the bounding box in degrees based on WGS 84",
+                      "type": "number",
+                      "example": 1.37
+                    },
+                    "BoundingBoxEastBoundLongitude": {
+                      "title": "Preferred Extent East Longitude",
+                      "description": "Eastern longitude limit of the bounding box in degrees based on WGS 84",
+                      "type": "number",
+                      "example": 11.14
+                    },
+                    "BoundingBoxNorthBoundLatitude": {
+                      "title": "Preferred Extent North Latitude",
+                      "description": "Northern latitude limit of the bounding box in degrees based on WGS 84",
+                      "type": "number",
+                      "example": 62.0
+                    }
+                  }
+                },
+                "Scope": {
+                  "title": "Preferred Scope",
+                  "description": "",
+                  "type": "object",
+                  "properties": {
+                    "AuthorityCode": {
+                      "title": "Preferred Scope Authority Code",
+                      "description": "The Scope authority code, corresponding to the ISO19111 ID and 'projjson' id.",
+                      "type": "object",
+                      "properties": {
+                        "Authority": {
+                          "title": "Preferred Scope Authority",
+                          "description": "The authority governing the 'Code'.",
+                          "type": "string",
+                          "example": "EPSG"
+                        },
+                        "Code": {
+                          "title": "Preferred Scope Code",
+                          "description": "The code assigned by the 'Authority'.",
+                          "type": "integer",
+                          "format": "int32",
+                          "example": 1253
+                        }
+                      }
+                    },
+                    "Name": {
+                      "title": "Preferred Scope Name.",
+                      "type": "string",
+                      "description": "The name of the Scope.",
+                      "example": "Approximation at the 1m level."
+                    }
+                  }
+                }
+              }
+            },
+            "PersistableReference": {
+              "title": "Persistable Reference",
+              "description": "Used for export and actionable instructions to a conversion/transformation engine. It is initially based on Esri well-known text (WKT). Eventually, when Esri WKT are convertible into ISO WKT and vice versa, the definition can be replaced by https://proj.org/schemas/v0.2/projjson.schema.json.",
+              "type": "string",
+              "example": "{\"authCode\":{\"auth\":\"EPSG\",\"code\":\"1613\"},\"name\":\"ED_1950_To_WGS_1984_24\",\"type\":\"ST\",\"ver\":\"PE_10_9_1\",\"wkt\":\"GEOGTRAN[\\\"ED_1950_To_WGS_1984_24\\\",GEOGCS[\\\"GCS_European_1950\\\",DATUM[\\\"D_European_1950\\\",SPHEROID[\\\"International_1924\\\",6378388.0,297.0]],PRIMEM[\\\"Greenwich\\\",0.0],UNIT[\\\"Degree\\\",0.0174532925199433]],GEOGCS[\\\"GCS_WGS_1984\\\",DATUM[\\\"D_WGS_1984\\\",SPHEROID[\\\"WGS_1984\\\",6378137.0,298.257223563]],PRIMEM[\\\"Greenwich\\\",0.0],UNIT[\\\"Degree\\\",0.0174532925199433]],METHOD[\\\"Position_Vector\\\"],PARAMETER[\\\"X_Axis_Translation\\\",-90.365],PARAMETER[\\\"Y_Axis_Translation\\\",-101.13],PARAMETER[\\\"Z_Axis_Translation\\\",-123.384],PARAMETER[\\\"X_Axis_Rotation\\\",0.333],PARAMETER[\\\"Y_Axis_Rotation\\\",0.077],PARAMETER[\\\"Z_Axis_Rotation\\\",0.894],PARAMETER[\\\"Scale_Difference\\\",1.994],OPERATIONACCURACY[1.0],AUTHORITY[\\\"EPSG\\\",1613]]\"}"
+            }
+          },
+          "title": "IndividualProperties"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "ExtensionProperties": {
+              "type": "object"
+            }
+          },
+          "title": "ExtensionProperties"
+        }
+      ]
+    }
+  },
+  "required": [
+    "kind",
+    "acl",
+    "legal"
+  ],
+  "additionalProperties": false,
+  "x-osdu-governance-authorities": [
+    "None"
+  ],
+  "x-osdu-governance-model": "LOCAL",
+  "x-osdu-virtual-properties": {
+    "data.VirtualProperties.DefaultName": {
+      "type": "string",
+      "priority": [
+        {
+          "path": "data.Name"
+        }
+      ]
+    }
+  },
+  "x-osdu-inheriting-from-kind": [
+    {
+      "name": "ReferenceType",
+      "kind": "osdu:wks:AbstractReferenceType:1.0.0"
+    }
+  ]
+}

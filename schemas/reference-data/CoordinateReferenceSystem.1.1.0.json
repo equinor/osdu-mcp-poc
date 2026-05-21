@@ -1,0 +1,888 @@
+{
+  "x-osdu-license": "Copyright 2022, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "$id": "https://schema.osdu.opengroup.org/json/reference-data/CoordinateReferenceSystem.1.1.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:reference-data--CoordinateReferenceSystem:1.1.0",
+  "title": "CoordinateReferenceSystem",
+  "description": "Used to describe any kind of coordinate reference system. The type is identified by CoordinateReferenceSystemType (used by the system) and Kind facing the end-user. The Code is according to OSDU standard a string, the EPSG standard number is available via the CodeAsNumber property. Description carries EPSG's Remark. AttributionAuthority carries EPSG's DataSource. AliasNames carry the EPSG Alias contents.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "Previously called ResourceID or SRN which identifies this OSDU resource object without version.",
+      "title": "Entity ID",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-CoordinateReferenceSystem:[\\w\\-\\.\\:\\%]+$",
+      "example": "namespace:reference-data--CoordinateReferenceSystem:8cfcd4e5-9fda-5a85-93cd-4562b92e6172"
+    },
+    "kind": {
+      "description": "The schema identification for the OSDU resource object following the pattern {Namespace}:{Source}:{Type}:{VersionMajor}.{VersionMinor}.{VersionPatch}. The versioning scheme follows the semantic versioning, https://semver.org/.",
+      "title": "Entity Kind",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:[\\w\\-\\.]+:[\\w\\-\\.]+:[0-9]+.[0-9]+.[0-9]+$",
+      "example": "osdu:wks:reference-data--CoordinateReferenceSystem:1.1.0"
+    },
+    "version": {
+      "description": "The version number of this OSDU resource; set by the framework.",
+      "title": "Version Number",
+      "type": "integer",
+      "format": "int64",
+      "example": 1562066009929332
+    },
+    "acl": {
+      "description": "The access control tags associated with this entity.",
+      "title": "Access Control List",
+      "$ref": "../abstract/AbstractAccessControlList.1.0.0.json"
+    },
+    "legal": {
+      "description": "The entity's legal tags and compliance status. The actual contents associated with the legal tags is managed by the Compliance Service.",
+      "title": "Legal Tags",
+      "$ref": "../abstract/AbstractLegalTags.1.0.0.json"
+    },
+    "tags": {
+      "title": "Tag Dictionary",
+      "description": "A generic dictionary of string keys mapping to string value. Only strings are permitted as keys and values.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "example": {
+        "NameOfKey": "String value"
+      }
+    },
+    "createTime": {
+      "description": "Timestamp of the time at which initial version of this OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:46:20.163Z"
+    },
+    "createUser": {
+      "title": "Resource Object Creation User Reference",
+      "description": "The user reference, which created the first version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "modifyTime": {
+      "description": "Timestamp of the time at which this version of the OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Version Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:52:24.477Z"
+    },
+    "modifyUser": {
+      "title": "Resource Object Version Creation User Reference",
+      "description": "The user reference, which created this version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "ancestry": {
+      "description": "The links to data, which constitute the inputs, from which this record instance is derived.",
+      "title": "Ancestry",
+      "$ref": "../abstract/AbstractLegalParentList.1.0.0.json"
+    },
+    "meta": {
+      "description": "The Frame of Reference meta data section linking the named properties to self-contained definitions.",
+      "title": "Frame of Reference Meta Data",
+      "type": "array",
+      "items": {
+        "$ref": "../abstract/AbstractMetaItem.1.0.0.json"
+      }
+    },
+    "data": {
+      "allOf": [
+        {
+          "$ref": "../abstract/AbstractCommonResources.1.0.0.json"
+        },
+        {
+          "$ref": "../abstract/AbstractReferenceType.1.0.0.json"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "CodeSpace": {
+              "title": "CRS CodeSpace",
+              "description": "The namespace or authority name governing this CRS definition, e.g. EPSG for contents from the EPSG Geodetic Parameter Dataset.",
+              "type": "string"
+            },
+            "InformationSource": {
+              "title": "CRS InformationSource",
+              "description": "The InformationSource providing the CRS definition if different from AttributionAuthority.",
+              "type": "string"
+            },
+            "RevisionDate": {
+              "title": "CRS Revision Date",
+              "description": "The revision date of this CRS.",
+              "type": "string",
+              "format": "date-time"
+            },
+            "Kind": {
+              "title": "CRS Kind",
+              "description": "The kind of CRS, e.g. bound, compound, derived, engineering, geocentric, geographic 2D, geographic 3D, projected, vertical.",
+              "type": "string"
+            },
+            "CodeAsNumber": {
+              "title": "Code (int32)",
+              "type": "integer",
+              "format": "int32",
+              "description": "The code as number as opposed to the Code defined as a string."
+            },
+            "CoordinateReferenceSystemType": {
+              "type": "string",
+              "title": "CRS Type",
+              "description": "The type of coordinate reference system. This is an enumeration of concrete sub-types.",
+              "enum": [
+                "BoundCRS",
+                "CompoundCRS",
+                "DerivedCRS",
+                "EngineeringCRS",
+                "GeodeticCRS",
+                "ProjectedCRS",
+                "VerticalCRS"
+              ]
+            },
+            "HorizontalCRS": {
+              "title": "Horizontal CRS",
+              "description": "The horizontal CRS reference of a CompoundCRS. Only populated for CoordinateReferenceSystemType==CompoundCRS.",
+              "type": "object",
+              "properties": {
+                "AuthorityCode": {
+                  "title": "Horizontal CRS Authority Code",
+                  "description": "The HorizontalCRS authority code, corresponding to the ISO19111 ID and 'projjson' id.",
+                  "type": "object",
+                  "properties": {
+                    "Authority": {
+                      "title": "Horizontal CRS Authority",
+                      "description": "The authority governing the 'Code'.",
+                      "type": "string",
+                      "example": "EPSG"
+                    },
+                    "Code": {
+                      "title": "Horizontal CRS Code",
+                      "description": "The code assigned by the 'Authority'.",
+                      "type": "integer",
+                      "format": "int32",
+                      "example": 32615
+                    }
+                  }
+                },
+                "Name": {
+                  "title": "Horizontal CRS Name.",
+                  "type": "string",
+                  "description": "The name of the HorizontalCrs.",
+                  "example": "WGS 84 / UTM zone 15N"
+                },
+                "HorizontalCRSID": {
+                  "title": "Horizontal CRS Reference",
+                  "type": "string",
+                  "description": "The relationship to the HorizontalCrs.",
+                  "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-CoordinateReferenceSystem:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                  "example": "namespace:reference-data--CoordinateReferenceSystem:Projected:EPSG::32615:",
+                  "x-osdu-relationship": [
+                    {
+                      "GroupType": "reference-data",
+                      "EntityType": "CoordinateReferenceSystem"
+                    }
+                  ]
+                }
+              }
+            },
+            "VerticalCRS": {
+              "title": "Vertical CRS",
+              "description": "The vertical CRS reference of a CompoundCRS. Only populated for CoordinateReferenceSystemType==CompoundCRS.",
+              "type": "object",
+              "properties": {
+                "AuthorityCode": {
+                  "title": "Vertical CRS Authority Code",
+                  "description": "The VerticalCRS authority code, corresponding to the ISO19111 ID and 'projjson' id.",
+                  "type": "object",
+                  "properties": {
+                    "Authority": {
+                      "title": "Vertical CRS Authority",
+                      "description": "The authority governing the 'Code'.",
+                      "type": "string",
+                      "example": "EPSG"
+                    },
+                    "Code": {
+                      "title": "Vertical CRS Code",
+                      "description": "The code assigned by the 'Authority'.",
+                      "type": "integer",
+                      "format": "int32",
+                      "example": 5714
+                    }
+                  }
+                },
+                "Name": {
+                  "title": "Vertical CRS Name.",
+                  "type": "string",
+                  "description": "The name of the VerticalCrs.",
+                  "example": "Mean Sea Level"
+                },
+                "VerticalCRSID": {
+                  "title": "Vertical CRS Reference",
+                  "type": "string",
+                  "description": "The relationship to the VerticalCrs.",
+                  "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-CoordinateReferenceSystem:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                  "example": "namespace:reference-data--CoordinateReferenceSystem:Vertical:EPSG::5714:",
+                  "x-osdu-relationship": [
+                    {
+                      "GroupType": "reference-data",
+                      "EntityType": "CoordinateReferenceSystem"
+                    }
+                  ]
+                }
+              }
+            },
+            "Transformation": {
+              "title": "Bound Transformation",
+              "description": "The Transformation bound to the BaseCRS in a BoundCRS. Only populated for CoordinateReferenceSystemType==BoundCRS.",
+              "type": "object",
+              "properties": {
+                "AuthorityCode": {
+                  "title": "Transformation Authority Code",
+                  "description": "The Transformation authority code, corresponding to the ISO19111 ID and 'projjson' id.",
+                  "type": "object",
+                  "properties": {
+                    "Authority": {
+                      "title": "Transformation Authority",
+                      "description": "The authority governing the 'Code'.",
+                      "type": "string",
+                      "example": "EPSG"
+                    },
+                    "Code": {
+                      "title": "Transformation Code",
+                      "description": "The code assigned by the 'Authority'.",
+                      "type": "integer",
+                      "format": "int32",
+                      "example": 1613
+                    }
+                  }
+                },
+                "Name": {
+                  "title": "Transformation Name.",
+                  "type": "string",
+                  "description": "The name of the Transformation.",
+                  "example": "ED50 to WGS 84 (24)"
+                },
+                "TransformationID": {
+                  "title": "BoundCRS Transformation Reference",
+                  "type": "string",
+                  "description": "The relationship to the bound transformation.",
+                  "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-CoordinateTransformation:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                  "example": "namespace:reference-data--CoordinateTransformation:EPSG::1613:",
+                  "x-osdu-relationship": [
+                    {
+                      "GroupType": "reference-data",
+                      "EntityType": "CoordinateTransformation"
+                    }
+                  ]
+                }
+              }
+            },
+            "Datum": {
+              "title": "Datum",
+              "description": "The datum of this CRS. Only populated for CoordinateReferenceSystemType in [GeographicCRS, VerticalCRS, EngineeringCRS].",
+              "type": "object",
+              "properties": {
+                "AuthorityCode": {
+                  "title": "Datum Authority Code",
+                  "description": "The Datum authority code, corresponding to the ISO19111 ID and 'projjson' id.",
+                  "type": "object",
+                  "properties": {
+                    "Authority": {
+                      "title": "Datum Authority",
+                      "description": "The authority governing the 'Code'.",
+                      "type": "string",
+                      "example": "EPSG"
+                    },
+                    "Code": {
+                      "title": "Datum Code",
+                      "description": "The code assigned by the 'Authority'.",
+                      "type": "integer",
+                      "format": "int32",
+                      "example": 6230
+                    }
+                  }
+                },
+                "Name": {
+                  "title": "Datum Name.",
+                  "type": "string",
+                  "description": "The name of the Datum."
+                }
+              }
+            },
+            "DatumEnsemble": {
+              "title": "DatumEnsemble",
+              "description": "The DatumEnsemble for the CRS's datum. Only populated for GeographicCRS.",
+              "type": "object",
+              "properties": {
+                "AuthorityCode": {
+                  "title": "DatumEnsemble Authority Code",
+                  "description": "The DatumEnsemble authority code, corresponding to the ISO19111 ID and 'projjson' id.",
+                  "type": "object",
+                  "properties": {
+                    "Authority": {
+                      "title": "DatumEnsemble Authority",
+                      "description": "The authority governing the 'Code'.",
+                      "type": "string",
+                      "example": "EPSG"
+                    },
+                    "Code": {
+                      "title": "DatumEnsemble Code",
+                      "description": "The code assigned by the 'Authority'.",
+                      "type": "integer",
+                      "format": "int32",
+                      "example": 6326
+                    }
+                  }
+                },
+                "Name": {
+                  "title": "DatumEnsemble Name.",
+                  "type": "string",
+                  "description": "The name of the DatumEnsemble.",
+                  "example": "World Geodetic System 1984 ensemble"
+                }
+              }
+            },
+            "Projection": {
+              "title": "Projection",
+              "description": "The projection operation of a ProjectedCRS. Only populated for CoordinateReferenceSystemType==ProjectedCRS.",
+              "type": "object",
+              "properties": {
+                "AuthorityCode": {
+                  "title": "Projection Operation Authority Code",
+                  "description": "The Projection Operation authority code, corresponding to the ISO19111 ID and 'projjson' id.",
+                  "type": "object",
+                  "properties": {
+                    "Authority": {
+                      "title": "Projection Operation Authority",
+                      "description": "The projection operation  authority governing the 'Code'.",
+                      "type": "string",
+                      "example": "EPSG"
+                    },
+                    "Code": {
+                      "title": "Projection Operation Code",
+                      "description": "The projection operation code assigned by the 'Authority'.",
+                      "type": "integer",
+                      "format": "int32",
+                      "example": 16031
+                    }
+                  }
+                },
+                "Name": {
+                  "title": "Projection Name.",
+                  "type": "string",
+                  "description": "The name of the projection.",
+                  "example": "UTM zone 31N"
+                }
+              }
+            },
+            "BaseCRS": {
+              "title": "Base CRS",
+              "description": "The base geographic CRS of this projected CRS. Only populated for CoordinateReferenceSystemType==ProjectedCRS.",
+              "type": "object",
+              "properties": {
+                "AuthorityCode": {
+                  "title": "Base CRS Authority Code",
+                  "description": "The BaseCRS authority code, corresponding to the ISO19111 ID and 'projjson' id.",
+                  "type": "object",
+                  "properties": {
+                    "Authority": {
+                      "title": "Base CRS Authority",
+                      "description": "The authority governing the 'Code'.",
+                      "type": "string",
+                      "example": "EPSG"
+                    },
+                    "Code": {
+                      "title": "Base CRS Code",
+                      "description": "The code assigned by the 'Authority'.",
+                      "type": "integer",
+                      "format": "int32",
+                      "example": 4230
+                    }
+                  }
+                },
+                "Name": {
+                  "title": "Base CRS Name.",
+                  "type": "string",
+                  "description": "The name of the base CRS.",
+                  "example": "ED50"
+                },
+                "BaseCRSID": {
+                  "title": "BaseCRS Reference",
+                  "type": "string",
+                  "description": "The relationship to the BaseCRS.",
+                  "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-CoordinateReferenceSystem:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                  "example": "namespace:reference-data--CoordinateReferenceSystem:Geographic2D:EPSG:4230:",
+                  "x-osdu-relationship": [
+                    {
+                      "GroupType": "reference-data",
+                      "EntityType": "CoordinateReferenceSystem"
+                    }
+                  ]
+                }
+              }
+            },
+            "SourceCRS": {
+              "title": "Source CRS",
+              "description": "The source CRS of a BoundCRS. Only populated for CoordinateReferenceSystemType==BoundCRS.",
+              "type": "object",
+              "properties": {
+                "AuthorityCode": {
+                  "title": "Source CRS Authority Code",
+                  "description": "The SourceCRS authority code, corresponding to the ISO19111 ID and 'projjson' id.",
+                  "type": "object",
+                  "properties": {
+                    "Authority": {
+                      "title": "Source CRS Authority",
+                      "description": "The authority governing the 'Code'.",
+                      "type": "string",
+                      "example": "EPSG"
+                    },
+                    "Code": {
+                      "title": "Source CRS Code",
+                      "description": "The code assigned by the 'Authority'.",
+                      "type": "integer",
+                      "format": "int32",
+                      "example": 23031
+                    }
+                  }
+                },
+                "Name": {
+                  "title": "Source CRS Name.",
+                  "type": "string",
+                  "description": "The name of the Source CRS.",
+                  "example": "ED50 / UTM zone 31N"
+                },
+                "SourceCRSID": {
+                  "title": "Source CRS Reference",
+                  "type": "string",
+                  "description": "The relationship to the source CoordinateRefSystem.",
+                  "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-CoordinateReferenceSystem:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                  "example": "namespace:reference-data--CoordinateReferenceSystem:Projected:EPSG::23031:",
+                  "x-osdu-relationship": [
+                    {
+                      "GroupType": "reference-data",
+                      "EntityType": "CoordinateReferenceSystem"
+                    }
+                  ]
+                }
+              }
+            },
+            "TargetCRS": {
+              "title": "Target CRS",
+              "description": "The target CRS of this bound CRS. Only populated for CoordinateReferenceSystemType==BoundCRS.",
+              "type": "object",
+              "properties": {
+                "AuthorityCode": {
+                  "title": "Target CRS Authority Code",
+                  "description": "The TargetCRS authority code, corresponding to the ISO19111 ID and 'projjson' id.",
+                  "type": "object",
+                  "properties": {
+                    "Authority": {
+                      "title": "Target CRS Authority",
+                      "description": "The authority governing the 'Code'.",
+                      "type": "string",
+                      "example": "EPSG"
+                    },
+                    "Code": {
+                      "title": "Target CRS Code",
+                      "description": "The code assigned by the 'Authority'.",
+                      "type": "integer",
+                      "format": "int32",
+                      "example": 4326
+                    }
+                  }
+                },
+                "Name": {
+                  "title": "Target CRS Name.",
+                  "type": "string",
+                  "description": "The name of the base CRS.",
+                  "example": "WGS 84"
+                },
+                "TargetCRSID": {
+                  "title": "Target CRS Reference",
+                  "type": "string",
+                  "description": "The relationship to the TargetCRS.",
+                  "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-CoordinateReferenceSystem:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                  "example": "namespace:reference-data--CoordinateReferenceSystem:Geographic2D:EPSG::4326:",
+                  "x-osdu-relationship": [
+                    {
+                      "GroupType": "reference-data",
+                      "EntityType": "CoordinateReferenceSystem"
+                    }
+                  ]
+                }
+              }
+            },
+            "Usages": {
+              "title": "Usages",
+              "description": "Contextual information about scope and extent/area of use.",
+              "type": "array",
+              "items": {
+                "title": "Usage",
+                "description": "Scope and extent information about the described CRS.",
+                "type": "object",
+                "properties": {
+                  "AuthorityCode": {
+                    "title": "Usage Authority Code",
+                    "description": "The Usage authority code, corresponding to the ISO19111 ID and 'projjson' id.",
+                    "type": "object",
+                    "properties": {
+                      "Authority": {
+                        "title": "Usage Authority",
+                        "description": "The authority governing the 'Code'.",
+                        "type": "string",
+                        "example": "EPSG"
+                      },
+                      "Code": {
+                        "title": "Usage Code",
+                        "description": "The code assigned by the 'Authority'.",
+                        "type": "integer",
+                        "format": "int32",
+                        "example": 6394
+                      }
+                    }
+                  },
+                  "Name": {
+                    "title": "Usage Name.",
+                    "type": "string",
+                    "description": "The name of the Usage.",
+                    "example": "Europe - 0\u00b0E to 6\u00b0E and ED50 by country"
+                  },
+                  "Extent": {
+                    "title": "Extent",
+                    "description": "Extent or area of use information.",
+                    "type": "object",
+                    "properties": {
+                      "AuthorityCode": {
+                        "title": "Extent Authority Code",
+                        "description": "The Extent authority code, corresponding to the ISO19111 ID and 'projjson' id.",
+                        "type": "object",
+                        "properties": {
+                          "Authority": {
+                            "title": "Extent Authority",
+                            "description": "The authority governing the 'Code'.",
+                            "type": "string",
+                            "example": "EPSG"
+                          },
+                          "Code": {
+                            "title": "Extent Code",
+                            "description": "The code assigned by the 'Authority'.",
+                            "type": "integer",
+                            "format": "int32",
+                            "example": 1634
+                          }
+                        }
+                      },
+                      "Name": {
+                        "title": "Extent Name.",
+                        "type": "string",
+                        "description": "The name of the Extent.",
+                        "example": "Europe - 0\u00b0E to 6\u00b0E and ED50 by country"
+                      },
+                      "Description": {
+                        "title": "Extent Description.",
+                        "type": "string",
+                        "description": "The description of the Extent.",
+                        "example": "Europe - between 0\u00b0E and 6\u00b0E - Andorra; Denmark (North Sea); Germany offshore; Netherlands offshore; Norway including Svalbard - onshore and offshore; Spain - onshore (mainland and Balearic Islands); United Kingdom (UKCS) offshore."
+                      },
+                      "BoundingBoxSouthBoundLatitude": {
+                        "title": "South Latitude",
+                        "description": "Southern latitude limit of the bounding box in degrees based on WGS 84",
+                        "type": "number",
+                        "example": 38.56
+                      },
+                      "BoundingBoxWestBoundLongitude": {
+                        "title": "West Longitude",
+                        "description": "Western longitude limit of the bounding box in degrees based on WGS 84",
+                        "type": "number",
+                        "example": 0.0
+                      },
+                      "BoundingBoxEastBoundLongitude": {
+                        "title": "East Longitude",
+                        "description": "Eastern longitude limit of the bounding box in degrees based on WGS 84",
+                        "type": "number",
+                        "example": 6.01
+                      },
+                      "BoundingBoxNorthBoundLatitude": {
+                        "title": "North Latitude",
+                        "description": "Northern latitude limit of the bounding box in degrees based on WGS 84",
+                        "type": "number",
+                        "example": 82.41
+                      }
+                    }
+                  },
+                  "Scope": {
+                    "title": "Scope",
+                    "description": "Scope declaration.",
+                    "type": "object",
+                    "properties": {
+                      "AuthorityCode": {
+                        "title": "Scope Authority Code",
+                        "description": "The Scope authority code, corresponding to the ISO19111 ID and 'projjson' id.",
+                        "type": "object",
+                        "properties": {
+                          "Authority": {
+                            "title": "Scope Authority",
+                            "description": "The authority governing the 'Code'.",
+                            "type": "string",
+                            "example": "EPSG"
+                          },
+                          "Code": {
+                            "title": "Scope Code",
+                            "description": "The code assigned by the 'Authority'.",
+                            "type": "integer",
+                            "format": "int32",
+                            "example": 1142
+                          }
+                        }
+                      },
+                      "Name": {
+                        "title": "Scope Name.",
+                        "type": "string",
+                        "description": "The name of the Scope.",
+                        "example": "Engineering survey, topographic mapping."
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "CoordinateSystem": {
+              "title": "Coordinate System",
+              "description": "The coordinate system defining the dimension and individual axes used by the CRS.",
+              "type": "object",
+              "properties": {
+                "AuthorityCode": {
+                  "title": "CoordinateSystem Authority Code",
+                  "description": "The CoordinateSystem authority code, corresponding to the ISO19111 ID and 'projjson' id.",
+                  "type": "object",
+                  "properties": {
+                    "Authority": {
+                      "title": "CoordinateSystem Authority",
+                      "description": "The authority governing the 'Code'.",
+                      "type": "string",
+                      "example": "EPSG"
+                    },
+                    "Code": {
+                      "title": "CoordinateSystem Code",
+                      "description": "The code assigned by the 'Authority'.",
+                      "type": "integer",
+                      "format": "int32",
+                      "example": 4400
+                    }
+                  }
+                },
+                "Name": {
+                  "title": "Coordinate System Name.",
+                  "type": "string",
+                  "description": "The name of the Coordinate System.",
+                  "example": "Cartesian 2D CS. Axes: easting, northing (E,N). Orientations: east, north. UoM: m."
+                },
+                "HorizontalAxisUnitID": {
+                  "title": "Horizontal Axis Unit",
+                  "description": "The horizontal unit for 2-dimensional or 3-dimensional coordinate systems. This property is not populated for 1-dimensional coordinate systems (Vertical CRSs).",
+                  "type": "string",
+                  "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-UnitOfMeasure:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                  "x-osdu-relationship": [
+                    {
+                      "GroupType": "reference-data",
+                      "EntityType": "UnitOfMeasure"
+                    }
+                  ]
+                },
+                "VerticalAxisUnitID": {
+                  "title": "Vertical Axis Unit",
+                  "description": "The vertical unit for 1-dimensional or 3-dimensional coordinate systems.",
+                  "type": "string",
+                  "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-UnitOfMeasure:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                  "x-osdu-relationship": [
+                    {
+                      "GroupType": "reference-data",
+                      "EntityType": "UnitOfMeasure"
+                    }
+                  ]
+                }
+              }
+            },
+            "PreferredUsage": {
+              "title": "Preferred Usage",
+              "description": "Scope and extent information about the described CRS.",
+              "type": "object",
+              "properties": {
+                "AuthorityCode": {
+                  "title": "Preferred Usage Authority Code",
+                  "description": "The PreferredUsage authority code, corresponding to the ISO19111 ID and 'projjson' id.",
+                  "type": "object",
+                  "properties": {
+                    "Authority": {
+                      "title": "Preferred Usage Authority",
+                      "description": "The authority governing the 'Code'.",
+                      "type": "string",
+                      "example": "EPSG"
+                    },
+                    "Code": {
+                      "title": "Preferred Usage Code",
+                      "description": "The code assigned by the 'Authority'.",
+                      "type": "integer",
+                      "format": "int32",
+                      "example": 6394
+                    }
+                  }
+                },
+                "Name": {
+                  "title": "Preferred Usage Name.",
+                  "type": "string",
+                  "description": "The name of the Usage.",
+                  "example": "Europe - 0\u00b0E to 6\u00b0E and ED50 by country"
+                },
+                "Extent": {
+                  "title": "Preferred Extent",
+                  "description": "Extent or area of use information.",
+                  "type": "object",
+                  "properties": {
+                    "AuthorityCode": {
+                      "title": "Preferred Extent Authority Code",
+                      "description": "The Preferred Extent authority code, corresponding to the ISO19111 ID and 'projjson' id.",
+                      "type": "object",
+                      "properties": {
+                        "Authority": {
+                          "title": "Preferred Extent Authority",
+                          "description": "The authority governing the 'Code'.",
+                          "type": "string",
+                          "example": "EPSG"
+                        },
+                        "Code": {
+                          "title": "Preferred Extent Code",
+                          "description": "The code assigned by the 'Authority'.",
+                          "type": "integer",
+                          "format": "int32",
+                          "example": 1634
+                        }
+                      }
+                    },
+                    "Name": {
+                      "title": "Preferred Extent Name.",
+                      "type": "string",
+                      "description": "The name of the Extent.",
+                      "example": "Europe - 0\u00b0E to 6\u00b0E and ED50 by country"
+                    },
+                    "Description": {
+                      "title": "Extent Description.",
+                      "type": "string",
+                      "description": "The description of the Extent.",
+                      "example": "Europe - between 0\u00b0E and 6\u00b0E - Andorra; Denmark (North Sea); Germany offshore; Netherlands offshore; Norway including Svalbard - onshore and offshore; Spain - onshore (mainland and Balearic Islands); United Kingdom (UKCS) offshore."
+                    },
+                    "BoundingBoxSouthBoundLatitude": {
+                      "title": "Preferred South Latitude",
+                      "description": "Southern latitude limit of the bounding box in degrees based on WGS 84",
+                      "type": "number",
+                      "example": 38.56
+                    },
+                    "BoundingBoxWestBoundLongitude": {
+                      "title": "Preferred West Longitude",
+                      "description": "Western longitude limit of the bounding box in degrees based on WGS 84",
+                      "type": "number",
+                      "example": 0.0
+                    },
+                    "BoundingBoxEastBoundLongitude": {
+                      "title": "Preferred East Longitude",
+                      "description": "Eastern longitude limit of the bounding box in degrees based on WGS 84",
+                      "type": "number",
+                      "example": 6.01
+                    },
+                    "BoundingBoxNorthBoundLatitude": {
+                      "title": "Preferred North Latitude",
+                      "description": "Northern latitude limit of the bounding box in degrees based on WGS 84",
+                      "type": "number",
+                      "example": 82.41
+                    }
+                  }
+                },
+                "Scope": {
+                  "title": "Preferred Scope",
+                  "description": "Scope declaration.",
+                  "type": "object",
+                  "properties": {
+                    "AuthorityCode": {
+                      "title": "Preferred Scope Authority Code",
+                      "description": "The Preferred Scope authority code, corresponding to the ISO19111 ID and 'projjson' id.",
+                      "type": "object",
+                      "properties": {
+                        "Authority": {
+                          "title": "Preferred Scope Authority",
+                          "description": "The authority governing the 'Code'.",
+                          "type": "string",
+                          "example": "EPSG"
+                        },
+                        "Code": {
+                          "title": "Preferred Scope Code",
+                          "description": "The code assigned by the 'Authority'.",
+                          "type": "integer",
+                          "format": "int32",
+                          "example": 1142
+                        }
+                      }
+                    },
+                    "Name": {
+                      "title": "Preferred Scope Name.",
+                      "type": "string",
+                      "description": "The name of the Scope.",
+                      "example": "Engineering survey, topographic mapping."
+                    }
+                  }
+                }
+              }
+            },
+            "PersistableReference": {
+              "title": "Persistable Reference",
+              "description": "Used for export and actionable instructions to a conversion/transformation engine. It is initially based on Esri well-known text (WKT). Eventually, when Esri WKT are convertible into ISO WKT and vice versa, the definition can be replaced by https://proj.org/schemas/v0.2/projjson.schema.json.",
+              "type": "string"
+            },
+            "Wgs84Coordinates": {
+              "title": "WGS 84 Coordinates",
+              "description": "The 2-dimensional bounding box derived from the extent (Polygon or MultiPolygon) based on WGS 84 (EPSG:4326). The schema of this substructure is identical to the GeoJSON FeatureCollection https://geojson.org/schema/FeatureCollection.json. The coordinate sequence follows GeoJSON standard, i.e. longitude, latitude. CoordinateReferenceSystems with an extent crossing the anti-meridian are represented by a MultiPolygon.",
+              "$ref": "../abstract/AbstractFeatureCollection.1.0.0.json"
+            }
+          },
+          "title": "IndividualProperties"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "ExtensionProperties": {
+              "type": "object"
+            }
+          },
+          "title": "ExtensionProperties"
+        }
+      ]
+    }
+  },
+  "required": [
+    "kind",
+    "acl",
+    "legal"
+  ],
+  "additionalProperties": false,
+  "x-osdu-governance-authorities": [
+    "None"
+  ],
+  "x-osdu-governance-model": "LOCAL",
+  "x-osdu-virtual-properties": {
+    "data.VirtualProperties.DefaultName": {
+      "type": "string",
+      "priority": [
+        {
+          "path": "data.Name"
+        }
+      ]
+    }
+  },
+  "x-osdu-inheriting-from-kind": [
+    {
+      "name": "ReferenceType",
+      "kind": "osdu:wks:AbstractReferenceType:1.0.0"
+    }
+  ]
+}

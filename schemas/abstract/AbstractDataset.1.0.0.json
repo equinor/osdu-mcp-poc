@@ -1,0 +1,76 @@
+{
+  "x-osdu-license": "Copyright 2022, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "x-osdu-review-status": "Accepted",
+  "$id": "https://schema.osdu.opengroup.org/json/abstract/AbstractDataset.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:AbstractDataset:1.0.0",
+  "title": "AbstractDataset",
+  "description": "Schema fragment holding properties common for all datasets.",
+  "type": "object",
+  "properties": {
+    "Name": {
+      "type": "string",
+      "title": "Name",
+      "description": "An optional name of the dataset, e.g. a user friendly file or file collection name.",
+      "example": "Dataset X221/15"
+    },
+    "Description": {
+      "type": "string",
+      "title": "Description",
+      "description": "An optional, textual description of the dataset.",
+      "example": "As originally delivered by ACME.com."
+    },
+    "TotalSize": {
+      "type": "string",
+      "title": "Total Size",
+      "description": "Total size of the dataset in bytes; for files it is the same as declared in FileSourceInfo.FileSize or the sum of all individual files. Implemented as string. The value must be convertible to a long integer (sizes can become very large).",
+      "format": "integer",
+      "pattern": "^[0-9]+$",
+      "example": 13245217273
+    },
+    "EncodingFormatTypeID": {
+      "type": "string",
+      "title": "Encoding Format Type ID",
+      "description": "EncodingFormatType ID reference value relationship. It can be a mime-type or media-type.",
+      "example": "namespace:reference-data--EncodingFormatType:text%2Fcsv:",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-EncodingFormatType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "EncodingFormatType"
+        }
+      ]
+    },
+    "SchemaFormatTypeID": {
+      "type": "string",
+      "title": "Schema Format Type ID",
+      "description": "Relationship to the SchemaFormatType reference value.",
+      "example": "namespace:reference-data--SchemaFormatType:CWLS%20LAS3:",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-SchemaFormatType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "SchemaFormatType"
+        }
+      ]
+    },
+    "Endian": {
+      "type": "string",
+      "description": "Endianness of binary value.  Enumeration: \"BIG\", \"LITTLE\".  If absent, applications will need to interpret from context indicators.",
+      "enum": [
+        "BIG",
+        "LITTLE"
+      ]
+    },
+    "DatasetProperties": {
+      "type": "object",
+      "title": "Dataset Properties",
+      "description": "Placeholder for a specialization.",
+      "example": {}
+    }
+  },
+  "required": [
+    "DatasetProperties"
+  ],
+  "x-osdu-inheriting-from-kind": []
+}

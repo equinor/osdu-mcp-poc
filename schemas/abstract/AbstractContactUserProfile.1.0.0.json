@@ -1,0 +1,35 @@
+{
+  "x-osdu-license": "Copyright 2023, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "x-osdu-review-status": "Accepted",
+  "$id": "https://schema.osdu.opengroup.org/json/abstract/AbstractContactUserProfile.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:AbstractContactUserProfile:1.0.0",
+  "title": "AbstractContactUserProfile",
+  "description": "A schema fragment, which can hold explicit contact information (contact by value) and a relationship to a UserProfile (contact by reference). Both ways of capturing contact information can be used simultaneously : the 'by value' may capture the state of the contact at the time of recording, while the 'by reference' relationship to UserProfile captures the current state of the contact.",
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../abstract/AbstractContact.1.1.0.json"
+    },
+    {
+      "type": "object",
+      "properties": {
+        "UserProfileID": {
+          "type": "string",
+          "title": "User Profile ID",
+          "description": "The contact information by reference to a UserProfile record.",
+          "example": "namespace:master-data--UserProfile:JohnSmith:",
+          "pattern": "^[\\w\\-\\.]+:master-data\\-\\-UserProfile:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+          "x-osdu-relationship": [
+            {
+              "GroupType": "master-data",
+              "EntityType": "UserProfile"
+            }
+          ]
+        }
+      },
+      "title": "AbstractContactUserProfile"
+    }
+  ],
+  "x-osdu-inheriting-from-kind": []
+}

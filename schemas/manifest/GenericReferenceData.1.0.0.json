@@ -1,0 +1,176 @@
+{
+  "x-osdu-license": "Copyright 2024, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "$id": "https://schema.osdu.opengroup.org/json/reference-data/GenericReferenceData.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:reference-data--GenericReferenceData:1.0.0",
+  "title": "GenericReferenceData",
+  "description": "An auto-generated placeholder schema representing reference-data group-type records in data loading/ingestion/creation manifests. Do not use this kind for actual records.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "Previously called ResourceID or SRN which identifies this OSDU resource object without version.",
+      "title": "Entity ID",
+      "type": "string",
+      "pattern": "^(surrogate-key:.+|[\\w\\-\\.]+:reference-data\\-\\-[\\w\\-\\.]+:[\\w\\-\\.\\:\\%]+)$",
+      "example": "namespace:reference-data--GenericReferenceData:63ca0ed3-d6fb-53f0-8549-0916ef144266"
+    },
+    "kind": {
+      "description": "The schema identification for the OSDU resource object following the pattern {Namespace}:{Source}:{Type}:{VersionMajor}.{VersionMinor}.{VersionPatch}. The versioning scheme follows the semantic versioning, https://semver.org/.",
+      "title": "Entity Kind",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:[\\w\\-\\.]+:[\\w\\-\\.]+:[0-9]+.[0-9]+.[0-9]+$",
+      "example": "osdu:wks:reference-data--GenericReferenceData:1.0.0"
+    },
+    "version": {
+      "description": "The version number of this OSDU resource; set by the framework.",
+      "title": "Version Number",
+      "type": "integer",
+      "format": "int64",
+      "example": 1562066009929332
+    },
+    "acl": {
+      "description": "The access control tags associated with this entity.",
+      "title": "Access Control List",
+      "$ref": "../abstract/AbstractAccessControlList.1.0.0.json"
+    },
+    "legal": {
+      "description": "The entity's legal tags and compliance status. The actual contents associated with the legal tags is managed by the Compliance Service.",
+      "title": "Legal Tags",
+      "$ref": "../abstract/AbstractLegalTags.1.0.0.json"
+    },
+    "tags": {
+      "title": "Tag Dictionary",
+      "description": "A generic dictionary of string keys mapping to string value. Only strings are permitted as keys and values.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "example": {
+        "NameOfKey": "String value"
+      }
+    },
+    "createTime": {
+      "description": "Timestamp of the time at which initial version of this OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:46:20.163Z"
+    },
+    "createUser": {
+      "title": "Resource Object Creation User Reference",
+      "description": "The user reference, which created the first version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "modifyTime": {
+      "description": "Timestamp of the time at which this version of the OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Version Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:52:24.477Z"
+    },
+    "modifyUser": {
+      "title": "Resource Object Version Creation User Reference",
+      "description": "The user reference, which created this version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "ancestry": {
+      "description": "The links to data, which constitute the inputs, from which this record instance is derived.",
+      "title": "Ancestry",
+      "$ref": "../abstract/AbstractLegalParentList.1.0.0.json"
+    },
+    "meta": {
+      "description": "The Frame of Reference meta data section linking the named properties to self-contained definitions.",
+      "title": "Frame of Reference Meta Data",
+      "type": "array",
+      "items": {
+        "$ref": "../abstract/AbstractMetaItem.1.0.0.json"
+      }
+    },
+    "data": {
+      "allOf": [
+        {
+          "$ref": "../abstract/AbstractCommonResources.1.0.0.json"
+        },
+        {
+          "title": "AbstractReferenceType",
+          "description": "Generic reference object containing the universal properties of reference data, especially the ones commonly thought of as Types",
+          "type": "object",
+          "properties": {
+            "Name": {
+              "type": "string",
+              "description": "The name of the entity instance.",
+              "x-osdu-natural-key": 1
+            },
+            "NameAlias": {
+              "type": "array",
+              "description": "Alternative names, including historical, by which this entity instance is/has been known.",
+              "x-osdu-indexing": {
+                "type": "nested"
+              },
+              "items": {
+                "$ref": "../abstract/AbstractAliasNames.1.0.0.json"
+              }
+            },
+            "ID": {
+              "type": "string",
+              "title": "External Identifier",
+              "description": "Native identifier from a Master Data Management System or other trusted source external to OSDU - stored here in order to allow for multi-system connection and synchronization. If used, the \"Source\" property should identify that source system."
+            },
+            "InactiveIndicator": {
+              "type": "boolean",
+              "title": "Inactive Indicator",
+              "description": "By default reference values are considered as 'active'. An absent 'InactiveIndicator' property value means the reference value is in active use. When 'InactiveIndicator' is set true the reverence value is no longer in use and should no longer be offered as a choice."
+            },
+            "Description": {
+              "type": "string",
+              "description": "The text which describes a NAME TYPE in detail."
+            },
+            "Code": {
+              "type": "string",
+              "description": "The abbreviation or mnemonic for a reference type if defined. Example: WELL and WLBR.",
+              "x-osdu-natural-key": 0
+            },
+            "AttributionAuthority": {
+              "type": "string",
+              "description": "Name of the authority, or organisation, which governs the entity value and from which it is sourced."
+            },
+            "AttributionPublication": {
+              "type": "string",
+              "description": "Name, URL, or other identifier of the publication, or repository, of the attribution source organisation from which the entity value is sourced."
+            },
+            "AttributionRevision": {
+              "type": "string",
+              "description": "The distinct instance of the attribution publication, by version number, sequence number, date of publication, etc., that was used for the entity value."
+            },
+            "CommitDate": {
+              "type": "string",
+              "title": "Commit Date",
+              "description": "For reference values published and governed by OSDU: The date and time the record was committed into the OSDU member GitLab reference-values repository. The sole purpose of this date is to optimise the OSDU milestone upgrades. It allows the upgrade code to figure out whether or not the record must be PUT into reference value storage.",
+              "format": "date-time",
+              "example": "2021-02-08T21:36:40-05:00"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "required": [
+    "id",
+    "kind",
+    "acl",
+    "legal"
+  ],
+  "x-osdu-virtual-properties": {
+    "data.VirtualProperties.DefaultName": {
+      "type": "string",
+      "priority": [
+        {
+          "path": "data.Name"
+        }
+      ]
+    }
+  },
+  "x-osdu-inheriting-from-kind": []
+}

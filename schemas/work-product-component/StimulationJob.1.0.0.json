@@ -1,0 +1,520 @@
+{
+  "x-osdu-license": "Copyright 2024, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "$id": "https://schema.osdu.opengroup.org/json/work-product-component/StimulationJob.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:work-product-component--StimulationJob:1.0.0",
+  "title": "StimulationJob",
+  "description": "Parent object for all the information for one Frac / Stimulation Job within a Well/Wellbore. A Stimulation Job can be associated to one or more Stimulation Stages with each Stage having one or more Job Steps.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "Previously called ResourceID or SRN which identifies this OSDU resource object without version.",
+      "title": "Entity ID",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-StimulationJob:[\\w\\-\\.\\:\\%]+$",
+      "example": "namespace:work-product-component--StimulationJob:fd28afdb-7250-57ed-8a0b-e486c44dc821"
+    },
+    "kind": {
+      "description": "The schema identification for the OSDU resource object following the pattern {Namespace}:{Source}:{Type}:{VersionMajor}.{VersionMinor}.{VersionPatch}. The versioning scheme follows the semantic versioning, https://semver.org/.",
+      "title": "Entity Kind",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:[\\w\\-\\.]+:[\\w\\-\\.]+:[0-9]+.[0-9]+.[0-9]+$",
+      "example": "osdu:wks:work-product-component--StimulationJob:1.0.0"
+    },
+    "version": {
+      "description": "The version number of this OSDU resource; set by the framework.",
+      "title": "Version Number",
+      "type": "integer",
+      "format": "int64",
+      "example": 1562066009929332
+    },
+    "acl": {
+      "description": "The access control tags associated with this entity.",
+      "title": "Access Control List",
+      "$ref": "../abstract/AbstractAccessControlList.1.0.0.json"
+    },
+    "legal": {
+      "description": "The entity's legal tags and compliance status. The actual contents associated with the legal tags is managed by the Compliance Service.",
+      "title": "Legal Tags",
+      "$ref": "../abstract/AbstractLegalTags.1.0.0.json"
+    },
+    "tags": {
+      "title": "Tag Dictionary",
+      "description": "A generic dictionary of string keys mapping to string value. Only strings are permitted as keys and values.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "example": {
+        "NameOfKey": "String value"
+      }
+    },
+    "createTime": {
+      "description": "Timestamp of the time at which initial version of this OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:46:20.163Z"
+    },
+    "createUser": {
+      "title": "Resource Object Creation User Reference",
+      "description": "The user reference, which created the first version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "modifyTime": {
+      "description": "Timestamp of the time at which this version of the OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Version Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:52:24.477Z"
+    },
+    "modifyUser": {
+      "title": "Resource Object Version Creation User Reference",
+      "description": "The user reference, which created this version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "ancestry": {
+      "description": "The links to data, which constitute the inputs, from which this record instance is derived.",
+      "title": "Ancestry",
+      "$ref": "../abstract/AbstractLegalParentList.1.0.0.json"
+    },
+    "meta": {
+      "description": "The Frame of Reference meta data section linking the named properties to self-contained definitions.",
+      "title": "Frame of Reference Meta Data",
+      "type": "array",
+      "items": {
+        "$ref": "../abstract/AbstractMetaItem.1.0.0.json"
+      }
+    },
+    "data": {
+      "allOf": [
+        {
+          "$ref": "../abstract/AbstractCommonResources.1.0.0.json"
+        },
+        {
+          "$ref": "../abstract/AbstractWPCGroupType.1.2.0.json"
+        },
+        {
+          "$ref": "../abstract/AbstractWorkProductComponent.1.1.0.json"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "JobTypeID": {
+              "type": "string",
+              "title": "Job Type ID",
+              "description": "Identifier of the type of well stimulation job",
+              "example": "Plug & Perf Chemical Frac"
+            },
+            "WellboreID": {
+              "type": "string",
+              "title": "Wellbore ID",
+              "description": "A link to the wellbore in which the stimulation took place.",
+              "example": "namespace:master-data--Wellbore:11000091175501:",
+              "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Wellbore:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "Wellbore"
+                }
+              ]
+            },
+            "WellActivityID": {
+              "type": "string",
+              "title": "Well Activity ID",
+              "description": "A link to the well activity to which this stimulation job is associated.",
+              "example": "namespace:master-data--WellActivity:110000911755.COM:",
+              "pattern": "^[\\w\\-\\.]+:master-data\\-\\-WellActivity:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "WellActivity"
+                }
+              ]
+            },
+            "JobStartDateTime": {
+              "type": "string",
+              "title": "Job Start Date Time",
+              "description": "Start date and time of the stimulation job.",
+              "format": "date-time",
+              "example": "2020-05-01T07:00:00+0000"
+            },
+            "JobEndDateTime": {
+              "type": "string",
+              "title": "Job End Date Time",
+              "description": "Ending date and time of the stimulation job.",
+              "format": "date-time",
+              "example": "2020-05-04T21:00:00+0000"
+            },
+            "ArrivalDateTime": {
+              "type": "string",
+              "title": "Arrival Date Time",
+              "description": "Date and time at which the stimulation contractor arrives on location.",
+              "format": "date-time",
+              "example": "2020-04-29T12:00:00+0000",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJob.DtTmArrival",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "MaterialCatalog": {
+              "type": "array",
+              "title": "Material Catalog",
+              "description": "Object that contains the Additives and Proppants on location and used in the stimulation job.",
+              "items": {
+                "type": "object",
+                "title": "Material Catalogue",
+                "description": "Object that defines the additives and proppants on location and used in the stimulation job.",
+                "properties": {
+                  "Additives": {
+                    "type": "array",
+                    "title": "Additives",
+                    "description": "Define the additives on location and used in the stimulation job.",
+                    "items": {
+                      "$ref": "../abstract/AbstractFluidAdditive.1.0.0.json"
+                    }
+                  },
+                  "ProppantAgents": {
+                    "type": "array",
+                    "title": "Proppant Agents",
+                    "description": "Define the proppants on location and used in the stimulation job.",
+                    "items": {
+                      "$ref": "../abstract/AbstractProppantAgent.1.0.0.json"
+                    }
+                  }
+                }
+              }
+            },
+            "BHStaticTemperature": {
+              "type": "number",
+              "title": "BH Static Temperature",
+              "description": "Bottomhole static temperature for the job (BHST)",
+              "example": "178 degF",
+              "x-osdu-frame-of-reference": "UOM:thermodynamic temperature",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJob.BottomholeStaticTemperature",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "BHTreatingTemperature": {
+              "type": "number",
+              "title": "BH Treating Temperature",
+              "description": "Expected or calculated bottomhole treating temperature for the job.",
+              "example": "155 degF",
+              "x-osdu-frame-of-reference": "UOM:thermodynamic temperature",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJob.TreatingBottomholeTemperature",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "ContractorID": {
+              "type": "string",
+              "title": "Contractor ID",
+              "description": "Identifier of service company performing the stimulation job.",
+              "example": "namespace:master-data--Organisation:SLB:",
+              "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Organisation:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "Organisation"
+                }
+              ]
+            },
+            "FlowBackPressure": {
+              "type": "number",
+              "title": "Flow Back Pressure",
+              "description": "Pressure recorded on fluid returning to surface.",
+              "example": "2358 psi",
+              "x-osdu-frame-of-reference": "UOM:pressure",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJob.FlowBackPres",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "FlowBackRate": {
+              "type": "number",
+              "title": "Flow Back Rate",
+              "description": "Flow rate recorded on fluid returning to surface.",
+              "example": "3637 ft3/d",
+              "x-osdu-frame-of-reference": "UOM:volume per time",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJob.FlowBackRate",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "FlowBackVolume": {
+              "type": "number",
+              "title": "Flow Back Volume",
+              "description": "Volume recorded on fluid returning to surface.",
+              "x-osdu-frame-of-reference": "UOM:volume",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJob.FlowBackVolume",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "FluidEfficiency": {
+              "type": "number",
+              "title": "Fluid Efficiency",
+              "description": "Volume ratio of fluid in the fracture at the end of pumping.",
+              "example": 0.98,
+              "x-osdu-frame-of-reference": "UOM:volume per volume",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJob.FluidEfficiency",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "FluidPumpingRateMax": {
+              "type": "number",
+              "title": "Fluid Pumping Rate Max",
+              "description": "Maximum job fluid pumping rate encountered during treatment of all stages.",
+              "example": "53 bbl/min",
+              "x-osdu-frame-of-reference": "UOM:volume per time",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJob.MaxFluidRate",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "HhpOrdered": {
+              "type": "number",
+              "title": "HHP Ordered",
+              "description": "Hydraulic horsepower ordered for the stimulation job.",
+              "example": "200000 hp",
+              "x-osdu-frame-of-reference": "UOM:power",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJob.HhpOrdered",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "HhpUsed": {
+              "type": "number",
+              "title": "HHP Used",
+              "description": "Hydraulic horsepower actually used for the stimulation job.",
+              "example": "157535 hp",
+              "x-osdu-frame-of-reference": "UOM:power",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJob.HhpUsed",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "JobPressureMax": {
+              "type": "number",
+              "title": "Job Pressure Max",
+              "description": "Maximum pressure encountered during the job.",
+              "example": "9421.65 psi",
+              "x-osdu-frame-of-reference": "UOM:pressure",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJob.MaxJobPres",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "JobPressureAvg": {
+              "type": "number",
+              "title": "Job Pressure Average",
+              "description": "Average pressure encountered during treatment of all stages.",
+              "example": "7505.76 psi",
+              "x-osdu-frame-of-reference": "UOM:pressure",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJob.AvgJobPres",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "JobTotalVolume": {
+              "type": "number",
+              "title": "Job Total Volume",
+              "description": "Total volume pumped for all stages.",
+              "example": "4228069 gal[US]",
+              "x-osdu-frame-of-reference": "UOM:volume",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJob.TotalJobVolume",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "OperatorRepresentative": {
+              "type": "string",
+              "title": "Operator Representative",
+              "description": "Name of Operator Representative/Supervisor",
+              "example": "Joe Bloggs"
+            },
+            "OperatorRepresentativeRemarks": {
+              "type": "string",
+              "title": "Operator Representative Remarks",
+              "description": "Operator Representative Remarks",
+              "example": "Well is ready for CT ops once Frac ops completed and stimulation services are R/O"
+            },
+            "PIDXCommodityCodeID": {
+              "type": "string",
+              "title": "PIDX Commodity Code ID",
+              "description": "Petroleum Industry Data Exchange (PIDX) UNSPSC (Segment 71) commodity code from the oil and gas extraction and production enhancement services family.",
+              "example": "namespace:reference-data--StimPIDXCommodityCode:71131000:",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJob.PIDXCommodityCode",
+              "x-osdu-attribution-revision": "v2.0",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-StimPIDXCommodityCode:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "StimPIDXCommodityCode"
+                }
+              ]
+            },
+            "ProppantInFormationTotal": {
+              "type": "number",
+              "title": "Proppant In Formation Total",
+              "description": "The total mass of proppant placed in the formation for the entire stim job.",
+              "example": "6394508 lbm",
+              "x-osdu-frame-of-reference": "UOM:mass",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJob.TotalProppantInFormation",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "ProppantUsedTotal": {
+              "type": "number",
+              "title": "Proppant Used Total",
+              "description": "The total mass of proppant used (pumped) for the entire stim job.",
+              "example": "6394508 lbm",
+              "x-osdu-frame-of-reference": "UOM:mass",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJob.TotalProppantUsed",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "PumpTimeTotal": {
+              "type": "number",
+              "title": "Pump Time Total",
+              "description": "The total pumping time/duration for the entire stim job.",
+              "x-osdu-frame-of-reference": "UOM:time",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJob.TotalPumpTime",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "StageCount": {
+              "type": "integer",
+              "title": "Stage Count",
+              "description": "Integer Number of stages treated during the stimulation job.",
+              "example": 27,
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJob.StageCount",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "Supervisor": {
+              "type": "string",
+              "title": "Supervisor",
+              "description": "Name of the service company supervisor.",
+              "example": "Marcel Schlumberger",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML StimJob.Supervisor",
+              "x-osdu-attribution-revision": "v2.0"
+            },
+            "MaterialUsed": {
+              "type": "array",
+              "title": "Material Used",
+              "description": "Total amount of materials used for the Stimulation Job.",
+              "items": {
+                "$ref": "../abstract/AbstractStimMaterialQuantity.1.0.0.json"
+              }
+            },
+            "WaterSource": {
+              "type": "string",
+              "title": "Water Source",
+              "description": "Source for water used during the stim job.",
+              "example": "Sunshine Municipal"
+            },
+            "WaterManagementPlanIdentifier": {
+              "type": "string",
+              "title": "Water Management Plan Identifier",
+              "description": "Water management plan identifier for this stim job.",
+              "example": "WMP-AA-BB-CC"
+            },
+            "OpenHoleLength": {
+              "type": "number",
+              "title": "Open Hole Length",
+              "description": "Total length of stimulated interval for this stim job.",
+              "example": "7000 ft",
+              "x-osdu-frame-of-reference": "UOM:length"
+            },
+            "PadPercent": {
+              "type": "number",
+              "title": "Pad Percent",
+              "description": "The ratio of proppant placed in formation vs proppant pumped",
+              "example": 1,
+              "x-osdu-frame-of-reference": "UOM:dimensionless"
+            },
+            "IsCoiledTubingConveyed": {
+              "type": "boolean",
+              "title": "Is Coiled Tubing Conveyed",
+              "description": "Is the stimulation conveyed via coiled tubing?",
+              "example": false
+            },
+            "CleanTotalVolume": {
+              "type": "number",
+              "title": "Clean Total Volume",
+              "description": "Total clean volume pumped for all job stages during this stim job.  Clean volume is amount of fluid before proppant is added.",
+              "example": "4100000 gal[US]",
+              "x-osdu-frame-of-reference": "UOM:volume"
+            },
+            "WellLog": {
+              "type": "array",
+              "title": "Well Log",
+              "description": "Log(s) associated to the Stim Job e.g. Composite Log(s)",
+              "items": {
+                "type": "string",
+                "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-WellLog:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                "x-osdu-relationship": [
+                  {
+                    "GroupType": "work-product-component",
+                    "EntityType": "WellLog"
+                  }
+                ]
+              }
+            },
+            "Remarks": {
+              "type": "string",
+              "title": "Remarks",
+              "description": "General remarks about this Stim Job.",
+              "example": "27 Stage Perf & Frac Ops"
+            }
+          },
+          "required": [
+            "JobTypeID",
+            "WellboreID"
+          ],
+          "title": "IndividualProperties"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "ExtensionProperties": {
+              "type": "object"
+            }
+          },
+          "title": "ExtensionProperties"
+        }
+      ]
+    }
+  },
+  "required": [
+    "kind",
+    "acl",
+    "legal"
+  ],
+  "additionalProperties": false,
+  "x-osdu-review-status": "Accepted",
+  "x-osdu-supported-file-formats": [
+    "WITSML"
+  ],
+  "x-osdu-virtual-properties": {
+    "data.VirtualProperties.DefaultName": {
+      "type": "string",
+      "priority": [
+        {
+          "path": "data.Name"
+        }
+      ]
+    },
+    "data.VirtualProperties.DefaultLocation": {
+      "type": "object",
+      "priority": [
+        {
+          "path": "data.SpatialArea"
+        },
+        {
+          "path": "data.SpatialPoint"
+        }
+      ]
+    }
+  },
+  "x-osdu-inheriting-from-kind": [
+    {
+      "name": "WorkProductComponent",
+      "kind": "osdu:wks:AbstractWPCGroupType:1.2.0"
+    }
+  ]
+}

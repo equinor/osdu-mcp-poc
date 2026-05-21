@@ -1,0 +1,268 @@
+{
+  "x-osdu-license": "Copyright 2022, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "$id": "https://schema.osdu.opengroup.org/json/work-product-component/ReservoirCompartmentInterpretation.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:work-product-component--ReservoirCompartmentInterpretation:1.0.0",
+  "title": "ReservoirCompartmentInterpretation",
+  "description": "A portion of a reservoir rock which is differentiated laterally from other portions of the same reservoir stratum. This differentiation could be due to being in a different fault block or a different channel or other stratigraphic or structural aspect. A reservoir compartment may or may not be in contact with other reservoir compartments.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "Previously called ResourceID or SRN which identifies this OSDU resource object without version.",
+      "title": "Entity ID",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-ReservoirCompartmentInterpretation:[\\w\\-\\.\\:\\%]+$",
+      "example": "namespace:work-product-component--ReservoirCompartmentInterpretation:2cf8ecaa-1519-521c-9ff5-1eb910d89cdc"
+    },
+    "kind": {
+      "description": "The schema identification for the OSDU resource object following the pattern {Namespace}:{Source}:{Type}:{VersionMajor}.{VersionMinor}.{VersionPatch}. The versioning scheme follows the semantic versioning, https://semver.org/.",
+      "title": "Entity Kind",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:[\\w\\-\\.]+:[\\w\\-\\.]+:[0-9]+.[0-9]+.[0-9]+$",
+      "example": "osdu:wks:work-product-component--ReservoirCompartmentInterpretation:1.0.0"
+    },
+    "version": {
+      "description": "The version number of this OSDU resource; set by the framework.",
+      "title": "Version Number",
+      "type": "integer",
+      "format": "int64",
+      "example": 1562066009929332
+    },
+    "acl": {
+      "description": "The access control tags associated with this entity.",
+      "title": "Access Control List",
+      "$ref": "../abstract/AbstractAccessControlList.1.0.0.json"
+    },
+    "legal": {
+      "description": "The entity's legal tags and compliance status. The actual contents associated with the legal tags is managed by the Compliance Service.",
+      "title": "Legal Tags",
+      "$ref": "../abstract/AbstractLegalTags.1.0.0.json"
+    },
+    "tags": {
+      "title": "Tag Dictionary",
+      "description": "A generic dictionary of string keys mapping to string value. Only strings are permitted as keys and values.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "example": {
+        "NameOfKey": "String value"
+      }
+    },
+    "createTime": {
+      "description": "Timestamp of the time at which initial version of this OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:46:20.163Z"
+    },
+    "createUser": {
+      "title": "Resource Object Creation User Reference",
+      "description": "The user reference, which created the first version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "modifyTime": {
+      "description": "Timestamp of the time at which this version of the OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Version Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:52:24.477Z"
+    },
+    "modifyUser": {
+      "title": "Resource Object Version Creation User Reference",
+      "description": "The user reference, which created this version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "ancestry": {
+      "description": "The links to data, which constitute the inputs, from which this record instance is derived.",
+      "title": "Ancestry",
+      "$ref": "../abstract/AbstractLegalParentList.1.0.0.json"
+    },
+    "meta": {
+      "description": "The Frame of Reference meta data section linking the named properties to self-contained definitions.",
+      "title": "Frame of Reference Meta Data",
+      "type": "array",
+      "items": {
+        "$ref": "../abstract/AbstractMetaItem.1.0.0.json"
+      }
+    },
+    "data": {
+      "allOf": [
+        {
+          "$ref": "../abstract/AbstractCommonResources.1.0.0.json"
+        },
+        {
+          "$ref": "../abstract/AbstractWPCGroupType.1.0.0.json"
+        },
+        {
+          "$ref": "../abstract/AbstractWorkProductComponent.1.0.0.json"
+        },
+        {
+          "$ref": "../abstract/AbstractInterpretation.1.0.0.json"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "ReservoirCompartmentUnits": {
+              "type": "array",
+              "title": "ReservoirCompartmentUnits",
+              "description": "A collection of subdivisions of a reservoir compartment generally corresponding to one geologic unit.",
+              "x-osdu-indexing": {
+                "type": "nested"
+              },
+              "items": {
+                "type": "object",
+                "title": "ReservoirCompartmentUnit",
+                "description": "A subdivision of a reservoir compartment generally corresponding to one geologic unit.",
+                "properties": {
+                  "GeologicUnitID": {
+                    "type": "string",
+                    "title": "GeologicUnit Identifier",
+                    "description": "The stratigraphic or the geobody associated to this Reservoir compartment unit.",
+                    "format": "uri-reference",
+                    "example": "namespace:work-product-component--StratigraphicUnitInterpretation:6a11bad8-2db0-4cfd-9828-049c0899ba79:",
+                    "pattern": "^[\\w\\-\\.]+:(work-product-component\\-\\-GeobodyInterpretation|work-product-component\\-\\-StratigraphicUnitInterpretation):[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "work-product-component",
+                        "EntityType": "GeobodyInterpretation"
+                      },
+                      {
+                        "GroupType": "work-product-component",
+                        "EntityType": "StratigraphicUnitInterpretation"
+                      }
+                    ]
+                  },
+                  "RockFluidUnitIDs": {
+                    "type": "array",
+                    "title": "Rock Fluid Unit Identifiers",
+                    "description": "The rock fluid unit which are associated to this Reservoir compartment unit.",
+                    "example": [
+                      "namespace:work-product-component--RockFluidUnitInterpretation:2c4d5363-89df-4541-b513-59bac0cdddc4:",
+                      "namespace:work-product-component--RockFluidUnitInterpretation:3ba4cbbd-3aaf-461f-9865-5023350a75f0:"
+                    ],
+                    "items": {
+                      "type": "string",
+                      "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-RockFluidUnitInterpretation:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                      "x-osdu-relationship": [
+                        {
+                          "GroupType": "work-product-component",
+                          "EntityType": "RockFluidUnitInterpretation"
+                        }
+                      ]
+                    }
+                  },
+                  "Identifier": {
+                    "type": "string",
+                    "title": "Identifier",
+                    "description": "Identifier of the reservoir compartment unit. It should be an UUID ideally. Used to be able to easier reference a reservoir compartment from other WPC.",
+                    "example": "bad50d43-fcf7-471c-b8a3-4080ddc131c9"
+                  }
+                }
+              }
+            },
+            "FeatureID": {
+              "type": "string",
+              "title": "Feature Identifier",
+              "description": "Reference to the Feature this Interpretation refers to.",
+              "pattern": "^[\\w\\-\\.]+:(master-data\\-\\-ModelFeature|master-data\\-\\-RockVolumeFeature|work-product-component\\-\\-LocalModelFeature|work-product-component\\-\\-LocalRockVolumeFeature):[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "ModelFeature"
+                },
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "RockVolumeFeature"
+                },
+                {
+                  "GroupType": "work-product-component",
+                  "EntityType": "LocalModelFeature"
+                },
+                {
+                  "GroupType": "work-product-component",
+                  "EntityType": "LocalRockVolumeFeature"
+                }
+              ]
+            },
+            "BoundaryIDs": {
+              "type": "array",
+              "title": "Boundary Identifiers",
+              "description": "References to the surfaces which delimit the reservoir compartment.",
+              "items": {
+                "type": "string",
+                "pattern": "^[\\w\\-\\.]+:(work-product-component\\-\\-HorizonInterpretation|work-product-component\\-\\-FaultInterpretation|work-product-component\\-\\-GeobodyBoundaryInterpretation):[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                "x-osdu-relationship": [
+                  {
+                    "GroupType": "work-product-component",
+                    "EntityType": "HorizonInterpretation"
+                  },
+                  {
+                    "GroupType": "work-product-component",
+                    "EntityType": "FaultInterpretation"
+                  },
+                  {
+                    "GroupType": "work-product-component",
+                    "EntityType": "GeobodyBoundaryInterpretation"
+                  }
+                ]
+              }
+            }
+          },
+          "title": "IndividualProperties"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "ExtensionProperties": {
+              "type": "object"
+            }
+          },
+          "title": "ExtensionProperties"
+        }
+      ]
+    }
+  },
+  "required": [
+    "kind",
+    "acl",
+    "legal"
+  ],
+  "additionalProperties": false,
+  "x-osdu-review-status": "Accepted",
+  "x-osdu-supported-file-formats": [
+    "ENERGISTICS RESQML2.2"
+  ],
+  "x-osdu-governance-authorities": [
+    "OSDU"
+  ],
+  "x-osdu-virtual-properties": {
+    "data.VirtualProperties.DefaultLocation": {
+      "type": "object",
+      "priority": [
+        {
+          "path": "data.SpatialArea"
+        },
+        {
+          "path": "data.SpatialPoint"
+        }
+      ]
+    },
+    "data.VirtualProperties.DefaultName": {
+      "type": "string",
+      "priority": [
+        {
+          "path": "data.Name"
+        }
+      ]
+    }
+  },
+  "x-osdu-inheriting-from-kind": [
+    {
+      "name": "WorkProductComponent",
+      "kind": "osdu:wks:AbstractWPCGroupType:1.0.0"
+    }
+  ]
+}

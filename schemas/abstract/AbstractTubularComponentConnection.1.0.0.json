@@ -1,0 +1,133 @@
+{
+  "x-osdu-license": "Copyright 2025, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "x-osdu-review-status": "Accepted",
+  "$id": "https://schema.osdu.opengroup.org/json/abstract/AbstractTubularComponentConnection.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:AbstractTubularComponentConnection:1.0.0",
+  "title": "Abstract Tubular Component Connection",
+  "description": "Tubular Connection specific properties. Based on WITSML Tubular  Component 'Connection' ComplexType.",
+  "type": "object",
+  "properties": {
+    "CXNOuterDiameter": {
+      "type": "number",
+      "title": "Connection Outer Diameter",
+      "description": "Outside diameter (OD) of the body of the connection.",
+      "example": "5 in",
+      "x-osdu-frame-of-reference": "UOM:length",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML Tubular.Connection.Od",
+      "x-osdu-attribution-revision": "V2.1"
+    },
+    "CXNInnerDiameter": {
+      "type": "number",
+      "title": "Connection Inner Diameter",
+      "description": "Inside diameter (ID) of the connection.",
+      "example": "4.276 in",
+      "x-osdu-frame-of-reference": "UOM:length",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML Tubular.Connection.Id",
+      "x-osdu-attribution-revision": "V2.1"
+    },
+    "OutsideConnectionLength": {
+      "type": "number",
+      "title": "Outside Connection Length",
+      "description": "External length of the connection.",
+      "x-osdu-frame-of-reference": "UOM:length",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML Tubular.Connection.Len"
+    },
+    "InsideConnectionLength": {
+      "type": "number",
+      "title": "Inside Connection Length",
+      "description": "Internal length of the connection.",
+      "x-osdu-frame-of-reference": "UOM:length",
+      "x-osdu-attribution-revision": "V2.1"
+    },
+    "ThreadTypeID": {
+      "type": "string",
+      "title": "Thread Type Identifier",
+      "description": "Thread/Connection Type",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML Tubular.Connection.TypeThread",
+      "x-osdu-attribution-revision": "V2.1",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-TubularComponentConnectionType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "TubularComponentConnectionType"
+        }
+      ]
+    },
+    "ThreadSize": {
+      "type": "number",
+      "title": "Thread Size",
+      "description": "Thread size/diameter.",
+      "x-osdu-frame-of-reference": "UOM:length",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML Tubular.Connection.SizeThread",
+      "x-osdu-attribution-revision": "V2.1"
+    },
+    "YieldStress": {
+      "type": "number",
+      "title": "Yield Stress",
+      "description": "Tensile yield stress of the connection",
+      "x-osdu-frame-of-reference": "UOM:pressure",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML Tubular.Connection.TensYield",
+      "x-osdu-attribution-revision": "V2.1"
+    },
+    "YieldTorque": {
+      "type": "number",
+      "title": "Yield Torque",
+      "description": "Torque limit for the connection",
+      "x-osdu-frame-of-reference": "UOM:moment of force",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML Tubular.Connection.TqYield",
+      "x-osdu-attribution-revision": "V2.1"
+    },
+    "PositionID": {
+      "type": "string",
+      "title": "Position Identifier",
+      "description": "Position of connection",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML Tubular.Connection.Position",
+      "x-osdu-attribution-revision": "V2.1",
+      "x-osdu-existing-standard": "N",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-TubularComponentCXNPosition:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "TubularComponentCXNPosition"
+        }
+      ]
+    },
+    "CriticalCrossSectionArea": {
+      "type": "number",
+      "title": "Critical Cross Section Area",
+      "description": "Critical Cross Section Area (for bending stiffness ratio).",
+      "x-osdu-frame-of-reference": "UOM:area",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML Tubular.Connection.CriticalCrossSection",
+      "x-osdu-attribution-revision": "V2.1"
+    },
+    "LeakPressure": {
+      "type": "number",
+      "title": "Leak Pressure",
+      "description": "Leak Pressure",
+      "x-osdu-frame-of-reference": "UOM:pressure",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML Tubular.Connection.PresLeak",
+      "x-osdu-attribution-revision": "V2.1"
+    },
+    "MakeUpTorque": {
+      "type": "number",
+      "title": "Make Up Torque",
+      "description": "Make Up Torque",
+      "x-osdu-frame-of-reference": "UOM:moment of force",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML Tubular.Connection.TqMakeup",
+      "x-osdu-attribution-revision": "V2.1"
+    }
+  },
+  "x-osdu-inheriting-from-kind": []
+}

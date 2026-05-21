@@ -1,0 +1,66 @@
+{
+  "x-osdu-license": "Copyright 2022, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "x-osdu-review-status": "Accepted",
+  "$id": "https://schema.osdu.opengroup.org/json/abstract/AbstractReferenceType.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:AbstractReferenceType:1.0.0",
+  "title": "AbstractReferenceType",
+  "description": "Generic reference object containing the universal properties of reference data, especially the ones commonly thought of as Types",
+  "type": "object",
+  "properties": {
+    "Name": {
+      "type": "string",
+      "description": "The name of the entity instance.",
+      "x-osdu-natural-key": 1
+    },
+    "NameAlias": {
+      "type": "array",
+      "description": "Alternative names, including historical, by which this entity instance is/has been known.",
+      "x-osdu-indexing": {
+        "type": "nested"
+      },
+      "items": {
+        "$ref": "../abstract/AbstractAliasNames.1.0.0.json"
+      }
+    },
+    "ID": {
+      "type": "string",
+      "title": "External Identifier",
+      "description": "Native identifier from a Master Data Management System or other trusted source external to OSDU - stored here in order to allow for multi-system connection and synchronization. If used, the \"Source\" property should identify that source system."
+    },
+    "InactiveIndicator": {
+      "type": "boolean",
+      "title": "Inactive Indicator",
+      "description": "By default reference values are considered as 'active'. An absent 'InactiveIndicator' property value means the reference value is in active use. When 'InactiveIndicator' is set true the reverence value is no longer in use and should no longer be offered as a choice."
+    },
+    "Description": {
+      "type": "string",
+      "description": "The text which describes a NAME TYPE in detail."
+    },
+    "Code": {
+      "type": "string",
+      "description": "The abbreviation or mnemonic for a reference type if defined. Example: WELL and WLBR.",
+      "x-osdu-natural-key": 0
+    },
+    "AttributionAuthority": {
+      "type": "string",
+      "description": "Name of the authority, or organisation, which governs the entity value and from which it is sourced."
+    },
+    "AttributionPublication": {
+      "type": "string",
+      "description": "Name, URL, or other identifier of the publication, or repository, of the attribution source organisation from which the entity value is sourced."
+    },
+    "AttributionRevision": {
+      "type": "string",
+      "description": "The distinct instance of the attribution publication, by version number, sequence number, date of publication, etc., that was used for the entity value."
+    },
+    "CommitDate": {
+      "type": "string",
+      "title": "Commit Date",
+      "description": "For reference values published and governed by OSDU: The date and time the record was committed into the OSDU member GitLab reference-values repository. The sole purpose of this date is to optimise the OSDU milestone upgrades. It allows the upgrade code to figure out whether or not the record must be PUT into reference value storage.",
+      "format": "date-time",
+      "example": "2021-02-08T21:36:40-05:00"
+    }
+  },
+  "x-osdu-inheriting-from-kind": []
+}

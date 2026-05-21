@@ -1,0 +1,93 @@
+{
+  "x-osdu-license": "Copyright 2022, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "x-osdu-review-status": "Accepted",
+  "$id": "https://schema.osdu.opengroup.org/json/abstract/AbstractColumnLayerGridPatch.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:AbstractColumnLayerGridPatch:1.0.0",
+  "title": "AbstractColumnLayerGridPatch",
+  "description": "The group of elements which all column grid layers (ijk or unstructured) contain",
+  "type": "object",
+  "properties": {
+    "Nk": {
+      "type": "integer",
+      "title": "Count of cells in K direction",
+      "description": "Count of cells in the K-direction (aka third and/or slowest and/or vertical direction) in the grid. Must be positive.",
+      "example": 100
+    },
+    "KDirectionID": {
+      "type": "string",
+      "title": "K Direction ID",
+      "description": "Indicate the K direction of the grid : up, down or not monotonic",
+      "format": "uri-reference",
+      "example": "namespace:reference-data--KDirectionType:Down:",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-KDirectionType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "KDirectionType"
+        }
+      ]
+    },
+    "HasCollocatedNodeInKDirection": {
+      "type": "boolean",
+      "title": "Has Collocated Node In K Direction",
+      "description": "Indicate if at least two adjacent nodes in K Direction are collocated. Also known as pinched node. Usually occur in erosional context.",
+      "example": "True"
+    },
+    "PillarShapeID": {
+      "type": "string",
+      "title": "Pillar Shape ID",
+      "description": "Indicate the most complex pillar shape of a grid : vertical, straight, curved",
+      "format": "uri-reference",
+      "example": "namespace:reference-data--PillarShapeType:Straight:",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-PillarShapeType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "PillarShapeType"
+        }
+      ]
+    },
+    "HasLateralGaps": {
+      "type": "boolean",
+      "title": "Has Lateral Gaps",
+      "description": "Indicate that it exists at least one gap in the lateral direction of the grid. A gap is really a hole, it is not a slice of dead cells.",
+      "example": "False"
+    },
+    "HasKGaps": {
+      "type": "boolean",
+      "title": "Has K Gaps",
+      "description": "Indicate that it exists at least one gap in the whole K direction of the grid. A gap is really a hole, it is not a layer of dead cells.",
+      "example": "False"
+    },
+    "HasParametricGeometry": {
+      "type": "boolean",
+      "title": "Has Parametric Geometry",
+      "description": "Indicate that the nodes of the grid are given by means of a parameter along the pillar. Otherwise nodes of the grid are explicitly given by means of an XYZ triplet.",
+      "example": "False"
+    },
+    "HasSplitNode": {
+      "type": "boolean",
+      "title": "Has split node",
+      "description": "Indicate that the grid contains some split nodes i.e some node which are not on a pillar.",
+      "example": "False"
+    },
+    "HasTruncations": {
+      "type": "boolean",
+      "title": "Has Truncations",
+      "description": "Indicate that some of the pillars of the grid are truncated (Fault contact in Y shape for example)",
+      "example": "False"
+    },
+    "ExpansionInDirection": {
+      "type": "string",
+      "title": "Expansion in direction",
+      "description": "Indicate if a grid has been topologically expanded in a particular dimension (K expansion, J expansion, I expansion)",
+      "enum": [
+        "I",
+        "J",
+        "K"
+      ]
+    }
+  },
+  "x-osdu-inheriting-from-kind": []
+}

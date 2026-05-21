@@ -1,0 +1,264 @@
+{
+  "x-osdu-license": "Copyright 2022, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "$id": "https://schema.osdu.opengroup.org/json/work-product-component/IjkGridNumericalAquiferRepresentation.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:work-product-component--IjkGridNumericalAquiferRepresentation:1.0.0",
+  "title": "IjkGridNumericalAquiferRepresentation",
+  "description": "A numerical aquifer representation defines the geometry of the aquifer as IJK grid cell indices.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "Previously called ResourceID or SRN which identifies this OSDU resource object without version.",
+      "title": "Entity ID",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-IjkGridNumericalAquiferRepresentation:[\\w\\-\\.\\:\\%]+$",
+      "example": "namespace:work-product-component--IjkGridNumericalAquiferRepresentation:d7eb306b-24b5-582c-a201-0c4ed4b8605d"
+    },
+    "kind": {
+      "description": "The schema identification for the OSDU resource object following the pattern {Namespace}:{Source}:{Type}:{VersionMajor}.{VersionMinor}.{VersionPatch}. The versioning scheme follows the semantic versioning, https://semver.org/.",
+      "title": "Entity Kind",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:[\\w\\-\\.]+:[\\w\\-\\.]+:[0-9]+.[0-9]+.[0-9]+$",
+      "example": "osdu:wks:work-product-component--IjkGridNumericalAquiferRepresentation:1.0.0"
+    },
+    "version": {
+      "description": "The version number of this OSDU resource; set by the framework.",
+      "title": "Version Number",
+      "type": "integer",
+      "format": "int64",
+      "example": 1562066009929332
+    },
+    "acl": {
+      "description": "The access control tags associated with this entity.",
+      "title": "Access Control List",
+      "$ref": "../abstract/AbstractAccessControlList.1.0.0.json"
+    },
+    "legal": {
+      "description": "The entity's legal tags and compliance status. The actual contents associated with the legal tags is managed by the Compliance Service.",
+      "title": "Legal Tags",
+      "$ref": "../abstract/AbstractLegalTags.1.0.0.json"
+    },
+    "tags": {
+      "title": "Tag Dictionary",
+      "description": "A generic dictionary of string keys mapping to string value. Only strings are permitted as keys and values.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "example": {
+        "NameOfKey": "String value"
+      }
+    },
+    "createTime": {
+      "description": "Timestamp of the time at which initial version of this OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:46:20.163Z"
+    },
+    "createUser": {
+      "title": "Resource Object Creation User Reference",
+      "description": "The user reference, which created the first version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "modifyTime": {
+      "description": "Timestamp of the time at which this version of the OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Version Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:52:24.477Z"
+    },
+    "modifyUser": {
+      "title": "Resource Object Version Creation User Reference",
+      "description": "The user reference, which created this version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "ancestry": {
+      "description": "The links to data, which constitute the inputs, from which this record instance is derived.",
+      "title": "Ancestry",
+      "$ref": "../abstract/AbstractLegalParentList.1.0.0.json"
+    },
+    "meta": {
+      "description": "The Frame of Reference meta data section linking the named properties to self-contained definitions.",
+      "title": "Frame of Reference Meta Data",
+      "type": "array",
+      "items": {
+        "$ref": "../abstract/AbstractMetaItem.1.0.0.json"
+      }
+    },
+    "data": {
+      "allOf": [
+        {
+          "$ref": "../abstract/AbstractCommonResources.1.0.0.json"
+        },
+        {
+          "$ref": "../abstract/AbstractWPCGroupType.1.0.0.json"
+        },
+        {
+          "$ref": "../abstract/AbstractWorkProductComponent.1.0.0.json"
+        },
+        {
+          "$ref": "../abstract/AbstractRepresentation.1.0.0.json"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "InterpretationID": {
+              "type": "string",
+              "title": "Aquifer Interpretation ID",
+              "description": "The reference to the AquiferInterpretation this representation belongs to.",
+              "format": "uri-reference",
+              "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-AquiferInterpretation:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "work-product-component",
+                  "EntityType": "AquiferInterpretation"
+                }
+              ]
+            },
+            "SingleCellAquiferSet": {
+              "type": "array",
+              "title": "Single Cell Aquifer Set",
+              "description": "Describe the aquifer by means of one to many single cell of reservoir grids",
+              "items": {
+                "type": "object",
+                "title": "SingleCellAquifer",
+                "description": "Describe a cell which is a part or the whole definition of an aquifer.",
+                "properties": {
+                  "SupportingGridID": {
+                    "type": "string",
+                    "title": "Supporting Grid",
+                    "description": "The grid where the aquifer cell is defined",
+                    "format": "uri-reference",
+                    "example": "namespace:work-product-component--IjkGridRepresentation:85348741-3433-406B-9189-22B298C3E2D2:",
+                    "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-IjkGridRepresentation:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "work-product-component",
+                        "EntityType": "IjkGridRepresentation"
+                      }
+                    ]
+                  },
+                  "I": {
+                    "type": "integer",
+                    "title": "I index",
+                    "description": "I index of the cell",
+                    "example": 10
+                  },
+                  "J": {
+                    "type": "integer",
+                    "title": "J index",
+                    "description": "J index of the cell",
+                    "example": 20
+                  },
+                  "K": {
+                    "type": "integer",
+                    "title": "K index",
+                    "description": "K index of the cell",
+                    "example": 30
+                  },
+                  "Area": {
+                    "type": "number",
+                    "title": "Area",
+                    "description": "Area of the aquifer.",
+                    "example": 11520.56,
+                    "x-osdu-frame-of-reference": "UOM:area"
+                  },
+                  "Length": {
+                    "type": "number",
+                    "title": "Length",
+                    "description": "Length of the aquifer.",
+                    "example": 7045,
+                    "x-osdu-frame-of-reference": "UOM:length"
+                  },
+                  "Porosity": {
+                    "type": "number",
+                    "title": "Porosity",
+                    "description": "Porosity of the aquifer.  Default property, caution if the grid property has got multi realizations.",
+                    "example": 0.2,
+                    "x-osdu-frame-of-reference": "UOM:dimensionless"
+                  },
+                  "Permeability": {
+                    "type": "number",
+                    "title": "Permeability",
+                    "description": "Permeability of the aquifer. Default property, caution if the grid property has got multi realizations.",
+                    "example": 180,
+                    "x-osdu-frame-of-reference": "UOM:permeability rock"
+                  },
+                  "Depth": {
+                    "type": "number",
+                    "title": "Depth",
+                    "description": "Depth of the aquifer",
+                    "example": 2150,
+                    "x-osdu-frame-of-reference": "UOM:length"
+                  },
+                  "InitialPressure": {
+                    "type": "number",
+                    "title": "Initial Pressure",
+                    "description": "Initial pressure of the aquifer.  Default property, caution if the grid property has got multi realizations.",
+                    "example": 0,
+                    "x-osdu-frame-of-reference": "UOM:pressure"
+                  }
+                }
+              }
+            },
+            "ConnectionSet": {
+              "type": "array",
+              "title": "Connection Set",
+              "description": "List all connections between the aquifer and reservoir grids.",
+              "items": {
+                "$ref": "../abstract/AbstractIjkGridFlowSimulationBoundaryConnection.1.0.0.json"
+              }
+            }
+          },
+          "title": "IndividualProperties"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "ExtensionProperties": {
+              "type": "object"
+            }
+          },
+          "title": "ExtensionProperties"
+        }
+      ]
+    }
+  },
+  "required": [
+    "kind",
+    "acl",
+    "legal"
+  ],
+  "additionalProperties": false,
+  "x-osdu-review-status": "Accepted",
+  "x-osdu-virtual-properties": {
+    "data.VirtualProperties.DefaultLocation": {
+      "type": "object",
+      "priority": [
+        {
+          "path": "data.SpatialArea"
+        },
+        {
+          "path": "data.SpatialPoint"
+        }
+      ]
+    },
+    "data.VirtualProperties.DefaultName": {
+      "type": "string",
+      "priority": [
+        {
+          "path": "data.Name"
+        }
+      ]
+    }
+  },
+  "x-osdu-inheriting-from-kind": [
+    {
+      "name": "WorkProductComponent",
+      "kind": "osdu:wks:AbstractWPCGroupType:1.0.0"
+    }
+  ]
+}

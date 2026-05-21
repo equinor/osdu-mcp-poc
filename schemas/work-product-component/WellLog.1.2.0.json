@@ -1,0 +1,518 @@
+{
+  "x-osdu-license": "Copyright 2022, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "$id": "https://schema.osdu.opengroup.org/json/work-product-component/WellLog.1.2.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:work-product-component--WellLog:1.2.0",
+  "title": "WellLog",
+  "description": "A well log is a data type that correlates a particular measurement or multiple measurements in a wellbore against depth and/or time within that wellbore. When plotted visually, well logs are typically long line graphs (called \"curves\") but may sometimes be discrete points or intervals. This schema object is intended for digital well logs, not raster log files or raster calibration files, but may be used for the latter in the absence of a defined OSDU schema for these use cases.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "Previously called ResourceID or SRN which identifies this OSDU resource object without version.",
+      "title": "Entity ID",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-WellLog:[\\w\\-\\.\\:\\%]+$",
+      "example": "namespace:work-product-component--WellLog:c2c79f1c-90ca-5c92-b8df-04dbe438f414"
+    },
+    "kind": {
+      "description": "The schema identification for the OSDU resource object following the pattern {Namespace}:{Source}:{Type}:{VersionMajor}.{VersionMinor}.{VersionPatch}. The versioning scheme follows the semantic versioning, https://semver.org/.",
+      "title": "Entity Kind",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:[\\w\\-\\.]+:[\\w\\-\\.]+:[0-9]+.[0-9]+.[0-9]+$",
+      "example": "osdu:wks:work-product-component--WellLog:1.2.0"
+    },
+    "version": {
+      "description": "The version number of this OSDU resource; set by the framework.",
+      "title": "Version Number",
+      "type": "integer",
+      "format": "int64",
+      "example": 1562066009929332
+    },
+    "acl": {
+      "description": "The access control tags associated with this entity.",
+      "title": "Access Control List",
+      "$ref": "../abstract/AbstractAccessControlList.1.0.0.json"
+    },
+    "legal": {
+      "description": "The entity's legal tags and compliance status. The actual contents associated with the legal tags is managed by the Compliance Service.",
+      "title": "Legal Tags",
+      "$ref": "../abstract/AbstractLegalTags.1.0.0.json"
+    },
+    "tags": {
+      "title": "Tag Dictionary",
+      "description": "A generic dictionary of string keys mapping to string value. Only strings are permitted as keys and values.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "example": {
+        "NameOfKey": "String value"
+      }
+    },
+    "createTime": {
+      "description": "Timestamp of the time at which initial version of this OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:46:20.163Z"
+    },
+    "createUser": {
+      "title": "Resource Object Creation User Reference",
+      "description": "The user reference, which created the first version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "modifyTime": {
+      "description": "Timestamp of the time at which this version of the OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Version Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:52:24.477Z"
+    },
+    "modifyUser": {
+      "title": "Resource Object Version Creation User Reference",
+      "description": "The user reference, which created this version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "ancestry": {
+      "description": "The links to data, which constitute the inputs, from which this record instance is derived.",
+      "title": "Ancestry",
+      "$ref": "../abstract/AbstractLegalParentList.1.0.0.json"
+    },
+    "meta": {
+      "description": "The Frame of Reference meta data section linking the named properties to self-contained definitions.",
+      "title": "Frame of Reference Meta Data",
+      "type": "array",
+      "items": {
+        "$ref": "../abstract/AbstractMetaItem.1.0.0.json"
+      }
+    },
+    "data": {
+      "allOf": [
+        {
+          "$ref": "../abstract/AbstractCommonResources.1.0.0.json"
+        },
+        {
+          "$ref": "../abstract/AbstractWPCGroupType.1.0.0.json"
+        },
+        {
+          "$ref": "../abstract/AbstractWorkProductComponent.1.0.0.json"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "WellboreID": {
+              "type": "string",
+              "description": "The Wellbore where the Well Log Work Product Component was recorded",
+              "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Wellbore:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "Wellbore"
+                }
+              ]
+            },
+            "WellLogTypeID": {
+              "type": "string",
+              "description": "Well Log Type short Description such as Raw; Evaluated; Composite;....",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-LogType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "LogType"
+                }
+              ]
+            },
+            "TopMeasuredDepth": {
+              "type": "number",
+              "title": "Top Measured Depth",
+              "description": "Informational Top Measured Depth of the Well Log. Always populate SamplingStart and SamplingStop, which represents the real sampling of the WellLog, including  non-depth sampling.",
+              "x-osdu-frame-of-reference": "UOM:length"
+            },
+            "BottomMeasuredDepth": {
+              "type": "number",
+              "title": "Bottom Measured Depth",
+              "description": "Informational Bottom Measured Depth of the Well Log. Always populate SamplingStart and SamplingStop, which represents the real sampling of the WellLog, including  non-depth sampling.",
+              "x-osdu-frame-of-reference": "UOM:length"
+            },
+            "ServiceCompanyID": {
+              "type": "string",
+              "description": "The relationship to a Service Company, typically the producer or logging contractor.",
+              "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Organisation:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "Organisation"
+                }
+              ]
+            },
+            "LogSource": {
+              "type": "string",
+              "description": "OSDU Native Log Source - will be updated for later releases - not to be used yet"
+            },
+            "LogActivity": {
+              "type": "string",
+              "description": "Log Activity, used to describe the type of pass such as Calibration Pass - Main Pass - Repeated Pass"
+            },
+            "LogRun": {
+              "type": "string",
+              "description": "Log Run - describe the run of the log - can be a number, but may be also a alphanumeric description such as a version name"
+            },
+            "LogVersion": {
+              "type": "string",
+              "description": "Log Version"
+            },
+            "LoggingService": {
+              "type": "string",
+              "description": "Logging Service - mainly a short concatenation of the names of the tools"
+            },
+            "LogServiceDateInterval": {
+              "type": "object",
+              "description": "An interval built from two nested values : StartDate and EndDate. It applies to the whole log services and may apply to composite logs as [start of the first run job] and [end of the last run job]Log Service Date",
+              "title": "LogServiceDateInterval",
+              "properties": {
+                "StartDate": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "EndDate": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              }
+            },
+            "ToolStringDescription": {
+              "type": "string",
+              "description": "Tool String Description - a long concatenation of the tools used for logging services such as GammaRay+NeutronPorosity"
+            },
+            "LoggingDirection": {
+              "type": "string",
+              "description": "Specifies whether curves were collected downward or upward"
+            },
+            "PassNumber": {
+              "type": "integer",
+              "description": "Indicates if the Pass is the Main one (1) or a repeated one - and it's level repetition"
+            },
+            "ActivityType": {
+              "type": "string",
+              "description": "General method or circumstance of logging - MWD, completion, ..."
+            },
+            "DrillingFluidProperty": {
+              "type": "string",
+              "description": "Type of mud at time of logging (oil, water based,...)"
+            },
+            "HoleTypeLogging": {
+              "type": "string",
+              "description": "Description of the hole related type of logging - POSSIBLE VALUE : OpenHole / CasedHole / CementedHole",
+              "pattern": "^OPENHOLE|CASEDHOLE|CEMENTEDHOLE$"
+            },
+            "VerticalMeasurementID": {
+              "type": "string",
+              "description": "DEPRECATED: Use data.VerticalMeasurement.VerticalReferenceID instead. References an entry in the Vertical Measurement array for the Wellbore identified by WellboreID, which defines the vertical reference datum for all curve measured depths. Either VerticalMeasurementID or VerticalMeasurement are populated."
+            },
+            "VerticalMeasurement": {
+              "$ref": "../abstract/AbstractFacilityVerticalMeasurement.1.0.0.json",
+              "description": "The vertical measurement reference for the log curves, which defines the vertical reference datum for the logged depths. Either VerticalMeasurement or VerticalMeasurementID are populated."
+            },
+            "Curves": {
+              "type": "array",
+              "x-osdu-indexing": {
+                "type": "nested"
+              },
+              "items": {
+                "type": "object",
+                "title": "Curves",
+                "properties": {
+                  "CurveID": {
+                    "type": "string",
+                    "description": "The ID of the Well Log Curve"
+                  },
+                  "DateStamp": {
+                    "type": "string",
+                    "description": "Date curve was created in the database",
+                    "format": "date-time",
+                    "x-osdu-frame-of-reference": "DateTime"
+                  },
+                  "CurveVersion": {
+                    "type": "string",
+                    "description": "The Version of the Log Curve."
+                  },
+                  "CurveQuality": {
+                    "type": "string",
+                    "description": "The Quality of the Log Curve."
+                  },
+                  "InterpreterName": {
+                    "type": "string",
+                    "description": "The name of person who interpreted this Log Curve."
+                  },
+                  "IsProcessed": {
+                    "type": "boolean",
+                    "description": "Indicates if the curve has been (pre)processed or if it is a raw recording"
+                  },
+                  "NullValue": {
+                    "type": "boolean",
+                    "description": "Indicates that there is no measurement within the curve"
+                  },
+                  "DepthCoding": {
+                    "type": "string",
+                    "description": "DEPRECATED: Replaced by boolean data.IsRegular. The Coding of the depth.",
+                    "pattern": "^REGULAR|DISCRETE$"
+                  },
+                  "Interpolate": {
+                    "type": "boolean",
+                    "description": "Whether curve can be interpolated or not"
+                  },
+                  "TopDepth": {
+                    "type": "number",
+                    "description": "The curve's minimum 'depth', i.e., the reference value at which the curve has its first non-absent value. The curve may contain further absent values in between TopDepth and BaseDepth. Note that the SamplingDomainType may not be a depth as the property name indicates.",
+                    "x-osdu-frame-of-reference": "UOM_via_property:DepthUnit"
+                  },
+                  "BaseDepth": {
+                    "type": "number",
+                    "description": "The curve's maximum 'depth' i.e., the reference value at which the curve has its last non-absent value. The curve may contain further absent values in between TopDepth and BaseDepth. Note that the SamplingDomainType may not be a depth as the property name indicates.",
+                    "x-osdu-frame-of-reference": "UOM_via_property:DepthUnit"
+                  },
+                  "DepthUnit": {
+                    "type": "string",
+                    "description": "Unit of Measure for TopDepth and BaseDepth.",
+                    "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-UnitOfMeasure:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "reference-data",
+                        "EntityType": "UnitOfMeasure"
+                      }
+                    ]
+                  },
+                  "CurveUnit": {
+                    "type": "string",
+                    "description": "Unit of Measure for the Log Curve",
+                    "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-UnitOfMeasure:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "reference-data",
+                        "EntityType": "UnitOfMeasure"
+                      }
+                    ]
+                  },
+                  "Mnemonic": {
+                    "type": "string",
+                    "description": "The Mnemonic of the Log Curve is the value as received either from Raw Providers or from Internal Processing team",
+                    "example": "PRES_HDRB.BAR"
+                  },
+                  "LogCurveTypeID": {
+                    "type": "string",
+                    "description": "The related record id of the Log Curve Type - which is the standard mnemonic chosen by the company - OSDU provides an initial list",
+                    "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-LogCurveType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "reference-data",
+                        "EntityType": "LogCurveType"
+                      }
+                    ]
+                  },
+                  "LogCurveBusinessValueID": {
+                    "type": "string",
+                    "description": "The related record id of the Log Curve Business Value Type.",
+                    "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-LogCurveBusinessValue:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "reference-data",
+                        "EntityType": "LogCurveBusinessValue"
+                      }
+                    ]
+                  },
+                  "LogCurveMainFamilyID": {
+                    "type": "string",
+                    "description": "The related record id of the Log Curve Main Family Type - which is the Geological Physical Quantity measured - such as porosity.",
+                    "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-LogCurveMainFamily:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "reference-data",
+                        "EntityType": "LogCurveMainFamily"
+                      }
+                    ]
+                  },
+                  "LogCurveFamilyID": {
+                    "type": "string",
+                    "description": "The related record id of the Log Curve Family - which is the detailed Geological Physical Quantity Measured - such as neutron porosity",
+                    "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-LogCurveFamily:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "reference-data",
+                        "EntityType": "LogCurveFamily"
+                      }
+                    ]
+                  },
+                  "NumberOfColumns": {
+                    "type": "integer",
+                    "title": "Number Of Columns",
+                    "description": "The number of columns present in this Curve for a single reference value. For simple logs this is typically 1; for image logs this holds the number of image traces or property series. Further information about the columns can be obtained via the respective log or curve APIs of the Domain Data Management Service.",
+                    "example": 192
+                  },
+                  "CurveSampleTypeID": {
+                    "type": "string",
+                    "title": "Curve Sample Type ID",
+                    "description": "The value type to be expected as curve sample values.",
+                    "example": "namespace:reference-data--CurveSampleType:float:",
+                    "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-CurveSampleType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "reference-data",
+                        "EntityType": "CurveSampleType"
+                      }
+                    ]
+                  },
+                  "CurveDescription": {
+                    "type": "string",
+                    "title": "Curve Description",
+                    "description": "Mnemonic-level curve description is used during parsing or reading and ingesting LAS or DLIS files, to explain the type of measurement being looked at, specifically for that moment. Curve description is specific to that single (log) mnemonic and for the entire log (acquisition run) interval. In essence, curve description defines the internal factors such as what the \"curve\" or measurement ideally is representing, how is it calculated, what are the assumptions and the \"constants\".",
+                    "example": "CBL Adjustment Factor, Resistivity Inversion Selection, Detector 1 Barite Constant"
+                  }
+                }
+              }
+            },
+            "FrameIdentifier": {
+              "type": "string",
+              "title": "Frame Identifier",
+              "description": "For multi-frame or multi-section files, this identifier defines the source frame in the file. If the identifier is an index number the index starts with zero and is converted to a string for this property.",
+              "example": 0
+            },
+            "SamplingInterval": {
+              "type": "number",
+              "title": "Sampling Interval",
+              "description": "For regularly sampled curves this property holds the sampling interval. For non regular sampling rate this property is not set. The IsRegular flag indicates whether SamplingInterval is required.",
+              "example": 0.0254,
+              "x-osdu-frame-of-reference": "UOM"
+            },
+            "ReferenceCurveID": {
+              "type": "string",
+              "title": "Reference Curve ID",
+              "description": "The data.Curves[].CurveID, which holds the primary index (reference) values.",
+              "example": "MD"
+            },
+            "SamplingStart": {
+              "type": "number",
+              "title": "Sampling Start",
+              "description": "The start value/first value of the ReferenceCurveID, typically the start depth of the logging.",
+              "example": 2500,
+              "x-osdu-frame-of-reference": "UOM"
+            },
+            "SamplingStop": {
+              "type": "number",
+              "title": "Sampling Stop",
+              "description": "The stop value/last value of the ReferenceCurveID, typically the end depth of the logging.",
+              "example": 7500,
+              "x-osdu-frame-of-reference": "UOM"
+            },
+            "SamplingDomainTypeID": {
+              "type": "string",
+              "title": "Sampling Domain Type ID",
+              "description": "The sampling domain, e.g. measured depth, true vertical, travel-time, calendar-time.",
+              "example": "namespace:reference-data--WellLogSamplingDomainType:Depth:",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-WellLogSamplingDomainType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "WellLogSamplingDomainType"
+                }
+              ]
+            },
+            "CompanyID": {
+              "type": "string",
+              "title": "Company ID",
+              "description": "The relationship to company who engaged the service company (ServiceCompanyID) to perform the logging.",
+              "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Organisation:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "Organisation"
+                }
+              ]
+            },
+            "CandidateReferenceCurveIDs": {
+              "type": "array",
+              "description": "Secondary index curves, which are alternative candidates to act as ReferenceCurveID. Generally not populated, except in the cases where multiple reference curves are present, e.g. measured depth and time.",
+              "items": {
+                "type": "string"
+              }
+            },
+            "ZeroTime": {
+              "type": "string",
+              "description": "Optional time reference for (calender) time logs. The ISO date time string representing zero time. Not to be confused with seismic travel time zero. The latter is defined by SeismicReferenceDatum.",
+              "format": "date-time",
+              "x-osdu-frame-of-reference": "DateTime"
+            },
+            "SeismicReferenceElevation": {
+              "$ref": "../abstract/AbstractFacilityVerticalMeasurement.1.0.0.json",
+              "description": "Populated only if the WellLog represents time-depth relationships or checkshots. It is expressed via the standard AbstractFacilityVerticalMeasurement. The following properties are expected to be present: VerticalMeasurementPathID (typically elevation), VerticalMeasurementTypeID as SeismicReferenceDatum, VerticalMeasurement holding the offset to either the VerticalCRSID or the chained VerticalReferenceID in the parent Wellbore."
+            },
+            "IsRegular": {
+              "type": "boolean",
+              "title": "Is Regular Flag",
+              "description": "Boolean property indicating the sampling mode of the ReferenceCurveID. True means all reference curve values are regularly spaced (see SamplingInterval); false means irregular or discrete sample spacing."
+            },
+            "LogRemark": {
+              "type": "string",
+              "title": "Log Remark",
+              "description": "Log remark provides contextual information during the actual log object acquisition. Explains how the measurement in the wellbore is taken on a point in time or depth. Additional information may be included such as bad weather, tool failure, etc. Usually a part of the log header, log remark contains info specific for an acquisition run, specific for a given logging tool (multiple measurements) and/or a specific interval. In essence, log remark represents the external factors and operational environment, directly or indirectly affecting the measurement quality/uncertainty (dynamically over time/depth) - adding both noise and bias to the measurements.",
+              "example": "tool failure, bad weather"
+            }
+          },
+          "title": "IndividualProperties"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "ExtensionProperties": {
+              "type": "object"
+            }
+          },
+          "title": "ExtensionProperties"
+        }
+      ]
+    }
+  },
+  "required": [
+    "kind",
+    "acl",
+    "legal"
+  ],
+  "additionalProperties": false,
+  "x-osdu-review-status": "Accepted",
+  "x-osdu-supported-file-formats": [
+    "WITSML",
+    "DLIS",
+    "LIS",
+    "LAS2",
+    "LAS3",
+    "csv"
+  ],
+  "x-osdu-virtual-properties": {
+    "data.VirtualProperties.DefaultLocation": {
+      "type": "object",
+      "priority": [
+        {
+          "path": "data.SpatialArea"
+        },
+        {
+          "path": "data.SpatialPoint"
+        }
+      ]
+    },
+    "data.VirtualProperties.DefaultName": {
+      "type": "string",
+      "priority": [
+        {
+          "path": "data.Name"
+        }
+      ]
+    }
+  },
+  "x-osdu-inheriting-from-kind": [
+    {
+      "name": "WorkProductComponent",
+      "kind": "osdu:wks:AbstractWPCGroupType:1.0.0"
+    }
+  ]
+}

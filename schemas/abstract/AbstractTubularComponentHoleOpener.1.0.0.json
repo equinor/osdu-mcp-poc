@@ -1,0 +1,80 @@
+{
+  "x-osdu-license": "Copyright 2025, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "x-osdu-review-status": "Accepted",
+  "x-osdu-governance-model": "LOCAL",
+  "x-osdu-governance-authorities": [
+    "OSDU"
+  ],
+  "$id": "https://schema.osdu.opengroup.org/json/abstract/AbstractTubularComponentHoleOpener.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:AbstractTubularComponentHoleOpener:1.0.0",
+  "title": "Abstract Tubular Component Hole Opener",
+  "description": "Hole Opener Component Schema. Describes the hole-opener tool (often called a \u2018reamer\u2019) used on the tubular string. Based on the WITSML Tubular 'HoleOpener' ComplexType",
+  "type": "object",
+  "properties": {
+    "HoleOpenerTypeID": {
+      "type": "string",
+      "title": "Hole Opener Type Identifier",
+      "description": "Type of hole opener - Under reamer or fixed blade.",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML Tubular.HoleOpener.TypeHoleOpener",
+      "x-osdu-attribution-revision": "V2.1",
+      "x-osdu-existing-standard": "N",
+      "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-HoleOpenerType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "reference-data",
+          "EntityType": "HoleOpenerType"
+        }
+      ]
+    },
+    "NumCutters": {
+      "type": "integer",
+      "title": "Number of Cutters",
+      "description": "Number of cutters on the tool.",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML Tubular.HoleOpener.NumCutter",
+      "x-osdu-attribution-revision": "V2.1"
+    },
+    "HoleOpenerDiameter": {
+      "type": "number",
+      "title": "Hole Opener Diameter",
+      "description": "Diameter of the reamer.",
+      "x-osdu-frame-of-reference": "UOM:length",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML Tubular.HoleOpener.DiaHoleOpener",
+      "x-osdu-attribution-revision": "V2.1"
+    },
+    "HoleOpenerDiameterMaximum": {
+      "type": "number",
+      "title": "Hole Opener Diameter Maximum",
+      "description": "Maximum extended size of the hole opener when the arms are extended.",
+      "x-osdu-frame-of-reference": "UOM:length"
+    },
+    "FishneckLength": {
+      "type": "number",
+      "title": "Fishneck Length",
+      "description": "Fishneck length of the hole opener. Dimension supplied by manufacturer. This dimension is used with the retrieval tool in case item is lost in hole.",
+      "x-osdu-frame-of-reference": "UOM:length"
+    },
+    "FlowRatePercent": {
+      "type": "number",
+      "title": "Flow Rate Percent",
+      "description": "Flow rate percent across the tool",
+      "x-osdu-frame-of-reference": "UOM:dimensionless"
+    },
+    "TotalFlowArea": {
+      "type": "number",
+      "title": "Total Flow Area",
+      "description": "Total Flow Area across the nozzles (jets)",
+      "x-osdu-frame-of-reference": "UOM:area"
+    },
+    "PluggedPercent": {
+      "type": "number",
+      "title": "Plugged Percent",
+      "description": "% of the Hole Opener Nozzles plugged on retrieval of the tool",
+      "x-osdu-frame-of-reference": "UOM:dimensionless"
+    }
+  },
+  "x-osdu-inheriting-from-kind": []
+}
