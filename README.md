@@ -103,6 +103,15 @@ that lives two cross-file `$ref` hops deep inside `AbstractFile` / `AbstractData
 The `abstract/` schemas are not indexed as standalone kinds; they appear inlined
 in every entity that references them.
 
+### Schema provenance
+
+`schemas/` is a point-in-time copy of the `Generated/` folder from the OSDU
+[data-definitions](https://community.opengroup.org/osdu/data/data-definitions)
+repository, tag **`v0.29.1`** (commit `be852720`, 2026-01-29). It does not track
+upstream releases automatically — to refresh, replace `schemas/` with the
+`Generated/` folder from a newer data-definitions tag, re-run `osdu-index`, and
+update this note.
+
 ## Known limitations
 
 - Cross-file `$ref` pointers **in the OpenAPI specs** are not resolved (noted as
