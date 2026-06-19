@@ -210,3 +210,17 @@ Copy `opencode.example.json` to `opencode.json` in the project root (or merge in
 2. Add a `find_workflow` tool for stitching multi-service paths — e.g. tying a
    `File.Generic` metadata record to the File-service operations that produce
    and consume its `FileSource`
+
+## Contributing
+
+Contributions are welcome — see [`CONTRIBUTING.md`](CONTRIBUTING.md) for
+development setup, the pull-request process, and commit conventions.
+
+## Security
+
+To report a security vulnerability, follow the process in
+[`SECURITY.md`](SECURITY.md). Do not open a public issue.
+
+## License
+
+Licensed under the [Apache License 2.0](LICENSE).
