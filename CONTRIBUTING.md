@@ -15,12 +15,12 @@ server. Contributions are welcome via issues and pull requests.
 
 This project uses [`uv`](https://docs.astral.sh/uv/).
 
-```bash
-uv sync                         # install dependencies
-uv run osdu-index               # build the local ChromaDB index
-uv run osdu-query "<query>"     # query the index
-uv run osdu-mcp --db ./chroma_db --schemas ./schemas   # run the MCP server
-```
+~~~bash
+uv sync  # install dependencies
+uv run osdu-index --specs ./specs --schemas ./schemas --db ./chroma_db   # build the local ChromaDB index
+uv run osdu-query --db ./chroma_db                                      # interactive query session
+uv run osdu-mcp --db ./chroma_db --schemas ./schemas                    # run the MCP server
+~~~
 
 On first run, ChromaDB downloads a local embedding model (~90 MB, once).
 
