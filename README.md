@@ -163,12 +163,51 @@ Requires the server to be started with `--schemas`.
 
 ### Client configuration
 
-Replace `/path/to/osdu-mcp-poc` with the absolute path to this repo in all examples below.
+This is a standard stdio MCP server, so it works with any MCP-capable client.
+Clients differ only in *where* the config file lives and *what the wrapper key
+is called* — the `command` and `args` are the same everywhere.
 
-#### Claude Desktop
+Two things to adjust in every example below:
 
-Merge the `mcpServers` block into `~/Library/Application Support/Claude/claude_desktop_config.json`.
-See `claude_desktop_config.example.json` for the full file.
+1. **Replace `/path/to/osdu-mcp-poc`** with the absolute path to this repo.
+   Relative paths and `~` are not expanded by most clients.
+2. **Use the absolute path to your own `uv`.** Clients launch the server
+   without your shell's `PATH`, so a bare `uv` usually fails with
+   `ENOENT`/`command not found`. Find yours with `which uv` (macOS/Linux) or
+   `where uv` (Windows). Common locations:
+
+   | Platform | Typical path |
+   |---|---|
+   | macOS, Homebrew (Apple Silicon) | `/opt/homebrew/bin/uv` |
+   | macOS, Homebrew (Intel) | `/usr/local/bin/uv` |
+   | macOS/Linux, `uv` standalone installer | `/Users/<you>/.local/bin/uv`, `/home/<you>/.local/bin/uv` |
+   | Windows | `C:\\Users\\<you>\\.local\\bin\\uv.exe` |
+
+   On Windows, remember that JSON requires escaped backslashes (`\\`) or forward slashes.
+
+**Keep the server name `osdu-discovery`.** Clients namespace tools as
+`<server-name>-<tool-name>`, and names containing spaces or other characters
+outside `[A-Za-z0-9_-]` produce an invalid tool name. Some clients drop the
+tools *silently* while still showing the server as connected.
+
+#### Which shape does my client use?
+
+Almost every client uses one of two shapes. Pick the matching example file:
+
+| Client | Config file | Wrapper key | Example file |
+|---|---|---|---|
+| Claude Desktop | `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS)<br>`%APPDATA%\\Claude\\claude_desktop_config.json` (Windows) | `mcpServers` | `claude_desktop_config.example.json` |
+| GitHub Copilot CLI | `~/.copilot/mcp-config.json` | `mcpServers` | `copilot_mcp_config.example.json` |
+| Cursor | `~/.cursor/mcp.json` (global) or `.cursor/mcp.json` (project) | `mcpServers` | `cursor_mcp.example.json` |
+| Windsurf, Zed, most others | client-specific | `mcpServers` | any `mcpServers` example |
+| VS Code | `.vscode/mcp.json` (workspace) or **MCP: Open User Configuration** | **`servers`** | `vscode_mcp.example.json` |
+| Claude Code | managed by CLI — see below | — | — |
+| OpenCode | `opencode.json` (project) or `~/.config/opencode/opencode.json` | **`mcp`** | `opencode.example.json` |
+
+Merge the block into the file if it already exists — don't overwrite it, as
+these files usually hold other servers too.
+
+#### `mcpServers` clients (Claude Desktop, Copilot CLI, Cursor, most others)
 
 ```json
 {
@@ -181,10 +220,36 @@ See `claude_desktop_config.example.json` for the full file.
 }
 ```
 
-#### GitHub Copilot CLI
+In the Copilot CLI you can also run `/mcp add` in an interactive session and
+fill in the fields instead of editing the file.
 
-Run `/mcp add` inside the Copilot CLI interactive session and fill in the fields, **or** edit `~/.copilot/mcp-config.json` directly.
-See `copilot_mcp_config.example.json` for the full file. The JSON format is identical to Claude Desktop.
+#### VS Code
+
+VS Code uses `servers`, not `mcpServers`, and wants an explicit `type` — the
+block above will **not** work if pasted as-is. Use `vscode_mcp.example.json`,
+or run **MCP: Add Server** from the Command Palette.
+
+```json
+{
+  "servers": {
+    "osdu-discovery": {
+      "type": "stdio",
+      "command": "/opt/homebrew/bin/uv",
+      "args": ["run", "--project", "/path/to/osdu-mcp-poc", "osdu-mcp", "--db", "/path/to/osdu-mcp-poc/chroma_db", "--schemas", "/path/to/osdu-mcp-poc/schemas"]
+    }
+  }
+}
+```
+
+#### Claude Code
+
+```bash
+claude mcp add osdu-discovery -- /opt/homebrew/bin/uv run --project /path/to/osdu-mcp-poc \
+  osdu-mcp --db /path/to/osdu-mcp-poc/chroma_db --schemas /path/to/osdu-mcp-poc/schemas
+```
+
+Everything after `--` is the command to launch. Add `-s user` to make it
+available outside the current project.
 
 #### OpenCode
 
@@ -202,6 +267,32 @@ Copy `opencode.example.json` to `opencode.json` in the project root (or merge in
   }
 }
 ```
+
+### Verifying the connection
+
+Restart the client fully after editing its config — most read MCP config only
+at startup.
+
+To check the server independently of any client, run the same command from
+your terminal:
+
+```bash
+/opt/homebrew/bin/uv run --project /path/to/osdu-mcp-poc osdu-mcp \
+  --db /path/to/osdu-mcp-poc/chroma_db --schemas /path/to/osdu-mcp-poc/schemas
+```
+
+It should start and wait silently on stdin. If it exits immediately, the error
+on stderr is the same one the client is hitting.
+
+### Troubleshooting
+
+| Symptom | Cause and fix |
+|---|---|
+| Server fails to start, `ENOENT` / `command not found` | `command` is a bare `uv` or the wrong absolute path. Use the output of `which uv`. |
+| Exits immediately, `No collections found` (exit code 1) | The index has not been built, or `--db` points at the wrong folder. Run `osdu-index` first — see [Index](#index). `chroma_db/` is generated, not shipped in the repo. |
+| Server connects but no tools appear | Server name contains a space or other unsupported character. Rename it to `osdu-discovery`. |
+| `search_osdu` works but `get_schema` is missing | The server was started without `--schemas`. |
+| Tools missing after the client was already running | Config is only read at startup, and some clients cache the tool list. Restart the client. |
 
 ## Next steps
 
