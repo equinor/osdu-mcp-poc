@@ -1,0 +1,99 @@
+{
+  "x-osdu-license": "Copyright 2026, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "x-osdu-review-status": "Accepted",
+  "$id": "https://schema.osdu.opengroup.org/json/abstract/AbstractDefinitiveDepthShift.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:AbstractDefinitiveDepthShift:1.0.0",
+  "title": "Abstract Definitive Depth Shift",
+  "description": "Schema fragment which enables the embedding of a definitive depth shift within OSDU schemas.",
+  "type": "object",
+  "x-osdu-virtual-properties": {
+    "data.VirtualProperties.DefaultName": {
+      "type": "string",
+      "priority": [
+        {
+          "path": "data.Name"
+        }
+      ]
+    },
+    "data.VirtualProperties.DefaultLocation": {
+      "type": "object",
+      "priority": [
+        {
+          "path": "data.SpatialArea"
+        },
+        {
+          "path": "data.SpatialPoint"
+        }
+      ]
+    }
+  },
+  "properties": {
+    "DefinitiveDepthShiftSourceID": {
+      "type": "string",
+      "title": "Definitive Depth Shift Source ID",
+      "description": "Identifies the well log that was used to create this depth shift. Usually this identifies a log record with a wireline gamma ray curve.",
+      "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-WellLog:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "work-product-component",
+          "EntityType": "WellLog"
+        }
+      ]
+    },
+    "DefinitiveDepthShiftID": {
+      "type": "string",
+      "title": "Definitive Depth Shift ID",
+      "description": "Identifies the definitive depth shift record applied to the object.",
+      "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-DepthShift:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "work-product-component",
+          "EntityType": "DepthShift"
+        }
+      ]
+    },
+    "DepthShiftedAttributes": {
+      "type": "array",
+      "title": "Depth Shifted Attributes",
+      "description": "Identifies the attributes impacted by the depth shift and their persisted depth-shifted values.",
+      "items": {
+        "type": "object",
+        "title": "Depth Shifted Attribute",
+        "description": "Identifies an attribute impacted by the depth shift and its persisted depth-shifted values.",
+        "properties": {
+          "DepthShiftAttributeName": {
+            "type": "string",
+            "title": "Depth Shift Attribute Name",
+            "description": "Identifies the attribute name in this data record that is impacted by the depth shift."
+          },
+          "DepthShiftedAmount": {
+            "type": "number",
+            "title": "Depth Shifted Amount",
+            "description": "Defines the amount of depth shifted from the original, as-received, depths for this data attribute. Positive values represent depth-shifting downhole in depth, while negative values represent depth shifting uphole.",
+            "x-osdu-frame-of-reference": "UOM:length"
+          },
+          "DepthShiftedVerticalMeasurementValue": {
+            "type": "number",
+            "title": "Depth Shifted Vertical Measurement Value",
+            "description": "Persisted depth-shifted vertical measurement value, for the identified attribute.",
+            "x-osdu-frame-of-reference": "UOM:length"
+          },
+          "DepthShiftUnitOfMeasureID": {
+            "type": "string",
+            "title": "Depth Shift Unit of Measure ID",
+            "description": "Defines the unit of measure for DepthShiftedAmount and DepthShiftedVerticalMeasurementValue.",
+            "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-UnitOfMeasure:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+            "x-osdu-relationship": [
+              {
+                "GroupType": "reference-data",
+                "EntityType": "UnitOfMeasure"
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "x-osdu-inheriting-from-kind": []
+}

@@ -1,0 +1,75 @@
+{
+  "x-osdu-license": "Copyright 2026, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "x-osdu-review-status": "Accepted",
+  "$id": "https://schema.osdu.opengroup.org/json/abstract/AbstractUnitEquipment.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:AbstractUnitEquipment:1.0.0",
+  "title": "Abstract Unit Equipment",
+  "description": "Defines the properties of various types of equipment found on a rig, unit, and during rigless operations.",
+  "type": "object",
+  "properties": {
+    "EquipmentName": {
+      "type": "string",
+      "title": "Equipment Name",
+      "description": "Human-recognizable name for the equipment."
+    },
+    "EquipmentNumber": {
+      "type": "integer",
+      "title": "Equipment Number",
+      "description": "A number assigned to the Equipment to differentiate it from other identical equipment on the rigsite."
+    },
+    "EquipmentManufacturer": {
+      "type": "string",
+      "title": "Equipment Make",
+      "description": "The Make or Manufacturer of the equipment/unit",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML Rig.<Various>.Manufacturer",
+      "x-osdu-attribution-revision": "v2.1"
+    },
+    "EquipmentModel": {
+      "type": "string",
+      "title": "Equipment Model",
+      "description": "The Model of the equipment/unit.",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML Rig.<Various>.Model",
+      "x-osdu-attribution-revision": "v2.1"
+    },
+    "EquipmentTypeID": {
+      "type": "string",
+      "title": "Equipment Type ID",
+      "description": "A description of the \"type\" of equipment being defined. For example, a mud pump may have the \"type\" Triplex, Duplex, Mixing, etc. or a derrick type may be conventional, portable mast, box, etc.",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML Rig.<Various>.Type",
+      "x-osdu-attribution-revision": "v2.1"
+    },
+    "EquipmentOwnerID": {
+      "type": "string",
+      "title": "Equipment Owner ID",
+      "description": "The owner of the equipment or unit",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML Rig.<Various>.Owner",
+      "x-osdu-attribution-revision": "v2.1",
+      "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Organisation:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+      "x-osdu-relationship": [
+        {
+          "GroupType": "master-data",
+          "EntityType": "Organisation"
+        }
+      ]
+    },
+    "EquipmentTag": {
+      "type": "string",
+      "title": "Equipment Tag",
+      "description": "An identification tag for the equipment/unit. A serial number is a type of identification tag; however, some tags contain many pieces of information. This element only identifies the tag and does not describe the contents.",
+      "x-osdu-attribution-authority": "Energistics",
+      "x-osdu-attribution-publication": "WITSML Rig.<Various>.NameTag",
+      "x-osdu-attribution-revision": "v2.1"
+    },
+    "Comments": {
+      "type": "string",
+      "title": "Comments",
+      "description": "Free text remarks about the equipment/unit."
+    }
+  },
+  "x-osdu-inheriting-from-kind": []
+}

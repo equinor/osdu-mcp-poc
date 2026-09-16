@@ -34,6 +34,8 @@ paths:
         in: header
         description: Tenant Id
         required: true
+        schema:
+          type: string
       responses:
         "200":
           description: OK
@@ -106,6 +108,8 @@ paths:
         in: header
         description: Tenant Id
         required: true
+        schema:
+          type: string
       responses:
         "200":
           description: OK
@@ -169,6 +173,8 @@ paths:
         in: header
         description: Tenant Id
         required: true
+        schema:
+          type: string
       responses:
         "200":
           description: OK
@@ -201,6 +207,8 @@ paths:
         in: header
         description: Tenant Id
         required: true
+        schema:
+          type: string
       responses:
         "200":
           description: Version info.

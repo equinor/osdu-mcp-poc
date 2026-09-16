@@ -1,0 +1,261 @@
+{
+  "x-osdu-license": "Copyright 2026, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "$id": "https://schema.osdu.opengroup.org/json/work-product-component/DepthShift.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:work-product-component--DepthShift:1.0.0",
+  "title": "DepthShift",
+  "description": "Describes parameters used to shift and apply modified depth values for a sample/specimen, well log, or other data, based on a data record that is referenced as trusted source for depth.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "Previously called ResourceID or SRN which identifies this OSDU resource object without version.",
+      "title": "Entity ID",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-DepthShift:[\\w\\-\\.\\:\\%]+$",
+      "example": "namespace:work-product-component--DepthShift:48b9de16-92cb-5700-a5f6-6826bc1543c4"
+    },
+    "kind": {
+      "description": "The schema identification for the OSDU resource object following the pattern {Namespace}:{Source}:{Type}:{VersionMajor}.{VersionMinor}.{VersionPatch}. The versioning scheme follows the semantic versioning, https://semver.org/.",
+      "title": "Entity Kind",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:[\\w\\-\\.]+:[\\w\\-\\.]+:[0-9]+.[0-9]+.[0-9]+$",
+      "example": "osdu:wks:work-product-component--DepthShift:1.0.0"
+    },
+    "version": {
+      "description": "The version number of this OSDU resource; set by the framework.",
+      "title": "Version Number",
+      "type": "integer",
+      "format": "int64",
+      "example": 1562066009929332
+    },
+    "acl": {
+      "description": "The access control tags associated with this entity.",
+      "title": "Access Control List",
+      "$ref": "../abstract/AbstractAccessControlList.1.0.0.json"
+    },
+    "legal": {
+      "description": "The entity's legal tags and compliance status. The actual contents associated with the legal tags is managed by the Compliance Service.",
+      "title": "Legal Tags",
+      "$ref": "../abstract/AbstractLegalTags.1.0.0.json"
+    },
+    "tags": {
+      "title": "Tag Dictionary",
+      "description": "A generic dictionary of string keys mapping to string value. Only strings are permitted as keys and values.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "example": {
+        "NameOfKey": "String value"
+      }
+    },
+    "createTime": {
+      "description": "Timestamp of the time at which initial version of this OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:46:20.163Z"
+    },
+    "createUser": {
+      "title": "Resource Object Creation User Reference",
+      "description": "The user reference, which created the first version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "modifyTime": {
+      "description": "Timestamp of the time at which this version of the OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Version Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:52:24.477Z"
+    },
+    "modifyUser": {
+      "title": "Resource Object Version Creation User Reference",
+      "description": "The user reference, which created this version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "ancestry": {
+      "description": "The links to data, which constitute the inputs, from which this record instance is derived.",
+      "title": "Ancestry",
+      "$ref": "../abstract/AbstractLegalParentList.1.0.0.json"
+    },
+    "meta": {
+      "description": "The Frame of Reference meta data section linking the named properties to self-contained definitions.",
+      "title": "Frame of Reference Meta Data",
+      "type": "array",
+      "items": {
+        "$ref": "../abstract/AbstractMetaItem.1.0.0.json"
+      }
+    },
+    "data": {
+      "allOf": [
+        {
+          "$ref": "../abstract/AbstractCommonResources.1.0.1.json"
+        },
+        {
+          "$ref": "../abstract/AbstractWPCGroupType.1.2.0.json"
+        },
+        {
+          "$ref": "../abstract/AbstractWorkProductComponent.1.1.0.json"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "WellboreID": {
+              "type": "string",
+              "title": "Wellbore ID",
+              "description": "Identifies the wellbore to which the core and the relevant log belong, which were used for the depth-shift.",
+              "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Wellbore:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "Wellbore"
+                }
+              ]
+            },
+            "VerticalReferenceRecordID": {
+              "type": "string",
+              "title": "Vertical Reference Record ID",
+              "description": "Identifies the data record that was referenced as the basis for creating this depth shift. Often this identifies a WellLog record with a wireline gamma ray curve.",
+              "pattern": "^[\\w\\-\\.]+:(work-product-component\\-\\-WellLog|work-product-component\\-\\-WellboreMarkerSet):[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "work-product-component",
+                  "EntityType": "WellLog"
+                },
+                {
+                  "GroupType": "work-product-component",
+                  "EntityType": "WellboreMarkerSet"
+                }
+              ]
+            },
+            "VerticalReferenceRecordCurveIDs": {
+              "type": "array",
+              "title": "Vertical Reference Record Curve IDs",
+              "description": "If VerticalReferenceRecordID identifies a well log, this identifies one or more CurveIDs within that WellLog record that define the log curve(s) used to create this depth shift. Usually this identifies a wireline gamma ray curve.",
+              "items": {
+                "type": "string"
+              }
+            },
+            "DepthShiftTypeID": {
+              "type": "string",
+              "title": "Depth Shift Type ID",
+              "description": "Identifies the type of depth shift (e.g., core-to-log, log-to-log, seismic time-to-depth, logging-elapsed time-to-depth).",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-DepthShiftType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "DepthShiftType"
+                }
+              ]
+            },
+            "ShiftedSamplingDomainTypeID": {
+              "type": "string",
+              "title": "Shifted Sampling Domain Type ID",
+              "description": "Identifies the original sampling domain (e.g,, time, depth) of target sample/specimen being shifted. This is only to be used when depth-shifting samples, not well logs.",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-WellLogSamplingDomainType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "WellLogSamplingDomainType"
+                }
+              ]
+            },
+            "DepthShiftedSamples": {
+              "type": "array",
+              "title": "Depth Shifted Samples",
+              "description": "Identifies the samples/specimens to shift as well as the intended usage of the depth shift with the identified samples. This is only to be used when depth-shifting samples, not well logs.",
+              "items": {
+                "type": "object",
+                "title": "Depth Shifted Sample",
+                "description": "Defines the relationship between this depth shift to a sample/specimen (e.g., rock or fluid) as well as the intended usage of the depth shift with the identified sample.",
+                "properties": {
+                  "SampleID": {
+                    "type": "string",
+                    "title": "Sample ID",
+                    "description": "Identifies the sample/specimen (e.g., core) to which this depth shift applies.",
+                    "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Sample:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                    "x-osdu-relationship": [
+                      {
+                        "GroupType": "master-data",
+                        "EntityType": "Sample"
+                      }
+                    ]
+                  },
+                  "CanDepthShiftBeAppliedToChildSamples": {
+                    "type": "boolean",
+                    "title": "Can Depth Shift Be Applied To Child Samples",
+                    "description": "Indicates whether the author of this depth shift intends for it to be applied to all rock samples that are subsampled from the specified SampleID. This could be used as a trigger for an application to find all child samples and apply this depth shift to those."
+                  },
+                  "CanDepthShiftBeAppliedToSiblingSamples": {
+                    "type": "boolean",
+                    "title": "Can Depth Shift Be Applied To Sibling Samples",
+                    "description": "Indicates whether the author of this depth shift intends for it to be applied to all samples/specimens that were subsampled from the same parent sample (e.g., other core plugs taken from the same slab, but for which a depth shift data record is not explicitly generated). This could be used as a trigger for an application to find all sibling samples and apply this depth shift."
+                  }
+                }
+              }
+            },
+            "AuthorID": {
+              "$ref": "../abstract/AbstractContact.1.1.0.json",
+              "title": "Author ID",
+              "description": "Identifies the geoscientist, engineer, or analyst who created this depth shift."
+            },
+            "Remarks": {
+              "type": "array",
+              "title": "Remarks",
+              "description": "Free text remarks about this data",
+              "items": {
+                "$ref": "../abstract/AbstractRemark.1.0.0.json"
+              }
+            }
+          },
+          "title": "IndividualProperties"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "ExtensionProperties": {
+              "type": "object"
+            }
+          },
+          "title": "ExtensionProperties"
+        }
+      ]
+    }
+  },
+  "required": [
+    "kind",
+    "acl",
+    "legal"
+  ],
+  "additionalProperties": false,
+  "x-osdu-review-status": "Accepted",
+  "x-osdu-virtual-properties": {
+    "data.VirtualProperties.DefaultName": {
+      "type": "string",
+      "priority": [
+        {
+          "path": "data.Name"
+        }
+      ]
+    },
+    "data.VirtualProperties.DefaultLocation": {
+      "type": "object",
+      "priority": [
+        {
+          "path": "data.SpatialArea"
+        },
+        {
+          "path": "data.SpatialPoint"
+        }
+      ]
+    }
+  },
+  "x-osdu-inheriting-from-kind": [
+    {
+      "name": "WorkProductComponent",
+      "kind": "osdu:wks:AbstractWPCGroupType:1.2.0"
+    }
+  ]
+}

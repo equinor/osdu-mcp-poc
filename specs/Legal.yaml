@@ -50,49 +50,49 @@ paths:
         "200":
           description: Retrieved LegalTags successfully.
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/LegalTagDtos"
         "400":
           description: Bad Request
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
         "401":
           description: Unauthorized
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
         "403":
           description: User not authorized to perform the action.
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
         "404":
           description: Requested LegalTag to update was not found.
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
         "500":
           description: Internal Server Error
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
         "502":
           description: Bad Gateway
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
         "503":
           description: Service Unavailable
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
       security:
@@ -121,55 +121,55 @@ paths:
         "200":
           description: Updated LegalTag successfully.
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/LegalTagDto"
         "400":
           description: Bad Request
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
         "401":
           description: Unauthorized
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
         "403":
           description: User not authorized to perform the action.
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
         "404":
           description: Requested LegalTag to update was not found.
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
         "409":
           description: A LegalTag with the given name already exists.
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
         "500":
           description: Internal Server Error
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
         "502":
           description: Bad Gateway
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
         "503":
           description: Service Unavailable
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
       security:
@@ -199,55 +199,55 @@ paths:
         "201":
           description: Created LegalTag successfully.
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/LegalTagDto"
         "400":
           description: Bad Request
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
         "401":
           description: Unauthorized
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
         "403":
           description: User not authorized to perform the action.
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
         "404":
           description: Not Found
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
         "409":
           description: A LegalTag with the given name already exists.
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
         "500":
           description: Internal Server Error
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
         "502":
           description: Bad Gateway
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
         "503":
           description: Service Unavailable
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
       security:
@@ -277,49 +277,49 @@ paths:
         "200":
           description: Retrieved LegalTag names with reason successfully.
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/InvalidTagsWithReason"
         "400":
           description: Bad Request
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
         "401":
           description: Unauthorized
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
         "403":
           description: User not authorized to perform the action.
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
         "404":
           description: LegalTag names were not found.
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
         "500":
           description: Internal Server Error
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
         "502":
           description: Bad Gateway
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
         "503":
           description: Service Unavailable
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
       security:
@@ -359,55 +359,55 @@ paths:
         "200":
           description: Retrieved LegalTags successfully.
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/LegalTagDtos"
         "400":
           description: Bad Request
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
         "401":
           description: Unauthorized
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
         "403":
           description: User not authorized to perform the action.
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
         "404":
           description: Requested LegalTag to update was not found.
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
         "405":
           description: Method not allowed. Legal Query API is disabled.
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
         "500":
           description: Internal Server Error
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
         "502":
           description: Bad Gateway
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
         "503":
           description: Service Unavailable
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
       security:
@@ -437,49 +437,49 @@ paths:
         "200":
           description: Retrieved LegalTags successfully.
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/LegalTagDtos"
         "400":
           description: Bad Request
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
         "401":
           description: Unauthorized
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
         "403":
           description: User not authorized to perform the action.
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
         "404":
           description: One or more requested LegalTags were not found.
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
         "500":
           description: Internal Server Error
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
         "502":
           description: Bad Gateway
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
         "503":
           description: Service Unavailable
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
       security:
@@ -502,43 +502,43 @@ paths:
         "200":
           description: Retrieved LegalTag properties successfully.
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/ReadablePropertyValues"
         "400":
           description: Bad Request
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
         "401":
           description: Unauthorized
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
         "403":
           description: User not authorized to perform the action.
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
         "500":
           description: Internal Server Error
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
         "502":
           description: Bad Gateway
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
         "503":
           description: Service Unavailable
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
       security:
@@ -569,49 +569,49 @@ paths:
         "200":
           description: Retrieved LegalTag successfully.
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/LegalTagDto"
         "400":
           description: Bad Request
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
         "401":
           description: Unauthorized
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
         "403":
           description: User not authorized to perform the action.
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
         "404":
           description: Requested LegalTag was not found.
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
         "500":
           description: Internal Server Error
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
         "502":
           description: Bad Gateway
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
         "503":
           description: Service Unavailable
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
       security:
@@ -641,7 +641,7 @@ paths:
         "204":
           description: LegalTag deleted successfully.
           content:
-            '*/*':
+            application/json:
               schema:
                 type: string
                 enum:
@@ -717,43 +717,43 @@ paths:
         "400":
           description: Bad Request
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
         "401":
           description: Unauthorized
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
         "403":
           description: User not authorized to perform the action.
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
         "404":
           description: Requested LegalTag to delete was not found.
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
         "500":
           description: Internal Server Error
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
         "502":
           description: Bad Gateway
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
         "503":
           description: Service Unavailable
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
       security:
@@ -776,7 +776,7 @@ paths:
         "200":
           description: OK
           content:
-            '*/*':
+            application/json:
               schema:
                 type: string
                 enum:
@@ -852,43 +852,43 @@ paths:
         "400":
           description: Bad Request
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
         "401":
           description: Unauthorized
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
         "403":
           description: User not authorized to perform the action.
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
         "404":
           description: Not Found
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
         "500":
           description: Internal Server Error
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
         "502":
           description: Bad Gateway
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
         "503":
           description: Service Unavailable
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/AppError"
       security:
@@ -934,7 +934,7 @@ paths:
         "200":
           description: Legal service is ready
           content:
-            '*/*':
+            application/json:
               schema:
                 type: string
   /_ah/liveness_check:
@@ -956,7 +956,7 @@ paths:
         "200":
           description: Legal service is alive
           content:
-            '*/*':
+            application/json:
               schema:
                 type: string
 components:
@@ -1026,6 +1026,7 @@ components:
           type: string
           description: The company or individual that created the data.
           example: Equinor
+          pattern: "^[-. A-Za-z0-9]{3,60}$"
         dataType:
           type: string
           description: "The data type classification (e.g. 'Third Party Data', 'First\

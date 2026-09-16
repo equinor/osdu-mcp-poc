@@ -772,6 +772,8 @@ components:
           items:
             type: string
             example: data.default.viewers@opendes.contoso.com
+            pattern: "^data\\.[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\\\
+              .)+[a-zA-Z](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?$"
         owners:
           type: array
           description: List of valid groups which will have write privileges over
@@ -779,6 +781,8 @@ components:
           items:
             type: string
             example: data.default.owners@opendes.contoso.com
+            pattern: "^data\\.[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\\\
+              .)+[a-zA-Z](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?$"
       required:
       - owners
       - viewers
@@ -835,7 +839,7 @@ components:
             \ Data Ecosystem will create and assign an id to the record. Must follow\
             \ the naming convention: {Data-Partition-Id}:{object-type}:{uuid}."
           example: common:work-product-component--wellLog:123456
-          pattern: "^[\\w\\-\\.]+:[\\w-\\.]+:[\\w\\-\\.\\:\\%]+$"
+          pattern: "^[\\w\\-\\.]+:[\\w\\-\\.]+:[\\w\\-\\.\\:\\%]+$"
         version:
           type: integer
           format: int64
@@ -845,6 +849,7 @@ components:
           type: string
           description: Record kind for which the schema information is applied to.
           example: common:wks:work-product-component--wellLog:1.0.0
+          pattern: "^[\\w\\-\\.]+:[\\w\\-\\.]+:[\\w\\-\\.]+:[0-9]+.[0-9]+.[0-9]+$"
         acl:
           $ref: "#/components/schemas/Acl"
           description: Access control lists for viewers and owners.
