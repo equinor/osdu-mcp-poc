@@ -197,10 +197,10 @@ def spec_filename(service: str, data: bytes) -> str:
     return service + (".json" if data.lstrip()[:1] == b"{" else ".yaml")
 
 
-def refresh_specs(check_only: bool) -> tuple[int, int, list[dict]]:
+def refresh_specs(check_only: bool) -> tuple[int, int, int, list[dict]]:
     os.makedirs(SPECS_DIR, exist_ok=True)
     entries: list[dict] = []
-    changed = failed = 0
+    changed = failed = dupes = 0
 
     for service in sorted(SPECS):
         project, path = SPECS[service]
@@ -216,6 +216,18 @@ def refresh_specs(check_only: bool) -> tuple[int, int, list[dict]]:
         target_name = spec_filename(service, data)
         target = os.path.join(SPECS_DIR, target_name)
 
+        # A format change upstream leaves the previous file behind under a
+        # different extension. specs/ is read non-recursively and the service
+        # label comes from the filename stem, so a leftover copy gets the
+        # service indexed twice, once from stale content. That is drift even
+        # when the expected file is already current, so check it unconditionally
+        # rather than only on the path where content changed.
+        duplicates = [
+            name
+            for name in (f"{service}.yaml", f"{service}.yml", f"{service}.json")
+            if name != target_name and os.path.exists(os.path.join(SPECS_DIR, name))
+        ]
+
         upstream_hash = sha256_bytes(data)
         local_hash = sha256_file(target)
 
@@ -225,18 +237,18 @@ def refresh_specs(check_only: bool) -> tuple[int, int, list[dict]]:
             status = "stale" if local_hash else "new"
             changed += 1
             if not check_only:
-                # Drop copies of the same service under a different extension,
-                # so a format change upstream cannot leave the service indexed
-                # twice from two files.
-                for stale in (service + ".yaml", service + ".yml", service + ".json"):
-                    if stale != target_name:
-                        stale_path = os.path.join(SPECS_DIR, stale)
-                        if os.path.exists(stale_path):
-                            os.remove(stale_path)
-                            print(f"        removed stale {stale}")
                 with open(target, "wb") as fh:
                     fh.write(data)
                 local_hash = upstream_hash
+
+        if duplicates:
+            dupes += len(duplicates)
+            for name in duplicates:
+                if check_only:
+                    print(f"        duplicate {name} shadows {target_name}")
+                else:
+                    os.remove(os.path.join(SPECS_DIR, name))
+                    print(f"        removed duplicate {name}")
 
         print(f"  {status:5s} {service:16s} {len(data):>9,d} B  {target_name}")
         entries.append(
@@ -254,7 +266,7 @@ def refresh_specs(check_only: bool) -> tuple[int, int, list[dict]]:
             }
         )
 
-    return changed, failed, entries
+    return changed, failed, dupes, entries
 
 
 def write_spec_sources(entries: list[dict]) -> None:
@@ -298,9 +310,26 @@ def schema_checkout() -> tuple[str, str | None]:
                 capture_output=True, text=True, check=False,
             ).stdout.strip()
             if described == SCHEMA_TAG:
-                print(f"  using sibling checkout at {SCHEMA_TAG}: {sibling}")
-                return sibling, None
-            print(f"  sibling checkout is at {described or 'an untagged commit'}, cloning {SCHEMA_TAG}")
+                # An exact tag says nothing about the worktree: `git describe`
+                # still reports it when tracked files under Generated/ are
+                # edited or untracked files are sitting there. Copying those in
+                # would record the official tag and commit as provenance for
+                # bytes that are not upstream, so only reuse the sibling when
+                # that subtree is clean. --porcelain covers untracked too.
+                dirty = subprocess.run(
+                    ["git", "-C", sibling, "status", "--porcelain", "--", SCHEMA_SUBDIR],
+                    capture_output=True, text=True, check=False,
+                ).stdout.strip()
+                if not dirty:
+                    print(f"  using sibling checkout at {SCHEMA_TAG}: {sibling}")
+                    return sibling, None
+                n = len(dirty.splitlines())
+                print(
+                    f"  sibling checkout is at {SCHEMA_TAG} but has {n} local "
+                    f"change(s) under {SCHEMA_SUBDIR}/, cloning {SCHEMA_TAG} instead"
+                )
+            else:
+                print(f"  sibling checkout is at {described or 'an untagged commit'}, cloning {SCHEMA_TAG}")
         except OSError:
             pass
 
@@ -427,15 +456,19 @@ def main() -> int:
 
     if do_specs:
         print(f"OpenAPI specs ({len(SPECS)} services, ref {SPEC_REF})")
-        changed, failed, entries = refresh_specs(args.check)
+        changed, failed, dupes, entries = refresh_specs(args.check)
         if failed:
             print(f"  {failed} service(s) could not be fetched")
             return 1
         if not args.check:
             write_spec_sources(entries)
             print(f"  wrote {os.path.basename(SPEC_SOURCES)}")
-        print(f"  {changed} changed, {len(entries) - changed} already current\n")
-        drift += changed
+        summary = f"  {changed} changed, {len(entries) - changed} already current"
+        if dupes:
+            verb = "found" if args.check else "removed"
+            summary += f", {dupes} duplicate file(s) {verb}"
+        print(summary + "\n")
+        drift += changed + dupes
 
     if do_schemas:
         print(f"OSDU schemas (data-definitions {SCHEMA_TAG}, snapshot {SCHEMA_SNAPSHOT})")
