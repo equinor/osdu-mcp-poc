@@ -136,7 +136,8 @@ osdu-mcp --db ./chroma_db --schemas ./schemas
 ```
 
 `--schemas` is optional but recommended: it enables the `get_schema` tool.
-Without it, only `search_osdu` is available.
+Without it, `get_schema` is still listed but every call returns
+`Schema lookup unavailable`, so only `search_osdu` does useful work.
 
 ### Tool: `search_osdu`
 
@@ -159,7 +160,8 @@ travel with it. Use it after `search_osdu` to see a matched property in context.
 | `kind` | string | required | Full id (`osdu:wks:dataset--File.Generic:1.1.0`), versioned name (`File.Generic.1.1.0`), or bare name (`File.Generic`, → highest version) |
 | `resolved` | boolean | `true` | `true` inlines cross-file `$ref`s into the abstract schemas; `false` returns the raw on-disk doc |
 
-Requires the server to be started with `--schemas`.
+Requires the server to be started with `--schemas`. Without it the tool is
+still listed, but returns `Schema lookup unavailable`.
 
 ### Client configuration
 
@@ -173,8 +175,9 @@ Two things to adjust in every example below:
    Relative paths and `~` are not expanded by most clients.
 2. **Use the absolute path to your own `uv`.** Clients launch the server
    without your shell's `PATH`, so a bare `uv` usually fails with
-   `ENOENT`/`command not found`. Find yours with `which uv` (macOS/Linux) or
-   `where uv` (Windows). Common locations:
+   `ENOENT`/`command not found`. Find yours with `which uv` (macOS/Linux),
+   `where uv` (Windows Command Prompt) or `where.exe uv` (PowerShell — plain
+   `where` is an alias for `Where-Object` there). Common locations:
 
    | Platform | Typical path |
    |---|---|
@@ -192,7 +195,7 @@ tools *silently* while still showing the server as connected.
 
 #### Which shape does my client use?
 
-Almost every client uses one of two shapes. Pick the matching example file:
+Almost every client uses one of three shapes. Pick the matching example file:
 
 | Client | Config file | Wrapper key | Example file |
 |---|---|---|---|
@@ -244,12 +247,12 @@ or run **MCP: Add Server** from the Command Palette.
 #### Claude Code
 
 ```bash
-claude mcp add osdu-discovery -- /opt/homebrew/bin/uv run --project /path/to/osdu-mcp-poc \
-  osdu-mcp --db /path/to/osdu-mcp-poc/chroma_db --schemas /path/to/osdu-mcp-poc/schemas
+claude mcp add osdu-discovery -- /opt/homebrew/bin/uv run --project /path/to/osdu-mcp-poc osdu-mcp --db /path/to/osdu-mcp-poc/chroma_db --schemas /path/to/osdu-mcp-poc/schemas
 ```
 
 Everything after `--` is the command to launch. Add `-s user` to make it
-available outside the current project.
+available outside the current project. Kept on one line so it pastes safely
+into PowerShell as well as a POSIX shell.
 
 #### OpenCode
 
@@ -277,21 +280,29 @@ To check the server independently of any client, run the same command from
 your terminal:
 
 ```bash
-/opt/homebrew/bin/uv run --project /path/to/osdu-mcp-poc osdu-mcp \
-  --db /path/to/osdu-mcp-poc/chroma_db --schemas /path/to/osdu-mcp-poc/schemas
+/opt/homebrew/bin/uv run --project /path/to/osdu-mcp-poc osdu-mcp --db /path/to/osdu-mcp-poc/chroma_db --schemas /path/to/osdu-mcp-poc/schemas
 ```
 
-It should start and wait silently on stdin. If it exits immediately, the error
-on stderr is the same one the client is hitting.
+A healthy start prints one line to stderr and then waits on stdin without
+returning to the prompt:
+
+```
+Schema index: 1427 files from '/path/to/osdu-mcp-poc/schemas' — get_schema enabled.
+```
+
+If you passed `--schemas` and don't see that line, the path is wrong — the
+server prints a `WARNING` and carries on with `get_schema` disabled. If the
+command exits immediately instead of waiting, the error on stderr is the same
+one the client is hitting.
 
 ### Troubleshooting
 
 | Symptom | Cause and fix |
 |---|---|
-| Server fails to start, `ENOENT` / `command not found` | `command` is a bare `uv` or the wrong absolute path. Use the output of `which uv`. |
+| Server fails to start, `ENOENT` / `command not found` | `command` is a bare `uv` or the wrong absolute path. Use the output of `which uv` / `where.exe uv`. |
 | Exits immediately, `No collections found` (exit code 1) | The index has not been built, or `--db` points at the wrong folder. Run `osdu-index` first — see [Index](#index). `chroma_db/` is generated, not shipped in the repo. |
 | Server connects but no tools appear | Server name contains a space or other unsupported character. Rename it to `osdu-discovery`. |
-| `search_osdu` works but `get_schema` is missing | The server was started without `--schemas`. |
+| `get_schema` returns `Schema lookup unavailable` | The server was started without `--schemas`, or the path given didn't exist. The tool is always registered, so this is a runtime message rather than a missing tool. |
 | Tools missing after the client was already running | Config is only read at startup, and some clients cache the tool list. Restart the client. |
 
 ## Next steps
