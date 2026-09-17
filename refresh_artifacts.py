@@ -38,6 +38,19 @@ import urllib.error
 import urllib.request
 from datetime import date, timezone, datetime
 
+import yaml
+from rich.console import Console
+
+console = Console()
+
+# Messages here carry file paths, URLs, hashes and git output, so rich's markup
+# parsing and value highlighting are both off: a stray bracket in upstream text
+# would otherwise raise or silently vanish from the output. soft_wrap keeps long
+# paths and URLs on one line so they stay copy-pasteable.
+def say(text: str = "", style: str | None = None) -> None:
+    console.print(text, style=style, markup=False, highlight=False, soft_wrap=True)
+
+
 REPO = os.path.dirname(os.path.abspath(__file__))
 SPECS_DIR = os.path.join(REPO, "specs")
 SCHEMAS_DIR = os.path.join(REPO, "schemas")
@@ -140,6 +153,13 @@ SCHEMA_TAG = "v0.30.0"
 SCHEMA_SNAPSHOT = "M27.0"
 SCHEMA_SUBDIR = "Generated"
 
+CONNECT_TIMEOUT = 30
+READ_TIMEOUT = 120
+
+# The extensions the indexer accepts in specs/. Anything here is indexed, so
+# anything here that we did not put there is drift.
+SPEC_EXTENSIONS = {".yaml", ".yml", ".json"}
+
 
 def raw_url(project: str, path: str, ref: str) -> str:
     return f"{COMMUNITY}/{project}/-/raw/{ref}/{path}"
@@ -164,9 +184,12 @@ def fetch(url: str) -> bytes:
     machine's management does populate, so it succeeds where Python cannot.
     Falling back keeps this runnable both on such machines and in CI, without
     disabling verification and without a new dependency.
+
+    Both paths are bounded: an unresponsive proxy should fail the refresh, not
+    park it forever with no output.
     """
     try:
-        with urllib.request.urlopen(url, timeout=120) as resp:
+        with urllib.request.urlopen(url, timeout=READ_TIMEOUT) as resp:
             if resp.status != 200:
                 raise RuntimeError(f"HTTP {resp.status} for {url}")
             return resp.read()
@@ -174,7 +197,12 @@ def fetch(url: str) -> bytes:
         if not isinstance(exc.reason, ssl.SSLCertVerificationError):
             raise
         proc = subprocess.run(
-            ["curl", "--silent", "--show-error", "--fail", "--location", url],
+            [
+                "curl", "--silent", "--show-error", "--fail", "--location",
+                "--connect-timeout", str(CONNECT_TIMEOUT),
+                "--max-time", str(READ_TIMEOUT),
+                url,
+            ],
             capture_output=True, check=False,
         )
         if proc.returncode != 0:
@@ -182,6 +210,39 @@ def fetch(url: str) -> bytes:
                 f"curl fallback failed for {url}: {proc.stderr.decode(errors='replace').strip()}"
             ) from exc
         return proc.stdout
+
+
+def parse_spec(data: bytes) -> dict:
+    """Decode a download and confirm it really is an OpenAPI document.
+
+    A captive portal, an SSO redirect or a GitLab error page is served with
+    status 200, so a successful response proves nothing. Hashing those bytes
+    blind would write the page into specs/ and record it in spec_sources.yaml
+    as `state: identical` -- provenance asserting the service's spec is current
+    when it holds an HTML error. The indexer would then drop or misreport that
+    service. Parsing here turns that into a loud failure instead.
+    """
+    try:
+        text = data.decode("utf-8")
+    except UnicodeDecodeError as exc:
+        raise RuntimeError(f"not valid UTF-8 ({exc})") from exc
+
+    try:
+        # YAML is a superset of JSON, so this covers both formats upstream uses.
+        doc = yaml.safe_load(text)
+    except yaml.YAMLError as exc:
+        detail = str(exc).splitlines()[0] if str(exc) else exc.__class__.__name__
+        raise RuntimeError(f"does not parse as YAML or JSON: {detail}") from exc
+
+    if not isinstance(doc, dict):
+        kind = type(doc).__name__
+        raise RuntimeError(f"parsed as {kind}, not a mapping - probably an error page")
+    if not (doc.get("openapi") or doc.get("swagger")):
+        raise RuntimeError("no openapi/swagger key - not an OpenAPI document")
+    paths = doc.get("paths")
+    if not isinstance(paths, dict) or not paths:
+        raise RuntimeError("no paths - nothing for the indexer to read")
+    return doc
 
 
 def spec_filename(service: str, data: bytes) -> str:
@@ -199,8 +260,15 @@ def spec_filename(service: str, data: bytes) -> str:
 
 def refresh_specs(check_only: bool) -> tuple[int, int, int, list[dict]]:
     os.makedirs(SPECS_DIR, exist_ok=True)
-    entries: list[dict] = []
-    changed = failed = dupes = 0
+
+    # Phase 1 -- fetch and validate every service before touching the tree.
+    #
+    # Writing as we went meant a failure on service 12 left services 1-11
+    # replaced on disk while main() bailed out before rewriting
+    # spec_sources.yaml, i.e. new specs described by old provenance. Staging
+    # first makes the refresh all-or-nothing.
+    planned: list[dict] = []
+    failed = 0
 
     for service in sorted(SPECS):
         project, path = SPECS[service]
@@ -208,65 +276,91 @@ def refresh_specs(check_only: bool) -> tuple[int, int, int, list[dict]]:
 
         try:
             data = fetch(url)
-        except Exception as exc:  # noqa: BLE001 - reported per service, not fatal
-            print(f"  FAIL  {service}: {exc}")
+            parse_spec(data)
+        except Exception as exc:  # noqa: BLE001 - collected, then aborts the run
+            say(f"  FAIL  {service}: {exc}", style="red")
             failed += 1
             continue
 
-        target_name = spec_filename(service, data)
-        target = os.path.join(SPECS_DIR, target_name)
+        planned.append(
+            {
+                "service": service,
+                "project": project,
+                "path": path,
+                "url": url,
+                "spec": spec_filename(service, data),
+                "data": data,
+                "sha": sha256_bytes(data),
+            }
+        )
 
-        # A format change upstream leaves the previous file behind under a
-        # different extension. specs/ is read non-recursively and the service
-        # label comes from the filename stem, so a leftover copy gets the
-        # service indexed twice, once from stale content. That is drift even
-        # when the expected file is already current, so check it unconditionally
-        # rather than only on the path where content changed.
-        duplicates = [
-            name
-            for name in (f"{service}.yaml", f"{service}.yml", f"{service}.json")
-            if name != target_name and os.path.exists(os.path.join(SPECS_DIR, name))
-        ]
+    if failed:
+        return 0, failed, 0, []
 
-        upstream_hash = sha256_bytes(data)
+    # Phase 2 -- reconcile the directory as a whole.
+    #
+    # Per-service checks only ever see stems still listed in SPECS, so a spec
+    # whose service was renamed or dropped stayed behind and kept being
+    # indexed while --check reported success. The indexer reads every
+    # .yaml/.yml/.json in specs/, so the honest question is not "is each
+    # service current" but "does this directory contain exactly the files we
+    # expect" -- which also covers a copy left under a superseded extension.
+    expected = {p["spec"] for p in planned}
+    present = {
+        name
+        for name in os.listdir(SPECS_DIR)
+        if os.path.isfile(os.path.join(SPECS_DIR, name))
+        and os.path.splitext(name)[1].lower() in SPEC_EXTENSIONS
+    }
+    extra = sorted(present - expected)
+
+    entries: list[dict] = []
+    changed = 0
+
+    for p in planned:
+        target = os.path.join(SPECS_DIR, p["spec"])
         local_hash = sha256_file(target)
 
-        if local_hash == upstream_hash:
+        if local_hash == p["sha"]:
             status = "ok"
         else:
             status = "stale" if local_hash else "new"
             changed += 1
             if not check_only:
                 with open(target, "wb") as fh:
-                    fh.write(data)
-                local_hash = upstream_hash
+                    fh.write(p["data"])
+                local_hash = p["sha"]
 
-        if duplicates:
-            dupes += len(duplicates)
-            for name in duplicates:
-                if check_only:
-                    print(f"        duplicate {name} shadows {target_name}")
-                else:
-                    os.remove(os.path.join(SPECS_DIR, name))
-                    print(f"        removed duplicate {name}")
-
-        print(f"  {status:5s} {service:16s} {len(data):>9,d} B  {target_name}")
+        say(f"  {status:5s} {p['service']:16s} {len(p['data']):>9,d} B  {p['spec']}")
         entries.append(
             {
-                "service": service,
-                "spec": target_name,
-                "project": project,
-                "path": path,
+                "service": p["service"],
+                "spec": p["spec"],
+                "project": p["project"],
+                "path": p["path"],
                 "ref": SPEC_REF,
-                "url": url,
-                "state": "identical" if local_hash == upstream_hash else "differs",
-                "upstream_sha256": upstream_hash,
+                "url": p["url"],
+                "state": "identical" if local_hash == p["sha"] else "differs",
+                "upstream_sha256": p["sha"],
                 "local_sha256": local_hash,
                 "verified": date.today().isoformat(),
             }
         )
 
-    return changed, failed, dupes, entries
+    for name in extra:
+        stem = os.path.splitext(name)[0]
+        shadowed = next((p["spec"] for p in planned if p["service"] == stem), None)
+        reason = (
+            f"shadows {shadowed}" if shadowed
+            else "no longer published by any indexed service"
+        )
+        if check_only:
+            say(f"  extra {name} ({reason})", style="yellow")
+        else:
+            os.remove(os.path.join(SPECS_DIR, name))
+            say(f"  removed {name} ({reason})", style="yellow")
+
+    return changed, failed, len(extra), entries
 
 
 def write_spec_sources(entries: list[dict]) -> None:
@@ -316,26 +410,40 @@ def schema_checkout() -> tuple[str, str | None]:
                 # would record the official tag and commit as provenance for
                 # bytes that are not upstream, so only reuse the sibling when
                 # that subtree is clean. --porcelain covers untracked too.
-                dirty = subprocess.run(
+                status = subprocess.run(
                     ["git", "-C", sibling, "status", "--porcelain", "--", SCHEMA_SUBDIR],
                     capture_output=True, text=True, check=False,
-                ).stdout.strip()
-                if not dirty:
-                    print(f"  using sibling checkout at {SCHEMA_TAG}: {sibling}")
-                    return sibling, None
-                n = len(dirty.splitlines())
-                print(
-                    f"  sibling checkout is at {SCHEMA_TAG} but has {n} local "
-                    f"change(s) under {SCHEMA_SUBDIR}/, cloning {SCHEMA_TAG} instead"
                 )
+                # A failed status is not a clean one. When git refuses the
+                # repository -- dubious ownership is the common case -- it
+                # writes the complaint to stderr and leaves stdout empty, which
+                # reads identically to "no changes". Reuse demands an explicit
+                # success, so an unverifiable checkout falls through to a clone
+                # rather than silently passing as clean.
+                if status.returncode != 0:
+                    detail = status.stderr.strip().splitlines()
+                    say(
+                        f"  sibling checkout could not be verified "
+                        f"({detail[0] if detail else f'git status exited {status.returncode}'}), "
+                        f"cloning {SCHEMA_TAG} instead"
+                    )
+                elif not status.stdout.strip():
+                    say(f"  using sibling checkout at {SCHEMA_TAG}: {sibling}")
+                    return sibling, None
+                else:
+                    n = len(status.stdout.strip().splitlines())
+                    say(
+                        f"  sibling checkout is at {SCHEMA_TAG} but has {n} local "
+                        f"change(s) under {SCHEMA_SUBDIR}/, cloning {SCHEMA_TAG} instead"
+                    )
             else:
-                print(f"  sibling checkout is at {described or 'an untagged commit'}, cloning {SCHEMA_TAG}")
+                say(f"  sibling checkout is at {described or 'an untagged commit'}, cloning {SCHEMA_TAG}")
         except OSError:
             pass
 
     tmp = tempfile.mkdtemp(prefix="data-definitions-")
     url = f"{COMMUNITY}/{SCHEMA_PROJECT}.git"
-    print(f"  cloning {SCHEMA_TAG} from {url}")
+    say(f"  cloning {SCHEMA_TAG} from {url}")
     subprocess.run(
         ["git", "clone", "--depth", "1", "--branch", SCHEMA_TAG, url, tmp],
         check=True, capture_output=True,
@@ -350,10 +458,19 @@ def refresh_schemas(check_only: bool) -> tuple[int, int, int, dict]:
         if not os.path.isdir(generated):
             raise RuntimeError(f"{generated} not found")
 
-        commit = subprocess.run(
+        rev = subprocess.run(
             ["git", "-C", source_root, "rev-parse", "HEAD"],
             capture_output=True, text=True, check=False,
-        ).stdout.strip()
+        )
+        # Recording an empty commit would leave schema_sources.yaml claiming a
+        # snapshot it cannot identify, so treat this as fatal rather than
+        # writing unusable provenance.
+        if rev.returncode != 0 or not rev.stdout.strip():
+            raise RuntimeError(
+                f"could not resolve HEAD in {source_root}: "
+                f"{rev.stderr.strip() or f'git rev-parse exited {rev.returncode}'}"
+            )
+        commit = rev.stdout.strip()
 
         added = updated = removed = 0
         upstream_files: set[str] = set()
@@ -391,7 +508,7 @@ def refresh_schemas(check_only: bool) -> tuple[int, int, int, dict]:
                     removed += 1
                     if not check_only:
                         os.remove(os.path.join(SCHEMAS_DIR, rel))
-                        print(f"        removed withdrawn {rel}")
+                        say(f"        removed withdrawn {rel}")
 
         total = len(upstream_files)
         meta = {
@@ -455,36 +572,38 @@ def main() -> int:
     drift = 0
 
     if do_specs:
-        print(f"OpenAPI specs ({len(SPECS)} services, ref {SPEC_REF})")
-        changed, failed, dupes, entries = refresh_specs(args.check)
+        say(f"OpenAPI specs ({len(SPECS)} services, ref {SPEC_REF})", style="bold")
+        changed, failed, extra, entries = refresh_specs(args.check)
         if failed:
-            print(f"  {failed} service(s) could not be fetched")
+            say(f"  {failed} service(s) could not be fetched - nothing was written", style="red")
             return 1
         if not args.check:
             write_spec_sources(entries)
-            print(f"  wrote {os.path.basename(SPEC_SOURCES)}")
+            say(f"  wrote {os.path.basename(SPEC_SOURCES)}")
         summary = f"  {changed} changed, {len(entries) - changed} already current"
-        if dupes:
-            verb = "found" if args.check else "removed"
-            summary += f", {dupes} duplicate file(s) {verb}"
-        print(summary + "\n")
-        drift += changed + dupes
+        if extra:
+            summary += f", {extra} unexpected file(s) {'found' if args.check else 'removed'}"
+        say(summary + "\n")
+        drift += changed + extra
 
     if do_schemas:
-        print(f"OSDU schemas (data-definitions {SCHEMA_TAG}, snapshot {SCHEMA_SNAPSHOT})")
+        say(f"OSDU schemas (data-definitions {SCHEMA_TAG}, snapshot {SCHEMA_SNAPSHOT})", style="bold")
         added, updated, removed, meta = refresh_schemas(args.check)
         if not args.check:
             write_schema_sources(meta)
-            print(f"  wrote {os.path.basename(SCHEMA_SOURCES)}")
-        print(f"  {added} added, {updated} updated, {removed} removed, {meta['files']} total\n")
+            say(f"  wrote {os.path.basename(SCHEMA_SOURCES)}")
+        say(f"  {added} added, {updated} updated, {removed} removed, {meta['files']} total\n")
         drift += added + updated + removed
 
     if args.check:
-        print(f"drift: {drift} artifact(s) differ from upstream")
+        say(
+            f"drift: {drift} artifact(s) differ from upstream",
+            style="yellow" if drift else "green",
+        )
         return 1 if drift else 0
 
-    print("Rebuild the index so queries see the new content:")
-    print("  osdu-index --specs ./specs --schemas ./schemas --db ./chroma_db --reset")
+    say("Rebuild the index so queries see the new content:")
+    say("  osdu-index --specs ./specs --schemas ./schemas --db ./chroma_db --reset")
     return 0
 
 
