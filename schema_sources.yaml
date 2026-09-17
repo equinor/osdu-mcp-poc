@@ -1,0 +1,24 @@
+# Upstream provenance for the schema tree in schemas/.
+#
+# schemas/ is a pinned copy of the OSDU data-definitions `Generated/` tree --
+# the fully resolved schemas the platform publishes, not the authoring sources.
+# It is pinned to a tag rather than tracked against a branch, so the content
+# behind the index only moves in an explicit, reviewable change. This mirrors
+# osdu-csharp-models, which pins the same upstream as schemas/M27.0/.
+#
+# Refresh with:
+#
+#     python refresh_artifacts.py --schemas
+#
+# Bumping the snapshot means editing SCHEMA_TAG and SCHEMA_SNAPSHOT in
+# refresh_artifacts.py, re-running it, and rebuilding the index.
+
+version: 1
+
+snapshot: M27.0
+project: osdu/data/data-definitions
+tag: v0.30.0
+commit: 99f8fc88d8ad838b5738ac5ad92ac643538b5766
+subdir: Generated
+files: 1427
+verified: "2026-09-17"

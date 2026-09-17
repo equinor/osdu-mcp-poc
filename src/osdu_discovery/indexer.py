@@ -50,30 +50,43 @@ def is_spec_file(filename: str) -> bool:
     return filename.endswith((".yaml", ".yml", ".json"))
 
 
-def resolve_refs(obj: dict | list, root: dict) -> dict | list:
+def resolve_refs(
+    obj: dict | list,
+    root: dict,
+    _seen: frozenset[str] = frozenset(),
+) -> dict | list:
     """
     Recursively resolves $ref pointers within the same document.
     Cross-file $refs are left as-is (noted in the text as [external ref]).
+
+    Self-referential schemas are cut off rather than followed. GeoJSON is the
+    case that matters here: ``GeoJsonFeature`` and ``GeoJsonGeometryCollection``
+    contain themselves, so following every ``$ref`` blindly recurses until the
+    interpreter gives up and the whole spec is dropped from the index. ``_seen``
+    carries the refs already expanded on the current branch, mirroring the guard
+    in ``SchemaResolver.resolve``.
     """
     if isinstance(obj, list):
-        return [resolve_refs(item, root) for item in obj]
+        return [resolve_refs(item, root, _seen) for item in obj]
 
     if isinstance(obj, dict):
         if "$ref" in obj:
             ref = obj["$ref"]
             if ref.startswith("#/"):
+                if ref in _seen:
+                    return {"type": "object", "description": f"[recursive ref: {ref}]"}
                 # Internal reference — resolve it
                 parts = ref.lstrip("#/").split("/")
                 resolved = root
                 try:
                     for part in parts:
                         resolved = resolved[part]
-                    return resolve_refs(resolved, root)
+                    return resolve_refs(resolved, root, _seen | {ref})
                 except (KeyError, TypeError):
                     return {"description": f"[unresolved ref: {ref}]"}
             else:
                 return {"description": f"[external ref: {ref}]"}
-        return {k: resolve_refs(v, root) for k, v in obj.items()}
+        return {k: resolve_refs(v, root, _seen) for k, v in obj.items()}
 
     return obj
 

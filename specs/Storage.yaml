@@ -527,7 +527,7 @@ paths:
         required: true
         schema:
           type: string
-          pattern: "^[\\w\\-\\.]+:[\\w-\\.]+:[\\w\\-\\.\\:\\%]+$"
+          pattern: "^[\\w\\-\\.]+:[\\w\\-\\.]+:[\\w\\-\\.\\:\\%]+$"
         example: tenant1:well:123456789
       - name: data-partition-id
         in: header
@@ -925,6 +925,85 @@ paths:
                 $ref: "#/components/schemas/AppError"
       security:
       - Authorization: []
+  /query/records/headers:
+    post:
+      tags:
+      - query
+      summary: Fetch multiple records' headers by ID
+      description: "The API fetches administrative headers (system-managed fields)\
+        \ for multiple records at once, completely omitting the heavy data payload.\
+        \ Allows up to 1000 IDs."
+      operationId: getRecordsHeaders
+      parameters:
+      - name: x-collaboration
+        in: header
+        description: x-collaboration
+        required: false
+        schema:
+          type: string
+      - name: data-partition-id
+        in: header
+        description: Tenant Id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MultiRecordHeadersRequest"
+        required: true
+      responses:
+        "200":
+          description: Fetch multiple records' headers successfully.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MultiRecordHeadersInfo"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "404":
+          description: Record(s) not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "502":
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "503":
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AppError"
+      security:
+      - Authorization: []
   /records/{id}:
     get:
       tags:
@@ -947,7 +1026,7 @@ paths:
         required: true
         schema:
           type: string
-          pattern: "^[\\w\\-\\.]+:[\\w-\\.]+:[\\w\\-\\.\\:\\%]+$"
+          pattern: "^[\\w\\-\\.]+:[\\w\\-\\.]+:[\\w\\-\\.\\:\\%]+$"
         example: tenant1:well:123456789
       - name: attribute
         in: query
@@ -1037,7 +1116,7 @@ paths:
         required: true
         schema:
           type: string
-          pattern: "^[\\w\\-\\.]+:[\\w-\\.]+:[\\w\\-\\.\\:\\%]+$"
+          pattern: "^[\\w\\-\\.]+:[\\w\\-\\.]+:[\\w\\-\\.\\:\\%]+$"
         example: tenant1:well:123456789
       - name: data-partition-id
         in: header
@@ -1110,7 +1189,7 @@ paths:
         required: true
         schema:
           type: string
-          pattern: "^[\\w\\-\\.]+:[\\w-\\.]+:[\\w\\-\\.\\:\\%]+$"
+          pattern: "^[\\w\\-\\.]+:[\\w\\-\\.]+:[\\w\\-\\.\\:\\%]+$"
         example: tenant1:well:123456789
       - name: data-partition-id
         in: header
@@ -1262,7 +1341,7 @@ paths:
         required: true
         schema:
           type: string
-          pattern: "^[\\w\\-\\.]+:[\\w-\\.]+:[\\w\\-\\.\\:\\%]+$"
+          pattern: "^[\\w\\-\\.]+:[\\w\\-\\.]+:[\\w\\-\\.\\:\\%]+$"
         example: tenant1:well:123456789
       - name: version
         in: path
@@ -1361,7 +1440,7 @@ paths:
         required: true
         schema:
           type: string
-          pattern: "^[\\w\\-\\.]+:[\\w-\\.]+:[\\w\\-\\.\\:\\%]+$"
+          pattern: "^[\\w\\-\\.]+:[\\w\\-\\.]+:[\\w\\-\\.\\:\\%]+$"
         example: tenant1:well:123456789
       - name: data-partition-id
         in: header
@@ -1498,7 +1577,7 @@ paths:
         required: true
         schema:
           type: string
-          pattern: "^[\\w\\-\\.]+:[\\w-\\.]+:[\\w\\-\\.\\:\\%]+$"
+          pattern: "^[\\w\\-\\.]+:[\\w\\-\\.]+:[\\w\\-\\.\\:\\%]+$"
         example: tenant1:well:123456789
       - name: versionIds
         in: query
@@ -1583,6 +1662,8 @@ components:
           items:
             type: string
             example: data.default.viewers@opendes.contoso.com
+            pattern: "^data\\.[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\\\
+              .)+[a-zA-Z](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?$"
         owners:
           type: array
           description: List of valid groups which will have write privileges over
@@ -1590,6 +1671,8 @@ components:
           items:
             type: string
             example: data.default.owners@opendes.contoso.com
+            pattern: "^data\\.[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\\\
+              .)+[a-zA-Z](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?$"
       required:
       - owners
       - viewers
@@ -1634,7 +1717,7 @@ components:
             \ Data Ecosystem will create and assign an id to the record. Must follow\
             \ the naming convention: {Data-Partition-Id}:{object-type}:{uuid}."
           example: common:work-product-component--wellLog:123456
-          pattern: "^[\\w\\-\\.]+:[\\w-\\.]+:[\\w\\-\\.\\:\\%]+$"
+          pattern: "^[\\w\\-\\.]+:[\\w\\-\\.]+:[\\w\\-\\.\\:\\%]+$"
         version:
           type: integer
           format: int64
@@ -1644,6 +1727,7 @@ components:
           type: string
           description: Record kind for which the schema information is applied to.
           example: common:wks:work-product-component--wellLog:1.0.0
+          pattern: "^[\\w\\-\\.]+:[\\w\\-\\.]+:[\\w\\-\\.]+:[0-9]+.[0-9]+.[0-9]+$"
         acl:
           $ref: "#/components/schemas/Acl"
           description: Access control lists for viewers and owners.
@@ -2015,6 +2099,83 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/ConversionStatus"
+    MultiRecordHeadersRequest:
+      type: object
+      description: Record headers query request
+      properties:
+        records:
+          type: array
+          items:
+            type: string
+          maxItems: 1000
+          minItems: 1
+        attributes:
+          type: array
+          description: "Filter/projection: list of record header attributes to return.\
+            \ If specified, only these attributes (plus 'id') will be returned. If\
+            \ omitted or empty, all record header fields are returned."
+          items:
+            type: string
+            enum:
+            - version
+            - kind
+            - acl
+            - legal
+            - ancestry
+            - tags
+            - createUser
+            - createTime
+            - modifyUser
+            - modifyTime
+            pattern: ^(version|kind|acl|legal|ancestry|tags|createUser|createTime|modifyUser|modifyTime)$
+          maxItems: 10
+          minItems: 0
+          uniqueItems: true
+      required:
+      - records
+    MultiRecordHeadersInfo:
+      type: object
+      properties:
+        records:
+          type: array
+          items:
+            $ref: "#/components/schemas/RecordHeadersDTO"
+        notFound:
+          type: array
+          items:
+            type: string
+        invalidRecords:
+          type: array
+          items:
+            type: string
+    RecordHeadersDTO:
+      type: object
+      properties:
+        id:
+          type: string
+        version:
+          type: integer
+          format: int64
+        kind:
+          type: string
+        acl:
+          $ref: "#/components/schemas/Acl"
+        legal:
+          $ref: "#/components/schemas/Legal"
+        ancestry:
+          $ref: "#/components/schemas/RecordAncestry"
+        tags:
+          type: object
+          additionalProperties:
+            type: string
+        createUser:
+          type: string
+        createTime:
+          type: string
+        modifyUser:
+          type: string
+        modifyTime:
+          type: string
     PatchOperation:
       type: object
       description: A single JSON Patch operation for updating record metadata fields.

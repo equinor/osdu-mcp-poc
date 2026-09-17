@@ -1,0 +1,57 @@
+{
+  "x-osdu-license": "Copyright 2026, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "x-osdu-review-status": "Accepted",
+  "$id": "https://schema.osdu.opengroup.org/json/abstract/AbstractGenericBinGrid.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:AbstractGenericBinGrid:1.0.0",
+  "title": "Abstract Generic Bin Grid",
+  "description": "The shared properties for a non seismic bin grid. Either ABCD or other attributes need to used. Maybe not the two ways at the same time (problem if they are not the same)",
+  "type": "object",
+  "properties": {
+    "BinGridName": {
+      "type": "string",
+      "description": "Name of bin grid"
+    },
+    "ABCDBinGridSpatialLocation": {
+      "$ref": "../abstract/AbstractSpatialLocation.1.1.0.json",
+      "description": "Bin Grid ABCD points containing the projected coordinates, projected CRS and quality metadata where A = (i=0, j=0), B = (i=0, j=jMax), C = (i=Imax, j=0) and D = (i=Imax, j=Jmax)"
+    },
+    "OriginEasting": {
+      "type": "number",
+      "description": "Easting coordinate of origin point (e.g., A point)"
+    },
+    "OriginNorthing": {
+      "type": "number",
+      "description": "Northing coordinate of origin point (e.g., A point)"
+    },
+    "ScaleFactor": {
+      "type": "number",
+      "description": "Scale factor for Bin Grid.  If not provided then 1 is assumed. Unit is unity."
+    },
+    "BinWidthOnIaxis": {
+      "type": "number",
+      "description": "Distance between two nodes on the I axis.  Unit from projected CRS in ABCDBinGridSpatialLocation"
+    },
+    "BinWidthOnJaxis": {
+      "type": "number",
+      "description": "Distance between two nodes on the J axis.  Unit from projected CRS in ABCDBinGridSpatialLocation"
+    },
+    "MapGridBearingOfBinGridJaxis": {
+      "type": "number",
+      "description": "Clockwise angle from grid north (in projCRS) in degrees from 0 to 360 to the direction of J axis"
+    },
+    "NodeCountOnIAxis": {
+      "type": "number",
+      "description": "The count of nodes on I Axis"
+    },
+    "NodeCountOnJAxis": {
+      "type": "number",
+      "description": "The count of nodes on J Axis"
+    },
+    "TransformationMethod": {
+      "type": "integer",
+      "description": "EPSG code: 9666 for right-handed, 1049 for left-handed.  See IOGP Guidance Note 373-07-2 and 483-6."
+    }
+  },
+  "x-osdu-inheriting-from-kind": []
+}

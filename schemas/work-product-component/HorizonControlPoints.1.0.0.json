@@ -1,0 +1,313 @@
+{
+  "x-osdu-license": "Copyright 2026, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "$id": "https://schema.osdu.opengroup.org/json/work-product-component/HorizonControlPoints.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:work-product-component--HorizonControlPoints:1.0.0",
+  "title": "HorizonControlPoints",
+  "description": "Horizon control points (seed points) representing sparse interpreter picks used to guide automated horizon tracking. Each control point captures a single depth or time pick at a spatial location. This work-product-component specializes AbstractRepresentation to deliver sparse seed points for a HorizonInterpretation. The InterpretationID links to the target HorizonInterpretation, while RepresentationRole (typically Pick) and RepresentationType (typically PointSet) characterize this representation. Control points capture key structural features, well ties, or high-confidence areas, and may serve as training labels for ML-based horizon prediction. Data may be stored inline via ColumnValues or as attached datasets such as File.TabularData.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "Previously called ResourceID or SRN which identifies this OSDU resource object without version.",
+      "title": "Entity ID",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-HorizonControlPoints:[\\w\\-\\.\\:\\%]+$",
+      "example": "namespace:work-product-component--HorizonControlPoints:fe6d86a5-14c4-585e-b8f8-7838e6853cf2"
+    },
+    "kind": {
+      "description": "The schema identification for the OSDU resource object following the pattern {Namespace}:{Source}:{Type}:{VersionMajor}.{VersionMinor}.{VersionPatch}. The versioning scheme follows the semantic versioning, https://semver.org/.",
+      "title": "Entity Kind",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:[\\w\\-\\.]+:[\\w\\-\\.]+:[0-9]+.[0-9]+.[0-9]+$",
+      "example": "osdu:wks:work-product-component--HorizonControlPoints:1.0.0"
+    },
+    "version": {
+      "description": "The version number of this OSDU resource; set by the framework.",
+      "title": "Version Number",
+      "type": "integer",
+      "format": "int64",
+      "example": 1562066009929332
+    },
+    "acl": {
+      "description": "The access control tags associated with this entity.",
+      "title": "Access Control List",
+      "$ref": "../abstract/AbstractAccessControlList.1.0.0.json"
+    },
+    "legal": {
+      "description": "The entity's legal tags and compliance status. The actual contents associated with the legal tags is managed by the Compliance Service.",
+      "title": "Legal Tags",
+      "$ref": "../abstract/AbstractLegalTags.1.0.0.json"
+    },
+    "tags": {
+      "title": "Tag Dictionary",
+      "description": "A generic dictionary of string keys mapping to string value. Only strings are permitted as keys and values.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "example": {
+        "NameOfKey": "String value"
+      }
+    },
+    "createTime": {
+      "description": "Timestamp of the time at which initial version of this OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:46:20.163Z"
+    },
+    "createUser": {
+      "title": "Resource Object Creation User Reference",
+      "description": "The user reference, which created the first version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "modifyTime": {
+      "description": "Timestamp of the time at which this version of the OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Version Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:52:24.477Z"
+    },
+    "modifyUser": {
+      "title": "Resource Object Version Creation User Reference",
+      "description": "The user reference, which created this version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "ancestry": {
+      "description": "The links to data, which constitute the inputs, from which this record instance is derived.",
+      "title": "Ancestry",
+      "$ref": "../abstract/AbstractLegalParentList.1.0.0.json"
+    },
+    "meta": {
+      "description": "The Frame of Reference meta data section linking the named properties to self-contained definitions.",
+      "title": "Frame of Reference Meta Data",
+      "type": "array",
+      "items": {
+        "$ref": "../abstract/AbstractMetaItem.1.0.0.json"
+      }
+    },
+    "data": {
+      "allOf": [
+        {
+          "$ref": "../abstract/AbstractCommonResources.1.0.1.json"
+        },
+        {
+          "$ref": "../abstract/AbstractWPCGroupType.1.2.0.json"
+        },
+        {
+          "$ref": "../abstract/AbstractWorkProductComponent.1.1.0.json"
+        },
+        {
+          "$ref": "../abstract/AbstractRepresentation.1.0.0.json"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "RepresentationRole": {
+              "type": "string",
+              "title": "Representation Role",
+              "description": "The RepresentationRole assigned to these control points. For HorizonControlPoints, this is typically 'Pick' as they represent manual interpreter picks.",
+              "example": "namespace:reference-data--RepresentationRole:Pick:",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-RepresentationRole:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "RepresentationRole"
+                }
+              ]
+            },
+            "RepresentationType": {
+              "type": "string",
+              "title": "Representation Type",
+              "description": "The RepresentationType for this representation. For HorizonControlPoints, this is typically PointSet, representing sparse spatial coordinates (seed points) used to guide automated horizon tracking algorithms.",
+              "example": "namespace:reference-data--RepresentationType:PointSet:",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-RepresentationType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "RepresentationType"
+                }
+              ]
+            },
+            "SeismicTraceDataIDs": {
+              "type": "array",
+              "title": "SeismicTraceDataIDs",
+              "description": "The seismic trace datasets (2D or 3D) on which the control points were interpreted. Supports multiple datasets when control points are picked across different seismic vintages or processing versions.",
+              "x-osdu-indexing": {
+                "type": "flattened"
+              },
+              "items": {
+                "type": "string",
+                "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-SeismicTraceData:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                "x-osdu-relationship": [
+                  {
+                    "GroupType": "work-product-component",
+                    "EntityType": "SeismicTraceData"
+                  }
+                ]
+              }
+            },
+            "BinGridID": {
+              "type": "string",
+              "title": "Bin Grid ID",
+              "description": "Explicit 3D bin grid geometry for control points, providing spatial resolution from Inline/Crossline to X,Y coordinates. If populated and all control points are defined by Inline/Crossline, `HorizontalCRSID` is not required. If any control points use explicit X,Y coordinates instead, `HorizontalCRSID` must also be populated. Overrides bin grid from Seismic3DInterpretationSet if specified. If empty and Seismic3DInterpretationSetID is populated, bin grid is inherited from Seismic3DInterpretationSet.SeismicBinGridID",
+              "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-SeismicBinGrid:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "work-product-component",
+                  "EntityType": "SeismicBinGrid"
+                }
+              ]
+            },
+            "SeismicLineGeometryIDs": {
+              "type": "array",
+              "title": "Seismic Line Geometry IDs",
+              "description": "Explicit 2D seismic line geometries for control points, providing spatial resolution from line position to X,Y coordinates. If populated and all control points are defined by line position, `HorizontalCRSID` is not required. If any control points use explicit X,Y coordinates instead, `HorizontalCRSID` must also be populated. Overrides geometries inferred from Seismic2DInterpretationSet. If empty and Seismic2DInterpretationSetID is populated, geometries are inherited from Seismic2DInterpretationSet.SeismicLineGeometries[].",
+              "x-osdu-indexing": {
+                "type": "flattened"
+              },
+              "items": {
+                "type": "string",
+                "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-SeismicLineGeometry:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                "x-osdu-relationship": [
+                  {
+                    "GroupType": "work-product-component",
+                    "EntityType": "SeismicLineGeometry"
+                  }
+                ]
+              }
+            },
+            "Seismic3DInterpretationSetID": {
+              "type": "string",
+              "title": "Seismic3DInterpretationSetID",
+              "description": "Reference to the 3D interpretation set supporting this control point picking (not the acquisition survey or application project). The seismic bin grid geometry required to resolve spatial locations is inherited from the interpretation set. The WPC SpatialArea may reflect the survey extent where horizon control points were picked. Mutually exclusive with Seismic2DInterpretationSetID.",
+              "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Seismic3DInterpretationSet:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "Seismic3DInterpretationSet"
+                }
+              ]
+            },
+            "Seismic2DInterpretationSetID": {
+              "type": "string",
+              "title": "Seismic2DInterpretationSetID",
+              "description": "Reference to the 2D interpretation set supporting this control point picking (not the acquisition survey or application project). The seismic line geometries required to resolve spatial locations are inherited from the interpretation set. The WPC SpatialArea may reflect the seismic lines where horizon control points were picked. Mutually exclusive with Seismic3DInterpretationSetID.",
+              "pattern": "^[\\w\\-\\.]+:master-data\\-\\-Seismic2DInterpretationSet:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "master-data",
+                  "EntityType": "Seismic2DInterpretationSet"
+                }
+              ]
+            },
+            "DomainTypeID": {
+              "type": "string",
+              "title": "DomainTypeID",
+              "description": "Describes the domain type for the control points, for example, Depth or Time. This property is added here to be human friendly and support search use cases. This information is also captured in the `Horizon Interpretation` through the `data.DomainTypeID` property and should be \nsynchronized.",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-DomainType:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "DomainType"
+                }
+              ]
+            },
+            "HorizontalCRSID": {
+              "type": "string",
+              "title": "Horizontal CRS ID",
+              "description": "Horizontal coordinate reference system for X,Y coordinates in the HorizonControlPoints table. Required when control points include explicit spatial coordinates (e.g. Easting/Northing) rather than being fully resolved via BinGridID or SeismicLineGeometryIDs. If BinGridID or SeismicLineGeometryIDs are populated and all control points are defined by Inline/Crossline or line position, this property may be absent.",
+              "pattern": "^[\\w\\-\\.]+:reference-data\\-\\-CoordinateReferenceSystem:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+              "x-osdu-relationship": [
+                {
+                  "GroupType": "reference-data",
+                  "EntityType": "CoordinateReferenceSystem"
+                }
+              ]
+            },
+            "VerticalDatum": {
+              "$ref": "../abstract/AbstractFacilityVerticalMeasurement.1.0.0.json",
+              "title": "VerticalDatum",
+              "description": "Defines the vertical reference datum (e.g. MSL) for the Z-values or depth/time measurements in the HorizonControlPoints table. This establishes the vertical coordinate system for all control points in this collection."
+            },
+            "WellboreMarkerSetIDs": {
+              "type": "array",
+              "title": "Wellbore Marker Set IDs",
+              "description": "Optional references to WellboreMarkerSet records containing formation tops at well locations. When control points are picked at or near well locations, these marker set references enable well-tie validation and provide depth calibration data for time-depth conversion validation.",
+              "x-osdu-indexing": {
+                "type": "flattened"
+              },
+              "items": {
+                "type": "string",
+                "pattern": "^[\\w\\-\\.]+:work-product-component\\-\\-WellboreMarkerSet:[\\w\\-\\.\\:\\%]+:[0-9]*$",
+                "x-osdu-relationship": [
+                  {
+                    "GroupType": "work-product-component",
+                    "EntityType": "WellboreMarkerSet"
+                  }
+                ]
+              }
+            },
+            "HorizonControlPoints": {
+              "$ref": "../abstract/AbstractColumnBasedTable.1.2.1.json",
+              "title": "Horizon Control Points",
+              "description": "Tabular data containing the control point locations and associated values. Each row represents a single seed point with spatial coordinates (X,Y or Inline/Crossline) and vertical datums (depth or time). Additional columns may include interpretation confidence, pick quality, source marker identifiers (e.g. linking to WellboreMarkerSet), or other attributes."
+            }
+          },
+          "title": "IndividualProperties"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "ExtensionProperties": {
+              "type": "object"
+            }
+          },
+          "title": "ExtensionProperties"
+        }
+      ]
+    }
+  },
+  "required": [
+    "kind",
+    "acl",
+    "legal"
+  ],
+  "additionalProperties": false,
+  "x-osdu-review-status": "Accepted",
+  "x-osdu-supported-file-formats": [
+    "csv",
+    "ascii",
+    "cps-3",
+    "tsv"
+  ],
+  "x-osdu-virtual-properties": {
+    "data.VirtualProperties.DefaultName": {
+      "type": "string",
+      "priority": [
+        {
+          "path": "data.Name"
+        }
+      ]
+    },
+    "data.VirtualProperties.DefaultLocation": {
+      "type": "object",
+      "priority": [
+        {
+          "path": "data.SpatialArea"
+        },
+        {
+          "path": "data.SpatialPoint"
+        }
+      ]
+    }
+  },
+  "x-osdu-inheriting-from-kind": [
+    {
+      "name": "WorkProductComponent",
+      "kind": "osdu:wks:AbstractWPCGroupType:1.2.0"
+    }
+  ]
+}

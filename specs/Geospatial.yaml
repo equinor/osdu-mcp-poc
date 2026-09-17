@@ -11,7 +11,7 @@ tags:
 - name: Version Info
   description: API for viewing GCZ Transformer Version Info
 - name: 1. Transformer Service Configuration
-  description: API for managing the Transformer configuration
+  description: API for managing and generating Transformer configuration
 - name: 2. Transformer Caches configuration
   description: API for managing kind cache configurations
 - name: 3. Transformer Caches insights
@@ -47,16 +47,10 @@ paths:
           type: string
           default: application/json
       - in: header
-        $ref: '#/components/parameters/dataPartitionId'
+        $ref: "#/components/parameters/dataPartitionId"
       responses:
         "404":
           description: Configuration not found
-          content:
-            '*/*':
-              schema:
-                type: object
-        "500":
-          description: Internal server error
           content:
             '*/*':
               schema:
@@ -66,7 +60,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TransformerConfiguration'
+                $ref: "#/components/schemas/TransformerConfiguration"
+        "500":
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                type: object
     put:
       tags:
       - 1. Transformer Service Configuration
@@ -75,26 +75,26 @@ paths:
       operationId: upsertTransformerConfiguration
       parameters:
       - in: header
-        $ref: '#/components/parameters/dataPartitionId'
+        $ref: "#/components/parameters/dataPartitionId"
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TransformerConfiguration'
+              $ref: "#/components/schemas/TransformerConfiguration"
         required: true
       responses:
+        "200":
+          description: Configuration updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
         "500":
           description: Internal server error
           content:
             '*/*':
               schema:
                 type: object
-        "200":
-          description: Configuration updated
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/MessageResponse'
     patch:
       tags:
       - 1. Transformer Service Configuration
@@ -103,16 +103,22 @@ paths:
       operationId: patchTransformerConfiguration
       parameters:
       - in: header
-        $ref: '#/components/parameters/dataPartitionId'
+        $ref: "#/components/parameters/dataPartitionId"
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TransformerConfigurationPatchDTO'
+              $ref: "#/components/schemas/TransformerConfigurationPatchDTO"
         required: true
       responses:
         "400":
           description: Invalid update request
+          content:
+            '*/*':
+              schema:
+                type: object
+        "500":
+          description: Internal server error
           content:
             '*/*':
               schema:
@@ -122,13 +128,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MessageResponse'
-        "500":
-          description: Internal server error
-          content:
-            '*/*':
-              schema:
-                type: object
+                $ref: "#/components/schemas/MessageResponse"
   /admin/providerConfig:
     get:
       tags:
@@ -146,14 +146,14 @@ paths:
           type: boolean
           default: false
       - in: header
-        $ref: '#/components/parameters/dataPartitionId'
+        $ref: "#/components/parameters/dataPartitionId"
       responses:
         "200":
           description: Provider configuration retrieved successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProviderConfiguration'
+                $ref: "#/components/schemas/ProviderConfiguration"
         "500":
           description: Internal server error
           content:
@@ -174,26 +174,26 @@ paths:
       operationId: upsertProviderConfiguration
       parameters:
       - in: header
-        $ref: '#/components/parameters/dataPartitionId'
+        $ref: "#/components/parameters/dataPartitionId"
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ProviderConfiguration'
+              $ref: "#/components/schemas/ProviderConfiguration"
         required: true
       responses:
+        "200":
+          description: Configuration updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
         "500":
           description: Internal server error
           content:
             '*/*':
               schema:
                 type: object
-        "200":
-          description: Configuration updated
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/MessageResponse'
     patch:
       tags:
       - 4. Provider Service configuration
@@ -202,16 +202,22 @@ paths:
       operationId: patchProviderConfiguration
       parameters:
       - in: header
-        $ref: '#/components/parameters/dataPartitionId'
+        $ref: "#/components/parameters/dataPartitionId"
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ProviderConfigurationPatchDTO'
+              $ref: "#/components/schemas/ProviderConfigurationPatchDTO"
         required: true
       responses:
         "400":
           description: Invalid update request
+          content:
+            '*/*':
+              schema:
+                type: object
+        "500":
+          description: Internal server error
           content:
             '*/*':
               schema:
@@ -221,13 +227,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MessageResponse'
-        "500":
-          description: Internal server error
-          content:
-            '*/*':
-              schema:
-                type: object
+                $ref: "#/components/schemas/MessageResponse"
   /admin/layerDefinitions:
     get:
       tags:
@@ -237,20 +237,20 @@ paths:
       operationId: getAllLayerDefinitions
       parameters:
       - in: header
-        $ref: '#/components/parameters/dataPartitionId'
+        $ref: "#/components/parameters/dataPartitionId"
       responses:
-        "200":
-          description: Successful retrieval
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/LayerDefinitionWithId'
         "500":
           description: Internal server error
           content:
             '*/*':
               schema:
                 type: object
+        "200":
+          description: Successful retrieval
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LayerDefinitionWithId"
     put:
       tags:
       - 5. Provider Layer definitions
@@ -259,32 +259,32 @@ paths:
       operationId: upsertLayerDefinition
       parameters:
       - in: header
-        $ref: '#/components/parameters/dataPartitionId'
+        $ref: "#/components/parameters/dataPartitionId"
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LayerDefinitionWithId'
+              $ref: "#/components/schemas/LayerDefinitionWithId"
         required: true
       responses:
+        "200":
+          description: Layer definition updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+        "201":
+          description: Layer definition created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
         "500":
           description: Internal server error
           content:
             '*/*':
               schema:
                 type: object
-        "201":
-          description: Layer definition created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/MessageResponse'
-        "200":
-          description: Layer definition updated
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/MessageResponse'
   /admin/kindCacheConfigs:
     get:
       tags:
@@ -300,7 +300,7 @@ paths:
         schema:
           type: string
       - in: header
-        $ref: '#/components/parameters/dataPartitionId'
+        $ref: "#/components/parameters/dataPartitionId"
       responses:
         "404":
           description: Configurations not found
@@ -319,7 +319,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Kind'
+                $ref: "#/components/schemas/Kind"
     put:
       tags:
       - 2. Transformer Caches configuration
@@ -328,12 +328,12 @@ paths:
       operationId: upsertKindCacheConfiguration
       parameters:
       - in: header
-        $ref: '#/components/parameters/dataPartitionId'
+        $ref: "#/components/parameters/dataPartitionId"
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Kind'
+              $ref: "#/components/schemas/Kind"
         required: true
       responses:
         "201":
@@ -341,19 +341,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MessageResponse'
+                $ref: "#/components/schemas/MessageResponse"
+        "200":
+          description: Configuration updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
         "500":
           description: Internal server error
           content:
             '*/*':
               schema:
                 type: object
-        "200":
-          description: Configuration updated
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/MessageResponse'
   /admin/updateCacheForList:
     post:
       tags:
@@ -375,7 +375,7 @@ paths:
           type: boolean
           default: false
       - in: header
-        $ref: '#/components/parameters/dataPartitionId'
+        $ref: "#/components/parameters/dataPartitionId"
       requestBody:
         description: "An array of cache names to be updated. Each cache name must\
           \ be a valid cache that exists in the system. If any cache doesn't exist,\
@@ -399,7 +399,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CacheBulkUpdateResponse'
+                $ref: "#/components/schemas/CacheBulkUpdateResponse"
   /admin/transformerConfig/reset:
     post:
       tags:
@@ -416,7 +416,7 @@ paths:
         schema:
           type: string
       - in: header
-        $ref: '#/components/parameters/dataPartitionId'
+        $ref: "#/components/parameters/dataPartitionId"
       requestBody:
         content:
           application/json:
@@ -464,7 +464,7 @@ paths:
       operationId: resetLostPartitions
       parameters:
       - in: header
-        $ref: '#/components/parameters/dataPartitionId'
+        $ref: "#/components/parameters/dataPartitionId"
       responses:
         "200":
           description: Reset partition processed
@@ -486,12 +486,12 @@ paths:
       operationId: resetProviderConfig
       parameters:
       - in: header
-        $ref: '#/components/parameters/dataPartitionId'
+        $ref: "#/components/parameters/dataPartitionId"
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ProviderConfigurationResetDTO'
+              $ref: "#/components/schemas/ProviderConfigurationResetDTO"
         required: true
       responses:
         "200":
@@ -518,6 +518,44 @@ paths:
                 type: object
                 additionalProperties:
                   type: string
+  /admin/generateGuidedConfig:
+    post:
+      tags:
+      - 1. Transformer Service Configuration
+      summary: Generate Guided Configuration
+      description: "Generates targeted Transformer and/or Provider configuration from\
+        \ the user's explicit kind selections and overrides, as collected by the Configuration\
+        \ Wizard."
+      operationId: generateGuidedConfig
+      parameters:
+      - in: header
+        $ref: "#/components/parameters/dataPartitionId"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GuidedConfigRequest"
+        required: true
+      responses:
+        "200":
+          description: Configuration generated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GuidedConfigResponse"
+        "400":
+          description: "Invalid request (empty selectedKinds, duplicate cacheNames,\
+            \ or empty field selection)"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/GuidedConfigResponse"
+        "500":
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/GuidedConfigResponse"
   /admin/cache/{cacheName}/data:
     post:
       tags:
@@ -533,12 +571,12 @@ paths:
         schema:
           type: string
       - in: header
-        $ref: '#/components/parameters/dataPartitionId'
+        $ref: "#/components/parameters/dataPartitionId"
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CacheDataRequest'
+              $ref: "#/components/schemas/CacheDataRequest"
         required: true
       responses:
         "200":
@@ -547,11 +585,11 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CacheDataResponse'
-        "400":
-          description: Invalid cache name or query parameters
+                $ref: "#/components/schemas/CacheDataResponse"
         "500":
           description: Internal server error
+        "400":
+          description: Invalid cache name or query parameters
   /admin/updateCache:
     get:
       tags:
@@ -577,20 +615,20 @@ paths:
           type: boolean
           default: false
       - in: header
-        $ref: '#/components/parameters/dataPartitionId'
+        $ref: "#/components/parameters/dataPartitionId"
       responses:
         "200":
           description: Cache update successfully queued
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UpdateCacheResponse'
+                $ref: "#/components/schemas/UpdateCacheResponse"
         "500":
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CacheBulkUpdateResponse'
+                $ref: "#/components/schemas/CacheBulkUpdateResponse"
   /admin/updateCacheForSingle:
     get:
       tags:
@@ -616,14 +654,14 @@ paths:
           type: boolean
           default: false
       - in: header
-        $ref: '#/components/parameters/dataPartitionId'
+        $ref: "#/components/parameters/dataPartitionId"
       responses:
         "200":
           description: Cache update was successfully queued
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UpdateCacheResponse'
+                $ref: "#/components/schemas/UpdateCacheResponse"
         "400":
           description: Invalid cache name - cache does not exist
         "409":
@@ -633,7 +671,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UpdateCacheResponse'
+                $ref: "#/components/schemas/UpdateCacheResponse"
   /admin/logs/{logStream}:
     get:
       tags:
@@ -705,8 +743,15 @@ paths:
           type: integer
           format: int32
           default: 10
+      - name: severity
+        in: query
+        description: "Log severity level filter (e.g., 'INFO', 'ERROR', 'WARN', 'DEBUG').\
+          \ Optional."
+        required: false
+        schema:
+          type: string
       - in: header
-        $ref: '#/components/parameters/dataPartitionId'
+        $ref: "#/components/parameters/dataPartitionId"
       responses:
         "200":
           description: Successfully retrieved log records
@@ -723,7 +768,7 @@ paths:
       operationId: getAvailableLogStreams
       parameters:
       - in: header
-        $ref: '#/components/parameters/dataPartitionId'
+        $ref: "#/components/parameters/dataPartitionId"
       responses:
         "200":
           description: Successfully retrieved available log streams
@@ -736,20 +781,20 @@ paths:
       operationId: getAllTransformerLoadStatuses
       parameters:
       - in: header
-        $ref: '#/components/parameters/dataPartitionId'
+        $ref: "#/components/parameters/dataPartitionId"
       responses:
-        "500":
-          description: Internal server error
-          content:
-            '*/*':
-              schema:
-                type: object
         "200":
           description: Successful retrieval
           content:
             application/json:
               schema:
                 type: array
+        "500":
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                type: object
   /admin/loadStatus/{cacheName}:
     get:
       tags:
@@ -765,18 +810,12 @@ paths:
         schema:
           type: string
       - in: header
-        $ref: '#/components/parameters/dataPartitionId'
+        $ref: "#/components/parameters/dataPartitionId"
       responses:
         "404":
           description: Cache exists but no load status found
           content:
             '*/*':
-              schema:
-                type: object
-        "200":
-          description: Successful retrieval
-          content:
-            application/json:
               schema:
                 type: object
         "500":
@@ -787,6 +826,12 @@ paths:
                 type: object
         "400":
           description: Invalid cache name - cache does not exist
+        "200":
+          description: Successful retrieval
+          content:
+            application/json:
+              schema:
+                type: object
   /admin/loadSessions:
     get:
       tags:
@@ -845,14 +890,14 @@ paths:
           type: boolean
           default: false
       - in: header
-        $ref: '#/components/parameters/dataPartitionId'
+        $ref: "#/components/parameters/dataPartitionId"
       responses:
         "200":
           description: Successful retrieval
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LoadSession'
+                $ref: "#/components/schemas/LoadSession"
         "500":
           description: Internal server error
           content:
@@ -860,7 +905,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/LoadSession'
+                  $ref: "#/components/schemas/LoadSession"
   /admin/loadSessions/lastSessionForCache:
     get:
       tags:
@@ -905,14 +950,14 @@ paths:
         - SUCCEEDED
         - FAILED
       - in: header
-        $ref: '#/components/parameters/dataPartitionId'
+        $ref: "#/components/parameters/dataPartitionId"
       responses:
         "200":
           description: Successfully retrieved the last session for the specified cache
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LoadSession'
+                $ref: "#/components/schemas/LoadSession"
         "404":
           description: No session found for the specified cache
           content:
@@ -940,20 +985,20 @@ paths:
         schema:
           type: string
       - in: header
-        $ref: '#/components/parameters/dataPartitionId'
+        $ref: "#/components/parameters/dataPartitionId"
       responses:
+        "200":
+          description: Layer definition found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LayerDefinitionWithId"
         "500":
           description: Internal server error
           content:
             '*/*':
               schema:
                 type: object
-        "200":
-          description: Layer definition found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/LayerDefinitionWithId'
         "404":
           description: Layer definition not found
           content:
@@ -974,20 +1019,20 @@ paths:
         schema:
           type: string
       - in: header
-        $ref: '#/components/parameters/dataPartitionId'
+        $ref: "#/components/parameters/dataPartitionId"
       responses:
+        "200":
+          description: Layer definition deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
         "404":
           description: Layer definition not found or could not be deleted
           content:
             '*/*':
               schema:
                 type: object
-        "200":
-          description: Layer definition deleted successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/MessageResponse'
         "500":
           description: Internal server error
           content:
@@ -1009,7 +1054,7 @@ paths:
         schema:
           type: string
       - in: header
-        $ref: '#/components/parameters/dataPartitionId'
+        $ref: "#/components/parameters/dataPartitionId"
       responses:
         "404":
           description: Configuration not found
@@ -1022,7 +1067,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Kind'
+                $ref: "#/components/schemas/Kind"
         "500":
           description: Internal server error
           content:
@@ -1043,14 +1088,14 @@ paths:
         schema:
           type: string
       - in: header
-        $ref: '#/components/parameters/dataPartitionId'
+        $ref: "#/components/parameters/dataPartitionId"
       responses:
         "200":
           description: Configuration deleted successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MessageResponse'
+                $ref: "#/components/schemas/MessageResponse"
         "500":
           description: Internal server error
           content:
@@ -1063,6 +1108,58 @@ paths:
             '*/*':
               schema:
                 type: object
+  /admin/kindCacheConfigs/properties:
+    get:
+      tags:
+      - 2. Transformer Caches configuration
+      summary: Get available properties for a Kind
+      description: "Discovers all available data.properties for a given Kind by querying\
+        \ the OSDU Schema Service. Note: Virtual properties (e.g., VirtualProperties.DefaultName)\
+        \ are computed at query time by the OSDU Search/Indexer service and are not\
+        \ registered in the Schema Service. They will not appear in this response\
+        \ but can still be used in propertyColumns configuration."
+      operationId: getAvailableProperties
+      parameters:
+      - name: kind
+        in: query
+        description: "Kind identifier (e.g., osdu:wks:master-data--Well:1.0.0). Supports\
+          \ wildcards in version segments."
+        required: true
+        schema:
+          maxLength: 256
+          minLength: 0
+          type: string
+      - in: header
+        $ref: "#/components/parameters/dataPartitionId"
+      responses:
+        "404":
+          description: Kind not found
+          content:
+            '*/*':
+              schema:
+                type: object
+        "502":
+          description: Upstream schema service error
+          content:
+            '*/*':
+              schema:
+                type: object
+        "400":
+          description: Invalid kind parameter
+          content:
+            '*/*':
+              schema:
+                type: object
+        "504":
+          description: Schema service timeout
+          content:
+            '*/*':
+              schema:
+                type: object
+        "200":
+          description: Properties retrieved successfully
+          content:
+            application/json: {}
   /admin/info:
     get:
       tags:
@@ -1070,20 +1167,20 @@ paths:
       operationId: getInfo
       parameters:
       - in: header
-        $ref: '#/components/parameters/dataPartitionId'
+        $ref: "#/components/parameters/dataPartitionId"
       responses:
+        "200":
+          description: Successful retrieval
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VersionInfo"
         "500":
           description: Internal server error
           content:
             '*/*':
               schema:
                 type: object
-        "200":
-          description: Successful retrieval
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/VersionInfo'
   /admin/getKindFields:
     get:
       tags:
@@ -1099,20 +1196,20 @@ paths:
         schema:
           type: string
       - in: header
-        $ref: '#/components/parameters/dataPartitionId'
+        $ref: "#/components/parameters/dataPartitionId"
       responses:
         "500":
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/KindsFieldsResponse'
+                $ref: "#/components/schemas/KindsFieldsResponse"
         "200":
           description: Kind fields retrieved successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/KindsFieldsResponse'
+                $ref: "#/components/schemas/KindsFieldsResponse"
   /admin/getAvailableKinds:
     get:
       tags:
@@ -1129,20 +1226,20 @@ paths:
           type: boolean
           default: true
       - in: header
-        $ref: '#/components/parameters/dataPartitionId'
+        $ref: "#/components/parameters/dataPartitionId"
       responses:
-        "200":
-          description: Available kinds retrieved successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AvailableKindsResponse'
         "500":
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AvailableKindsResponse'
+                $ref: "#/components/schemas/AvailableKindsResponse"
+        "200":
+          description: Available kinds retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AvailableKindsResponse"
   /admin/generateKoopConfig:
     get:
       tags:
@@ -1185,14 +1282,14 @@ paths:
           type: boolean
           default: true
       - in: header
-        $ref: '#/components/parameters/dataPartitionId'
+        $ref: "#/components/parameters/dataPartitionId"
       responses:
         "200":
           description: Koop configuration generated successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ConfigResponse'
+                $ref: "#/components/schemas/ConfigResponse"
         "500":
           description: Internal server error
           content:
@@ -1235,7 +1332,7 @@ paths:
           type: boolean
           default: true
       - in: header
-        $ref: '#/components/parameters/dataPartitionId'
+        $ref: "#/components/parameters/dataPartitionId"
       responses:
         "500":
           description: Internal server error
@@ -1248,7 +1345,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ConfigResponse'
+                $ref: "#/components/schemas/ConfigResponse"
   /admin/cacheSize:
     get:
       tags:
@@ -1265,20 +1362,20 @@ paths:
         schema:
           type: string
       - in: header
-        $ref: '#/components/parameters/dataPartitionId'
+        $ref: "#/components/parameters/dataPartitionId"
       responses:
-        "200":
-          description: Cache size retrieved successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetCacheStatusResponse'
         "500":
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetCacheStatusResponse'
+                $ref: "#/components/schemas/GetCacheStatusResponse"
+        "200":
+          description: Cache size retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetCacheStatusResponse"
 components:
   schemas:
     TransformerConfiguration:
@@ -1385,11 +1482,11 @@ components:
         cacheName:
           type: string
         geometryType:
-          $ref: '#/components/schemas/GeometryType'
+          $ref: "#/components/schemas/GeometryType"
         fields:
           type: array
           items:
-            $ref: '#/components/schemas/Field'
+            $ref: "#/components/schemas/Field"
         disabled:
           type: boolean
         hasZ:
@@ -1445,9 +1542,15 @@ components:
         validationFilters:
           type: array
           items:
-            $ref: '#/components/schemas/ValidationFilter'
+            $ref: "#/components/schemas/ValidationFilter"
         trajectoryStationPropertyKind:
           type: string
+        propertyColumns:
+          maxItems: 200
+          minItems: 0
+          type: array
+          items:
+            type: string
     ValidationFilter:
       type: object
       properties:
@@ -1459,11 +1562,11 @@ components:
         succeeded:
           type: array
           items:
-            $ref: '#/components/schemas/CacheUpdateInfo'
+            $ref: "#/components/schemas/CacheUpdateInfo"
         failed:
           type: array
           items:
-            $ref: '#/components/schemas/CacheUpdateInfo'
+            $ref: "#/components/schemas/CacheUpdateInfo"
     CacheUpdateInfo:
       type: object
       properties:
@@ -1496,11 +1599,11 @@ components:
         cacheName:
           type: string
         geometryType:
-          $ref: '#/components/schemas/GeometryType'
+          $ref: "#/components/schemas/GeometryType"
         fields:
           type: array
           items:
-            $ref: '#/components/schemas/Field'
+            $ref: "#/components/schemas/Field"
         disabled:
           type: boolean
         hasZ:
@@ -1514,9 +1617,93 @@ components:
         layerDefinitions:
           type: object
           additionalProperties:
-            $ref: '#/components/schemas/LayerDefinition'
+            $ref: "#/components/schemas/LayerDefinition"
         serviceDefinition:
-          $ref: '#/components/schemas/ProviderConfiguration'
+          $ref: "#/components/schemas/ProviderConfiguration"
+    GeometryTypeDTO:
+      type: object
+      properties:
+        defaultType:
+          type: string
+        esriType:
+          type: string
+    GuidedConfigRequest:
+      type: object
+      properties:
+        mode:
+          type: string
+        outputType:
+          type: string
+        selectedKinds:
+          type: array
+          items:
+            type: string
+        runtimeResetCompatible:
+          type: boolean
+        kindOverrides:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/KindOverrides"
+        fieldSelections:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+        geometryTypes:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/GeometryTypeDTO"
+    KindOverrides:
+      type: object
+      properties:
+        cacheName:
+          type: string
+        geometryLocation:
+          type: string
+        chronExpr:
+          type: string
+        batchSize:
+          type: integer
+          format: int32
+        spatialSourceKind:
+          type: string
+        spatialSourceID:
+          type: string
+        spatialSourceGeometryLocation:
+          type: string
+        propertyColumns:
+          type: array
+          items:
+            type: string
+        completeTrajectory:
+          type: boolean
+        trajectoryStationPropertyKind:
+          type: string
+        convertTrajectoryMethod:
+          type: string
+        interpolate:
+          type: boolean
+        interpolationMdIntervalInMeters:
+          type: integer
+          format: int32
+        createSticks:
+          type: boolean
+        validationFilters:
+          type: array
+          items:
+            type: string
+    GuidedConfigResponse:
+      type: object
+      properties:
+        transformerConfig:
+          type: string
+        providerConfig:
+          type: string
+        warnings:
+          type: array
+          items:
+            type: string
     CacheDataRequest:
       type: object
       properties:
@@ -1660,21 +1847,21 @@ components:
         fields:
           type: array
           items:
-            $ref: '#/components/schemas/FieldInfo'
+            $ref: "#/components/schemas/FieldInfo"
     KindsFieldsResponse:
       type: object
       properties:
         kindFields:
           type: array
           items:
-            $ref: '#/components/schemas/KindFieldInfo'
+            $ref: "#/components/schemas/KindFieldInfo"
     AvailableKindsResponse:
       type: object
       properties:
         Kinds:
           type: array
           items:
-            $ref: '#/components/schemas/KindInfo'
+            $ref: "#/components/schemas/KindInfo"
     KindInfo:
       type: object
       properties:

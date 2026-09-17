@@ -1,0 +1,252 @@
+# Upstream provenance for every spec in specs/.
+#
+# Specs in this repository are copies of files their services publish. This
+# records where each came from, so a refresh is an overwrite rather than a
+# merge and a drift check has something to compare against.
+#
+# Every OSDU service publishes at docs/api/community/v{N}/openapi.{yaml,json}
+# on community.opengroup.org, served anonymously over plain HTTPS -- which is
+# why the drift check needs no credentials and no deployed environment. Those
+# published files are themselves gated by each service's own
+# `cimpl-check-openapi-spec` job, which fails that service's pipeline when the
+# committed spec no longer matches the running service. Comparing against them
+# inherits that guarantee.
+#
+# This file follows the same shape as the one in osdu-csharp-client, so the two
+# repositories can be checked with the same tooling. Two services indexed here
+# are not in the client: Geospatial and Seismic_ddms. Seismic is the one entry
+# that does not publish under docs/api/community -- it ships its spec inside the
+# service tree, recorded below.
+#
+# Fields
+#   service          key used below; matches the spec filename stem in specs/
+#   spec             path to the file, relative to specs/
+#   project          GitLab project path
+#   path             file path within that project
+#   ref              branch or commit the hash was taken from
+#   url              raw download URL
+#   state            identical -> our copy matches upstream byte for byte
+#                    differs   -> it does not, for the reason in `note`
+#   upstream_sha256  sha256 of the upstream file when last verified
+#   local_sha256     sha256 of our copy at that time
+#   verified         date of the last comparison
+#
+# Every entry should read `state: identical`. Refresh with:
+#
+#     python refresh_artifacts.py --specs
+#
+# Unit Service v2 is deliberately absent: all of its operations are marked
+# deprecated upstream, so only v3 is indexed.
+
+version: 1
+verified: "2026-09-17"
+
+specs:
+  - service: CRS_Catalog
+    spec: CRS_Catalog.yaml
+    project: osdu/platform/system/reference/crs-catalog-service
+    path: docs/api/community/v3/openapi.yaml
+    ref: master
+    url: https://community.opengroup.org/osdu/platform/system/reference/crs-catalog-service/-/raw/master/docs/api/community/v3/openapi.yaml
+    state: identical
+    upstream_sha256: e400f5875cf97545fdf8758827890eb67da551aa12924fdb051683c08244044b
+    local_sha256: e400f5875cf97545fdf8758827890eb67da551aa12924fdb051683c08244044b
+    verified: "2026-09-17"
+
+  - service: CRS_Conversion
+    spec: CRS_Conversion.json
+    project: osdu/platform/system/reference/crs-conversion-service
+    path: docs/api/community/v4/openapi.yaml
+    ref: master
+    url: https://community.opengroup.org/osdu/platform/system/reference/crs-conversion-service/-/raw/master/docs/api/community/v4/openapi.yaml
+    state: identical
+    upstream_sha256: c464bb3addd22eb369ab000511b76d813ed60b0c654d716d4fbd6a646ca4e339
+    local_sha256: c464bb3addd22eb369ab000511b76d813ed60b0c654d716d4fbd6a646ca4e339
+    verified: "2026-09-17"
+
+  - service: Dataset
+    spec: Dataset.yaml
+    project: osdu/platform/system/dataset
+    path: docs/api/community/v1/openapi.yaml
+    ref: master
+    url: https://community.opengroup.org/osdu/platform/system/dataset/-/raw/master/docs/api/community/v1/openapi.yaml
+    state: identical
+    upstream_sha256: 5838edd7ae2d8c4ad2fc279289b979ecd3d87c7b5fcdc23911185e23a4d1a5a9
+    local_sha256: 5838edd7ae2d8c4ad2fc279289b979ecd3d87c7b5fcdc23911185e23a4d1a5a9
+    verified: "2026-09-17"
+
+  - service: Entitlements
+    spec: Entitlements.yaml
+    project: osdu/platform/security-and-compliance/entitlements
+    path: docs/api/community/v2/openapi.yaml
+    ref: master
+    url: https://community.opengroup.org/osdu/platform/security-and-compliance/entitlements/-/raw/master/docs/api/community/v2/openapi.yaml
+    state: identical
+    upstream_sha256: be0666f050189cfadba6e8ca8e77c697ba6662cd331332df1390393dfefe94c4
+    local_sha256: be0666f050189cfadba6e8ca8e77c697ba6662cd331332df1390393dfefe94c4
+    verified: "2026-09-17"
+
+  - service: File
+    spec: File.yaml
+    project: osdu/platform/system/file
+    path: docs/api/community/v2/openapi.yaml
+    ref: master
+    url: https://community.opengroup.org/osdu/platform/system/file/-/raw/master/docs/api/community/v2/openapi.yaml
+    state: identical
+    upstream_sha256: 20b0679f360e2d4aa6acfed8b059b3e12325285855323f2194b5df4361e0c10e
+    local_sha256: 20b0679f360e2d4aa6acfed8b059b3e12325285855323f2194b5df4361e0c10e
+    verified: "2026-09-17"
+
+  - service: Geospatial
+    spec: Geospatial.yaml
+    project: osdu/platform/consumption/geospatial
+    path: docs/api/community/v3/openapi.yaml
+    ref: master
+    url: https://community.opengroup.org/osdu/platform/consumption/geospatial/-/raw/master/docs/api/community/v3/openapi.yaml
+    state: identical
+    upstream_sha256: 33e01e867c48ce98e92b0c01d4647bd510c96c392b029ecd6ccf83d1d5a49b28
+    local_sha256: 33e01e867c48ce98e92b0c01d4647bd510c96c392b029ecd6ccf83d1d5a49b28
+    verified: "2026-09-17"
+
+  - service: Indexer
+    spec: Indexer.yaml
+    project: osdu/platform/system/indexer-service
+    path: docs/api/community/v2/openapi.yaml
+    ref: master
+    url: https://community.opengroup.org/osdu/platform/system/indexer-service/-/raw/master/docs/api/community/v2/openapi.yaml
+    state: identical
+    upstream_sha256: c418094aa2607a790f8ef00daec4f5b46213bf14093093ce3a0b7013a97231b7
+    local_sha256: c418094aa2607a790f8ef00daec4f5b46213bf14093093ce3a0b7013a97231b7
+    verified: "2026-09-17"
+
+  - service: Legal
+    spec: Legal.yaml
+    project: osdu/platform/security-and-compliance/legal
+    path: docs/api/community/v1/openapi.yaml
+    ref: master
+    url: https://community.opengroup.org/osdu/platform/security-and-compliance/legal/-/raw/master/docs/api/community/v1/openapi.yaml
+    state: identical
+    upstream_sha256: 60d5355db2a0977dc1dd31103c3a2342a5fda283cb39d405d6c8074bc33bfd22
+    local_sha256: 60d5355db2a0977dc1dd31103c3a2342a5fda283cb39d405d6c8074bc33bfd22
+    verified: "2026-09-17"
+
+  - service: Notification
+    spec: Notification.yaml
+    project: osdu/platform/system/notification
+    path: docs/api/community/v1/openapi.yaml
+    ref: master
+    url: https://community.opengroup.org/osdu/platform/system/notification/-/raw/master/docs/api/community/v1/openapi.yaml
+    state: identical
+    upstream_sha256: db696026659611db46acaa7357baa644c57273316d819cf04f467d011dbb536a
+    local_sha256: db696026659611db46acaa7357baa644c57273316d819cf04f467d011dbb536a
+    verified: "2026-09-17"
+
+  - service: Partition
+    spec: Partition.yaml
+    project: osdu/platform/system/partition
+    path: docs/api/community/v1/openapi.yaml
+    ref: master
+    url: https://community.opengroup.org/osdu/platform/system/partition/-/raw/master/docs/api/community/v1/openapi.yaml
+    state: identical
+    upstream_sha256: 02cb853267f5763841db45844a086c9f759c6ea463665a76275aa78ec0bedd3b
+    local_sha256: 02cb853267f5763841db45844a086c9f759c6ea463665a76275aa78ec0bedd3b
+    verified: "2026-09-17"
+
+  - service: Policy
+    spec: Policy.json
+    project: osdu/platform/security-and-compliance/policy
+    path: docs/api/community/v1/openapi.json
+    ref: master
+    url: https://community.opengroup.org/osdu/platform/security-and-compliance/policy/-/raw/master/docs/api/community/v1/openapi.json
+    state: identical
+    upstream_sha256: 0a49187b445a7a4fe9cf5798ec74ab2a454d4c0cc511e582095d1279a5b467dd
+    local_sha256: 0a49187b445a7a4fe9cf5798ec74ab2a454d4c0cc511e582095d1279a5b467dd
+    verified: "2026-09-17"
+
+  - service: Register
+    spec: Register.yaml
+    project: osdu/platform/system/register
+    path: docs/api/community/v1/openapi.yaml
+    ref: master
+    url: https://community.opengroup.org/osdu/platform/system/register/-/raw/master/docs/api/community/v1/openapi.yaml
+    state: identical
+    upstream_sha256: 6ff04c52afd1487335d154c5f1d343ba94047f700e91f8d409839cd3b75bbf61
+    local_sha256: 6ff04c52afd1487335d154c5f1d343ba94047f700e91f8d409839cd3b75bbf61
+    verified: "2026-09-17"
+
+  - service: Schema
+    spec: Schema.yaml
+    project: osdu/platform/system/schema-service
+    path: docs/api/community/v1/openapi.yaml
+    ref: master
+    url: https://community.opengroup.org/osdu/platform/system/schema-service/-/raw/master/docs/api/community/v1/openapi.yaml
+    state: identical
+    upstream_sha256: 3b9894e38e8c9936bfa92ff314f4e48f9e8914e440a8ce7c4a3170d2d95116cc
+    local_sha256: 3b9894e38e8c9936bfa92ff314f4e48f9e8914e440a8ce7c4a3170d2d95116cc
+    verified: "2026-09-17"
+
+  - service: Search
+    spec: Search.yaml
+    project: osdu/platform/system/search-service
+    path: docs/api/community/v2/openapi.yaml
+    ref: master
+    url: https://community.opengroup.org/osdu/platform/system/search-service/-/raw/master/docs/api/community/v2/openapi.yaml
+    state: identical
+    upstream_sha256: c4c15f44d946c42a03ba860dddd1bd302631e0f9bcb7d7178755081fc9b28715
+    local_sha256: c4c15f44d946c42a03ba860dddd1bd302631e0f9bcb7d7178755081fc9b28715
+    verified: "2026-09-17"
+
+  - service: Seismic_ddms
+    spec: Seismic_ddms.yaml
+    project: osdu/platform/domain-data-mgmt-services/seismic/seismic-dms-suite/seismic-store-service
+    path: app/sdms/docs/api/openapi.yaml
+    ref: master
+    url: https://community.opengroup.org/osdu/platform/domain-data-mgmt-services/seismic/seismic-dms-suite/seismic-store-service/-/raw/master/app/sdms/docs/api/openapi.yaml
+    state: identical
+    upstream_sha256: b2e64270bf33e377ce4afbd507897a93cbbf356d9844ee01e2538f6c0223c475
+    local_sha256: b2e64270bf33e377ce4afbd507897a93cbbf356d9844ee01e2538f6c0223c475
+    verified: "2026-09-17"
+
+  - service: Storage
+    spec: Storage.yaml
+    project: osdu/platform/system/storage
+    path: docs/api/community/v2/openapi.yaml
+    ref: master
+    url: https://community.opengroup.org/osdu/platform/system/storage/-/raw/master/docs/api/community/v2/openapi.yaml
+    state: identical
+    upstream_sha256: fc893bd59daaf5b6bb14bc9f77b639720b1cd3d70e59374916a3e89b9b661c45
+    local_sha256: fc893bd59daaf5b6bb14bc9f77b639720b1cd3d70e59374916a3e89b9b661c45
+    verified: "2026-09-17"
+
+  - service: Unit
+    spec: Unit.yaml
+    project: osdu/platform/system/reference/unit-service
+    path: docs/api/community/v3/openapi.yaml
+    ref: master
+    url: https://community.opengroup.org/osdu/platform/system/reference/unit-service/-/raw/master/docs/api/community/v3/openapi.yaml
+    state: identical
+    upstream_sha256: 13d53a3b1f3dd610b35e8f6f99e450cb94c7959c46da9f49ae73c5327f4fcb1c
+    local_sha256: 13d53a3b1f3dd610b35e8f6f99e450cb94c7959c46da9f49ae73c5327f4fcb1c
+    verified: "2026-09-17"
+
+  - service: Wellbore_ddms
+    spec: Wellbore_ddms.json
+    project: osdu/platform/domain-data-mgmt-services/wellbore/wellbore-domain-services
+    path: docs/api/community/v1/openapi.json
+    ref: master
+    url: https://community.opengroup.org/osdu/platform/domain-data-mgmt-services/wellbore/wellbore-domain-services/-/raw/master/docs/api/community/v1/openapi.json
+    state: identical
+    upstream_sha256: 371b134a9c7cb57ce6a649398f560784fdee402891af755d929bcee733278e21
+    local_sha256: 371b134a9c7cb57ce6a649398f560784fdee402891af755d929bcee733278e21
+    verified: "2026-09-17"
+
+  - service: Workflow
+    spec: Workflow.yaml
+    project: osdu/platform/data-flow/ingestion/ingestion-workflow
+    path: docs/api/community/v1/openapi.yaml
+    ref: master
+    url: https://community.opengroup.org/osdu/platform/data-flow/ingestion/ingestion-workflow/-/raw/master/docs/api/community/v1/openapi.yaml
+    state: identical
+    upstream_sha256: 75bc51063a395c1f9bc764822636f92767f6e10ac17b69354163bf8267c14c57
+    local_sha256: 75bc51063a395c1f9bc764822636f92767f6e10ac17b69354163bf8267c14c57
+    verified: "2026-09-17"

@@ -1,0 +1,314 @@
+{
+  "x-osdu-license": "Copyright 2026, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "$id": "https://schema.osdu.opengroup.org/json/master-data/RigPump.1.0.0.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "x-osdu-schema-source": "osdu:wks:master-data--RigPump:1.0.0",
+  "title": "RigPump",
+  "description": "Defines the properties of a Pump found on a rig.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "Previously called ResourceID or SRN which identifies this OSDU resource object without version.",
+      "title": "Entity ID",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:master-data\\-\\-RigPump:[\\w\\-\\.\\:\\%]+$",
+      "example": "namespace:master-data--RigPump:4245afa9-a835-57d3-8200-6e7ed49391b4"
+    },
+    "kind": {
+      "description": "The schema identification for the OSDU resource object following the pattern {Namespace}:{Source}:{Type}:{VersionMajor}.{VersionMinor}.{VersionPatch}. The versioning scheme follows the semantic versioning, https://semver.org/.",
+      "title": "Entity Kind",
+      "type": "string",
+      "pattern": "^[\\w\\-\\.]+:[\\w\\-\\.]+:[\\w\\-\\.]+:[0-9]+.[0-9]+.[0-9]+$",
+      "example": "osdu:wks:master-data--RigPump:1.0.0"
+    },
+    "version": {
+      "description": "The version number of this OSDU resource; set by the framework.",
+      "title": "Version Number",
+      "type": "integer",
+      "format": "int64",
+      "example": 1562066009929332
+    },
+    "acl": {
+      "description": "The access control tags associated with this entity.",
+      "title": "Access Control List",
+      "$ref": "../abstract/AbstractAccessControlList.1.0.0.json"
+    },
+    "legal": {
+      "description": "The entity's legal tags and compliance status. The actual contents associated with the legal tags is managed by the Compliance Service.",
+      "title": "Legal Tags",
+      "$ref": "../abstract/AbstractLegalTags.1.0.0.json"
+    },
+    "tags": {
+      "title": "Tag Dictionary",
+      "description": "A generic dictionary of string keys mapping to string value. Only strings are permitted as keys and values.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "example": {
+        "NameOfKey": "String value"
+      }
+    },
+    "createTime": {
+      "description": "Timestamp of the time at which initial version of this OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:46:20.163Z"
+    },
+    "createUser": {
+      "title": "Resource Object Creation User Reference",
+      "description": "The user reference, which created the first version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "modifyTime": {
+      "description": "Timestamp of the time at which this version of the OSDU resource object was created. Set by the System. The value is a combined date-time string in ISO-8601 given in UTC.",
+      "title": "Resource Object Version Creation DateTime",
+      "type": "string",
+      "format": "date-time",
+      "example": "2020-12-16T11:52:24.477Z"
+    },
+    "modifyUser": {
+      "title": "Resource Object Version Creation User Reference",
+      "description": "The user reference, which created this version of this resource object. Set by the System.",
+      "type": "string",
+      "example": "some-user@some-company-cloud.com"
+    },
+    "ancestry": {
+      "description": "The links to data, which constitute the inputs, from which this record instance is derived.",
+      "title": "Ancestry",
+      "$ref": "../abstract/AbstractLegalParentList.1.0.0.json"
+    },
+    "meta": {
+      "description": "The Frame of Reference meta data section linking the named properties to self-contained definitions.",
+      "title": "Frame of Reference Meta Data",
+      "type": "array",
+      "items": {
+        "$ref": "../abstract/AbstractMetaItem.1.0.0.json"
+      }
+    },
+    "data": {
+      "allOf": [
+        {
+          "$ref": "../abstract/AbstractCommonResources.1.0.1.json"
+        },
+        {
+          "$ref": "../abstract/AbstractMaster.1.2.0.json"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "Purpose": {
+              "type": "string",
+              "title": "Purpose",
+              "description": "Purpose of pump.",
+              "example": "Primary drilling fluid circulation"
+            },
+            "MaxMechanicalPower": {
+              "type": "number",
+              "title": "Max Mechanical Power",
+              "description": "Maximum mechanical power defined by the manufacturer.",
+              "example": "2200 hp",
+              "x-osdu-frame-of-reference": "UOM:power",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML.Rig.MudPump.PowMechMx",
+              "x-osdu-attribution-revision": "v2.1"
+            },
+            "WorkingPower": {
+              "type": "number",
+              "title": "Working Power",
+              "description": "Maximum power authorized by the drilling contractor",
+              "example": "1800 hp",
+              "x-osdu-frame-of-reference": "UOM:power"
+            },
+            "MaxPumpPressure": {
+              "type": "number",
+              "title": "Maximum Pump Pressure",
+              "description": "Maximum required/delivered pressure from/by the pump",
+              "example": "7500 psi",
+              "x-osdu-frame-of-reference": "UOM:pressure",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML.Rig.MudPump.PresMx",
+              "x-osdu-attribution-revision": "v2.1"
+            },
+            "MaxPumpFlowrate": {
+              "type": "number",
+              "title": "Maximum Pump Flowrate",
+              "description": "Maximum required/delivered flowrate from/by the pump",
+              "example": "1250 gpm",
+              "x-osdu-frame-of-reference": "UOM:volume per time",
+              "x-osdu-attribution-authority": "The Open Group",
+              "x-osdu-attribution-publication": "The OSDU Data Platform",
+              "x-osdu-attribution-revision": "evergreen"
+            },
+            "NumOfCylinders": {
+              "type": "integer",
+              "title": "Number Of Cylinders",
+              "description": "Number of cylinders (3 = single acting, 2 = double acting)",
+              "example": 3,
+              "x-osdu-frame-of-reference": "UOM:dimensionless",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML Rig.MudPump.NumCyl",
+              "x-osdu-attribution-revision": "v2.1"
+            },
+            "RodOuterDiameter": {
+              "type": "number",
+              "title": "Rod Outer Diameter",
+              "description": "Rod outer diameter.",
+              "example": "5 in",
+              "x-osdu-frame-of-reference": "UOM:length",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML Rig.MudPump.OdRod",
+              "x-osdu-attribution-revision": "v2.1"
+            },
+            "LinerInnerDiameter": {
+              "type": "number",
+              "title": "Liner Inner Diameter",
+              "description": "Inner diameter of the pump liner.",
+              "example": "6.5 in",
+              "x-osdu-frame-of-reference": "UOM:length",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML Rig.MudPump.IdLiner",
+              "x-osdu-attribution-revision": "v2.1"
+            },
+            "Action": {
+              "type": "integer",
+              "title": "Action",
+              "description": "Pump action. 1 = single acting, 2 = double acting.",
+              "example": 1,
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML Rig.MudPump.PumpAction",
+              "x-osdu-attribution-revision": "v2.1"
+            },
+            "Efficiency": {
+              "type": "number",
+              "title": "Efficiency",
+              "description": "Efficiency of the pump.",
+              "example": 0.92,
+              "x-osdu-frame-of-reference": "UOM:dimensionless",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML Rig.MudPump.Eff",
+              "x-osdu-attribution-revision": "v2.1"
+            },
+            "StrokeLength": {
+              "type": "number",
+              "title": "Stroke Length",
+              "description": "Stroke length.",
+              "example": "18 in",
+              "x-osdu-frame-of-reference": "UOM:length",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML Rig.MudPump.LenStroke",
+              "x-osdu-attribution-revision": "v2.1"
+            },
+            "PumpStrokeMaximum": {
+              "type": "number",
+              "title": "Pump Stroke Maximum",
+              "description": "Maximum SPM from/by the pump defined by the manufacturer.",
+              "example": "120 strokes/min",
+              "x-osdu-frame-of-reference": "UOM:power",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML Rig.MudPump.SpmMx",
+              "x-osdu-attribution-revision": "v2.1"
+            },
+            "DisplacementOutput": {
+              "type": "number",
+              "title": "Displacement Output",
+              "description": "Pump displacement. /// The volume of fluid the pump can displace per stroke.",
+              "example": "0.151 bbl/stroke",
+              "x-osdu-frame-of-reference": "UOM:volume",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML Rig.MudPump.Displacement",
+              "x-osdu-attribution-revision": "v2.1"
+            },
+            "HydraulicPowerMaximum": {
+              "type": "number",
+              "title": "Hydraulic Power Maximum",
+              "description": "Maximum power defined by the manufacturer.",
+              "example": "2000 hp",
+              "x-osdu-frame-of-reference": "UOM:power",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML Rig.MudPump.PowHydMx",
+              "x-osdu-attribution-revision": "v2.1"
+            },
+            "HydraulicPowerAllowed": {
+              "type": "number",
+              "title": "Hydraulic Power Allowed",
+              "description": "Maximum hydraulic power authorized by the Drilling Contractor (manufacturing maximum including a safety factor)",
+              "example": "1700 hp",
+              "x-osdu-frame-of-reference": "UOM:power"
+            },
+            "DampenerPressure": {
+              "type": "number",
+              "title": "Dampener Pressure",
+              "description": "Pulsation dampener pressure.",
+              "example": "900 psi",
+              "x-osdu-frame-of-reference": "UOM:pressure",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML Rig.MudPump.PresDamp",
+              "x-osdu-attribution-revision": "v2.1"
+            },
+            "DampenerVolume": {
+              "type": "number",
+              "title": "Dampener Volume",
+              "description": "Pulsation dampener volume.",
+              "example": "50 gal",
+              "x-osdu-frame-of-reference": "UOM:volume",
+              "x-osdu-attribution-authority": "Energistics",
+              "x-osdu-attribution-publication": "WITSML Rig.MudPump.VolDamp",
+              "x-osdu-attribution-revision": "v2.1"
+            },
+            "SuperchargerMake": {
+              "type": "string",
+              "title": "Supercharger Make",
+              "description": "Supercharger Make",
+              "example": "Nov Mission"
+            },
+            "SuperchargerModel": {
+              "type": "string",
+              "title": "Supercharger Model",
+              "description": "Supercharger Model",
+              "example": "ChargePro 1600"
+            }
+          },
+          "title": "IndividualProperties"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "ExtensionProperties": {
+              "type": "object"
+            }
+          },
+          "title": "ExtensionProperties"
+        }
+      ]
+    }
+  },
+  "required": [
+    "kind",
+    "acl",
+    "legal"
+  ],
+  "additionalProperties": false,
+  "x-osdu-review-status": "Accepted",
+  "x-osdu-virtual-properties": {
+    "data.VirtualProperties.DefaultLocation": {
+      "type": "object",
+      "priority": [
+        {
+          "path": "data.SpatialLocation"
+        }
+      ]
+    },
+    "data.VirtualProperties.DefaultName": {
+      "type": "string",
+      "priority": [
+        {
+          "path": "data.FacilityName"
+        }
+      ]
+    }
+  },
+  "x-osdu-inheriting-from-kind": []
+}
