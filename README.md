@@ -166,8 +166,10 @@ still listed, but returns `Schema lookup unavailable`.
 ### Client configuration
 
 This is a standard stdio MCP server, so it works with any MCP-capable client.
-Clients differ only in *where* the config file lives and *what the wrapper key
-is called* — the `command` and `args` are the same everywhere.
+Clients differ in *where* the config file lives, *what the wrapper key is
+called*, and — for OpenCode alone — *how the launch command is spelled*. The
+executable and its arguments are the same everywhere; only the JSON around them
+changes.
 
 Two things to adjust in every example below:
 
@@ -197,15 +199,15 @@ tools *silently* while still showing the server as connected.
 
 Almost every client uses one of three shapes. Pick the matching example file:
 
-| Client | Config file | Wrapper key | Example file |
-|---|---|---|---|
-| Claude Desktop | `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS)<br>`%APPDATA%\\Claude\\claude_desktop_config.json` (Windows) | `mcpServers` | `claude_desktop_config.example.json` |
-| GitHub Copilot CLI | `~/.copilot/mcp-config.json` | `mcpServers` | `copilot_mcp_config.example.json` |
-| Cursor | `~/.cursor/mcp.json` (global) or `.cursor/mcp.json` (project) | `mcpServers` | `cursor_mcp.example.json` |
-| Windsurf, Zed, most others | client-specific | `mcpServers` | any `mcpServers` example |
-| VS Code | `.vscode/mcp.json` (workspace) or **MCP: Open User Configuration** | **`servers`** | `vscode_mcp.example.json` |
-| Claude Code | managed by CLI — see below | — | — |
-| OpenCode | `opencode.json` (project) or `~/.config/opencode/opencode.json` | **`mcp`** | `opencode.example.json` |
+| Client | Config file | Wrapper key | Command shape | Example file |
+|---|---|---|---|---|
+| Claude Desktop | `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS)<br>`%APPDATA%\\Claude\\claude_desktop_config.json` (Windows) | `mcpServers` | `command` + `args` | `claude_desktop_config.example.json` |
+| GitHub Copilot CLI | `~/.copilot/mcp-config.json` | `mcpServers` | `command` + `args` | `copilot_mcp_config.example.json` |
+| Cursor | `~/.cursor/mcp.json` (global) or `.cursor/mcp.json` (project) | `mcpServers` | `command` + `args` | `cursor_mcp.example.json` |
+| Windsurf, Zed, most others | client-specific | `mcpServers` | `command` + `args` | any `mcpServers` example |
+| VS Code | `.vscode/mcp.json` (workspace) or **MCP: Open User Configuration** | **`servers`** | `command` + `args`, plus `type` | `vscode_mcp.example.json` |
+| Claude Code | managed by CLI — see below | — | — | — |
+| OpenCode | `opencode.json` (project) or `~/.config/opencode/opencode.json` | **`mcp`** | **single `command` array** | `opencode.example.json` |
 
 Merge the block into the file if it already exists — don't overwrite it, as
 these files usually hold other servers too.
@@ -256,20 +258,28 @@ into PowerShell as well as a POSIX shell.
 
 #### OpenCode
 
+OpenCode is the one client that does not take `command` + `args`. Its
+`McpLocalConfig` wants a **single `command` array** holding the executable and
+every argument, and the schema sets `additionalProperties: false`, so an `args`
+key is rejected outright rather than ignored.
+
 Copy `opencode.example.json` to `opencode.json` in the project root (or merge into `~/.config/opencode/opencode.json` for global use):
 
 ```json
 {
+  "$schema": "https://opencode.ai/config.json",
   "mcp": {
     "osdu-discovery": {
       "type": "local",
-      "command": "/opt/homebrew/bin/uv",
-      "args": ["run", "--project", "/path/to/osdu-mcp-poc", "osdu-mcp", "--db", "/path/to/osdu-mcp-poc/chroma_db", "--schemas", "/path/to/osdu-mcp-poc/schemas"],
+      "command": ["/opt/homebrew/bin/uv", "run", "--project", "/path/to/osdu-mcp-poc", "osdu-mcp", "--db", "/path/to/osdu-mcp-poc/chroma_db", "--schemas", "/path/to/osdu-mcp-poc/schemas"],
       "enabled": true
     }
   }
 }
 ```
+
+Keeping `$schema` at the top is worth it: editors then flag a malformed entry
+in place, instead of OpenCode rejecting the file at startup.
 
 ### Verifying the connection
 

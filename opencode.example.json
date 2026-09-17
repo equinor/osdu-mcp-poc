@@ -3,8 +3,8 @@
   "mcp": {
     "osdu-discovery": {
       "type": "local",
-      "command": "/opt/homebrew/bin/uv",
-      "args": [
+      "command": [
+        "/opt/homebrew/bin/uv",
         "run",
         "--project",
         "/path/to/osdu-mcp-poc",

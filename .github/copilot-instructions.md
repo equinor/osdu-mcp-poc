@@ -91,7 +91,9 @@ Example configs for wiring the MCP server into each supported client are include
 | `copilot_mcp_config.example.json` | GitHub Copilot CLI — merge into `~/.copilot/mcp-config.json`, or use `/mcp add` in the interactive session |
 | `cursor_mcp.example.json` | Cursor — merge `mcpServers` block into `~/.cursor/mcp.json` (global) or `.cursor/mcp.json` (project) |
 | `vscode_mcp.example.json` | VS Code — merge into `.vscode/mcp.json`. Note VS Code uses the `servers` key and requires `"type": "stdio"`, so the `mcpServers` examples are **not** interchangeable with it |
-| `opencode.example.json` | OpenCode — copy to `opencode.json` in project root, or merge `mcp` block into `~/.config/opencode/opencode.json` |
+| `opencode.example.json` | OpenCode — copy to `opencode.json` in project root, or merge `mcp` block into `~/.config/opencode/opencode.json`. OpenCode takes a **single `command` array** (executable plus arguments) and its schema is `additionalProperties: false`, so an `args` key is rejected, not ignored |
 
 When adding a new client example, keep the server name `osdu-discovery`: clients namespace tools as `<server-name>-<tool-name>`, and a name containing a space or other character outside `[A-Za-z0-9_-]` yields an invalid tool name that some clients drop silently. Keep `command` as an absolute path to `uv` — clients spawn the server without the user's shell `PATH`.
+
+Launching the command is not enough to validate an example: it proves the server runs, not that the client accepts the file. Where a client publishes a config schema (OpenCode's is at `https://opencode.ai/config.json`), validate the example against it.
 
