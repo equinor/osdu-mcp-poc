@@ -136,7 +136,8 @@ osdu-mcp --db ./chroma_db --schemas ./schemas
 ```
 
 `--schemas` is optional but recommended: it enables the `get_schema` tool.
-Without it, only `search_osdu` is available.
+Without it, `get_schema` is still listed but every call returns
+`Schema lookup unavailable`, so only `search_osdu` does useful work.
 
 ### Tool: `search_osdu`
 
@@ -159,16 +160,59 @@ travel with it. Use it after `search_osdu` to see a matched property in context.
 | `kind` | string | required | Full id (`osdu:wks:dataset--File.Generic:1.1.0`), versioned name (`File.Generic.1.1.0`), or bare name (`File.Generic`, → highest version) |
 | `resolved` | boolean | `true` | `true` inlines cross-file `$ref`s into the abstract schemas; `false` returns the raw on-disk doc |
 
-Requires the server to be started with `--schemas`.
+Requires the server to be started with `--schemas`. Without it the tool is
+still listed, but returns `Schema lookup unavailable`.
 
 ### Client configuration
 
-Replace `/path/to/osdu-mcp-poc` with the absolute path to this repo in all examples below.
+This is a standard stdio MCP server, so it works with any MCP-capable client.
+Clients differ in *where* the config file lives, *what the wrapper key is
+called*, and — for OpenCode alone — *how the launch command is spelled*. The
+executable and its arguments are the same everywhere; only the JSON around them
+changes.
 
-#### Claude Desktop
+Two things to adjust in every example below:
 
-Merge the `mcpServers` block into `~/Library/Application Support/Claude/claude_desktop_config.json`.
-See `claude_desktop_config.example.json` for the full file.
+1. **Replace `/path/to/osdu-mcp-poc`** with the absolute path to this repo.
+   Relative paths and `~` are not expanded by most clients.
+2. **Use the absolute path to your own `uv`.** Clients launch the server
+   without your shell's `PATH`, so a bare `uv` usually fails with
+   `ENOENT`/`command not found`. Find yours with `which uv` (macOS/Linux),
+   `where uv` (Windows Command Prompt) or `where.exe uv` (PowerShell — plain
+   `where` is an alias for `Where-Object` there). Common locations:
+
+   | Platform | Typical path |
+   |---|---|
+   | macOS, Homebrew (Apple Silicon) | `/opt/homebrew/bin/uv` |
+   | macOS, Homebrew (Intel) | `/usr/local/bin/uv` |
+   | macOS/Linux, `uv` standalone installer | `/Users/<you>/.local/bin/uv`, `/home/<you>/.local/bin/uv` |
+   | Windows | `C:\\Users\\<you>\\.local\\bin\\uv.exe` |
+
+   On Windows, remember that JSON requires escaped backslashes (`\\`) or forward slashes.
+
+**Keep the server name `osdu-discovery`.** Clients namespace tools as
+`<server-name>-<tool-name>`, and names containing spaces or other characters
+outside `[A-Za-z0-9_-]` produce an invalid tool name. Some clients drop the
+tools *silently* while still showing the server as connected.
+
+#### Which shape does my client use?
+
+Almost every client uses one of three shapes. Pick the matching example file:
+
+| Client | Config file | Wrapper key | Command shape | Example file |
+|---|---|---|---|---|
+| Claude Desktop | `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS)<br>`%APPDATA%\\Claude\\claude_desktop_config.json` (Windows) | `mcpServers` | `command` + `args` | `claude_desktop_config.example.json` |
+| GitHub Copilot CLI | `~/.copilot/mcp-config.json` | `mcpServers` | `command` + `args` | `copilot_mcp_config.example.json` |
+| Cursor | `~/.cursor/mcp.json` (global) or `.cursor/mcp.json` (project) | `mcpServers` | `command` + `args` | `cursor_mcp.example.json` |
+| Windsurf, Zed, most others | client-specific | `mcpServers` | `command` + `args` | any `mcpServers` example |
+| VS Code | `.vscode/mcp.json` (workspace) or **MCP: Open User Configuration** | **`servers`** | `command` + `args`, plus `type` | `vscode_mcp.example.json` |
+| Claude Code | managed by CLI — see below | — | — | — |
+| OpenCode | `opencode.json` (project) or `~/.config/opencode/opencode.json` | **`mcp`** | **single `command` array** | `opencode.example.json` |
+
+Merge the block into the file if it already exists — don't overwrite it, as
+these files usually hold other servers too.
+
+#### `mcpServers` clients (Claude Desktop, Copilot CLI, Cursor, most others)
 
 ```json
 {
@@ -181,27 +225,95 @@ See `claude_desktop_config.example.json` for the full file.
 }
 ```
 
-#### GitHub Copilot CLI
+In the Copilot CLI you can also run `/mcp add` in an interactive session and
+fill in the fields instead of editing the file.
 
-Run `/mcp add` inside the Copilot CLI interactive session and fill in the fields, **or** edit `~/.copilot/mcp-config.json` directly.
-See `copilot_mcp_config.example.json` for the full file. The JSON format is identical to Claude Desktop.
+#### VS Code
+
+VS Code uses `servers`, not `mcpServers`, and wants an explicit `type` — the
+block above will **not** work if pasted as-is. Use `vscode_mcp.example.json`,
+or run **MCP: Add Server** from the Command Palette.
+
+```json
+{
+  "servers": {
+    "osdu-discovery": {
+      "type": "stdio",
+      "command": "/opt/homebrew/bin/uv",
+      "args": ["run", "--project", "/path/to/osdu-mcp-poc", "osdu-mcp", "--db", "/path/to/osdu-mcp-poc/chroma_db", "--schemas", "/path/to/osdu-mcp-poc/schemas"]
+    }
+  }
+}
+```
+
+#### Claude Code
+
+```bash
+claude mcp add osdu-discovery -- /opt/homebrew/bin/uv run --project /path/to/osdu-mcp-poc osdu-mcp --db /path/to/osdu-mcp-poc/chroma_db --schemas /path/to/osdu-mcp-poc/schemas
+```
+
+Everything after `--` is the command to launch. Add `-s user` to make it
+available outside the current project. Kept on one line so it pastes safely
+into PowerShell as well as a POSIX shell.
 
 #### OpenCode
+
+OpenCode is the one client that does not take `command` + `args`. Its
+`McpLocalConfig` wants a **single `command` array** holding the executable and
+every argument, and the schema sets `additionalProperties: false`, so an `args`
+key is rejected outright rather than ignored.
 
 Copy `opencode.example.json` to `opencode.json` in the project root (or merge into `~/.config/opencode/opencode.json` for global use):
 
 ```json
 {
+  "$schema": "https://opencode.ai/config.json",
   "mcp": {
     "osdu-discovery": {
       "type": "local",
-      "command": "/opt/homebrew/bin/uv",
-      "args": ["run", "--project", "/path/to/osdu-mcp-poc", "osdu-mcp", "--db", "/path/to/osdu-mcp-poc/chroma_db", "--schemas", "/path/to/osdu-mcp-poc/schemas"],
+      "command": ["/opt/homebrew/bin/uv", "run", "--project", "/path/to/osdu-mcp-poc", "osdu-mcp", "--db", "/path/to/osdu-mcp-poc/chroma_db", "--schemas", "/path/to/osdu-mcp-poc/schemas"],
       "enabled": true
     }
   }
 }
 ```
+
+Keeping `$schema` at the top is worth it: editors then flag a malformed entry
+in place, instead of OpenCode rejecting the file at startup.
+
+### Verifying the connection
+
+Restart the client fully after editing its config — most read MCP config only
+at startup.
+
+To check the server independently of any client, run the same command from
+your terminal:
+
+```bash
+/opt/homebrew/bin/uv run --project /path/to/osdu-mcp-poc osdu-mcp --db /path/to/osdu-mcp-poc/chroma_db --schemas /path/to/osdu-mcp-poc/schemas
+```
+
+A healthy start prints one line to stderr and then waits on stdin without
+returning to the prompt:
+
+```
+Schema index: 1427 files from '/path/to/osdu-mcp-poc/schemas' — get_schema enabled.
+```
+
+If you passed `--schemas` and don't see that line, the path is wrong — the
+server prints a `WARNING` and carries on with `get_schema` disabled. If the
+command exits immediately instead of waiting, the error on stderr is the same
+one the client is hitting.
+
+### Troubleshooting
+
+| Symptom | Cause and fix |
+|---|---|
+| Server fails to start, `ENOENT` / `command not found` | `command` is a bare `uv` or the wrong absolute path. Use the output of `which uv` / `where.exe uv`. |
+| Exits immediately, `No collections found` (exit code 1) | The index has not been built, or `--db` points at the wrong folder. Run `osdu-index` first — see [Index](#index). `chroma_db/` is generated, not shipped in the repo. |
+| Server connects but no tools appear | Server name contains a space or other unsupported character. Rename it to `osdu-discovery`. |
+| `get_schema` returns `Schema lookup unavailable` | The server was started without `--schemas`, or the path given didn't exist. The tool is always registered, so this is a runtime message rather than a missing tool. |
+| Tools missing after the client was already running | Config is only read at startup, and some clients cache the tool list. Restart the client. |
 
 ## Next steps
 

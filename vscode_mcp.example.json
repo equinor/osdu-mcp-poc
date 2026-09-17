@@ -1,10 +1,9 @@
 {
-  "$schema": "https://opencode.ai/config.json",
-  "mcp": {
+  "servers": {
     "osdu-discovery": {
-      "type": "local",
-      "command": [
-        "/opt/homebrew/bin/uv",
+      "type": "stdio",
+      "command": "/opt/homebrew/bin/uv",
+      "args": [
         "run",
         "--project",
         "/path/to/osdu-mcp-poc",
@@ -13,8 +12,7 @@
         "/path/to/osdu-mcp-poc/chroma_db",
         "--schemas",
         "/path/to/osdu-mcp-poc/schemas"
-      ],
-      "enabled": true
+      ]
     }
   }
 }
