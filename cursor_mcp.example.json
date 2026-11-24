@@ -10,7 +10,9 @@
         "--db",
         "/path/to/osdu-mcp-poc/chroma_db",
         "--schemas",
-        "/path/to/osdu-mcp-poc/schemas"
+        "/path/to/osdu-mcp-poc/schemas",
+        "--model",
+        "/path/to/osdu-mcp-poc/model/osdu_latest.yaml"
       ]
     }
   }

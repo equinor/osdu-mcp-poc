@@ -149,8 +149,8 @@ SPEC_REF = "master"
 # The schema snapshot. data-definitions tag v0.30.0 is the M27.0 milestone
 # publication -- the same snapshot osdu-csharp-models pins as schemas/M27.0.
 SCHEMA_PROJECT = "osdu/data/data-definitions"
-SCHEMA_TAG = "v0.30.0"
-SCHEMA_SNAPSHOT = "M27.0"
+SCHEMA_TAG = "v0.30.1"
+SCHEMA_SNAPSHOT = "M27.1"
 SCHEMA_SUBDIR = "Generated"
 
 CONNECT_TIMEOUT = 30
