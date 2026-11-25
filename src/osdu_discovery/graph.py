@@ -80,6 +80,9 @@ class Edge:
     deprecated: bool = False
     origin: str = ""  # class that defines the attribute (entity, abstract or nested)
     common: bool = False  # inherited from a mixin shared by many entities
+    # The id sits in an array (the attribute or one of its ancestors is
+    # multivalued), so one record can hold several different targets here.
+    repeated: bool = False
 
 
 @dataclass
@@ -144,8 +147,9 @@ class OsduGraph:
                 quantity = _annotation(attr, "uom_quantity")
                 if quantity:
                     self.units[entity].append((path, quantity))
+                repeated = "[]" in path or bool(attr.get("multivalued"))
                 for target in self._targets(attr):
-                    raw.append((entity, path, target, deprecated, origin, chain))
+                    raw.append((entity, path, target, deprecated, origin, repeated, chain))
         # An edge is "common" when it reaches the entity through a class that
         # most entities share (AbstractCommonResources, AbstractMaster,
         # AbstractWPCGroupType, TechnicalAssurances, NameAliases, the vertical
@@ -158,9 +162,9 @@ class OsduGraph:
                 users[c].add(entity)
         shared = {c for c, us in users.items() if len(us) >= COMMON_THRESHOLD}
         self.common_classes = shared
-        for entity, path, target, deprecated, origin, chain in raw:
+        for entity, path, target, deprecated, origin, repeated, chain in raw:
             common = not self.is_wildcard(target) and any(c in shared for c in chain)
-            edge = Edge(entity, path, target, deprecated, origin, common)
+            edge = Edge(entity, path, target, deprecated, origin, common, repeated)
             self.out_edges[entity].append(edge)
             self.in_edges[target].append(edge)
         # Hubs: non-reference entities referenced (by domain edges) from a
@@ -224,11 +228,16 @@ class OsduGraph:
         out = []
         for tok in raw.split(","):
             group, _, name = tok.strip().partition("::")
-            if group == "abstract" or not name:
+            if group == "abstract":
                 continue  # structural containment, not a record reference
-            if name == "AnyObject":
-                # Wildcard: any record of that group ("*" for any group).
-                out.append("*" if group == "any-group-type" else f"{group}/*")
+            if name == "AnyObject" or not name:
+                # Wildcard: any record of that group ("*" for any group). The
+                # model spells it either ``group::AnyObject`` or ``group::``
+                # (AbstractWPCGroupTypeArtefacts.ResourceID is ``dataset::``).
+                if group == "any-group-type":
+                    out.append("*")
+                elif group in ENTITY_GROUPS:
+                    out.append(f"{group}/*")
                 continue
             key = f"{group}/{_VERSION_RE.sub('', name)}"
             if key in self.entities:
@@ -281,12 +290,20 @@ class OsduGraph:
         include_reference_data: bool = True,
         include_common: bool = True,
         goal: str | tuple[str, ...] | None = None,
+        reverse: bool = False,
     ) -> list[tuple[str, Edge, str]]:
         """(other, edge, direction) with direction 'out' (key references
         other) or 'in' (other references key). Wildcard out-edges are only
         followed when they cover ``goal`` (one key or several): expanding
         "any dataset" into every dataset kind would connect everything to
-        everything."""
+        everything.
+
+        With ``reverse`` the result is every ``other`` from which a forward
+        step onto ``key`` is allowed, rather than every ``other`` reachable
+        from ``key``. The two differ because the filters are one-sided (a
+        common edge may only *land on* an endpoint); find_paths uses the
+        reverse form to measure distance to the goal, which must never
+        overestimate a forward route."""
         res = []
         goals = (goal,) if isinstance(goal, str) else tuple(goal or ())
 
@@ -294,14 +311,26 @@ class OsduGraph:
             # Common-mixin edges are kept only when they land on an endpoint:
             # "Wellbore.data.GeoContexts[].FieldID -> Field" answers Wellbore->Field,
             # but as a stepping stone it would put everything two hops apart.
-            if e.common and not include_common and other not in goals:
+            # Going backwards, the landing end is ``key``, not ``other``.
+            landing = key if reverse else other
+            if e.common and not include_common and landing not in goals:
                 return False
             return include_reference_data or other in goals or not other.startswith("reference-data/")
 
         for e in self.out_edges.get(key, []):
             other = e.target
             if self.is_wildcard(other):
-                hit = next((g for g in goals if other in PATH_WILDCARDS and self.matches(other, g)), None)
+                if other not in PATH_WILDCARDS:
+                    continue
+                if reverse:
+                    # Forward, any kind the wildcard covers may step onto
+                    # ``key`` through this edge (an incoming wildcard edge),
+                    # so every one of them is a predecessor.
+                    for cand in self.entities:
+                        if self.matches(other, cand) and keep(cand, e):
+                            res.append((cand, e, "out"))
+                    continue
+                hit = next((g for g in goals if self.matches(other, g)), None)
                 if hit is None:
                     continue
                 other = hit
@@ -345,15 +374,18 @@ class OsduGraph:
         kw = dict(include_reference_data=include_reference_data, include_common=include_common, goal=(start, goal))
         blocked = set() if include_hubs else (self.hubs - {start, goal})
 
-        # Distance-to-goal by BFS from the goal (the graph is symmetric because
-        # each edge is visible from both ends), used to prune the DFS below.
+        # Distance-to-goal by BFS backwards from the goal, used to prune the
+        # DFS below. It must never overestimate: a too-large distance would
+        # prune a valid route. It may underestimate (it ignores the
+        # same-slot rule), which only weakens pruning; the budget loop below
+        # copes with that.
         to_goal = {goal: 0}
         q = deque([goal])
         while q:
             node = q.popleft()
             if to_goal[node] >= max_hops:
                 continue
-            for other, _e, _d in self.neighbours(node, **kw):
+            for other, _e, _d in self.neighbours(node, reverse=True, **kw):
                 if other not in to_goal and other not in blocked and (
                     include_reference_data or other == start or not other.startswith("reference-data/")
                 ):
@@ -361,9 +393,9 @@ class OsduGraph:
                     q.append(other)
         if start not in to_goal:
             return []
-        budget = min(max_hops, to_goal[start] + extra_hops)
 
         paths: list[list[tuple[str, Edge, str]]] = []
+        budget = to_goal[start]
 
         def dfs(node: str, acc: list, visited: set):
             if node == goal:
@@ -374,8 +406,19 @@ class OsduGraph:
             for other, edge, direction in self.neighbours(node, **kw):
                 if other in visited or other in blocked or to_goal.get(other, budget + 1) > remaining - 1:
                     continue
-                if prev and prev[2] == "in" and direction == "out" and prev[1].path == edge.path:
-                    continue  # entered and left via the same polymorphic slot
+                if (
+                    prev
+                    and prev[2] == "in"
+                    and direction == "out"
+                    and prev[1].path == edge.path
+                    and not edge.repeated
+                ):
+                    # Entered and left via the same single-valued slot:
+                    # X.ReportingEntityID is a Wellbore *or* a Reservoir,
+                    # which does not relate the two. An array slot is
+                    # different: one EquipmentInventory lists a RigAnchor
+                    # and a RigPump side by side.
+                    continue
                 acc.append((other, edge, direction))
                 visited.add(other)
                 dfs(other, acc, visited)
@@ -384,7 +427,26 @@ class OsduGraph:
                 if len(paths) >= 5000:  # safety valve on dense neighbourhoods
                     return
 
-        dfs(start, [], {start})
+        # The BFS bound can be shorter than any route the DFS accepts, so
+        # widen the budget until one is found, then allow ``extra_hops`` on
+        # top of that real length.
+        while budget <= max_hops:
+            dfs(start, [], {start})
+            if paths:
+                break
+            budget += 1
+        if not paths:
+            return []
+        final = min(max_hops, budget + extra_hops)
+        if final > budget:
+            # Keep the shortest routes aside: the wider search can fill the
+            # safety valve with longer alternatives before it meets them
+            # again. They are re-found too, which the dedupe below removes.
+            shortest = list(paths)
+            paths.clear()
+            budget = final
+            dfs(start, [], {start})
+            paths[:0] = shortest
         # Rank: hops, with each common-mixin link costing an extra hop
         # (WellLog->Wellbore->Well beats WellLog's vertical-reference id
         # pointing at a Well); then fewer deprecated links; then shallower

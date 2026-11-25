@@ -26,6 +26,7 @@ osdu-mcp-poc/
 ├── schemas/                # OSDU JSON Schemas, data-definitions Generated/
 ├── model/
 │   └── osdu_latest.yaml    # OSDU LinkML Logical Data Model (see Model provenance)
+├── tests/                  # pytest suite: uv run pytest
 ├── pyproject.toml
 └── README.md
 ```
@@ -258,8 +259,11 @@ through a shared hub. The search therefore:
 - follows **"any dataset" wildcards** (`data.Datasets` on every WPC) but no
   other wildcards ("any record", "any master-data"), which would link
   everything to everything;
-- never treats one polymorphic slot as a link: `FlowTest.data.ReportingEntityID`
-  can be a Wellbore *or* a Reservoir, but that does not relate the two.
+- never treats one single-valued polymorphic slot as a link:
+  `FlowTest.data.ReportingEntityID` can be a Wellbore *or* a Reservoir, but
+  that does not relate the two. Array slots are different: one
+  `EquipmentInventory` lists a RigAnchor and a RigPump side by side in
+  `data.EquipmentInventory[].EquipmentID`, so that route is kept.
 
 Paths up to one hop longer than the shortest are also returned, ranked with
 each common link counting as an extra hop. For example, `WellLog → Wellbore →
@@ -421,7 +425,7 @@ returning to the prompt:
 
 ```
 Schema index: 1450 files from '/path/to/osdu-mcp-poc/schemas' — get_schema enabled.
-Relationship graph: 818 kinds, 22165 reference links from '/path/to/osdu-mcp-poc/model/osdu_latest.yaml' — relationship tools enabled.
+Relationship graph: 818 kinds, 22270 reference links from '/path/to/osdu-mcp-poc/model/osdu_latest.yaml' — relationship tools enabled.
 ```
 
 If you passed `--schemas` or `--model` and don't see the matching line, the
