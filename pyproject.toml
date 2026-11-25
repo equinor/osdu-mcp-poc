@@ -23,3 +23,8 @@ where = ["src"]
 [build-system]
 requires = ["setuptools>=80.0.0"]
 build-backend = "setuptools.build_meta"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.2.0",
+]
