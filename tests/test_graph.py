@@ -138,3 +138,23 @@ def test_model_canonical_routes_unchanged(graph):
         ("master-data/Wellbore", "data.WellID", "master-data/Well"),
     ]
     assert paths_between(graph, "File.Generic", "Wellbore")
+
+
+def test_shortest_route_survives_the_path_cap():
+    # One 3-hop route S -> X -> Y -> G, and 71 * 71 = 5041 four-hop
+    # alternatives S -> Ai -> Bj -> C -> G that the DFS meets first. Widening
+    # the budget for extra_hops fills the 5,000-path cap with those; the
+    # 3-hop route must still be returned, and ranked first.
+    n = 71
+    edges = [Edge("master-data/S", "data.AID", f"master-data/A{i}") for i in range(n)]
+    edges += [Edge(f"master-data/A{i}", "data.BID", f"master-data/B{j}") for i in range(n) for j in range(n)]
+    edges += [Edge(f"master-data/B{j}", "data.CID", "master-data/C") for j in range(n)]
+    edges += [
+        Edge("master-data/C", "data.GID", "master-data/G"),
+        Edge("master-data/S", "data.XID", "master-data/X"),
+        Edge("master-data/X", "data.YID", "master-data/Y"),
+        Edge("master-data/Y", "data.GID", "master-data/G"),
+    ]
+    g = synthetic(*edges)
+    paths = g.find_paths("master-data/S", "master-data/G")
+    assert [n for n, _, _ in paths[0]] == ["master-data/X", "master-data/Y", "master-data/G"]

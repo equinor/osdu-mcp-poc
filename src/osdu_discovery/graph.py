@@ -439,9 +439,14 @@ class OsduGraph:
             return []
         final = min(max_hops, budget + extra_hops)
         if final > budget:
+            # Keep the shortest routes aside: the wider search can fill the
+            # safety valve with longer alternatives before it meets them
+            # again. They are re-found too, which the dedupe below removes.
+            shortest = list(paths)
             paths.clear()
             budget = final
             dfs(start, [], {start})
+            paths[:0] = shortest
         # Rank: hops, with each common-mixin link costing an extra hop
         # (WellLog->Wellbore->Well beats WellLog's vertical-reference id
         # pointing at a Well); then fewer deprecated links; then shallower
