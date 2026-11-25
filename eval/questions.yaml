@@ -1,0 +1,270 @@
+# Retrieval evaluation set for osdu-discovery.
+#
+# Questions are phrased the way a user would ask them, deliberately *not*
+# reusing the property or path names where a user wouldn't know them. Each
+# gold answer was checked to exist in specs/ or schemas/ at data-definitions
+# v0.30.1.
+#
+# Gold formats
+#   api:      "METHOD /path" exactly as in the spec; any listed entry counts
+#   property: "group--Name data.Path" (kind without version); any entry counts
+#   kind:     "group--Name"; a result of that kind (any entry) counts
+#   A `*` in the kind name matches any characters (fnmatch), for properties
+#   shared by a family of kinds (every dataset--File.* has FileSize).
+#
+# Where the schema offers several genuinely correct answers, all are listed.
+# The gold set was widened once, after reviewing keyword-search misses and
+# before running any other method: IsDefinitive replaced ActiveIndicator
+# (which is "not necessarily the definitive survey"), and the operator array
+# and the File.* / Seismic* families were added.
+#
+# `vocab` marks whether the question uses the schema's own words (true) or
+# a paraphrase (false), so results can be split by how "lucky" wording is.
+
+questions:
+  # ---------------------------------------------------------------- API
+  - id: api-upload-url
+    type: api
+    vocab: false
+    q: I need a location in the landing zone to upload a file into the platform
+    gold: ["GET /v2/files/uploadURL"]
+
+  - id: api-download-url
+    type: api
+    vocab: false
+    q: How do I get at the actual file content behind a file metadata record?
+    gold: ["GET /v2/files/{id}/downloadURL"]
+
+  - id: api-get-record
+    type: api
+    vocab: true
+    q: Get a single record by its id
+    gold: ["GET /records/{id}"]
+
+  - id: api-search-name
+    type: api
+    vocab: false
+    q: Find all wellbores whose name starts with 'NO 15/9'
+    gold: ["POST /query"]
+
+  - id: api-cursor
+    type: api
+    vocab: false
+    q: I need to page through 50,000 search results, more than one request can return
+    gold: ["POST /query_with_cursor"]
+
+  - id: api-trajectory-crs
+    type: api
+    vocab: false
+    q: Transform deviation survey stations from one coordinate reference system to another
+    gold: ["POST /v4/convertTrajectory"]
+
+  - id: api-create-legaltag
+    type: api
+    vocab: true
+    q: Create a new legal tag for data from a licensed survey
+    gold: ["POST /legaltags"]
+
+  - id: api-add-member
+    type: api
+    vocab: false
+    q: Give a colleague access to data by adding them to a group
+    gold: ["POST /groups/{group_email}/members"]
+
+  - id: api-record-history
+    type: api
+    vocab: false
+    q: See the history of edits made to a record
+    gold: ["GET /records/versions/{id}"]
+
+  - id: api-register-schema
+    type: api
+    vocab: false
+    q: Publish a custom schema for my own record type
+    gold: ["POST /schema"]
+
+  - id: api-reindex-kind
+    type: api
+    vocab: false
+    q: Search results are stale for one kind; rebuild its index
+    gold: ["POST /reindex"]
+
+  - id: api-trigger-workflow
+    type: api
+    vocab: false
+    q: Kick off an ingestion DAG run
+    gold: ["POST /v1/workflow/{workflow_name}/workflowRun"]
+
+  - id: api-unit-conversion
+    type: api
+    vocab: false
+    q: Get the conversion factors to go from feet to metres
+    gold:
+      - "GET /v3/conversion/abcd"
+      - "POST /v3/conversion/abcd"
+      - "GET /v3/conversion/scale"
+      - "POST /v3/conversion/scale"
+
+  - id: api-purge-record
+    type: api
+    vocab: false
+    q: Permanently remove a record, not just soft-delete it
+    gold: ["DELETE /records/{id}"]
+
+  - id: api-subscribe
+    type: api
+    vocab: false
+    q: I want to be notified when records change
+    gold: ["POST /subscription"]
+
+  - id: api-welllog-bulk
+    type: api
+    vocab: false
+    q: Read the curve values (bulk data) of a well log
+    gold:
+      - "GET /ddms/v3/welllogs/{record_id}/data"
+      - "GET /ddms/v3/welllogs/{record_id}/versions/{version}/data"
+
+  - id: api-validate-legaltags
+    type: api
+    vocab: false
+    q: Check whether my legal tags are still valid
+    gold: ["POST /legaltags:validate"]
+
+  - id: api-batch-fetch
+    type: api
+    vocab: false
+    q: Fetch many records at once by their ids
+    gold: ["POST /query/records:batch", "POST /query/records"]
+
+  # ----------------------------------------------------------- property
+  - id: prop-marker-depth
+    type: property
+    vocab: false
+    q: At what depth was a formation top picked in a wellbore?
+    gold: ["work-product-component--WellboreMarkerSet data.Markers[].MarkerMeasuredDepth"]
+
+  - id: prop-current-operator
+    type: property
+    vocab: false
+    q: Which company currently operates a well?
+    gold:
+      - "master-data--Well data.CurrentOperatorID"
+      - "master-data--Wellbore data.CurrentOperatorID"
+      - "master-data--Well data.FacilityOperators[].FacilityOperatorOrganisationID"
+      - "master-data--Wellbore data.FacilityOperators[].FacilityOperatorOrganisationID"
+
+  - id: prop-log-wellbore
+    type: property
+    vocab: false
+    q: Which wellbore was a well log recorded in?
+    gold: ["work-product-component--WellLog data.WellboreID"]
+
+  - id: prop-curve-mnemonic
+    type: property
+    vocab: true
+    q: The curve mnemonic, like GR or RHOB, of a log curve
+    gold: ["work-product-component--WellLog data.Curves[].Mnemonic"]
+
+  - id: prop-curve-unit
+    type: property
+    vocab: false
+    q: Unit of measure of a curve in a well log
+    gold: ["work-product-component--WellLog data.Curves[].CurveUnit"]
+
+  - id: prop-file-size
+    type: property
+    vocab: false
+    q: How big is a file, in bytes?
+    gold: ["dataset--File.* data.DatasetProperties.FileSourceInfo.FileSize"]
+
+  - id: prop-file-location
+    type: property
+    vocab: false
+    q: Where in storage does a file actually live?
+    gold: ["dataset--File.* data.DatasetProperties.FileSourceInfo.FileSource"]
+
+  - id: prop-seismic-sample-interval
+    type: property
+    vocab: false
+    q: Time or depth sample rate of a seismic trace volume
+    gold: ["work-product-component--Seismic* data.SampleInterval"]
+
+  - id: prop-definitive-trajectory
+    type: property
+    vocab: false
+    q: Is this the definitive trajectory for its wellbore?
+    gold:
+      - "work-product-component--WellboreTrajectory data.IsDefinitive"
+      - "master-data--Wellbore data.DefinitiveTrajectoryID"
+
+  - id: prop-kelly-bushing
+    type: property
+    vocab: false
+    q: Elevation of the kelly bushing used as the depth reference of a wellbore
+    gold:
+      - "master-data--Wellbore data.VerticalMeasurements[].VerticalMeasurement"
+      - "master-data--Well data.VerticalMeasurements[].VerticalMeasurement"
+
+  - id: prop-log-sampling
+    type: property
+    vocab: false
+    q: Depth spacing between samples in a well log
+    gold: ["work-product-component--WellLog data.SamplingInterval"]
+
+  - id: prop-file-checksum
+    type: property
+    vocab: true
+    q: Checksum to verify the integrity of a file
+    gold:
+      - "dataset--File.* data.DatasetProperties.FileSourceInfo.Checksum"
+      - "dataset--File.* data.Checksum"
+
+  - id: prop-azimuth-reference
+    type: property
+    vocab: false
+    q: Which north do the azimuths of a directional survey refer to?
+    gold: ["work-product-component--WellboreTrajectory data.AzimuthReferenceType"]
+
+  # --------------------------------------------------------------- kind
+  - id: kind-formation-tops
+    type: kind
+    vocab: false
+    q: What record type holds formation tops picked along a wellbore?
+    gold: ["work-product-component--WellboreMarkerSet"]
+
+  - id: kind-production
+    type: kind
+    vocab: false
+    q: Record type for monthly oil and gas volumes reported for a well
+    gold: ["work-product-component--ProductionValues"]
+
+  - id: kind-cement-job
+    type: kind
+    vocab: true
+    q: Record type for a cement job
+    gold: ["work-product-component--CementJob"]
+
+  - id: kind-rig
+    type: kind
+    vocab: false
+    q: Record type describing a drilling rig
+    gold: ["master-data--Rig"]
+
+  - id: kind-core-samples
+    type: kind
+    vocab: false
+    q: Physical rock samples taken from a core
+    gold: ["master-data--RockSample", "master-data--Coring"]
+
+  - id: kind-directional-survey
+    type: kind
+    vocab: false
+    q: Record type for the directional survey of a wellbore
+    gold: ["work-product-component--WellboreTrajectory"]
+
+  - id: kind-drilling-permit
+    type: kind
+    vocab: false
+    q: The government permit that allows a well to be drilled
+    gold: ["master-data--WellLicense"]

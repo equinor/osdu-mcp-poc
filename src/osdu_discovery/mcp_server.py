@@ -4,11 +4,15 @@ OSDU Discovery — MCP Server
 Exposes OSDU semantic search as an MCP tool for use with AI assistants
 (Claude Desktop, VS Code Copilot, etc.) via stdio transport.
 
-Requires a pre-built ChromaDB index. Run the indexer first:
+`search_osdu` needs a pre-built ChromaDB index. Run the indexer first:
     osdu-index --specs ./specs --schemas ./schemas --db ./chroma_db
 
+The list tools need only the spec and schema folders, so the server can also
+run without an index (`--db` pointing at a missing folder just disables
+`search_osdu`).
+
 Start the server:
-    osdu-mcp --db ./chroma_db
+    osdu-mcp --db ./chroma_db --specs ./specs --schemas ./schemas
     uv run -m osdu_discovery.mcp_server --db ./chroma_db
 """
 
@@ -23,6 +27,7 @@ from itertools import zip_longest
 import chromadb
 from mcp.server.fastmcp import FastMCP
 
+from osdu_discovery.catalog import Catalog
 from osdu_discovery.graph import OsduGraph
 from osdu_discovery.indexer import SchemaResolver, load_file
 from osdu_discovery.query import query_collection
@@ -37,6 +42,9 @@ _schema_col: chromadb.Collection | None = None
 # Maps lookup keys (full kind id, versioned stem, bare name) → file path.
 _schema_index: dict[str, str] = {}
 _resolver = SchemaResolver()
+
+# Compact operation and kind lists for the list_* tools (--specs / --schemas).
+_catalog = Catalog()
 
 # Relationship graph from the LinkML Logical Data Model, loaded when --model is given.
 _graph: OsduGraph | None = None
@@ -56,11 +64,13 @@ def _build_schema_index(schemas_dir: str) -> int:
             stem = re.sub(r"\.(json|ya?ml)$", "", fn, flags=re.IGNORECASE)
             _schema_index[stem.lower()] = path
             try:
-                kind = load_file(path).get("x-osdu-schema-source", "")
+                doc = load_file(path)
+                kind = doc.get("x-osdu-schema-source", "")
             except Exception:
                 kind = ""
             if kind:
                 _schema_index[kind.lower()] = path
+                _catalog.add_schema(path, doc)
             m = re.match(r"^(.*)\.(\d+)\.(\d+)\.(\d+)$", stem)
             if m:
                 bare = m.group(1).lower()
@@ -70,6 +80,9 @@ def _build_schema_index(schemas_dir: str) -> int:
             files += 1
     for bare, (_, path) in versions.items():
         _schema_index.setdefault(bare, path)
+    # "group--Name" (the form list_kinds prints) -> highest version.
+    for short, k in _catalog.kinds.items():
+        _schema_index.setdefault(short, k.path)
     return files
 
 
@@ -114,6 +127,10 @@ def search_osdu(
 ) -> str:
     """Search OSDU API operations and/or schema properties using natural language.
 
+    Best for exact or near-exact names. For a question in domain words
+    ("history of edits", "formation tops"), reading `list_operations` or
+    `list_kinds` and picking is usually more reliable.
+
     Args:
         query: Natural language description of what you are looking for.
                Examples: "get wireline log curves for a wellbore",
@@ -128,7 +145,8 @@ def search_osdu(
     if not _api_col and not _schema_col:
         return (
             "No ChromaDB collections loaded. "
-            "Run `osdu-index --specs ./specs --schemas ./schemas --db ./chroma_db` first."
+            "Run `osdu-index --specs ./specs --schemas ./schemas --db ./chroma_db` first, "
+            "or use list_operations / list_kinds / list_properties instead."
         )
 
     if mode == "api" and not _api_col:
@@ -217,6 +235,79 @@ def get_schema(kind: str, resolved: bool = True) -> str:
         f"# Schema: {kind}{note}\n"
         f"Source file: {path}\nForm: {mode}\n\n```json\n{text}\n```"
     )
+
+
+# ---------------------------------------------------------------------------
+# Catalog tools (no index needed)
+# ---------------------------------------------------------------------------
+
+
+@mcp.tool()
+def list_operations(service: str = "", contains: str = "") -> str:
+    """List every OSDU API operation as one short line: method, path, summary.
+
+    Start here for "which endpoint do I call to ...?" questions. Read the
+    list and pick, rather than searching: it maps domain wording ("history of
+    edits", "be notified of changes") to the right endpoint far more
+    reliably. The full list of about 370 operations is roughly 6,500 tokens.
+
+    Args:
+        service: Only operations of services whose name contains this text,
+              e.g. "storage", "search", "wellbore". Empty (default) lists all.
+        contains: Only operations whose path or summary contains this text.
+    """
+    if not _catalog.operations:
+        return (
+            "Operation list unavailable: the server was started without --specs. "
+            "Restart with `osdu-mcp ... --specs ./specs`."
+        )
+    return _catalog.list_operations(service, contains)
+
+
+@mcp.tool()
+def list_kinds(group: str = "", contains: str = "", include_reference_data: bool = False) -> str:
+    """List OSDU record kinds (latest version) with a one-line description each.
+
+    Start here for "which record type holds ...?" questions, then call
+    `list_properties` on the kinds you pick. Reference-data kinds (about 600
+    code lists: units, CRS, type values) are hidden by default; they rarely
+    hold the record you want, and the list stays near 7,500 tokens without them.
+
+    Args:
+        group: Only this group: "master-data", "work-product-component",
+              "dataset", "reference-data", "content", "work-product", "type".
+        contains: Only kinds whose name or description contains this text.
+        include_reference_data: List reference-data kinds too when no group
+              is given (about 25,000 tokens in all).
+    """
+    if not _catalog.kinds:
+        return (
+            "Kind list unavailable: the server was started without --schemas. "
+            "Restart with `osdu-mcp ... --schemas ./schemas`."
+        )
+    return _catalog.list_kinds(group, contains, include_reference_data)
+
+
+@mcp.tool()
+def list_properties(kind: str, contains: str = "") -> str:
+    """List every data property of an OSDU kind as one line: path, type,
+    description, and the kinds it references.
+
+    A compact alternative to `get_schema` (which returns the full JSON
+    Schema, often 50-80 KB). Includes properties inherited from the abstract
+    schemas, with nested arrays shown as `data.Curves[].Mnemonic`.
+
+    Args:
+        kind: Full kind id, "group--Name" (as `list_kinds` prints it), or
+              bare name ("WellLog"). The latest version is used.
+        contains: Only properties whose path or description contains this text.
+    """
+    if not _catalog.kinds:
+        return (
+            "Property list unavailable: the server was started without --schemas. "
+            "Restart with `osdu-mcp ... --schemas ./schemas`."
+        )
+    return _catalog.list_properties(kind, contains)
 
 
 # ---------------------------------------------------------------------------
@@ -460,9 +551,14 @@ def main() -> None:
         help="Path to ChromaDB persistence folder (default: ./chroma_db)",
     )
     parser.add_argument(
+        "--specs",
+        default=None,
+        help="Path to the OpenAPI spec folder. Enables the `list_operations` tool.",
+    )
+    parser.add_argument(
         "--schemas",
         default=None,
-        help="Path to the OSDU schema folder. Enables the `get_schema` tool.",
+        help="Path to the OSDU schema folder. Enables get_schema, list_kinds and list_properties.",
     )
     parser.add_argument(
         "--model",
@@ -473,37 +569,48 @@ def main() -> None:
 
     global _api_col, _schema_col, _graph
 
-    try:
-        client = chromadb.PersistentClient(path=args.db)
-    except Exception as e:
-        print(f"ERROR: Could not open ChromaDB at '{args.db}': {e}", file=sys.stderr)
-        sys.exit(1)
-
-    existing = {c.name for c in client.list_collections()}
+    existing: set[str] = set()
+    client = None
+    if os.path.isdir(args.db):
+        try:
+            client = chromadb.PersistentClient(path=args.db)
+            existing = {c.name for c in client.list_collections()}
+        except Exception as e:
+            print(f"WARNING: Could not open ChromaDB at '{args.db}': {e}", file=sys.stderr)
+    else:
+        print(f"WARNING: no ChromaDB folder at '{args.db}' — search_osdu unavailable.", file=sys.stderr)
 
     if "osdu_api_operations" in existing:
         _api_col = client.get_collection("osdu_api_operations")
-    else:
+    elif client:
         print("WARNING: 'osdu_api_operations' collection not found — API search unavailable.", file=sys.stderr)
 
     if "osdu_schema_properties" in existing:
         _schema_col = client.get_collection("osdu_schema_properties")
-    else:
+    elif client:
         print("WARNING: 'osdu_schema_properties' collection not found — schema search unavailable.", file=sys.stderr)
 
-    if not _api_col and not _schema_col:
+    if not (_api_col or _schema_col or args.specs or args.schemas or args.model):
         print(
-            f"ERROR: No collections found in '{args.db}'. "
-            "Run osdu-index first.",
+            f"ERROR: No collections found in '{args.db}' and no --specs, --schemas or "
+            "--model given, so no tool would work. Run osdu-index first, or pass a folder.",
             file=sys.stderr,
         )
         sys.exit(1)
+
+    if args.specs:
+        if os.path.isdir(args.specs):
+            n = _catalog.load_specs(args.specs)
+            print(f"Operation list: {n} operations from '{args.specs}' — list_operations enabled.", file=sys.stderr)
+        else:
+            print(f"WARNING: --specs path '{args.specs}' not found — list_operations unavailable.", file=sys.stderr)
 
     if args.schemas:
         if os.path.isdir(args.schemas):
             n = _build_schema_index(args.schemas)
             print(
-                f"Schema index: {n} files from '{args.schemas}' — get_schema enabled.",
+                f"Schema index: {n} files, {len(_catalog.kinds)} kinds from '{args.schemas}' — "
+                "get_schema, list_kinds and list_properties enabled.",
                 file=sys.stderr,
             )
         else:

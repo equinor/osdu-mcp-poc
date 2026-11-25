@@ -1,0 +1,223 @@
+"""Compact catalogs of OSDU API operations, kinds and properties.
+
+Backs the `list_operations`, `list_kinds` and `list_properties` tools. They
+let the agent read a short list and pick, instead of relying on a search
+index to surface the right item. The evaluation in eval/README.md found this
+gets the right answer first far more often than the embedding search.
+
+Everything is built from the spec and schema folders in a few seconds; no
+index is needed.
+"""
+
+from __future__ import annotations
+
+import os
+import re
+from dataclasses import dataclass, field
+
+from osdu_discovery.indexer import (
+    SchemaResolver,
+    extract_api_operations,
+    extract_service_name,
+    flatten_schema_properties,
+    is_spec_file,
+    load_file,
+)
+
+REFERENCE_GROUP = "reference-data"
+
+_KIND_RE = re.compile(r"^[^:]+:[^:]+:(?P<group>[a-z-]+)--(?P<name>[^:]+):(?P<ver>\d+\.\d+\.\d+)$")
+
+
+def first_sentence(text: str, limit: int) -> str:
+    """The first sentence of a description, cut to `limit` characters."""
+    text = " ".join((text or "").split())
+    sentence = re.split(r"(?<=[a-z0-9)])(?<!e\.g)(?<!i\.e)\.\s", text, maxsplit=1)[0].rstrip(".")
+    return sentence if len(sentence) <= limit else sentence[: limit - 1].rstrip() + "…"
+
+
+@dataclass
+class Operation:
+    service: str
+    method: str
+    path: str
+    summary: str
+
+
+@dataclass
+class Kind:
+    group: str
+    name: str
+    version: tuple[int, int, int]
+    kind_id: str
+    description: str
+    path: str
+
+    @property
+    def short(self) -> str:
+        """'master-data--Wellbore', the form the other tools accept."""
+        return f"{self.group}--{self.name}"
+
+
+@dataclass
+class Catalog:
+    operations: list[Operation] = field(default_factory=list)
+    kinds: dict[str, Kind] = field(default_factory=dict)  # short name (lower) -> latest version
+    _resolver: SchemaResolver = field(default_factory=SchemaResolver)
+
+    # ----------------------------------------------------------- loading
+
+    def load_specs(self, specs_dir: str) -> int:
+        for fn in sorted(os.listdir(specs_dir)):
+            if not is_spec_file(fn):
+                continue
+            spec = load_file(os.path.join(specs_dir, fn))
+            service = extract_service_name(spec, fn)
+            for op in extract_api_operations(spec, service):
+                m = op["metadata"]
+                self.operations.append(Operation(m["service"], m["method"], m["path"], m["summary"]))
+        return len(self.operations)
+
+    def add_schema(self, path: str, doc: dict) -> None:
+        """Register one schema file; keeps the highest version of each kind."""
+        m = _KIND_RE.match(doc.get("x-osdu-schema-source", ""))
+        if not m:
+            return
+        ver = tuple(int(x) for x in m["ver"].split("."))
+        kind = Kind(m["group"], m["name"], ver, m[0], doc.get("description", ""), path)
+        key = kind.short.lower()
+        if key not in self.kinds or ver > self.kinds[key].version:
+            self.kinds[key] = kind
+
+    def load_schemas(self, schemas_dir: str) -> int:
+        for dirpath, dirnames, filenames in os.walk(schemas_dir):
+            if os.path.basename(dirpath) == "abstract":
+                dirnames[:] = []
+                continue
+            for fn in filenames:
+                if is_spec_file(fn):
+                    path = os.path.join(dirpath, fn)
+                    try:
+                        self.add_schema(path, load_file(path))
+                    except Exception:  # noqa: BLE001 - same tolerance as the indexer
+                        continue
+        return len(self.kinds)
+
+    # ----------------------------------------------------------- listings
+
+    def services(self) -> list[str]:
+        return sorted({o.service for o in self.operations})
+
+    def list_operations(self, service: str = "", contains: str = "") -> str:
+        ops = self.operations
+        if service:
+            needle = service.strip().lower()
+            ops = [o for o in ops if needle in o.service.lower()]
+            if not ops:
+                return f"No service '{service}'. Services: {', '.join(self.services())}."
+        if contains:
+            needle = contains.strip().lower()
+            ops = [o for o in ops if needle in f"{o.path} {o.summary}".lower()]
+            if not ops:
+                return f"No operations match '{contains}'."
+        lines = [f"# OSDU API operations ({len(ops)})"]
+        current = None
+        for o in sorted(ops, key=lambda o: (o.service, o.path, o.method)):
+            if o.service != current:
+                current = o.service
+                lines.append(f"\n## {current}")
+            summary = first_sentence(o.summary, 90)
+            lines.append(f"- {o.method} {o.path}" + (f" — {summary}" if summary else ""))
+        return "\n".join(lines)
+
+    def groups(self) -> dict[str, int]:
+        counts: dict[str, int] = {}
+        for k in self.kinds.values():
+            counts[k.group] = counts.get(k.group, 0) + 1
+        return dict(sorted(counts.items()))
+
+    def list_kinds(self, group: str = "", contains: str = "", include_reference_data: bool = False) -> str:
+        kinds = list(self.kinds.values())
+        group = group.strip().lower()
+        if group:
+            kinds = [k for k in kinds if k.group == group]
+            if not kinds:
+                listed = ", ".join(f"{g} ({n})" for g, n in self.groups().items())
+                return f"No group '{group}'. Groups: {listed}."
+        elif not include_reference_data:
+            kinds = [k for k in kinds if k.group != REFERENCE_GROUP]
+        if contains:
+            needle = contains.strip().lower()
+            kinds = [k for k in kinds if needle in f"{k.name} {k.description}".lower()]
+            if not kinds:
+                return f"No kinds match '{contains}'."
+
+        lines = [f"# OSDU kinds ({len(kinds)}, latest version of each)"]
+        current = None
+        for k in sorted(kinds, key=lambda k: (k.group, k.name.lower())):
+            if k.group != current:
+                current = k.group
+                lines.append(f"\n## {current}")
+            desc = first_sentence(k.description, 110)
+            lines.append(f"- {k.short}" + (f" — {desc}" if desc else ""))
+        hidden = self.groups().get(REFERENCE_GROUP, 0)
+        if not group and not include_reference_data and hidden:
+            lines.append(
+                f"\n_{hidden} reference-data kinds (code lists such as units, CRS and type "
+                "values) are hidden. Pass group=\"reference-data\" with `contains` to find one._"
+            )
+        return "\n".join(lines)
+
+    def find_kind(self, kind: str) -> Kind | list[str]:
+        """Look a kind up by full id, 'group--Name' or bare name. Returns the
+        Kind, or a list of suggestions when there is no single match."""
+        key = kind.strip().lower()
+        m = _KIND_RE.match(key)
+        if m:
+            key = f"{m['group']}--{m['name']}"
+        if key in self.kinds:
+            return self.kinds[key]
+        bare = [k for k in self.kinds.values() if k.name.lower() == key]
+        if len(bare) == 1:
+            return bare[0]
+        if bare:
+            return sorted(k.short for k in bare)
+        return sorted(k.short for k in self.kinds.values() if key and key in k.short.lower())[:15]
+
+    def _target_name(self, related: str) -> str:
+        """'master-data/wellbore' (lower-cased by the indexer) -> 'master-data--Wellbore'."""
+        key = related.replace("/", "--", 1)
+        return self.kinds[key].short if key in self.kinds else key
+
+    def list_properties(self, kind: str, contains: str = "") -> str:
+        found = self.find_kind(kind)
+        if not isinstance(found, Kind):
+            if not found:
+                return f"No kind '{kind}'. Use list_kinds to see the available kinds."
+            listed = "\n".join(f"  - {s}" for s in found)
+            return f"No single kind matches '{kind}'. Did you mean:\n{listed}"
+
+        doc = load_file(found.path)
+        resolved = self._resolver.resolve(
+            doc, base_dir=os.path.dirname(os.path.abspath(found.path)), root=doc
+        )
+        if not isinstance(resolved, dict):
+            resolved = doc
+        props = flatten_schema_properties(resolved.get("properties", {}).get("data", resolved))
+        if contains:
+            needle = contains.strip().lower()
+            props = [p for p in props if needle in f"{p['path']} {p['description']}".lower()]
+
+        lines = [f"# Properties of {found.kind_id} ({len(props)})"]
+        for p in props:
+            extra = []
+            if p["related_types"]:
+                extra.append("→ " + ", ".join(self._target_name(t) for t in p["related_types"]))
+            if p["units"]:
+                extra.append(f"unit: {p['units']}")
+            desc = first_sentence(p["description"], 80)
+            tail = f" [{'; '.join(extra)}]" if extra else ""
+            lines.append(f"- data.{p['path']} ({p['type']})" + (f" — {desc}" if desc else "") + tail)
+        if not props:
+            lines.append(f"\nNo properties match '{contains}'." if contains else "\nNo data properties.")
+        return "\n".join(lines)
