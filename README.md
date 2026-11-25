@@ -18,8 +18,14 @@ osdu-mcp-poc/
 ├── src/
 │   └── osdu_discovery/
 │       ├── __init__.py
-│       ├── indexer.py
-│       └── query.py
+│       ├── indexer.py      # builds the ChromaDB index from specs/ and schemas/
+│       ├── query.py        # interactive query CLI
+│       ├── graph.py        # relationship graph from the LinkML model
+│       └── mcp_server.py   # MCP server (stdio)
+├── specs/                  # OpenAPI specs (see Spec provenance)
+├── schemas/                # OSDU JSON Schemas, data-definitions Generated/
+├── model/
+│   └── osdu_latest.yaml    # OSDU LinkML Logical Data Model (see Model provenance)
 ├── pyproject.toml
 └── README.md
 ```
@@ -105,12 +111,26 @@ in every entity that references them.
 
 ### Schema provenance
 
-`schemas/` is a point-in-time copy of the `Generated/` folder from the OSDU
+`schemas/` is a pinned copy of the `Generated/` folder from the OSDU
 [data-definitions](https://community.opengroup.org/osdu/data/data-definitions)
-repository, tag **`v0.29.1`** (commit `be852720`, 2026-01-29). It does not track
-upstream releases automatically — to refresh, replace `schemas/` with the
-`Generated/` folder from a newer data-definitions tag, re-run `osdu-index`, and
-update this note.
+repository, tag **`v0.30.1`** (M27.1, 1450 files). `schema_sources.yaml`
+records the exact commit. The tag is pinned in `refresh_artifacts.py`
+(`SCHEMA_TAG`, `SCHEMA_SNAPSHOT`); to move to a newer release, bump those,
+then run:
+
+```bash
+python refresh_artifacts.py --schemas
+```
+
+and rebuild the index. v0.30.1 is the release the OSDU LinkML Logical Data
+Model in `model/` is generated from (see Model provenance).
+
+### Spec provenance
+
+`specs/` holds copies of the OpenAPI files each service publishes. Where each
+one came from, with hashes, is in `spec_sources.yaml`. Refresh or check for
+drift with `python refresh_artifacts.py --specs` (add `--check` to only
+report).
 
 ## Known limitations
 
@@ -120,6 +140,17 @@ update this note.
   [Redocly CLI](https://redocly.com/docs/cli/commands/bundle/):
   `redocly bundle openapi.yaml -o bundled.yaml`. (Schema-file cross-refs *are*
   resolved — see above.)
+
+- The relationship graph covers the **latest version** of each kind only
+  (that is what `osdu_latest.yaml` holds), while `get_schema` also serves
+  older versions. Of the roughly 25,000 reference and deprecated-property paths the
+  graph reports, 27 don't match the resolved JSON Schema exactly. These sit in
+  `oneOf` branches and deeply nested override arrays (Coring, Facet, vector
+  header mappings).
+
+- The path-search thresholds (common mixin at 30 or more kinds, hub at 75 or
+  more) are tuned by eye on a dozen known questions. They are constants at
+  the top of `graph.py`.
 
 - ChromaDB's default embedding model (all-MiniLM-L6-v2) is fast and good enough
   for a PoC. For production, consider switching to a larger model or an API-based
@@ -132,12 +163,17 @@ The MCP server exposes OSDU semantic search as a tool for AI assistants (Claude 
 **Prerequisite:** build the index first (see above).
 
 ```bash
-osdu-mcp --db ./chroma_db --schemas ./schemas
+osdu-mcp --db ./chroma_db --schemas ./schemas --model ./model/osdu_latest.yaml
 ```
 
 `--schemas` is optional but recommended: it enables the `get_schema` tool.
 Without it, `get_schema` is still listed but every call returns
 `Schema lookup unavailable`, so only `search_osdu` does useful work.
+
+`--model` is optional too: it loads the OSDU LinkML Logical Data Model and
+enables the relationship tools (`get_relationships`, `find_path`,
+`get_deprecations`). Loading takes under a second. Without it those tools are
+listed but return `Relationship graph unavailable`.
 
 ### Tool: `search_osdu`
 
@@ -162,6 +198,93 @@ travel with it. Use it after `search_osdu` to see a matched property in context.
 
 Requires the server to be started with `--schemas`. Without it the tool is
 still listed, but returns `Schema lookup unavailable`.
+
+### Relationship tools (LinkML Logical Data Model)
+
+Semantic search finds *a* property; it cannot follow references between
+records. These three tools answer structural questions from the LinkML model
+(`model/osdu_latest.yaml`) instead: every attribute carrying a
+`relationship_targets` annotation is rolled up from the abstract schemas and
+nested arrays it lives in to the kind that owns it, with its JSON path in a
+record (`data.WellboreID`, `data.Markers[].InterpretationID`,
+`data.GeoContexts[].FieldID`). That gives 818 kinds and about 22,000
+reference links. Checked against the resolved JSON Schemas in `schemas/`,
+99.9% of those paths exist exactly as reported (see Known limitations).
+
+All three accept a full kind id, `group--Name`, or a bare name. An ambiguous
+bare name (`TubularAssembly` is both master-data and a WPC) returns the
+candidates, and a misspelling returns close matches.
+
+#### `get_relationships`
+
+Outgoing references (which properties of this kind hold another record's id)
+and incoming ones (which kinds point at this one, via which property). Use it
+for "what links to a Wellbore?" or for impact analysis.
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `kind` | string | required | Kind to describe |
+| `direction` | string | `"both"` | `"out"`, `"in"` or `"both"` |
+| `include_reference_data` | boolean | `false` | Also list links to and from reference-data kinds (units, CRS, type lists) |
+| `include_common` | boolean | `false` | Also list links inherited from abstract schemas that most kinds share (see below) |
+
+#### `find_path`
+
+How two kinds connect through record references, best path first. Each hop
+reads `A data.X → B`: an A record stores B's id in `data.X`. Hops can point
+either way along a path, as in File.Generic ← WellLog `data.Datasets`,
+WellLog `data.WellboreID` → Wellbore.
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `from_kind` | string | required | Start kind |
+| `to_kind` | string | required | Target kind |
+| `max_hops` | integer | `4` | Longest path considered (capped at 6) |
+| `limit` | integer | `8` | Paths returned (capped at 25) |
+| `include_reference_data` | boolean | `false` | Allow reference-data kinds as intermediate hops |
+
+Without some pruning, every pair of kinds would be about two hops apart
+through a shared hub. The search therefore:
+
+- skips **reference-data** kinds as intermediate hops;
+- uses **common links** only as the final hop onto an endpoint. Common links
+  are attributes a kind inherits through an abstract class that 30 or more
+  kinds share, such as `NameAliases[].DefinitionOrganisationID`,
+  `TechnicalAssurances`, `GeoContexts[]` and the vertical-measurement
+  reference. `Wellbore data.GeoContexts[].FieldID → Field` is still found,
+  but Field is never used as a stepping stone;
+- skips **hub kinds** (referenced by 75 or more kinds, currently only
+  `Organisation`) as intermediate hops;
+- follows **"any dataset" wildcards** (`data.Datasets` on every WPC) but no
+  other wildcards ("any record", "any master-data"), which would link
+  everything to everything;
+- never treats one polymorphic slot as a link: `FlowTest.data.ReportingEntityID`
+  can be a Wellbore *or* a Reservoir, but that does not relate the two.
+
+Paths up to one hop longer than the shortest are also returned, ranked with
+each common link counting as an extra hop. For example, `WellLog → Wellbore →
+Well` ranks above WellLog's vertical-reference id that happens to point at a
+Well.
+
+#### `get_deprecations`
+
+Deprecated properties of a kind, and the replacement where the model names
+one (`data.FacilityNameAliases → NameAliases`). Use it before writing records
+or queries.
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `kind` | string | required | Kind to check |
+
+#### Model provenance
+
+`model/osdu_latest.yaml` is copied unchanged from the OSDU schema
+work-products repository (`LogicalDataModels/osdu_latest.yaml`, `master` at
+commit `b2c86102`, 2026-11-20). It is generated from the same JSON Schemas as
+data-definitions `v0.30.1`, so it lines up with `schemas/`: the two differ in
+exactly one file, `reference-data/RigType.1.0.0.json`. To refresh it, copy the
+newer file over this one. The graph is derived at server start, so no
+re-index is needed.
 
 ### Client configuration
 
@@ -219,7 +342,7 @@ these files usually hold other servers too.
   "mcpServers": {
     "osdu-discovery": {
       "command": "/opt/homebrew/bin/uv",
-      "args": ["run", "--project", "/path/to/osdu-mcp-poc", "osdu-mcp", "--db", "/path/to/osdu-mcp-poc/chroma_db", "--schemas", "/path/to/osdu-mcp-poc/schemas"]
+      "args": ["run", "--project", "/path/to/osdu-mcp-poc", "osdu-mcp", "--db", "/path/to/osdu-mcp-poc/chroma_db", "--schemas", "/path/to/osdu-mcp-poc/schemas", "--model", "/path/to/osdu-mcp-poc/model/osdu_latest.yaml"]
     }
   }
 }
@@ -240,7 +363,7 @@ or run **MCP: Add Server** from the Command Palette.
     "osdu-discovery": {
       "type": "stdio",
       "command": "/opt/homebrew/bin/uv",
-      "args": ["run", "--project", "/path/to/osdu-mcp-poc", "osdu-mcp", "--db", "/path/to/osdu-mcp-poc/chroma_db", "--schemas", "/path/to/osdu-mcp-poc/schemas"]
+      "args": ["run", "--project", "/path/to/osdu-mcp-poc", "osdu-mcp", "--db", "/path/to/osdu-mcp-poc/chroma_db", "--schemas", "/path/to/osdu-mcp-poc/schemas", "--model", "/path/to/osdu-mcp-poc/model/osdu_latest.yaml"]
     }
   }
 }
@@ -249,7 +372,7 @@ or run **MCP: Add Server** from the Command Palette.
 #### Claude Code
 
 ```bash
-claude mcp add osdu-discovery -- /opt/homebrew/bin/uv run --project /path/to/osdu-mcp-poc osdu-mcp --db /path/to/osdu-mcp-poc/chroma_db --schemas /path/to/osdu-mcp-poc/schemas
+claude mcp add osdu-discovery -- /opt/homebrew/bin/uv run --project /path/to/osdu-mcp-poc osdu-mcp --db /path/to/osdu-mcp-poc/chroma_db --schemas /path/to/osdu-mcp-poc/schemas --model /path/to/osdu-mcp-poc/model/osdu_latest.yaml
 ```
 
 Everything after `--` is the command to launch. Add `-s user` to make it
@@ -271,7 +394,7 @@ Copy `opencode.example.json` to `opencode.json` in the project root (or merge in
   "mcp": {
     "osdu-discovery": {
       "type": "local",
-      "command": ["/opt/homebrew/bin/uv", "run", "--project", "/path/to/osdu-mcp-poc", "osdu-mcp", "--db", "/path/to/osdu-mcp-poc/chroma_db", "--schemas", "/path/to/osdu-mcp-poc/schemas"],
+      "command": ["/opt/homebrew/bin/uv", "run", "--project", "/path/to/osdu-mcp-poc", "osdu-mcp", "--db", "/path/to/osdu-mcp-poc/chroma_db", "--schemas", "/path/to/osdu-mcp-poc/schemas", "--model", "/path/to/osdu-mcp-poc/model/osdu_latest.yaml"],
       "enabled": true
     }
   }
@@ -290,18 +413,20 @@ To check the server independently of any client, run the same command from
 your terminal:
 
 ```bash
-/opt/homebrew/bin/uv run --project /path/to/osdu-mcp-poc osdu-mcp --db /path/to/osdu-mcp-poc/chroma_db --schemas /path/to/osdu-mcp-poc/schemas
+/opt/homebrew/bin/uv run --project /path/to/osdu-mcp-poc osdu-mcp --db /path/to/osdu-mcp-poc/chroma_db --schemas /path/to/osdu-mcp-poc/schemas --model /path/to/osdu-mcp-poc/model/osdu_latest.yaml
 ```
 
-A healthy start prints one line to stderr and then waits on stdin without
+A healthy start prints these lines to stderr and then waits on stdin without
 returning to the prompt:
 
 ```
-Schema index: 1427 files from '/path/to/osdu-mcp-poc/schemas' — get_schema enabled.
+Schema index: 1450 files from '/path/to/osdu-mcp-poc/schemas' — get_schema enabled.
+Relationship graph: 818 kinds, 22165 reference links from '/path/to/osdu-mcp-poc/model/osdu_latest.yaml' — relationship tools enabled.
 ```
 
-If you passed `--schemas` and don't see that line, the path is wrong — the
-server prints a `WARNING` and carries on with `get_schema` disabled. If the
+If you passed `--schemas` or `--model` and don't see the matching line, the
+path is wrong. The server prints a `WARNING` and carries on with those tools
+disabled. If the
 command exits immediately instead of waiting, the error on stderr is the same
 one the client is hitting.
 
@@ -313,15 +438,21 @@ one the client is hitting.
 | Exits immediately, `No collections found` (exit code 1) | The index has not been built, or `--db` points at the wrong folder. Run `osdu-index` first — see [Index](#index). `chroma_db/` is generated, not shipped in the repo. |
 | Server connects but no tools appear | Server name contains a space or other unsupported character. Rename it to `osdu-discovery`. |
 | `get_schema` returns `Schema lookup unavailable` | The server was started without `--schemas`, or the path given didn't exist. The tool is always registered, so this is a runtime message rather than a missing tool. |
+| `get_relationships` / `find_path` return `Relationship graph unavailable` | The server was started without `--model`, or the file couldn't be loaded. The stderr `WARNING` says which. |
 | Tools missing after the client was already running | Config is only read at startup, and some clients cache the tool list. Restart the client. |
 
 ## Next steps
 
 1. Add a `get_spec` tool that returns the full OpenAPI spec for an API result
    (the schema-side equivalent, `get_schema`, now exists)
-2. Add a `find_workflow` tool for stitching multi-service paths — e.g. tying a
-   `File.Generic` metadata record to the File-service operations that produce
-   and consume its `FileSource`
+2. Add a `find_workflow` tool for stitching multi-service paths, for example
+   tying a `File.Generic` metadata record to the File-service operations that
+   produce and consume its `FileSource`. `find_path` now covers the
+   record-to-record half; what's missing is mapping each hop onto the
+   Search/Storage/File calls that follow it.
+3. Annotate `search_osdu` and `get_schema` results with deprecation warnings
+   from the model, and validate records against the LinkML/SHACL
+   realisations (`validate_record`).
 
 ## Contributing
 

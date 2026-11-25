@@ -13,6 +13,7 @@ Start the server:
 """
 
 import argparse
+import difflib
 import json
 import os
 import re
@@ -22,6 +23,7 @@ from itertools import zip_longest
 import chromadb
 from mcp.server.fastmcp import FastMCP
 
+from osdu_discovery.graph import OsduGraph
 from osdu_discovery.indexer import SchemaResolver, load_file
 from osdu_discovery.query import query_collection
 
@@ -35,6 +37,9 @@ _schema_col: chromadb.Collection | None = None
 # Maps lookup keys (full kind id, versioned stem, bare name) → file path.
 _schema_index: dict[str, str] = {}
 _resolver = SchemaResolver()
+
+# Relationship graph from the LinkML Logical Data Model, loaded when --model is given.
+_graph: OsduGraph | None = None
 
 
 def _build_schema_index(schemas_dir: str) -> int:
@@ -214,6 +219,239 @@ def get_schema(kind: str, resolved: bool = True) -> str:
     )
 
 
+# ---------------------------------------------------------------------------
+# Relationship tools (LinkML Logical Data Model)
+# ---------------------------------------------------------------------------
+
+_NO_GRAPH = (
+    "Relationship graph unavailable: the server was started without --model. "
+    "Restart with `osdu-mcp ... --model ./model/osdu_latest.yaml`."
+)
+
+
+def _label(key: str) -> str:
+    if key == "*":
+        return "any record"
+    if key.endswith("/*"):
+        return f"any {key[:-2]} record"
+    return _graph.kind_id(key) if _graph else key
+
+
+def _short(key: str) -> str:
+    """'master-data/Wellbore' -> 'master-data--Wellbore' (wildcards spelled out)."""
+    if _graph and _graph.is_wildcard(key):
+        return _label(key)
+    return key.replace("/", "--", 1)
+
+
+def _resolve_one(kind: str) -> tuple[str | None, str | None]:
+    """(class key, error message)."""
+    hits = _graph.resolve(kind)
+    if len(hits) == 1:
+        return hits[0], None
+    if hits:
+        listed = "\n".join(f"  - {_label(h)}" for h in hits)
+        return None, f"'{kind}' is ambiguous. Use one of:\n{listed}"
+    needle = re.split(r"[:/]+|--", kind.strip().lower())[-1]
+    near = sorted(k for k in _graph.entities if needle and needle in k.lower())[:15]
+    if not near:
+        names = {k.partition("/")[2].lower(): k for k in _graph.entities}
+        near = [names[n] for n in difflib.get_close_matches(needle, list(names), n=8, cutoff=0.75)]
+    if near:
+        listed = "\n".join(f"  - {_label(k)}" for k in near)
+        return None, f"No entity '{kind}' in the logical model. Did you mean:\n{listed}"
+    return None, f"No entity '{kind}' in the logical model."
+
+
+def _flags(edge) -> str:
+    flags = []
+    if edge.deprecated:
+        flags.append("DEPRECATED")
+    if edge.common:
+        flags.append("common")
+    return f"  _({', '.join(flags)})_" if flags else ""
+
+
+@mcp.tool()
+def get_relationships(
+    kind: str,
+    direction: str = "both",
+    include_reference_data: bool = False,
+    include_common: bool = False,
+) -> str:
+    """List which records an OSDU kind references, and which kinds reference it.
+
+    Built from the OSDU LinkML Logical Data Model, so it covers every
+    relationship in the schema corpus, including ones inherited from abstract
+    schemas and nested arrays, each with its JSON path in a record. Use it for
+    "what links to a Wellbore?", "what does a WellLog point at?", or impact
+    analysis before changing a kind. For multi-hop questions use `find_path`.
+
+    Args:
+        kind: Full kind id ("osdu:wks:master-data--Wellbore:1.5.1"),
+              "master-data--Wellbore", or bare name ("Wellbore").
+        direction: "out" (this kind's reference properties), "in" (kinds
+              whose properties point at this one), or "both" (default).
+        include_reference_data: Include links to/from reference-data kinds
+              (unit, CRS, type lists...). Off by default: they are numerous.
+        include_common: Include links every entity inherits from shared
+              abstract schemas (NameAliases organisation, technical assurance,
+              GeoContexts, vertical-measurement reference...). Off by default.
+    """
+    if not _graph:
+        return _NO_GRAPH
+    if direction not in ("out", "in", "both"):
+        return "Invalid direction. Use 'out', 'in' or 'both'."
+    key, err = _resolve_one(kind)
+    if err:
+        return err
+
+    def keep(other: str, e) -> bool:
+        if e.common and not include_common:
+            return False
+        return include_reference_data or not other.startswith("reference-data/")
+
+    lines = [f"# Relationships of {_label(key)}"]
+    hidden = 0
+    if direction in ("out", "both"):
+        by_path: dict[str, list] = {}
+        for e in _graph.out_edges.get(key, []):
+            if keep(e.target, e):
+                by_path.setdefault(e.path, []).append(e)
+            else:
+                hidden += 1
+        lines.append(f"\n## Outgoing — properties of this kind that reference other records ({len(by_path)})")
+        for path, es in sorted(by_path.items()):
+            targets = ", ".join(sorted({_label(e.target) for e in es}))
+            lines.append(f"- `{path}` → {targets}{_flags(es[0])}")
+    if direction in ("in", "both"):
+        by_src: dict[str, list] = {}
+        for e in _graph.incoming(key):
+            if keep(e.source, e) and not _graph.is_wildcard(e.target):
+                by_src.setdefault(e.source, []).append(e)
+            elif not _graph.is_wildcard(e.target):
+                hidden += 1
+        lines.append(f"\n## Incoming — kinds whose properties reference this kind ({len(by_src)})")
+        for src, es in sorted(by_src.items()):
+            paths = ", ".join(f"`{p}`" for p in sorted({e.path for e in es}))
+            lines.append(f"- {_label(src)}: {paths}{_flags(es[0])}")
+        # Group-level wildcards ("any dataset" etc.) are specific enough to list.
+        group_wild: dict[str, set[str]] = {}
+        any_wild: set[str] = set()
+        for e in _graph.incoming(key):
+            if e.target == "*":
+                any_wild.add(e.path)
+            elif _graph.is_wildcard(e.target):
+                group_wild.setdefault(f"{e.path} → {_label(e.target)}", set()).add(e.source)
+        if group_wild:
+            lines.append("\n## Incoming via generic properties (this kind is one allowed target)")
+            for desc, sources in sorted(group_wild.items(), key=lambda x: -len(x[1])):
+                path, _, tgt = desc.partition(" → ")
+                eg = ", ".join(_short(s) for s in sorted(sources)[:4])
+                more = f", ... ({len(sources)} kinds)" if len(sources) > 4 else ""
+                lines.append(f"- `{path}` → {tgt}, held by: {eg}{more}")
+        if any_wild:
+            props = sorted(any_wild)
+            shown = ", ".join(f"`{p}`" for p in props[:6]) + (", ..." if len(props) > 6 else "")
+            lines.append(
+                f"\n_Can also be the target of {len(props)} \"any record\" properties ({shown}) — omitted._"
+            )
+    if hidden:
+        lines.append(
+            f"\n_{hidden} reference-data or common links hidden; "
+            "pass include_reference_data / include_common to show them._"
+        )
+    return "\n".join(lines)
+
+
+@mcp.tool()
+def find_path(
+    from_kind: str,
+    to_kind: str,
+    max_hops: int = 4,
+    limit: int = 8,
+    include_reference_data: bool = False,
+) -> str:
+    """Find how two OSDU kinds are connected through record references.
+
+    Answers "how do I get from a WellLog to its Well?", "which records tie a
+    File to a Wellbore?", "how are WellboreMarkerSets related to
+    SeismicHorizons?". Each hop names the JSON property holding the id, and
+    its direction: `A.data.X → B` means an A record stores B's id in
+    `data.X` (so from a B you find As by searching on `data.X`); hops may
+    point either way along the path. Paths are
+    returned best first: fewest hops, with links inherited from common
+    abstract schemas ranked lower, plus alternatives up to one hop longer.
+
+    Args:
+        from_kind: Start kind (full id, "group--Name", or bare name).
+        to_kind: Target kind.
+        max_hops: Longest path considered (default 4).
+        limit: Maximum number of paths returned (default 8).
+        include_reference_data: Allow reference-data kinds as intermediate
+              hops. Off by default (nearly everything shares a unit or CRS).
+    """
+    if not _graph:
+        return _NO_GRAPH
+    a, err = _resolve_one(from_kind)
+    if err:
+        return err
+    b, err = _resolve_one(to_kind)
+    if err:
+        return err
+    if a == b:
+        return "Start and target are the same kind."
+    paths = _graph.find_paths(
+        a, b, max_hops=max(1, min(max_hops, 6)), limit=max(1, min(limit, 25)),
+        include_reference_data=include_reference_data,
+    )
+    if not paths:
+        return (
+            f"No path from {_label(a)} to {_label(b)} within {max_hops} hops "
+            "(reference-data hops, hub kinds such as Organisation, and generic "
+            "'any record' links are not used as intermediate steps)."
+        )
+    lines = [f"# Paths from {_label(a)} to {_label(b)}"]
+    for i, p in enumerate(paths, 1):
+        lines.append(f"\n## Path {i} — {len(p)} hop{'s' if len(p) > 1 else ''}")
+        node = a
+        for other, e, _direction in p:
+            target = _short(e.target)
+            if _graph.is_wildcard(e.target):
+                covered = node if e.source == other else other
+                target += f" (here {_short(covered)})"
+            lines.append(f"- {_short(e.source)} `{e.path}` → {target}{_flags(e)}")
+            node = other
+    return "\n".join(lines)
+
+
+@mcp.tool()
+def get_deprecations(kind: str) -> str:
+    """List deprecated properties of an OSDU kind and their replacements.
+
+    Check this before writing or querying records: OSDU marks many
+    properties deprecated (e.g. FacilityNameAliases → NameAliases) and the
+    LinkML model records the successor where one is named.
+
+    Args:
+        kind: Full kind id, "group--Name", or bare name.
+    """
+    if not _graph:
+        return _NO_GRAPH
+    key, err = _resolve_one(kind)
+    if err:
+        return err
+    deps = _graph.deprecations.get(key, [])
+    if not deps:
+        return f"{_label(key)} has no deprecated properties."
+    lines = [f"# Deprecated properties of {_label(key)} ({len(deps)})"]
+    for d in sorted(deps, key=lambda d: d.path):
+        repl = f" → use `{d.replacement}`" if d.replacement else " (no replacement named)"
+        note = d.note if len(d.note) <= 200 else d.note[:197] + "..."
+        lines.append(f"- `{d.path}`{repl}\n  {note}")
+    return "\n".join(lines)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="OSDU Discovery MCP server (stdio)")
     parser.add_argument(
@@ -226,9 +464,14 @@ def main() -> None:
         default=None,
         help="Path to the OSDU schema folder. Enables the `get_schema` tool.",
     )
+    parser.add_argument(
+        "--model",
+        default=None,
+        help="Path to the LinkML osdu_latest.yaml. Enables get_relationships, find_path and get_deprecations.",
+    )
     args = parser.parse_args()
 
-    global _api_col, _schema_col
+    global _api_col, _schema_col, _graph
 
     try:
         client = chromadb.PersistentClient(path=args.db)
@@ -267,6 +510,22 @@ def main() -> None:
             print(
                 f"WARNING: --schemas path '{args.schemas}' not found — "
                 "get_schema unavailable.",
+                file=sys.stderr,
+            )
+
+    if args.model:
+        try:
+            _graph = OsduGraph.load(args.model)
+            n_edges = sum(len(v) for v in _graph.out_edges.values())
+            print(
+                f"Relationship graph: {len(_graph.entities)} kinds, {n_edges} reference "
+                f"links from '{args.model}' — relationship tools enabled.",
+                file=sys.stderr,
+            )
+        except Exception as exc:  # noqa: BLE001
+            print(
+                f"WARNING: could not load --model '{args.model}': {exc} — "
+                "relationship tools unavailable.",
                 file=sys.stderr,
             )
 

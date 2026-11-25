@@ -4,7 +4,7 @@
 # the fully resolved schemas the platform publishes, not the authoring sources.
 # It is pinned to a tag rather than tracked against a branch, so the content
 # behind the index only moves in an explicit, reviewable change. This mirrors
-# osdu-csharp-models, which pins the same upstream as schemas/M27.0/.
+# osdu-csharp-models, which pins the same upstream as schemas/M27.1/.
 #
 # Refresh with:
 #
@@ -15,10 +15,10 @@
 
 version: 1
 
-snapshot: M27.0
+snapshot: M27.1
 project: osdu/data/data-definitions
-tag: v0.30.0
-commit: 99f8fc88d8ad838b5738ac5ad92ac643538b5766
+tag: v0.30.1
+commit: ff89d87caa43d05d1341dcaa6d258e1186ec8aa6
 subdir: Generated
-files: 1427
-verified: "2026-09-17"
+files: 1450
+verified: "2026-11-24"

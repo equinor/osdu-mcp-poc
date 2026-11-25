@@ -712,7 +712,7 @@
     "legal"
   ],
   "additionalProperties": false,
-  "x-osdu-review-status": "Pending",
+  "x-osdu-review-status": "Accepted",
   "x-osdu-supported-file-formats": [
     "SEGY",
     "OpenVDS",
