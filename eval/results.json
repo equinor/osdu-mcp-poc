@@ -1,0 +1,2149 @@
+{
+ "dense": {
+  "setup_seconds": 0.1,
+  "rows": [
+   {
+    "id": "api-upload-url",
+    "type": "api",
+    "vocab": false,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "GET /v2/files/uploadURL",
+     "GET /utility/upload-connection-string",
+     "GET /utility/download-connection-string"
+    ],
+    "seconds": 0.401,
+    "error": null
+   },
+   {
+    "id": "api-download-url",
+    "type": "api",
+    "vocab": false,
+    "rank": 4,
+    "rank_dedup": 4,
+    "top3": [
+     "POST /v2/files/metadata",
+     "GET /v2/files/{id}/metadata",
+     "GET /v2/files/uploadURL"
+    ],
+    "seconds": 0.064,
+    "error": null
+   },
+   {
+    "id": "api-get-record",
+    "type": "api",
+    "vocab": true,
+    "rank": null,
+    "rank_dedup": null,
+    "top3": [
+     "POST /query/records/headers",
+     "GET /ddms/v3/ppfgdataset/{record_id}",
+     "GET /records/{id}/{version}"
+    ],
+    "seconds": 0.088,
+    "error": null
+   },
+   {
+    "id": "api-search-name",
+    "type": "api",
+    "vocab": false,
+    "rank": null,
+    "rank_dedup": null,
+    "top3": [
+     "GET /ddms/v3/wells/{record_id}/versions/{version}",
+     "GET /ddms/v3/wellbores/{record_id}/versions",
+     "GET /ddms/v3/wellboreintervalsets/{record_id}/versions"
+    ],
+    "seconds": 0.08,
+    "error": null
+   },
+   {
+    "id": "api-cursor",
+    "type": "api",
+    "vocab": false,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "POST /query_with_cursor",
+     "POST /v3/measurement/search",
+     "POST /query"
+    ],
+    "seconds": 0.064,
+    "error": null
+   },
+   {
+    "id": "api-trajectory-crs",
+    "type": "api",
+    "vocab": false,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "POST /v4/convertTrajectory",
+     "POST /v4/convert",
+     "GET /v3/coordinate-transformation"
+    ],
+    "seconds": 0.07,
+    "error": null
+   },
+   {
+    "id": "api-create-legaltag",
+    "type": "api",
+    "vocab": true,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "POST /legaltags",
+     "PUT /legaltags",
+     "GET /legaltags"
+    ],
+    "seconds": 0.075,
+    "error": null
+   },
+   {
+    "id": "api-add-member",
+    "type": "api",
+    "vocab": false,
+    "rank": 6,
+    "rank_dedup": 6,
+    "top3": [
+     "GET /dataset/tenant/{tenantid}/subproject/{subprojectid}/dataset/{datasetid}/permission",
+     "PUT /user",
+     "PUT /registerDataset"
+    ],
+    "seconds": 0.059,
+    "error": null
+   },
+   {
+    "id": "api-record-history",
+    "type": "api",
+    "vocab": false,
+    "rank": null,
+    "rank_dedup": null,
+    "top3": [
+     "GET /records",
+     "GET /info",
+     "GET /admin/logs/{logStream}"
+    ],
+    "seconds": 0.062,
+    "error": null
+   },
+   {
+    "id": "api-register-schema",
+    "type": "api",
+    "vocab": false,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "POST /schema",
+     "PUT /schema",
+     "PUT /schemas/system"
+    ],
+    "seconds": 0.059,
+    "error": null
+   },
+   {
+    "id": "api-reindex-kind",
+    "type": "api",
+    "vocab": false,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "POST /reindex",
+     "POST /v3/catalog/search",
+     "POST /reindex/records"
+    ],
+    "seconds": 0.06,
+    "error": null
+   },
+   {
+    "id": "api-trigger-workflow",
+    "type": "api",
+    "vocab": false,
+    "rank": null,
+    "rank_dedup": null,
+    "top3": [
+     "POST /ddms/v3/wellpressuretestrawmeasurement/{record_id}/sessions",
+     "POST /ddms/v3/ppfgdataset/{record_id}/sessions",
+     "PATCH /ddms/v3/ppfgdataset/{record_id}/sessions/{session_id}"
+    ],
+    "seconds": 0.058,
+    "error": null
+   },
+   {
+    "id": "api-unit-conversion",
+    "type": "api",
+    "vocab": false,
+    "rank": 2,
+    "rank_dedup": 2,
+    "top3": [
+     "POST /v4/convert",
+     "POST /v3/conversion/scale",
+     "POST /v4/convertTrajectory"
+    ],
+    "seconds": 0.059,
+    "error": null
+   },
+   {
+    "id": "api-purge-record",
+    "type": "api",
+    "vocab": false,
+    "rank": 2,
+    "rank_dedup": 2,
+    "top3": [
+     "DELETE /records/{id}/versions",
+     "DELETE /records/{id}",
+     "DELETE /ddms/v3/wellboretrajectories/{record_id}"
+    ],
+    "seconds": 0.059,
+    "error": null
+   },
+   {
+    "id": "api-subscribe",
+    "type": "api",
+    "vocab": false,
+    "rank": null,
+    "rank_dedup": null,
+    "top3": [
+     "PUT /records",
+     "PATCH /ddms/v3/wellboretrajectories/{record_id}/sessions/{session_id}",
+     "GET /records"
+    ],
+    "seconds": 0.057,
+    "error": null
+   },
+   {
+    "id": "api-welllog-bulk",
+    "type": "api",
+    "vocab": false,
+    "rank": 7,
+    "rank_dedup": 7,
+    "top3": [
+     "GET /ddms/v3/welllogs/{record_id}/data/statistics",
+     "GET /ddms/v3/welllogs/{record_id}/versions/{version}/data/statistics",
+     "POST /ddms/v3/welllogs/{record_id}/versions/{version}/data/statistics"
+    ],
+    "seconds": 0.06,
+    "error": null
+   },
+   {
+    "id": "api-validate-legaltags",
+    "type": "api",
+    "vocab": false,
+    "rank": 4,
+    "rank_dedup": 4,
+    "top3": [
+     "GET /legaltags",
+     "GET /jobs/updateLegalTagStatus",
+     "POST /legaltags:batchRetrieve"
+    ],
+    "seconds": 0.058,
+    "error": null
+   },
+   {
+    "id": "api-batch-fetch",
+    "type": "api",
+    "vocab": false,
+    "rank": 4,
+    "rank_dedup": 4,
+    "top3": [
+     "POST /query/records/headers",
+     "GET /records",
+     "POST /query_with_cursor"
+    ],
+    "seconds": 0.059,
+    "error": null
+   },
+   {
+    "id": "prop-marker-depth",
+    "type": "property",
+    "vocab": false,
+    "rank": null,
+    "rank_dedup": null,
+    "top3": [
+     "master-data--Wellbore data.TargetFormation",
+     "master-data--EvaluationPlan data.ReservoirEvaluations[].MaximumDepthTestStart",
+     "master-data--RigUtilization data.StartHoleDepth"
+    ],
+    "seconds": 0.256,
+    "error": null
+   },
+   {
+    "id": "prop-current-operator",
+    "type": "property",
+    "vocab": false,
+    "rank": null,
+    "rank_dedup": null,
+    "top3": [
+     "master-data--WellPlanningWell ",
+     "master-data--Well data.BusinessIntentionID",
+     "work-product-component--WellOperationsReport "
+    ],
+    "seconds": 0.082,
+    "error": null
+   },
+   {
+    "id": "prop-log-wellbore",
+    "type": "property",
+    "vocab": false,
+    "rank": null,
+    "rank_dedup": null,
+    "top3": [
+     "reference-data--WellLogMethod ",
+     "master-data--WellLogAcquisition data.WellboreID",
+     "work-product-component--WellLog data.WellLogAcquisitionDetails.WellLogAcquisitionID"
+    ],
+    "seconds": 0.068,
+    "error": null
+   },
+   {
+    "id": "prop-curve-mnemonic",
+    "type": "property",
+    "vocab": true,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "work-product-component--WellLog data.Curves[].Mnemonic",
+     "work-product-component--WellPressureTestRawMeasurement data.Curves[].Mnemonic",
+     "work-product-component--WellLog data.Curves[].LogCurveTypeID"
+    ],
+    "seconds": 0.065,
+    "error": null
+   },
+   {
+    "id": "prop-curve-unit",
+    "type": "property",
+    "vocab": false,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "work-product-component--WellLog data.Curves[].CurveUnit",
+     "work-product-component--WellPressureTestRawMeasurement data.Curves[].CurveUnitID",
+     "work-product-component--WellLog data.SamplingInterval"
+    ],
+    "seconds": 0.062,
+    "error": null
+   },
+   {
+    "id": "prop-file-size",
+    "type": "property",
+    "vocab": false,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "dataset--File.PRODML data.DatasetProperties.FileSourceInfo.FileSize",
+     "dataset--File.OGC.GeoTIFF data.DatasetProperties.FileSourceInfo.FileSize",
+     "dataset--File.Generic data.DatasetProperties.FileSourceInfo.FileSize"
+    ],
+    "seconds": 0.07,
+    "error": null
+   },
+   {
+    "id": "prop-file-location",
+    "type": "property",
+    "vocab": false,
+    "rank": null,
+    "rank_dedup": null,
+    "top3": [
+     "dataset--FileCollection.SEGA data.StorageFacilityID",
+     "dataset--FileCollection.SEGY data.StorageFacilityID",
+     "dataset--File.CompressedVectorHeaders data.DatasetProperties.FileSourceInfo"
+    ],
+    "seconds": 0.068,
+    "error": null
+   },
+   {
+    "id": "prop-seismic-sample-interval",
+    "type": "property",
+    "vocab": false,
+    "rank": null,
+    "rank_dedup": null,
+    "top3": [
+     "work-product-component--SeismicPostStackTrace3DVolume data.TraceLength",
+     "work-product-component--SeismicPreStackTrace3DVolume data.TraceLength",
+     "work-product-component--SeismicFieldTraceData data.TraceLength"
+    ],
+    "seconds": 0.073,
+    "error": null
+   },
+   {
+    "id": "prop-definitive-trajectory",
+    "type": "property",
+    "vocab": false,
+    "rank": 7,
+    "rank_dedup": 2,
+    "top3": [
+     "master-data--Wellbore data.TrajectoryTypeID",
+     "work-product-component--WellboreTrajectory data.IsDefinitive",
+     "master-data--Wellbore data.WellboreTrajectoryTypeID"
+    ],
+    "seconds": 0.068,
+    "error": null
+   },
+   {
+    "id": "prop-kelly-bushing",
+    "type": "property",
+    "vocab": false,
+    "rank": null,
+    "rank_dedup": null,
+    "top3": [
+     "master-data--PerforationInterval data.VerticalMeasurement",
+     "master-data--WellLicense data.VerticalMeasurement",
+     "master-data--HoleSection data.MeasuredDepthBase"
+    ],
+    "seconds": 0.078,
+    "error": null
+   },
+   {
+    "id": "prop-log-sampling",
+    "type": "property",
+    "vocab": false,
+    "rank": null,
+    "rank_dedup": 7,
+    "top3": [
+     "work-product-component--DepthShift data.ShiftedSamplingDomainTypeID",
+     "master-data--Sample data.SampleAcquisition.SampleAcquisitionDetail.TopDepth",
+     "master-data--Sample data.SampleAcquisition.SampleAcquisitionDetail.BaseDepth"
+    ],
+    "seconds": 0.068,
+    "error": null
+   },
+   {
+    "id": "prop-file-checksum",
+    "type": "property",
+    "vocab": true,
+    "rank": null,
+    "rank_dedup": null,
+    "top3": [
+     "work-product-component--WellFluidsReport ",
+     "work-product-component--FaultSystem data.Artefacts",
+     "work-product-component--FormationIntegrityTest data.Artefacts"
+    ],
+    "seconds": 0.069,
+    "error": null
+   },
+   {
+    "id": "prop-azimuth-reference",
+    "type": "property",
+    "vocab": false,
+    "rank": 6,
+    "rank_dedup": 2,
+    "top3": [
+     "work-product-component--WellboreTrajectory data.SurveyType",
+     "work-product-component--WellboreTrajectory data.AzimuthReferenceType",
+     "work-product-component--FaultInterpretation data.RepresentativeDipDirection.NorthKind"
+    ],
+    "seconds": 0.076,
+    "error": null
+   },
+   {
+    "id": "kind-formation-tops",
+    "type": "kind",
+    "vocab": false,
+    "rank": 9,
+    "rank_dedup": 2,
+    "top3": [
+     "master-data--Wellbore",
+     "work-product-component--WellboreMarkerSet",
+     "master-data--OperationsReport"
+    ],
+    "seconds": 0.066,
+    "error": null
+   },
+   {
+    "id": "kind-production",
+    "type": "kind",
+    "vocab": false,
+    "rank": null,
+    "rank_dedup": null,
+    "top3": [
+     "master-data--OperationsReport",
+     "work-product-component--FlowTest",
+     "work-product-component--WellOperationsReport"
+    ],
+    "seconds": 0.065,
+    "error": null
+   },
+   {
+    "id": "kind-cement-job",
+    "type": "kind",
+    "vocab": true,
+    "rank": 8,
+    "rank_dedup": 4,
+    "top3": [
+     "reference-data--CementStageType",
+     "master-data--PlannedCementJob",
+     "reference-data--CementJobQuality"
+    ],
+    "seconds": 0.067,
+    "error": null
+   },
+   {
+    "id": "kind-rig",
+    "type": "kind",
+    "vocab": false,
+    "rank": 2,
+    "rank_dedup": 2,
+    "top3": [
+     "master-data--RigDerrick",
+     "master-data--Rig",
+     "master-data--WellActivityProgram"
+    ],
+    "seconds": 0.067,
+    "error": null
+   },
+   {
+    "id": "kind-core-samples",
+    "type": "kind",
+    "vocab": false,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "master-data--Coring",
+     "master-data--RockSample",
+     "reference-data--ConventionalCoreType"
+    ],
+    "seconds": 0.069,
+    "error": null
+   },
+   {
+    "id": "kind-directional-survey",
+    "type": "kind",
+    "vocab": false,
+    "rank": 5,
+    "rank_dedup": 3,
+    "top3": [
+     "reference-data--CalculationMethodType",
+     "master-data--SurveyProgram",
+     "work-product-component--WellboreTrajectory"
+    ],
+    "seconds": 0.063,
+    "error": null
+   },
+   {
+    "id": "kind-drilling-permit",
+    "type": "kind",
+    "vocab": false,
+    "rank": null,
+    "rank_dedup": null,
+    "top3": [
+     "master-data--WellSiteStructure",
+     "master-data--Wellbore",
+     "master-data--WellPressureTestAcquisitionJob"
+    ],
+    "seconds": 0.066,
+    "error": null
+   }
+  ]
+ },
+ "bm25": {
+  "setup_seconds": 1.4,
+  "rows": [
+   {
+    "id": "api-upload-url",
+    "type": "api",
+    "vocab": false,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "GET /v2/files/uploadURL",
+     "POST /v2/files/metadata",
+     "POST /legaltags:query"
+    ],
+    "seconds": 0.0,
+    "error": null
+   },
+   {
+    "id": "api-download-url",
+    "type": "api",
+    "vocab": false,
+    "rank": 4,
+    "rank_dedup": 4,
+    "top3": [
+     "DELETE /v2/files/{id}/metadata",
+     "GET /v2/files/{id}/metadata",
+     "POST /v2/files/metadata"
+    ],
+    "seconds": 0.0,
+    "error": null
+   },
+   {
+    "id": "api-get-record",
+    "type": "api",
+    "vocab": true,
+    "rank": null,
+    "rank_dedup": null,
+    "top3": [
+     "GET /ddms/{id}/{type}/{localid}",
+     "GET /admin/updateCacheForSingle",
+     "POST /ddms/v3/welllogs/{record_id}/sessions"
+    ],
+    "seconds": 0.0,
+    "error": null
+   },
+   {
+    "id": "api-search-name",
+    "type": "api",
+    "vocab": false,
+    "rank": null,
+    "rank_dedup": null,
+    "top3": [
+     "DELETE /ddms/v3/wellbores/{record_id}",
+     "GET /retrievalInstructions",
+     "POST /retrievalInstructions"
+    ],
+    "seconds": 0.0,
+    "error": null
+   },
+   {
+    "id": "api-cursor",
+    "type": "api",
+    "vocab": false,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "POST /query_with_cursor",
+     "POST /query",
+     "POST /dataset/tenant/{tenantid}/subproject/{subprojectid}"
+    ],
+    "seconds": 0.0,
+    "error": null
+   },
+   {
+    "id": "api-trajectory-crs",
+    "type": "api",
+    "vocab": false,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "POST /v4/convertTrajectory",
+     "POST /v4/convert",
+     "GET /v3/coordinate-reference-system"
+    ],
+    "seconds": 0.0,
+    "error": null
+   },
+   {
+    "id": "api-create-legaltag",
+    "type": "api",
+    "vocab": true,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "POST /legaltags",
+     "GET /legaltags/{name}",
+     "DELETE /legaltags/{name}"
+    ],
+    "seconds": 0.0,
+    "error": null
+   },
+   {
+    "id": "api-add-member",
+    "type": "api",
+    "vocab": false,
+    "rank": 10,
+    "rank_dedup": 10,
+    "top3": [
+     "PATCH /groups/{group_email}",
+     "DELETE /groups/{group_email}",
+     "POST /subproject/tenant/{tenantid}/subproject/{subprojectid}"
+    ],
+    "seconds": 0.0,
+    "error": null
+   },
+   {
+    "id": "api-record-history",
+    "type": "api",
+    "vocab": false,
+    "rank": null,
+    "rank_dedup": null,
+    "top3": [
+     "PUT /log-recognition/upload-catalog",
+     "GET /v1/workflow/{workflow_name}/workflowRun",
+     "POST /ddms/v3/welllogs/{record_id}/sessions/{session_id}/data"
+    ],
+    "seconds": 0.0,
+    "error": null
+   },
+   {
+    "id": "api-register-schema",
+    "type": "api",
+    "vocab": false,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "POST /schema",
+     "PUT /schemas/system",
+     "PUT /schema"
+    ],
+    "seconds": 0.0,
+    "error": null
+   },
+   {
+    "id": "api-reindex-kind",
+    "type": "api",
+    "vocab": false,
+    "rank": 3,
+    "rank_dedup": 3,
+    "top3": [
+     "POST /query_with_cursor",
+     "POST /query",
+     "POST /reindex"
+    ],
+    "seconds": 0.0,
+    "error": null
+   },
+   {
+    "id": "api-trigger-workflow",
+    "type": "api",
+    "vocab": false,
+    "rank": 7,
+    "rank_dedup": 7,
+    "top3": [
+     "POST /v1/workflow",
+     "POST /v1/workflow/system",
+     "PUT /v1/workflow/{workflow_name}/workflowRun/{runId}"
+    ],
+    "seconds": 0.0,
+    "error": null
+   },
+   {
+    "id": "api-unit-conversion",
+    "type": "api",
+    "vocab": false,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "GET /v3/conversion/scale",
+     "GET /v3/conversion/abcd",
+     "POST /v4/convert"
+    ],
+    "seconds": 0.0,
+    "error": null
+   },
+   {
+    "id": "api-purge-record",
+    "type": "api",
+    "vocab": false,
+    "rank": null,
+    "rank_dedup": null,
+    "top3": [
+     "POST /metadataRecord/{id}/softDelete",
+     "POST /records/delete",
+     "DELETE /user"
+    ],
+    "seconds": 0.0,
+    "error": null
+   },
+   {
+    "id": "api-subscribe",
+    "type": "api",
+    "vocab": false,
+    "rank": null,
+    "rank_dedup": null,
+    "top3": [
+     "GET /operation/change-tier/{operation-id}",
+     "PUT /operation/change-tier",
+     "POST /records/delete"
+    ],
+    "seconds": 0.0,
+    "error": null
+   },
+   {
+    "id": "api-welllog-bulk",
+    "type": "api",
+    "vocab": false,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "GET /ddms/v3/welllogs/{record_id}/data",
+     "POST /ddms/v3/welllogs/{record_id}/data",
+     "GET /ddms/v3/welllogs/{record_id}/versions/{version}/data"
+    ],
+    "seconds": 0.0,
+    "error": null
+   },
+   {
+    "id": "api-validate-legaltags",
+    "type": "api",
+    "vocab": false,
+    "rank": 5,
+    "rank_dedup": 5,
+    "top3": [
+     "GET /legaltags",
+     "GET /_ah/readiness_check",
+     "GET /_ah/liveness_check"
+    ],
+    "seconds": 0.0,
+    "error": null
+   },
+   {
+    "id": "api-batch-fetch",
+    "type": "api",
+    "vocab": false,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "POST /query/records",
+     "POST /query/records/headers",
+     "POST /query/records:batch"
+    ],
+    "seconds": 0.0,
+    "error": null
+   },
+   {
+    "id": "prop-marker-depth",
+    "type": "property",
+    "vocab": false,
+    "rank": null,
+    "rank_dedup": null,
+    "top3": [
+     "work-product-component--StimulationStage data.FormationTopMeasuredDepth",
+     "work-product-component--StimulationStage data.FormationTopTrueVerticalDepth",
+     "master-data--EvaluationPlan data.FormationEvaluationCorings[].MeasuredDepthTop"
+    ],
+    "seconds": 0.005,
+    "error": null
+   },
+   {
+    "id": "prop-current-operator",
+    "type": "property",
+    "vocab": false,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "master-data--Well data.FacilityOperators[].FacilityOperatorOrganisationID",
+     "master-data--WellSiteStructure data.FacilityOperators[].FacilityOperatorOrganisationID",
+     "master-data--Rig data.FacilityOperators[].FacilityOperatorOrganisationID"
+    ],
+    "seconds": 0.006,
+    "error": null
+   },
+   {
+    "id": "prop-log-wellbore",
+    "type": "property",
+    "vocab": false,
+    "rank": 2,
+    "rank_dedup": 2,
+    "top3": [
+     "master-data--WellLogAcquisition data.WellboreID",
+     "work-product-component--WellLog data.WellboreID",
+     "master-data--WellLogAcquisition data.LogRuns[].LogPasses[].WellboreFluidTypeID"
+    ],
+    "seconds": 0.005,
+    "error": null
+   },
+   {
+    "id": "prop-curve-mnemonic",
+    "type": "property",
+    "vocab": true,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "work-product-component--WellLog data.Curves[].Mnemonic",
+     "work-product-component--WellLog data.Curves[].LogCurveTypeID",
+     "work-product-component--WellLog data.Curves[].CurveDescription"
+    ],
+    "seconds": 0.001,
+    "error": null
+   },
+   {
+    "id": "prop-curve-unit",
+    "type": "property",
+    "vocab": false,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "work-product-component--WellLog data.Curves[].CurveUnit",
+     "work-product-component--WellPressureTestRawMeasurement data.Curves[].CurveUnitID",
+     "work-product-component--WellLog data.Curves[].CurveID"
+    ],
+    "seconds": 0.006,
+    "error": null
+   },
+   {
+    "id": "prop-file-size",
+    "type": "property",
+    "vocab": false,
+    "rank": null,
+    "rank_dedup": null,
+    "top3": [
+     "dataset--File.Image.WorldFile data.Endian",
+     "dataset--File.Image.WorldFile data.DatasetProperties.FileSourceInfo.Checksum",
+     "dataset--File.EML data.DatasetProperties.FileSourceInfo.Checksum"
+    ],
+    "seconds": 0.002,
+    "error": null
+   },
+   {
+    "id": "prop-file-location",
+    "type": "property",
+    "vocab": false,
+    "rank": null,
+    "rank_dedup": null,
+    "top3": [
+     "dataset--File.Image.WorldFile data.DatasetProperties.FileSourceInfo",
+     "dataset--File.EML data.DatasetProperties.FileSourceInfo",
+     "dataset--File.Generic data.DatasetProperties.FileSourceInfo"
+    ],
+    "seconds": 0.003,
+    "error": null
+   },
+   {
+    "id": "prop-seismic-sample-interval",
+    "type": "property",
+    "vocab": false,
+    "rank": null,
+    "rank_dedup": null,
+    "top3": [
+     "work-product-component--SeismicPostStackTrace3DVolume data.StartVerticalIndex",
+     "work-product-component--SeismicPostStackTrace3DVolume data.EndVerticalIndex",
+     "work-product-component--SeismicPreStackTrace3DVolume data.StartVerticalIndex"
+    ],
+    "seconds": 0.011,
+    "error": null
+   },
+   {
+    "id": "prop-definitive-trajectory",
+    "type": "property",
+    "vocab": false,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "work-product-component--WellboreTrajectory data.IsDefinitive",
+     "master-data--Wellbore data.DefinitiveTrajectoryID",
+     "master-data--SurveyProgram data.SurveySections[].WellboreTrajectoryID"
+    ],
+    "seconds": 0.003,
+    "error": null
+   },
+   {
+    "id": "prop-kelly-bushing",
+    "type": "property",
+    "vocab": false,
+    "rank": 9,
+    "rank_dedup": 6,
+    "top3": [
+     "master-data--RigDerrick data.RotarySystemDescription",
+     "master-data--RigCoilTubingReel data.InjectorStackUpHeight",
+     "master-data--ReferenceLevel data.VerticalMeasurementPathID"
+    ],
+    "seconds": 0.022,
+    "error": null
+   },
+   {
+    "id": "prop-log-sampling",
+    "type": "property",
+    "vocab": false,
+    "rank": null,
+    "rank_dedup": null,
+    "top3": [
+     "work-product-component--DepthShift data.DepthShiftedSamples",
+     "master-data--SeismicAcquisitionSurvey data.CableSpacingDistance",
+     "work-product-component--WellLog data.Curves[].TopDepth"
+    ],
+    "seconds": 0.005,
+    "error": null
+   },
+   {
+    "id": "prop-file-checksum",
+    "type": "property",
+    "vocab": true,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "dataset--File.Image.WorldFile data.Checksum",
+     "dataset--File.EML data.Checksum",
+     "dataset--File.Generic data.Checksum"
+    ],
+    "seconds": 0.002,
+    "error": null
+   },
+   {
+    "id": "prop-azimuth-reference",
+    "type": "property",
+    "vocab": false,
+    "rank": null,
+    "rank_dedup": 5,
+    "top3": [
+     "work-product-component--WellboreTrajectory data.SurfaceGridConvergence",
+     "work-product-component--WellboreTrajectory data.SurveyType",
+     "work-product-component--WellboreTrajectory data.SurveyReferenceIdentifier"
+    ],
+    "seconds": 0.001,
+    "error": null
+   },
+   {
+    "id": "kind-formation-tops",
+    "type": "kind",
+    "vocab": false,
+    "rank": 2,
+    "rank_dedup": 2,
+    "top3": [
+     "work-product-component--HorizonControlPoints",
+     "work-product-component--WellboreMarkerSet",
+     "master-data--Wellbore"
+    ],
+    "seconds": 0.037,
+    "error": null
+   },
+   {
+    "id": "kind-production",
+    "type": "kind",
+    "vocab": false,
+    "rank": null,
+    "rank_dedup": null,
+    "top3": [
+     "master-data--Sample",
+     "work-product-component--ReservoirSimulationEquilibriumModel",
+     "work-product-component--FluidBoundaryInterpretation"
+    ],
+    "seconds": 0.038,
+    "error": null
+   },
+   {
+    "id": "kind-cement-job",
+    "type": "kind",
+    "vocab": true,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "work-product-component--CementJob",
+     "master-data--PlannedCementJob"
+    ],
+    "seconds": 0.037,
+    "error": null
+   },
+   {
+    "id": "kind-rig",
+    "type": "kind",
+    "vocab": false,
+    "rank": 2,
+    "rank_dedup": 2,
+    "top3": [
+     "master-data--RigSpecifications",
+     "master-data--Rig",
+     "master-data--WellActivityProgram"
+    ],
+    "seconds": 0.036,
+    "error": null
+   },
+   {
+    "id": "kind-core-samples",
+    "type": "kind",
+    "vocab": false,
+    "rank": 9,
+    "rank_dedup": 5,
+    "top3": [
+     "work-product-component--SamplesAnalysis",
+     "work-product-component--DepthShift",
+     "master-data--Sample"
+    ],
+    "seconds": 0.002,
+    "error": null
+   },
+   {
+    "id": "kind-directional-survey",
+    "type": "kind",
+    "vocab": false,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "work-product-component--WellboreTrajectory",
+     "master-data--SurveyProgram",
+     "master-data--SeismicAcquisitionSurvey"
+    ],
+    "seconds": 0.037,
+    "error": null
+   },
+   {
+    "id": "kind-drilling-permit",
+    "type": "kind",
+    "vocab": false,
+    "rank": null,
+    "rank_dedup": 6,
+    "top3": [
+     "work-product-component--WellOperationsReport",
+     "master-data--BHARun",
+     "work-product-component--CementJob"
+    ],
+    "seconds": 0.004,
+    "error": null
+   }
+  ]
+ },
+ "hybrid": {
+  "setup_seconds": 0.0,
+  "rows": [
+   {
+    "id": "api-upload-url",
+    "type": "api",
+    "vocab": false,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "GET /v2/files/uploadURL",
+     "GET /utility/upload-connection-string",
+     "GET /v2/files/{id}/downloadURL"
+    ],
+    "seconds": 0.06,
+    "error": null
+   },
+   {
+    "id": "api-download-url",
+    "type": "api",
+    "vocab": false,
+    "rank": 5,
+    "rank_dedup": 5,
+    "top3": [
+     "POST /v2/files/metadata",
+     "GET /v2/files/{id}/metadata",
+     "DELETE /v2/files/{id}/metadata"
+    ],
+    "seconds": 0.062,
+    "error": null
+   },
+   {
+    "id": "api-get-record",
+    "type": "api",
+    "vocab": true,
+    "rank": 7,
+    "rank_dedup": 7,
+    "top3": [
+     "GET /ddms/{id}/{type}/{localid}",
+     "GET /records",
+     "GET /records/{id}/{version}"
+    ],
+    "seconds": 0.057,
+    "error": null
+   },
+   {
+    "id": "api-search-name",
+    "type": "api",
+    "vocab": false,
+    "rank": 5,
+    "rank_dedup": 5,
+    "top3": [
+     "GET /ddms/v3/wellbores/{record_id}/versions",
+     "POST /log-recognition/family",
+     "GET /ddms/v3/wellbores/{record_id}"
+    ],
+    "seconds": 0.06,
+    "error": null
+   },
+   {
+    "id": "api-cursor",
+    "type": "api",
+    "vocab": false,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "POST /query_with_cursor",
+     "POST /query",
+     "DELETE /query_with_cursor/{cursor}"
+    ],
+    "seconds": 0.059,
+    "error": null
+   },
+   {
+    "id": "api-trajectory-crs",
+    "type": "api",
+    "vocab": false,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "POST /v4/convertTrajectory",
+     "POST /v4/convert",
+     "GET /v3/coordinate-reference-system"
+    ],
+    "seconds": 0.059,
+    "error": null
+   },
+   {
+    "id": "api-create-legaltag",
+    "type": "api",
+    "vocab": true,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "POST /legaltags",
+     "PUT /legaltags",
+     "GET /legaltags/{name}"
+    ],
+    "seconds": 0.059,
+    "error": null
+   },
+   {
+    "id": "api-add-member",
+    "type": "api",
+    "vocab": false,
+    "rank": 5,
+    "rank_dedup": 5,
+    "top3": [
+     "PATCH /groups/{group_email}",
+     "PUT /user",
+     "GET /groups/{group_email}/members"
+    ],
+    "seconds": 0.059,
+    "error": null
+   },
+   {
+    "id": "api-record-history",
+    "type": "api",
+    "vocab": false,
+    "rank": null,
+    "rank_dedup": null,
+    "top3": [
+     "PUT /log-recognition/upload-catalog",
+     "POST /ddms/v3/welllogs/{record_id}/sessions/{session_id}/data",
+     "POST /ddms/v3/wellpressuretestrawmeasurement/{record_id}/sessions"
+    ],
+    "seconds": 0.059,
+    "error": null
+   },
+   {
+    "id": "api-register-schema",
+    "type": "api",
+    "vocab": false,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "POST /schema",
+     "PUT /schema",
+     "PUT /schemas/system"
+    ],
+    "seconds": 0.057,
+    "error": null
+   },
+   {
+    "id": "api-reindex-kind",
+    "type": "api",
+    "vocab": false,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "POST /reindex",
+     "POST /reindex/records",
+     "POST /query_with_cursor"
+    ],
+    "seconds": 0.058,
+    "error": null
+   },
+   {
+    "id": "api-trigger-workflow",
+    "type": "api",
+    "vocab": false,
+    "rank": null,
+    "rank_dedup": null,
+    "top3": [
+     "POST /v1/workflow/system",
+     "PATCH /ddms/v3/ppfgdataset/{record_id}/sessions/{session_id}",
+     "PATCH /ddms/v3/wellboretrajectories/{record_id}/sessions/{session_id}"
+    ],
+    "seconds": 0.058,
+    "error": null
+   },
+   {
+    "id": "api-unit-conversion",
+    "type": "api",
+    "vocab": false,
+    "rank": 2,
+    "rank_dedup": 2,
+    "top3": [
+     "POST /v4/convert",
+     "GET /v3/conversion/scale",
+     "POST /v3/conversion/scale"
+    ],
+    "seconds": 0.058,
+    "error": null
+   },
+   {
+    "id": "api-purge-record",
+    "type": "api",
+    "vocab": false,
+    "rank": null,
+    "rank_dedup": null,
+    "top3": [
+     "POST /records/delete",
+     "DELETE /ddms/v3/wellpressuretestrawmeasurement/{record_id}",
+     "DELETE /ddms/v3/ppfgdataset/{record_id}"
+    ],
+    "seconds": 0.059,
+    "error": null
+   },
+   {
+    "id": "api-subscribe",
+    "type": "api",
+    "vocab": false,
+    "rank": null,
+    "rank_dedup": null,
+    "top3": [
+     "PUT /records",
+     "GET /records",
+     "PATCH /records"
+    ],
+    "seconds": 0.059,
+    "error": null
+   },
+   {
+    "id": "api-welllog-bulk",
+    "type": "api",
+    "vocab": false,
+    "rank": 3,
+    "rank_dedup": 3,
+    "top3": [
+     "POST /ddms/v3/welllogs/{record_id}/data",
+     "POST /ddms/v3/welllogs/{record_id}/versions/{version}/data/statistics",
+     "GET /ddms/v3/welllogs/{record_id}/data"
+    ],
+    "seconds": 0.059,
+    "error": null
+   },
+   {
+    "id": "api-validate-legaltags",
+    "type": "api",
+    "vocab": false,
+    "rank": 3,
+    "rank_dedup": 3,
+    "top3": [
+     "GET /legaltags",
+     "GET /jobs/updateLegalTagStatus",
+     "POST /legaltags:validate"
+    ],
+    "seconds": 0.059,
+    "error": null
+   },
+   {
+    "id": "api-batch-fetch",
+    "type": "api",
+    "vocab": false,
+    "rank": 2,
+    "rank_dedup": 2,
+    "top3": [
+     "POST /query/records/headers",
+     "POST /query/records:batch",
+     "GET /records"
+    ],
+    "seconds": 0.058,
+    "error": null
+   },
+   {
+    "id": "prop-marker-depth",
+    "type": "property",
+    "vocab": false,
+    "rank": null,
+    "rank_dedup": null,
+    "top3": [
+     "work-product-component--RockImage data.TopDepthMeasuredDepth",
+     "master-data--Wellbore data.TargetFormation",
+     "work-product-component--StimulationStage data.FormationTopMeasuredDepth"
+    ],
+    "seconds": 0.064,
+    "error": null
+   },
+   {
+    "id": "prop-current-operator",
+    "type": "property",
+    "vocab": false,
+    "rank": 2,
+    "rank_dedup": 2,
+    "top3": [
+     "master-data--WellPlanningWell ",
+     "master-data--Well data.FacilityOperators[].FacilityOperatorOrganisationID",
+     "master-data--Well data.BusinessIntentionID"
+    ],
+    "seconds": 0.063,
+    "error": null
+   },
+   {
+    "id": "prop-log-wellbore",
+    "type": "property",
+    "vocab": false,
+    "rank": null,
+    "rank_dedup": null,
+    "top3": [
+     "master-data--WellLogAcquisition data.WellboreID",
+     "work-product-component--WellLog data.WellLogAcquisitionDetails.WellLogAcquisitionID",
+     "work-product-component--WellLog data.WellLogAcquisitionDetails"
+    ],
+    "seconds": 0.068,
+    "error": null
+   },
+   {
+    "id": "prop-curve-mnemonic",
+    "type": "property",
+    "vocab": true,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "work-product-component--WellLog data.Curves[].Mnemonic",
+     "work-product-component--WellLog data.Curves[].LogCurveTypeID",
+     "work-product-component--WellLog data.Curves[].CurveDescription"
+    ],
+    "seconds": 0.06,
+    "error": null
+   },
+   {
+    "id": "prop-curve-unit",
+    "type": "property",
+    "vocab": false,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "work-product-component--WellLog data.Curves[].CurveUnit",
+     "work-product-component--WellPressureTestRawMeasurement data.Curves[].CurveUnitID",
+     "work-product-component--WellLog data.Curves[].CurveQuality"
+    ],
+    "seconds": 0.066,
+    "error": null
+   },
+   {
+    "id": "prop-file-size",
+    "type": "property",
+    "vocab": false,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "dataset--File.PRODML data.DatasetProperties.FileSourceInfo.FileSize",
+     "dataset--File.Image.WorldFile data.Endian",
+     "dataset--File.OGC.GeoTIFF data.DatasetProperties.FileSourceInfo.FileSize"
+    ],
+    "seconds": 0.06,
+    "error": null
+   },
+   {
+    "id": "prop-file-location",
+    "type": "property",
+    "vocab": false,
+    "rank": null,
+    "rank_dedup": null,
+    "top3": [
+     "dataset--FileCollection.SEGA data.StorageFacilityID",
+     "dataset--File.Image.WorldFile data.DatasetProperties.FileSourceInfo",
+     "dataset--FileCollection.SEGY data.StorageFacilityID"
+    ],
+    "seconds": 0.073,
+    "error": null
+   },
+   {
+    "id": "prop-seismic-sample-interval",
+    "type": "property",
+    "vocab": false,
+    "rank": null,
+    "rank_dedup": null,
+    "top3": [
+     "work-product-component--SeismicPostStackTrace3DVolume data.TraceLength",
+     "work-product-component--SeismicPreStackTrace3DVolume data.TraceLength",
+     "work-product-component--SeismicPreStackTrace3DVolume data.StartVerticalIndex"
+    ],
+    "seconds": 0.082,
+    "error": null
+   },
+   {
+    "id": "prop-definitive-trajectory",
+    "type": "property",
+    "vocab": false,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "work-product-component--WellboreTrajectory data.IsDefinitive",
+     "master-data--Wellbore data.DefinitiveTrajectoryID",
+     "master-data--Wellbore data.WellboreTrajectoryTypeID"
+    ],
+    "seconds": 0.064,
+    "error": null
+   },
+   {
+    "id": "prop-kelly-bushing",
+    "type": "property",
+    "vocab": false,
+    "rank": null,
+    "rank_dedup": 10,
+    "top3": [
+     "master-data--PerforationInterval data.VerticalMeasurement",
+     "master-data--RigDerrick data.RotarySystemDescription",
+     "master-data--WellLicense data.VerticalMeasurement"
+    ],
+    "seconds": 0.08,
+    "error": null
+   },
+   {
+    "id": "prop-log-sampling",
+    "type": "property",
+    "vocab": false,
+    "rank": null,
+    "rank_dedup": null,
+    "top3": [
+     "work-product-component--DepthShift data.DepthShiftedSamples",
+     "work-product-component--WellLog data.BottomMeasuredDepth",
+     "work-product-component--WellLog data.TopMeasuredDepth"
+    ],
+    "seconds": 0.063,
+    "error": null
+   },
+   {
+    "id": "prop-file-checksum",
+    "type": "property",
+    "vocab": true,
+    "rank": 2,
+    "rank_dedup": 2,
+    "top3": [
+     "work-product-component--WellFluidsReport ",
+     "dataset--File.Image.WorldFile data.Checksum",
+     "work-product-component--FaultSystem data.Artefacts"
+    ],
+    "seconds": 0.06,
+    "error": null
+   },
+   {
+    "id": "prop-azimuth-reference",
+    "type": "property",
+    "vocab": false,
+    "rank": 9,
+    "rank_dedup": 3,
+    "top3": [
+     "work-product-component--WellboreTrajectory data.SurveyType",
+     "work-product-component--WellboreTrajectory data.SurfaceGridConvergence",
+     "work-product-component--WellboreTrajectory data.AzimuthReferenceType"
+    ],
+    "seconds": 0.059,
+    "error": null
+   },
+   {
+    "id": "kind-formation-tops",
+    "type": "kind",
+    "vocab": false,
+    "rank": 2,
+    "rank_dedup": 2,
+    "top3": [
+     "master-data--Wellbore",
+     "work-product-component--WellboreMarkerSet",
+     "work-product-component--HorizonControlPoints"
+    ],
+    "seconds": 0.095,
+    "error": null
+   },
+   {
+    "id": "kind-production",
+    "type": "kind",
+    "vocab": false,
+    "rank": null,
+    "rank_dedup": null,
+    "top3": [
+     "work-product-component--ReservoirSimulationEquilibriumModel",
+     "master-data--OperationsReport",
+     "master-data--Sample"
+    ],
+    "seconds": 0.098,
+    "error": null
+   },
+   {
+    "id": "kind-cement-job",
+    "type": "kind",
+    "vocab": true,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "work-product-component--CementJob",
+     "master-data--PlannedCementJob",
+     "reference-data--CementStageType"
+    ],
+    "seconds": 0.098,
+    "error": null
+   },
+   {
+    "id": "kind-rig",
+    "type": "kind",
+    "vocab": false,
+    "rank": 3,
+    "rank_dedup": 3,
+    "top3": [
+     "master-data--WellActivityProgram",
+     "master-data--RigSpecifications",
+     "master-data--Rig"
+    ],
+    "seconds": 0.096,
+    "error": null
+   },
+   {
+    "id": "kind-core-samples",
+    "type": "kind",
+    "vocab": false,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "master-data--Coring",
+     "master-data--RockSample",
+     "work-product-component--RockSampleAnalysis"
+    ],
+    "seconds": 0.06,
+    "error": null
+   },
+   {
+    "id": "kind-directional-survey",
+    "type": "kind",
+    "vocab": false,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "work-product-component--WellboreTrajectory",
+     "reference-data--CalculationMethodType",
+     "master-data--SurveyProgram"
+    ],
+    "seconds": 0.095,
+    "error": null
+   },
+   {
+    "id": "kind-drilling-permit",
+    "type": "kind",
+    "vocab": false,
+    "rank": null,
+    "rank_dedup": 9,
+    "top3": [
+     "master-data--WellSiteStructure",
+     "work-product-component--WellOperationsReport",
+     "master-data--Wellbore"
+    ],
+    "seconds": 0.072,
+    "error": null
+   }
+  ]
+ },
+ "catalog": {
+  "setup_seconds": 0.1,
+  "rows": [
+   {
+    "id": "api-upload-url",
+    "type": "api",
+    "vocab": false,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "GET /v2/files/uploadURL",
+     "POST /v2/files/metadata",
+     "POST /storageInstructions"
+    ],
+    "seconds": 39.882,
+    "error": null
+   },
+   {
+    "id": "api-download-url",
+    "type": "api",
+    "vocab": false,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "GET /v2/files/{id}/downloadURL",
+     "GET /v2/files/{id}/metadata",
+     "GET /retrievalInstructions"
+    ],
+    "seconds": 12.005,
+    "error": null
+   },
+   {
+    "id": "api-get-record",
+    "type": "api",
+    "vocab": true,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "GET /records/{id}",
+     "GET /schema/{id}",
+     "GET /v2/files/{id}/metadata"
+    ],
+    "seconds": 29.874,
+    "error": null
+   },
+   {
+    "id": "api-search-name",
+    "type": "api",
+    "vocab": false,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "POST /query",
+     "POST /query/records",
+     "POST /query_with_cursor"
+    ],
+    "seconds": 17.402,
+    "error": null
+   },
+   {
+    "id": "api-cursor",
+    "type": "api",
+    "vocab": false,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "POST /query_with_cursor",
+     "DELETE /query_with_cursor/{cursor}",
+     "POST /query"
+    ],
+    "seconds": 32.726,
+    "error": null
+   },
+   {
+    "id": "api-trajectory-crs",
+    "type": "api",
+    "vocab": false,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "POST /v4/convertTrajectory",
+     "POST /v4/convert",
+     "POST /v3/coordinate-transformation"
+    ],
+    "seconds": 26.251,
+    "error": null
+   },
+   {
+    "id": "api-create-legaltag",
+    "type": "api",
+    "vocab": true,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "POST /legaltags",
+     "GET /legaltags:properties",
+     "POST /legaltags:validate"
+    ],
+    "seconds": 29.642,
+    "error": null
+   },
+   {
+    "id": "api-add-member",
+    "type": "api",
+    "vocab": false,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "POST /groups/{group_email}/members",
+     "GET /groups",
+     "GET /groups/{group_email}/members"
+    ],
+    "seconds": 23.566,
+    "error": null
+   },
+   {
+    "id": "api-record-history",
+    "type": "api",
+    "vocab": false,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "GET /records/versions/{id}",
+     "GET /records/{id}/{version}",
+     "GET /records/{id}"
+    ],
+    "seconds": 28.616,
+    "error": null
+   },
+   {
+    "id": "api-register-schema",
+    "type": "api",
+    "vocab": false,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "POST /schema",
+     "PUT /schema",
+     "GET /schema"
+    ],
+    "seconds": 32.767,
+    "error": null
+   },
+   {
+    "id": "api-reindex-kind",
+    "type": "api",
+    "vocab": false,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "POST /reindex",
+     "PATCH /reindex",
+     "DELETE /index"
+    ],
+    "seconds": 16.66,
+    "error": null
+   },
+   {
+    "id": "api-trigger-workflow",
+    "type": "api",
+    "vocab": false,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "POST /v1/workflow/{workflow_name}/workflowRun",
+     "POST /v1/workflow",
+     "POST /action"
+    ],
+    "seconds": 50.237,
+    "error": null
+   },
+   {
+    "id": "api-unit-conversion",
+    "type": "api",
+    "vocab": false,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "GET /v3/conversion/scale",
+     "GET /v3/conversion/abcd",
+     "GET /v3/unit/symbol"
+    ],
+    "seconds": 41.267,
+    "error": null
+   },
+   {
+    "id": "api-purge-record",
+    "type": "api",
+    "vocab": false,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "DELETE /records/{id}",
+     "DELETE /records/{id}/versions",
+     "DELETE /v2/files/{id}/metadata"
+    ],
+    "seconds": 48.812,
+    "error": null
+   },
+   {
+    "id": "api-subscribe",
+    "type": "api",
+    "vocab": false,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "POST /subscription",
+     "GET /topics",
+     "POST /action"
+    ],
+    "seconds": 14.814,
+    "error": null
+   },
+   {
+    "id": "api-welllog-bulk",
+    "type": "api",
+    "vocab": false,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "GET /ddms/v3/welllogs/{record_id}/data",
+     "GET /ddms/v3/welllogs/{record_id}/versions/{version}/data",
+     "GET /ddms/v3/welllogs/{record_id}/data/statistics"
+    ],
+    "seconds": 29.932,
+    "error": null
+   },
+   {
+    "id": "api-validate-legaltags",
+    "type": "api",
+    "vocab": false,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "POST /legaltags:validate",
+     "GET /jobs/updateLegalTagStatus",
+     "GET /legaltags"
+    ],
+    "seconds": 12.441,
+    "error": null
+   },
+   {
+    "id": "api-batch-fetch",
+    "type": "api",
+    "vocab": false,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "POST /query/records:batch",
+     "POST /query/records/headers",
+     "POST /query/records"
+    ],
+    "seconds": 42.855,
+    "error": null
+   },
+   {
+    "id": "prop-marker-depth",
+    "type": "property",
+    "vocab": false,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "work-product-component--WellboreMarkerSet data.Markers[].MarkerMeasuredDepth",
+     "work-product-component--WellboreMarkerSet data.Markers[].MarkerSubSeaVerticalDepth",
+     "work-product-component--WellboreMarkerSet data.Markers[].FeatureTypeID"
+    ],
+    "seconds": 32.278,
+    "error": null
+   },
+   {
+    "id": "prop-current-operator",
+    "type": "property",
+    "vocab": false,
+    "rank": null,
+    "rank_dedup": null,
+    "top3": [
+     "master-data--WellActivity data.StewardingCompany",
+     "master-data--WellActivity data.WellID",
+     "master-data--WellActivity data.LastActivityState.ActivityStatusID"
+    ],
+    "seconds": 66.794,
+    "error": null
+   },
+   {
+    "id": "prop-log-wellbore",
+    "type": "property",
+    "vocab": false,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "work-product-component--WellLog data.WellboreID",
+     "master-data--WellLogAcquisition data.WellboreID",
+     "work-product-component--WellLog data.WellLogAcquisitionDetails"
+    ],
+    "seconds": 57.404,
+    "error": null
+   },
+   {
+    "id": "prop-curve-mnemonic",
+    "type": "property",
+    "vocab": true,
+    "rank": null,
+    "rank_dedup": null,
+    "top3": [
+     "reference-data--LogCurveType data.Code",
+     "reference-data--LogCurveType data.Name",
+     "reference-data--LogCurveFamily data.Code"
+    ],
+    "seconds": 37.922,
+    "error": null
+   },
+   {
+    "id": "prop-curve-unit",
+    "type": "property",
+    "vocab": false,
+    "rank": null,
+    "rank_dedup": null,
+    "top3": [
+     "reference-data--LogCurveType data.UnitQuantityID",
+     "reference-data--UnitOfMeasure data.Name",
+     "reference-data--UnitOfMeasure data.Code"
+    ],
+    "seconds": 63.946,
+    "error": null
+   },
+   {
+    "id": "prop-file-size",
+    "type": "property",
+    "vocab": false,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "dataset--File.Generic data.DatasetProperties.FileSourceInfo.FileSize",
+     "dataset--File.Generic data.TotalSize",
+     "dataset--FileCollection.Generic data.DatasetProperties.FileSourceInfos[].FileSize"
+    ],
+    "seconds": 23.772,
+    "error": null
+   },
+   {
+    "id": "prop-file-location",
+    "type": "property",
+    "vocab": false,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "dataset--File.Generic data.DatasetProperties.FileSourceInfo.FileSource",
+     "dataset--FileCollection.Generic data.DatasetProperties.FileCollectionPath",
+     "dataset--FileCollection.Generic data.DatasetProperties.FileSourceInfos[].FileSource"
+    ],
+    "seconds": 52.631,
+    "error": null
+   },
+   {
+    "id": "prop-seismic-sample-interval",
+    "type": "property",
+    "vocab": false,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "work-product-component--SeismicTraceData data.SampleInterval",
+     "work-product-component--SeismicTraceData data.DomainTypeID",
+     "work-product-component--SeismicTraceData data.SampleCount"
+    ],
+    "seconds": 44.755,
+    "error": null
+   },
+   {
+    "id": "prop-definitive-trajectory",
+    "type": "property",
+    "vocab": false,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "work-product-component--WellboreTrajectory data.IsDefinitive",
+     "work-product-component--WellboreTrajectory data.IsFinal",
+     "master-data--Wellbore data.DefinitiveTrajectoryID"
+    ],
+    "seconds": 23.547,
+    "error": null
+   },
+   {
+    "id": "prop-kelly-bushing",
+    "type": "property",
+    "vocab": false,
+    "rank": 2,
+    "rank_dedup": 2,
+    "top3": [
+     "master-data--Wellbore data.DefaultVerticalMeasurementID",
+     "master-data--Wellbore data.VerticalMeasurements[].VerticalMeasurement",
+     "master-data--Wellbore data.VerticalMeasurements[].VerticalReferenceID"
+    ],
+    "seconds": 44.385,
+    "error": null
+   },
+   {
+    "id": "prop-log-sampling",
+    "type": "property",
+    "vocab": false,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "work-product-component--WellLog data.SamplingInterval",
+     "work-product-component--WellLog data.IsRegular",
+     "work-product-component--WellLog data.Curves[].IsRegularlySampled"
+    ],
+    "seconds": 56.032,
+    "error": null
+   },
+   {
+    "id": "prop-file-checksum",
+    "type": "property",
+    "vocab": true,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "dataset--File.Generic data.DatasetProperties.FileSourceInfo.Checksum",
+     "dataset--File.Generic data.DatasetProperties.FileSourceInfo.ChecksumAlgorithm",
+     "dataset--File.Generic data.Checksum"
+    ],
+    "seconds": 31.643,
+    "error": null
+   },
+   {
+    "id": "prop-azimuth-reference",
+    "type": "property",
+    "vocab": false,
+    "rank": null,
+    "rank_dedup": null,
+    "top3": [
+     "reference-data--AzimuthReferenceType data.Name",
+     "reference-data--AzimuthReferenceType data.Description",
+     "reference-data--AzimuthReferenceType data.Code"
+    ],
+    "seconds": 35.489,
+    "error": null
+   },
+   {
+    "id": "kind-formation-tops",
+    "type": "kind",
+    "vocab": false,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "work-product-component--WellboreMarkerSet",
+     "work-product-component--WellboreIntervalSet",
+     "work-product-component--HorizonInterpretation"
+    ],
+    "seconds": 20.352,
+    "error": null
+   },
+   {
+    "id": "kind-production",
+    "type": "kind",
+    "vocab": false,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "work-product-component--ProductionValues",
+     "reference-data--ReportingPeriod",
+     "reference-data--ProductionPropertyType"
+    ],
+    "seconds": 27.74,
+    "error": null
+   },
+   {
+    "id": "kind-cement-job",
+    "type": "kind",
+    "vocab": true,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "work-product-component--CementJob",
+     "master-data--PlannedCementJob",
+     "reference-data--CementJobType"
+    ],
+    "seconds": 13.853,
+    "error": null
+   },
+   {
+    "id": "kind-rig",
+    "type": "kind",
+    "vocab": false,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "master-data--Rig",
+     "master-data--RigSpecifications",
+     "reference-data--RigType"
+    ],
+    "seconds": 10.261,
+    "error": null
+   },
+   {
+    "id": "kind-core-samples",
+    "type": "kind",
+    "vocab": false,
+    "rank": null,
+    "rank_dedup": null,
+    "top3": [
+     "master-data--Sample",
+     "master-data--SampleAcquisitionJob",
+     "master-data--SampleContainer"
+    ],
+    "seconds": 16.158,
+    "error": null
+   },
+   {
+    "id": "kind-directional-survey",
+    "type": "kind",
+    "vocab": false,
+    "rank": 2,
+    "rank_dedup": 2,
+    "top3": [
+     "master-data--SurveyProgram",
+     "work-product-component--WellboreTrajectory",
+     "master-data--Wellbore"
+    ],
+    "seconds": 14.787,
+    "error": null
+   },
+   {
+    "id": "kind-drilling-permit",
+    "type": "kind",
+    "vocab": false,
+    "rank": 1,
+    "rank_dedup": 1,
+    "top3": [
+     "master-data--WellLicense",
+     "master-data--GeoPoliticalEntity",
+     "reference-data--WellLicenseStatusType"
+    ],
+    "seconds": 18.344,
+    "error": null
+   }
+  ]
+ }
+}

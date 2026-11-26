@@ -21,6 +21,7 @@ osdu-mcp-poc/
 │       ├── indexer.py      # builds the ChromaDB index from specs/ and schemas/
 │       ├── query.py        # interactive query CLI
 │       ├── graph.py        # relationship graph from the LinkML model
+│       ├── catalog.py      # compact operation, kind and property lists
 │       └── mcp_server.py   # MCP server (stdio)
 ├── specs/                  # OpenAPI specs (see Spec provenance)
 ├── schemas/                # OSDU JSON Schemas, data-definitions Generated/
@@ -159,17 +160,48 @@ report).
 
 ## MCP server
 
-The MCP server exposes OSDU semantic search as a tool for AI assistants (Claude Desktop, VS Code Copilot, etc.) via stdio transport.
-
-**Prerequisite:** build the index first (see above).
+The MCP server exposes OSDU discovery tools for AI assistants (Claude Desktop, VS Code Copilot, etc.) via stdio transport.
 
 ```bash
-osdu-mcp --db ./chroma_db --schemas ./schemas --model ./model/osdu_latest.yaml
+osdu-mcp --db ./chroma_db --specs ./specs --schemas ./schemas --model ./model/osdu_latest.yaml
 ```
 
-`--schemas` is optional but recommended: it enables the `get_schema` tool.
-Without it, `get_schema` is still listed but every call returns
-`Schema lookup unavailable`, so only `search_osdu` does useful work.
+Each flag enables its own tools, and a tool whose flag is missing is still
+listed but returns a message saying which flag to add:
+
+| Flag | Enables | Needs |
+|---|---|---|
+| `--db` | `search_osdu` | the index built by `osdu-index` (about 28 min) |
+| `--specs` | `list_operations` | the `specs/` folder, loads in under a second |
+| `--schemas` | `get_schema`, `list_kinds`, `list_properties` | the `schemas/` folder, loads in about a second |
+| `--model` | `get_relationships`, `find_path`, `get_deprecations` | `model/osdu_latest.yaml`, loads in under a second |
+
+The index is no longer required: if `--db` points at a missing folder, the
+server starts with `search_osdu` disabled, as long as another flag is given.
+That makes the server usable where building the index isn't practical, such
+as cloud agents.
+
+### Catalog tools: `list_operations`, `list_kinds`, `list_properties`
+
+Compact lists the agent reads and picks from. In the
+[retrieval evaluation](eval/README.md), a model picking from these lists got
+the right answer first for 82% of questions, against 26% for `search_osdu`,
+and for all 18 API questions. They work best for questions in domain words
+("see the history of edits", "formation tops") that search misses.
+
+| Tool | Returns | Size |
+|---|---|---|
+| `list_operations(service="", contains="")` | one line per API operation: method, path, summary, grouped by service | ~6,500 tokens for all 366 |
+| `list_kinds(group="", contains="", include_reference_data=false)` | one line per kind (latest version): `group--Name` and the first sentence of its description | ~7,500 tokens; ~25,000 with reference data |
+| `list_properties(kind, contains="")` | one line per data property, including inherited and nested ones: path, type, description, linked kinds, unit (`x-osdu-frame-of-reference`); `oneOf` branches marked `one of` | median ~5,000 tokens, 90% under ~7,500; use `contains` for the largest (up to ~17,500) |
+
+`list_kinds` hides the 594 reference-data kinds (code lists such as units,
+CRS and type values) unless you pass `group="reference-data"` or
+`include_reference_data=true`. They are 70% of all kinds and seldom the
+record a question is about. `contains` filters any of the lists by text.
+
+Typical flow: `list_kinds` → `list_properties` on the kinds that fit →
+`get_schema` or `find_path` for detail.
 
 `--model` is optional too: it loads the OSDU LinkML Logical Data Model and
 enables the relationship tools (`get_relationships`, `find_path`,
@@ -179,6 +211,8 @@ listed but return `Relationship graph unavailable`.
 ### Tool: `search_osdu`
 
 Semantic search — finds *candidate* operations and properties for a need.
+Best for exact or near-exact names; for questions in domain words, the
+catalog tools above are more reliable. Requires `--db`.
 
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
@@ -194,7 +228,7 @@ travel with it. Use it after `search_osdu` to see a matched property in context.
 
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
-| `kind` | string | required | Full id (`osdu:wks:dataset--File.Generic:1.1.0`), versioned name (`File.Generic.1.1.0`), or bare name (`File.Generic`, → highest version) |
+| `kind` | string | required | Full id (`osdu:wks:dataset--File.Generic:1.1.0`), versioned name (`File.Generic.1.1.0`), `group--Name` as `list_kinds` prints it (`dataset--File.Generic`), or bare name (`File.Generic`); the last two resolve to the highest version |
 | `resolved` | boolean | `true` | `true` inlines cross-file `$ref`s into the abstract schemas; `false` returns the raw on-disk doc |
 
 Requires the server to be started with `--schemas`. Without it the tool is
@@ -346,7 +380,7 @@ these files usually hold other servers too.
   "mcpServers": {
     "osdu-discovery": {
       "command": "/opt/homebrew/bin/uv",
-      "args": ["run", "--project", "/path/to/osdu-mcp-poc", "osdu-mcp", "--db", "/path/to/osdu-mcp-poc/chroma_db", "--schemas", "/path/to/osdu-mcp-poc/schemas", "--model", "/path/to/osdu-mcp-poc/model/osdu_latest.yaml"]
+      "args": ["run", "--project", "/path/to/osdu-mcp-poc", "osdu-mcp", "--db", "/path/to/osdu-mcp-poc/chroma_db", "--specs", "/path/to/osdu-mcp-poc/specs", "--schemas", "/path/to/osdu-mcp-poc/schemas", "--model", "/path/to/osdu-mcp-poc/model/osdu_latest.yaml"]
     }
   }
 }
@@ -367,7 +401,7 @@ or run **MCP: Add Server** from the Command Palette.
     "osdu-discovery": {
       "type": "stdio",
       "command": "/opt/homebrew/bin/uv",
-      "args": ["run", "--project", "/path/to/osdu-mcp-poc", "osdu-mcp", "--db", "/path/to/osdu-mcp-poc/chroma_db", "--schemas", "/path/to/osdu-mcp-poc/schemas", "--model", "/path/to/osdu-mcp-poc/model/osdu_latest.yaml"]
+      "args": ["run", "--project", "/path/to/osdu-mcp-poc", "osdu-mcp", "--db", "/path/to/osdu-mcp-poc/chroma_db", "--specs", "/path/to/osdu-mcp-poc/specs", "--schemas", "/path/to/osdu-mcp-poc/schemas", "--model", "/path/to/osdu-mcp-poc/model/osdu_latest.yaml"]
     }
   }
 }
@@ -376,7 +410,7 @@ or run **MCP: Add Server** from the Command Palette.
 #### Claude Code
 
 ```bash
-claude mcp add osdu-discovery -- /opt/homebrew/bin/uv run --project /path/to/osdu-mcp-poc osdu-mcp --db /path/to/osdu-mcp-poc/chroma_db --schemas /path/to/osdu-mcp-poc/schemas --model /path/to/osdu-mcp-poc/model/osdu_latest.yaml
+claude mcp add osdu-discovery -- /opt/homebrew/bin/uv run --project /path/to/osdu-mcp-poc osdu-mcp --db /path/to/osdu-mcp-poc/chroma_db --specs /path/to/osdu-mcp-poc/specs --schemas /path/to/osdu-mcp-poc/schemas --model /path/to/osdu-mcp-poc/model/osdu_latest.yaml
 ```
 
 Everything after `--` is the command to launch. Add `-s user` to make it
@@ -398,7 +432,7 @@ Copy `opencode.example.json` to `opencode.json` in the project root (or merge in
   "mcp": {
     "osdu-discovery": {
       "type": "local",
-      "command": ["/opt/homebrew/bin/uv", "run", "--project", "/path/to/osdu-mcp-poc", "osdu-mcp", "--db", "/path/to/osdu-mcp-poc/chroma_db", "--schemas", "/path/to/osdu-mcp-poc/schemas", "--model", "/path/to/osdu-mcp-poc/model/osdu_latest.yaml"],
+      "command": ["/opt/homebrew/bin/uv", "run", "--project", "/path/to/osdu-mcp-poc", "osdu-mcp", "--db", "/path/to/osdu-mcp-poc/chroma_db", "--specs", "/path/to/osdu-mcp-poc/specs", "--schemas", "/path/to/osdu-mcp-poc/schemas", "--model", "/path/to/osdu-mcp-poc/model/osdu_latest.yaml"],
       "enabled": true
     }
   }
@@ -417,18 +451,19 @@ To check the server independently of any client, run the same command from
 your terminal:
 
 ```bash
-/opt/homebrew/bin/uv run --project /path/to/osdu-mcp-poc osdu-mcp --db /path/to/osdu-mcp-poc/chroma_db --schemas /path/to/osdu-mcp-poc/schemas --model /path/to/osdu-mcp-poc/model/osdu_latest.yaml
+/opt/homebrew/bin/uv run --project /path/to/osdu-mcp-poc osdu-mcp --db /path/to/osdu-mcp-poc/chroma_db --specs /path/to/osdu-mcp-poc/specs --schemas /path/to/osdu-mcp-poc/schemas --model /path/to/osdu-mcp-poc/model/osdu_latest.yaml
 ```
 
 A healthy start prints these lines to stderr and then waits on stdin without
 returning to the prompt:
 
 ```
-Schema index: 1450 files from '/path/to/osdu-mcp-poc/schemas' — get_schema enabled.
+Operation list: 366 operations from '/path/to/osdu-mcp-poc/specs' — list_operations enabled.
+Schema index: 1450 files, 824 kinds from '/path/to/osdu-mcp-poc/schemas' — get_schema, list_kinds and list_properties enabled.
 Relationship graph: 818 kinds, 22270 reference links from '/path/to/osdu-mcp-poc/model/osdu_latest.yaml' — relationship tools enabled.
 ```
 
-If you passed `--schemas` or `--model` and don't see the matching line, the
+If you passed `--specs`, `--schemas` or `--model` and don't see the matching line, the
 path is wrong. The server prints a `WARNING` and carries on with those tools
 disabled. If the
 command exits immediately instead of waiting, the error on stderr is the same
@@ -439,7 +474,9 @@ one the client is hitting.
 | Symptom | Cause and fix |
 |---|---|
 | Server fails to start, `ENOENT` / `command not found` | `command` is a bare `uv` or the wrong absolute path. Use the output of `which uv` / `where.exe uv`. |
-| Exits immediately, `No collections found` (exit code 1) | The index has not been built, or `--db` points at the wrong folder. Run `osdu-index` first — see [Index](#index). `chroma_db/` is generated, not shipped in the repo. |
+| Exits immediately, `ERROR: nothing loaded` (exit code 1) | No index at `--db`, and `--specs`, `--schemas` and `--model` were missing, empty or failed to load, so no tool would work. Pass those folders, or run `osdu-index` first — see [Index](#index). `chroma_db/` is generated, not shipped in the repo. |
+| `search_osdu` returns `No ChromaDB collections loaded` | The index has not been built, or `--db` points at the wrong folder. The catalog tools work without it. |
+| `list_operations` / `list_kinds` return `... unavailable` | The server was started without `--specs` / `--schemas`, or the path didn't exist. |
 | Server connects but no tools appear | Server name contains a space or other unsupported character. Rename it to `osdu-discovery`. |
 | `get_schema` returns `Schema lookup unavailable` | The server was started without `--schemas`, or the path given didn't exist. The tool is always registered, so this is a runtime message rather than a missing tool. |
 | `get_relationships` / `find_path` return `Relationship graph unavailable` | The server was started without `--model`, or the file couldn't be loaded. The stderr `WARNING` says which. |
