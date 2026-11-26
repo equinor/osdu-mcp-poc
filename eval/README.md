@@ -1,7 +1,7 @@
 # Retrieval evaluation
 
-Does the embedding index behind `search_osdu` earn its 28-minute build and
-1.4 GB footprint? This folder measures it against cheaper alternatives on
+Does the embedding index behind `search_osdu` earn its 26-minute build and
+1.7 GB footprint? This folder measures it against cheaper alternatives on
 38 realistic questions.
 
 ```bash
@@ -21,7 +21,7 @@ uv run python eval/run_eval.py --methods bm25,hybrid   # a subset
 
 | Method | What it is | Build | Query |
 |---|---|---|---|
-| `dense` | Today's `search_osdu`: ChromaDB with all-MiniLM-L6-v2 | ~28 min, 1.4 GB | ~70 ms |
+| `dense` | Today's `search_osdu`: ChromaDB with all-MiniLM-L6-v2 | ~26 min, 1.7 GB | ~70 ms |
 | `bm25` | Keyword search that splits camelCase names, over the same documents | ~2 s, in memory | ~1 ms |
 | `hybrid` | `dense` and `bm25` merged by reciprocal-rank fusion | the index | ~60 ms |
 | `catalog` | An LLM picks from a compact list of operations or kinds, then from that kind's properties, as an agent would with list and describe tools | none | an LLM call or two |
@@ -43,31 +43,37 @@ Raw (as the tools return results today):
 
 | Method | API hit@1 | API hit@5 | Property hit@1 | Property hit@5 | Kind hit@1 | Kind hit@5 | **All hit@1** | **All hit@5** | All MRR |
 |---|---|---|---|---|---|---|---|---|---|
-| `dense` (current) | 33% | 61% | 23% | 23% | 14% | 43% | **26%** | **45%** | 0.35 |
+| `dense` (current) | 33% | 61% | 23% | 23% | 14% | 29% | **26%** | **42%** | 0.35 |
 | `bm25` | 44% | 61% | 38% | 46% | 29% | 57% | **39%** | **55%** | 0.47 |
-| `hybrid` | 33% | 72% | 31% | 46% | 43% | 71% | **34%** | **63%** | 0.46 |
+| `hybrid` | 33% | 72% | 31% | 46% | 43% | 71% | **34%** | **63%** | 0.45 |
 | `catalog` (Haiku) | 100% | 100% | 62% | 69% | 71% | 86% | **82%** | **87%** | 0.84 |
 
 Deduplicated (oversampled, version-aware):
 
 | Method | API hit@1 | API hit@5 | Property hit@1 | Property hit@5 | Kind hit@1 | Kind hit@5 | **All hit@1** | **All hit@5** | All MRR |
 |---|---|---|---|---|---|---|---|---|---|
-| `dense` (current) | 33% | 61% | 23% | 38% | 14% | 71% | **26%** | **55%** | 0.39 |
-| `bm25` | 44% | 61% | 38% | 54% | 29% | 71% | **39%** | **61%** | 0.48 |
-| `hybrid` | 33% | 72% | 31% | 54% | 43% | 71% | **34%** | **66%** | 0.47 |
+| `dense` (current) | 33% | 61% | 23% | 38% | 14% | 57% | **26%** | **53%** | 0.37 |
+| `bm25` | 44% | 61% | 38% | 54% | 29% | 86% | **39%** | **63%** | 0.48 |
+| `hybrid` | 33% | 72% | 31% | 54% | 43% | 71% | **34%** | **66%** | 0.46 |
 | `catalog` (Haiku) | 100% | 100% | 62% | 69% | 71% | 86% | **82%** | **87%** | 0.84 |
 
 The catalog picks distinct kinds, so it scores the same either way. hit@1 is
 also the same either way for every method. The `dense`, `bm25` and `hybrid`
-rows were re-run on 2026-11-26, after fixing the hybrid to fuse on full
-document ids instead of collapsed answer keys; `dense` and `bm25` didn't change.
-The `catalog` row is from the original run.
+rows were re-run on 2026-11-26 on the current corpus (106,493 schema
+documents): after fixing the hybrid to fuse on full document ids, and after
+the indexer started following `oneOf` branches, item-level relationships and
+`x-osdu-frame-of-reference` units (3,312 more documents, with an index
+rebuilt from them). Against the first run, `dense` lost one kind question
+("formation tops" fell out of its top 10, crowded out by property documents),
+`bm25` gained one ("drilling permit") and lost one ("kelly bushing"), and the
+hybrid's headline scores held. The `catalog` row is from the original run,
+on the earlier corpus.
 
 ### What this shows
 
 - **Letting the model choose from a catalog wins by a wide margin.** It
   scores 82% hit@1 against 26% for today's search, and 100% on API questions.
-  This uses Haiku, the smallest current model. It gets all 11 of the
+  This uses Haiku, the smallest current model. It gets all 10 of the
   questions every search method missed into its top 5, such as "history of edits" →
   `GET /records/versions/{id}`, and "monthly oil and gas volumes" →
   `ProductionValues`.
@@ -86,11 +92,11 @@ The `catalog` row is from the original run.
   catalog.
 - **The embedding index is the weakest method, not the strongest.** Keyword
   search with no index at all ties or beats it on every question type, in both
-  scorings. It builds in 2 seconds instead of 28 minutes.
-- **The hybrid has the best top 5 of the searches** (63% raw, against 45% for
+  scorings. It builds in 2 seconds instead of 26 minutes.
+- **The hybrid has the best top 5 of the searches** (63% raw, against 42% for
   `dense`), but its top 1 is below plain keyword search (34% vs 39%). It still
   needs the index.
-- **All three methods miss the same questions.** 11 of the 38 are missed by
+- **All three methods miss the same questions.** 10 of the 38 are missed by
   every method in the deduplicated top 5, for example:
   - "see the history of edits to a record" (`GET /records/versions/{id}`);
   - "be notified when records change" (`POST /subscription`);
@@ -132,7 +138,7 @@ the picking, so a lookup is just one more tool call and its output.
    numbered lists this run measured.
 2. **Replace the embedding index with keyword search** for `search_osdu`, as a
    cheap way to look up exact names. It's level with or better than the index,
-   builds in seconds, and removes the 1.4 GB, 28-minute build. That would also
+   builds in seconds, and removes the 1.7 GB, 26-minute build. That would also
    make the server practical for cloud agents.
 3. **Re-run this evaluation with new questions** after building 1 and 2. The
    reference-data fix was found by studying these misses, so measuring it on
