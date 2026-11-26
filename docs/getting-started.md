@@ -137,14 +137,22 @@ configuration".
 
 ## 4. Try it
 
-Ask in plain words, for example:
+Ask in plain words. The table shows what a good answer mentions, so you can
+tell it works. The agent words the answer itself, so look for the key names,
+not exact text.
 
-- *Which OSDU API do I call to see the edit history of a record?*
-- *Which record type holds formation tops, and which property has the depth?*
-- *Which properties of a WellLog point to a Wellbore?*
-- *How do I get from a WellLog to its field?*
-- *Which Wellbore properties are deprecated, and what replaces them?*
-- *Show me the JSON Schema for dataset--File.Generic.*
+| Question | A good answer mentions | Tool |
+|---|---|---|
+| Which OSDU API shows the edit history of a record? | `GET /records/versions/{id}`, then `GET /records/{id}/{version}` | `list_operations` |
+| Which record type holds formation tops, and which property has the depth? | `WellboreMarkerSet`, `data.Markers[].MarkerMeasuredDepth` | `list_kinds`, `list_properties` |
+| Which record types reference a Wellbore? | 61 kinds, for example `WellLicense data.LicenseViolations[].WellboreID` | `get_relationships` |
+| How do WellboreMarkerSet and SeismicHorizon relate? | Through `HorizonControlPoints`, or through `HorizonInterpretation` | `find_path` |
+| How does a File.Generic connect to a Wellbore? | Through a work-product component that holds both, e.g. `BiostratigraphicStudy` | `find_path` |
+| Which Well properties are deprecated? | 10, e.g. `FacilityNameAliases → NameAliases` | `get_deprecations` |
+
+The last three use the Logical Data Model (LinkML): what points *in* to a
+kind, routes through a third kind, and deprecations with their replacements.
+None of that is stated directly in the JSON Schemas.
 
 The first time a tool is used, the client asks for permission. Approve it.
 
@@ -186,6 +194,7 @@ Restart the client (or the session) afterwards. Nothing needs building.
 | Problem | Fix |
 |---|---|
 | The server doesn't start, `ENOENT` or `command not found` | `command` must be the full path to `uv`; see step 2. |
+| The assistant answers from memory without calling a tool | Name the tool in the question, e.g. "use find_path". |
 | No tools appear | Restart the client completely; most read their configuration only at startup. In VS Code, check that you are in Agent mode. |
 | A tool answers `... unavailable` and mentions `--specs`, `--schemas` or `--model` | That path is missing or wrong in the configuration. |
 | The server exits with `ERROR: nothing loaded` | None of the `--specs`, `--schemas` or `--model` paths existed. Check `REPO`. |

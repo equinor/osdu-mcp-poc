@@ -137,14 +137,22 @@ repoet (`*.example.json`) og i README-en, under «Client configuration».
 
 ## 4. Prøv det
 
-Spør på vanlig norsk eller engelsk, for eksempel:
+Spør på vanlig norsk eller engelsk. Tabellen viser hva et godt svar nevner,
+så du ser at det virker. Agenten formulerer svaret selv, så se etter
+nøkkelordene, ikke ordrett tekst.
 
-- *Hvilket OSDU-API bruker jeg for å se endringshistorikken til en record?*
-- *Hvilken record-type har formasjonstopper, og hvilken property har dybden?*
-- *Hvilke properties på en WellLog peker til en Wellbore?*
-- *Hvordan kommer jeg fra en WellLog til feltet den tilhører?*
-- *Hvilke properties på Wellbore er utfaset, og hva erstatter dem?*
-- *Vis JSON-skjemaet for dataset--File.Generic.*
+| Spørsmål | Et godt svar nevner | Verktøy |
+|---|---|---|
+| Hvilket OSDU-API viser endringshistorikken til en record? | `GET /records/versions/{id}`, deretter `GET /records/{id}/{version}` | `list_operations` |
+| Hvilken record-type har formasjonstopper, og hvilken property har dybden? | `WellboreMarkerSet`, `data.Markers[].MarkerMeasuredDepth` | `list_kinds`, `list_properties` |
+| Hvilke record-typer refererer til en Wellbore? | 61 typer, for eksempel `WellLicense data.LicenseViolations[].WellboreID` | `get_relationships` |
+| Hvordan henger WellboreMarkerSet og SeismicHorizon sammen? | Via `HorizonControlPoints`, eller via `HorizonInterpretation` | `find_path` |
+| Hvordan kobles en File.Generic til en Wellbore? | Via en work-product component som holder begge, f.eks. `BiostratigraphicStudy` | `find_path` |
+| Hvilke properties på Well er utfaset? | 10 stykker, f.eks. `FacilityNameAliases → NameAliases` | `get_deprecations` |
+
+De tre siste bruker den logiske datamodellen (LinkML): hva som peker *inn*
+til en type, veier gjennom en tredje type, og utfasing med erstatning. Det
+står ikke direkte i JSON-skjemaene.
 
 Første gang et verktøy brukes, ber klienten om lov. Godkjenn det.
 
@@ -185,6 +193,7 @@ Start klienten (eller økten) på nytt etterpå. Ingenting må bygges.
 | Problem | Løsning |
 |---|---|
 | Serveren starter ikke, `ENOENT` eller `command not found` | `command` må være full sti til `uv`; se steg 2. |
+| Agenten svarer fra hukommelsen uten å bruke et verktøy | Nevn verktøyet i spørsmålet, for eksempel «bruk find_path». |
 | Ingen verktøy dukker opp | Start klienten helt på nytt; de fleste leser oppsettet bare ved oppstart. I VS Code: sjekk at du er i Agent-modus. |
 | Et verktøy svarer `... unavailable` og nevner `--specs`, `--schemas` eller `--model` | Den stien mangler eller er feil i oppsettet. |
 | Serveren avslutter med `ERROR: nothing loaded` | Ingen av stiene `--specs`, `--schemas` eller `--model` fantes. Sjekk `REPO`. |
