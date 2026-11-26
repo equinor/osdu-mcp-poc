@@ -103,7 +103,20 @@ mirrors the OSDU `Generated/` layout (`abstract/`, `dataset/`, `master-data/`,
 - walks it **recursively**;
 - **resolves cross-file `$ref`s** (relative to each referencing file) and inlines
   the abstract schemas, with circular-reference guarding;
-- merges nested `allOf` chains to whatever depth they reach.
+- merges nested `allOf` chains to whatever depth they reach;
+- follows `oneOf`/`anyOf` branches, such as Coring's `ConventionalCoring` /
+  `SidewallCoring` and the `GeoContexts[]` variants, and notes in each
+  document that the property is present in only some records. The GeoJSON
+  geometry variants under every `SpatialLocation` are not expanded;
+- reads `x-osdu-relationship` on array items as well as on the property, and
+  keeps targets that name only a group (`Relates to: dataset/*`);
+- takes units from `x-osdu-frame-of-reference` (`UOM:length`,
+  `UOM_via_property:DepthUnit`);
+- writes property paths with the `data.` prefix only when the kind has a
+  `data` wrapper; content kinds keep their root paths.
+
+`list_properties` uses the same walk. It goes two levels deeper (8 instead
+of 6), so it also lists the few properties nested deeper than the index reaches.
 
 This is what lets a query like *"which attribute links file metadata to its
 content"* surface `data.DatasetProperties.FileSourceInfo.FileSource` — a property
@@ -171,7 +184,7 @@ listed but returns a message saying which flag to add:
 
 | Flag | Enables | Needs |
 |---|---|---|
-| `--db` | `search_osdu` | the index built by `osdu-index` (about 28 min) |
+| `--db` | `search_osdu` | the index built by `osdu-index` (about 26 min, 1.7 GB) |
 | `--specs` | `list_operations` | the `specs/` folder, loads in under a second |
 | `--schemas` | `get_schema`, `list_kinds`, `list_properties` | the `schemas/` folder, loads in about a second |
 | `--model` | `get_relationships`, `find_path`, `get_deprecations` | `model/osdu_latest.yaml`, loads in under a second |

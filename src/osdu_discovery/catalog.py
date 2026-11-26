@@ -19,9 +19,10 @@ from osdu_discovery.indexer import (
     SchemaResolver,
     extract_api_operations,
     extract_service_name,
+    data_schema,
+    flatten_schema_properties,
     is_spec_file,
     load_file,
-    merged_properties,
 )
 
 REFERENCE_GROUP = "reference-data"
@@ -73,61 +74,6 @@ class Prop:
     targets: list[str]  # "master-data--Wellbore", or "any dataset record"
     unit: str  # x-osdu-frame-of-reference, e.g. "UOM:length"
     alternative: bool  # inside a oneOf/anyOf branch: present in only some records
-
-
-def _relationships(prop: dict) -> list[dict]:
-    """x-osdu-relationship on the property, or on its array items."""
-    rels = prop.get("x-osdu-relationship") or []
-    items = prop.get("items")
-    if not rels and isinstance(items, dict):
-        rels = items.get("x-osdu-relationship") or []
-    return [r for r in rels if isinstance(r, dict)]
-
-
-def _frame_of_reference(prop: dict) -> str:
-    unit = prop.get("x-osdu-frame-of-reference", "")
-    items = prop.get("items")
-    if not unit and isinstance(items, dict):
-        unit = items.get("x-osdu-frame-of-reference", "")
-    return unit if isinstance(unit, str) else ""
-
-
-def _branches(schema: dict) -> list[dict]:
-    """oneOf/anyOf branches of a schema, including those inside its allOf
-    members (Coring's ConventionalCoring / SidewallCoring sit there)."""
-    out = [b for key in ("oneOf", "anyOf") for b in schema.get(key, []) if isinstance(b, dict)]
-    for sub in schema.get("allOf", []):
-        if isinstance(sub, dict):
-            out += _branches(sub)
-    return out
-
-
-def _has_children(schema: dict) -> bool:
-    return any(k in schema for k in ("properties", "allOf", "oneOf", "anyOf"))
-
-
-def walk_properties(
-    schema: dict, prefix: str, alternative: bool = False, depth: int = 0, max_depth: int = 8
-) -> list[tuple[str, dict, bool]]:
-    """(path, property schema, in-alternative) for every property, following
-    allOf, oneOf/anyOf branches and array items. Expects resolved $refs."""
-    if depth > max_depth:
-        return []
-    found: list[tuple[str, dict, bool]] = []
-    groups = [(merged_properties(schema), alternative)]
-    groups += [(merged_properties(b), True) for b in _branches(schema)]
-    for props, alt in groups:
-        for name, prop in props.items():
-            if not isinstance(prop, dict):
-                continue
-            path = f"{prefix}.{name}" if prefix else name
-            found.append((path, prop, alt))
-            if _has_children(prop):
-                found += walk_properties(prop, path, alt, depth + 1, max_depth)
-            items = prop.get("items")
-            if isinstance(items, dict) and _has_children(items):
-                found += walk_properties(items, f"{path}[]", alt, depth + 1, max_depth)
-    return found
 
 
 @dataclass
@@ -265,41 +211,36 @@ class Catalog:
             return sorted(k.short for k in bare)
         return sorted(k.short for k in self.kinds.values() if key and key in k.short.lower())[:15]
 
-    def _targets(self, prop: dict) -> list[str]:
+    def _targets(self, relationships: list[tuple[str, str]]) -> list[str]:
         out = []
-        for r in _relationships(prop):
-            group, entity = r.get("GroupType", ""), r.get("EntityType", "")
+        for group, entity in relationships:
             if entity:
                 key = f"{group}--{entity}" if group else entity
                 out.append(self.kinds[key.lower()].short if key.lower() in self.kinds else key)
-            elif group:
+            else:
                 out.append(f"any {group} record")
         return list(dict.fromkeys(out))
 
     def properties(self, kind: Kind) -> list[Prop]:
+        """Every property of a kind, from the same walk the indexer uses."""
         doc = load_file(kind.path)
         resolved = self._resolver.resolve(
             doc, base_dir=os.path.dirname(os.path.abspath(kind.path)), root=doc
         )
         if not isinstance(resolved, dict):
             resolved = doc
-        # Most kinds wrap their model in "data"; content kinds have it at the root.
-        data = resolved.get("properties", {}).get("data")
-        schema, prefix = (data, "data") if isinstance(data, dict) else (resolved, "")
-        props: dict[str, Prop] = {}
-        for path, p, alt in walk_properties(schema, prefix):
-            if path in props:  # the same path from several oneOf branches
-                props[path].alternative &= alt
-                continue
-            props[path] = Prop(
-                path=path,
-                type=str(p.get("type", "object")),
-                description=(p.get("description") or "").strip(),
-                targets=self._targets(p),
-                unit=_frame_of_reference(p),
-                alternative=alt,
+        schema, prefix = data_schema(resolved)
+        return [
+            Prop(
+                path=p["path"],
+                type=str(p["type"]),
+                description=p["description"],
+                targets=self._targets(p["relationships"]),
+                unit=p["units"],
+                alternative=p["alternative"],
             )
-        return list(props.values())
+            for p in flatten_schema_properties(schema, prefix, max_depth=8)
+        ]
 
     def list_properties(self, kind: str, contains: str = "") -> str:
         found = self.find_kind(kind)

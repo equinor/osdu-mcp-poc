@@ -444,73 +444,149 @@ def extract_semantic_keywords(prop_name: str, prop_schema: dict) -> list[str]:
     return list(set(keywords))  # Remove duplicates
 
 
+def _relationships(prop: dict) -> list[dict]:
+    """``x-osdu-relationship`` on the property, or on its array items."""
+    rels = prop.get("x-osdu-relationship") or []
+    items = prop.get("items")
+    if not rels and isinstance(items, dict):
+        rels = items.get("x-osdu-relationship") or []
+    return [r for r in rels if isinstance(r, dict)]
+
+
+def _units(prop: dict) -> str:
+    """The unit annotation of a property or its array items. The shipped
+    schemas use ``x-osdu-frame-of-reference`` ("UOM:length",
+    "UOM_via_property:DepthUnit"); the other two are kept for older ones."""
+    for schema in (prop, prop.get("items")):
+        if not isinstance(schema, dict):
+            continue
+        for key in ("x-osdu-frame-of-reference", "x-osdu-uom-quantity", "x-unit"):
+            value = schema.get(key)
+            if isinstance(value, str) and value:
+                return value
+    return ""
+
+
+def _branches(schema: dict) -> list[dict]:
+    """oneOf/anyOf branches of a schema, including those inside its allOf
+    members (Coring's ConventionalCoring / SidewallCoring sit there)."""
+    out = [b for key in ("oneOf", "anyOf") for b in schema.get(key, []) if isinstance(b, dict)]
+    for sub in schema.get("allOf", []):
+        if isinstance(sub, dict):
+            out += _branches(sub)
+    return out
+
+
+# Keys of the GeoJSON geometry and feature variants (Point, LineString, ...)
+# that every SpatialLocation repeats as oneOf branches. They are the GeoJSON
+# standard, not OSDU data model, and expanding them would add ~12,500 near-
+# identical documents to the index.
+_GEOJSON_KEYS = {"type", "coordinates", "bbox", "geometries", "geometry", "properties"}
+
+
+def _is_geojson_branch(branch: dict) -> bool:
+    props = merged_properties(branch)
+    return bool(props) and set(props) <= _GEOJSON_KEYS
+
+
+def _has_children(schema: dict) -> bool:
+    return any(k in schema for k in ("properties", "allOf", "oneOf", "anyOf"))
+
+
 def flatten_schema_properties(
     schema: dict,
     prefix: str = "",
     depth: int = 0,
     max_depth: int = 6,
+    alternative: bool = False,
 ) -> list[dict]:
     """
     Walk a JSON Schema object and return a flat list of property entries,
     each with its dotted path, type, and description, enriched with semantic keywords.
 
+    Follows ``allOf`` members, ``oneOf``/``anyOf`` branches (entries from a
+    branch get ``alternative=True``: present in only some records) and array
+    items (``path[]``). GeoJSON geometry variants are not expanded. Relationships are read from the property or its
+    items; a target naming only a group becomes ``group/*``. A path reached
+    through several branches is listed once.
+
     Expects ``$ref``s to have been inlined by :class:`SchemaResolver` first, so
     cross-file ``allOf`` members (the OSDU ``Abstract*`` schemas) contribute
     their real properties.
     """
-    results = []
+    results: list[dict] = []
     if depth > max_depth:
         return results
 
-    properties = merged_properties(schema)
+    groups = [(merged_properties(schema), alternative)]
+    groups += [(merged_properties(b), True) for b in _branches(schema) if not _is_geojson_branch(b)]
 
-    for prop_name, prop_schema in properties.items():
-        if not isinstance(prop_schema, dict):
-            continue
-        path = f"{prefix}.{prop_name}" if prefix else prop_name
-        prop_type = prop_schema.get("type", "object")
-        description = prop_schema.get("description", "").strip()
-        units = prop_schema.get("x-osdu-uom-quantity", prop_schema.get("x-unit", ""))
-        enum_vals = prop_schema.get("enum", [])
-        pattern = prop_schema.get("pattern", "")
-        
-        # Extract semantic keywords for better retrieval
-        semantic_keywords = extract_semantic_keywords(prop_name, prop_schema)
-        
-        # Extract OSDU relationships if present
-        relationships = prop_schema.get("x-osdu-relationship", [])
-        related_types = []
-        if relationships:
-            for rel in relationships:
-                if isinstance(rel, dict):
-                    entity_type = rel.get("EntityType", "")
-                    group_type = rel.get("GroupType", "")
-                    if entity_type:
-                        related_types.append(f"{group_type}/{entity_type}".lower())
-                        semantic_keywords.append(entity_type.lower())
+    for properties, alt in groups:
+        for prop_name, prop_schema in properties.items():
+            if not isinstance(prop_schema, dict):
+                continue
+            path = f"{prefix}.{prop_name}" if prefix else prop_name
+            prop_type = prop_schema.get("type", "object")
+            description = prop_schema.get("description", "").strip()
+            enum_vals = prop_schema.get("enum", [])
+            pattern = prop_schema.get("pattern", "")
 
-        results.append({
-            "path": path,
-            "type": prop_type,
-            "description": description,
-            "units": units,
-            "enum": enum_vals,
-            "pattern": pattern,
-            "semantic_keywords": semantic_keywords,
-            "related_types": related_types,
-        })
+            # Extract semantic keywords for better retrieval
+            semantic_keywords = extract_semantic_keywords(prop_name, prop_schema)
 
-        # Recurse into nested objects
-        if prop_type == "object" or "properties" in prop_schema or "allOf" in prop_schema:
-            results.extend(flatten_schema_properties(prop_schema, path, depth + 1, max_depth))
+            # OSDU relationships, raw (group, entity) and as "group/entity" text
+            relationships: list[tuple[str, str]] = []
+            related_types: list[str] = []
+            for rel in _relationships(prop_schema):
+                group = rel.get("GroupType", "")
+                entity = rel.get("EntityType", "")
+                if not (group or entity):
+                    continue
+                relationships.append((group, entity))
+                related_types.append(f"{group}/{entity or '*'}".lower())
+                semantic_keywords.append((entity or group).lower())
 
-        # Recurse into array items
-        if prop_type == "array":
+            results.append({
+                "path": path,
+                "type": prop_type,
+                "description": description,
+                "units": _units(prop_schema),
+                "enum": enum_vals,
+                "pattern": pattern,
+                "semantic_keywords": list(dict.fromkeys(semantic_keywords)),
+                "related_types": list(dict.fromkeys(related_types)),
+                "relationships": list(dict.fromkeys(relationships)),
+                "alternative": alt,
+            })
+
+            # Recurse into nested objects (and their oneOf/anyOf branches)
+            if _has_children(prop_schema):
+                results.extend(flatten_schema_properties(prop_schema, path, depth + 1, max_depth, alt))
+
+            # Recurse into array items
             items = prop_schema.get("items", {})
-            if isinstance(items, dict) and ("properties" in items or "allOf" in items):
-                results.extend(flatten_schema_properties(items, f"{path}[]", depth + 1, max_depth))
+            if isinstance(items, dict) and _has_children(items):
+                results.extend(flatten_schema_properties(items, f"{path}[]", depth + 1, max_depth, alt))
 
+    if depth == 0:
+        # A path reached through several branches is listed once; it is an
+        # alternative only if every route to it is.
+        merged: dict[str, dict] = {}
+        for entry in results:
+            if entry["path"] in merged:
+                merged[entry["path"]]["alternative"] &= entry["alternative"]
+            else:
+                merged[entry["path"]] = entry
+        results = list(merged.values())
     return results
+
+
+def data_schema(resolved_doc: dict) -> tuple[dict, str]:
+    """The schema holding a kind's data model, and the path prefix for its
+    properties: ``data`` for most kinds; the root for content kinds, which
+    have no ``data`` wrapper."""
+    data = resolved_doc.get("properties", {}).get("data")
+    return (data, "data") if isinstance(data, dict) else (resolved_doc, "")
 
 
 def format_kind_summary(resolved_doc: dict, kind: str) -> str:
@@ -521,8 +597,8 @@ def format_kind_summary(resolved_doc: dict, kind: str) -> str:
         or resolved_doc.get("description", "")
     ).strip()
 
-    data_schema = resolved_doc.get("properties", {}).get("data", {})
-    top_level_props = list(merged_properties(data_schema).keys())
+    schema, _ = data_schema(resolved_doc)
+    top_level_props = list(merged_properties(schema).keys())
     props_str = ", ".join(top_level_props[:25])  # cap for readability
 
     return "\n".join(filter(None, [
@@ -561,8 +637,8 @@ def extract_schema_entries(
     })
 
     # Property-level entries (for specific queries)
-    data_schema = resolved.get("properties", {}).get("data", resolved)
-    flat_props = flatten_schema_properties(data_schema)
+    schema, prefix = data_schema(resolved)
+    flat_props = flatten_schema_properties(schema, prefix)
 
     for prop in flat_props:
         path = prop["path"]
@@ -575,7 +651,7 @@ def extract_schema_entries(
 
         text_parts = [
             f"Kind: {kind}",
-            f"Property path: data.{path}",
+            f"Property path: {path}",
             f"Type: {prop_type}",
         ]
         if description:
@@ -592,8 +668,11 @@ def extract_schema_entries(
         # Add relationship information for better domain discovery
         if related_types:
             text_parts.append(f"Relates to: {', '.join(related_types)}")
+        if prop["alternative"]:
+            text_parts.append("Present in only some records (one of several alternative structures)")
 
-        prop_id = f"prop__{kind}__{path.replace('.', '_').replace('[]', '_arr')}"
+        id_path = path.removeprefix("data.")  # ids unchanged for data-wrapped kinds
+        prop_id = f"prop__{kind}__{id_path.replace('.', '_').replace('[]', '_arr')}"
         # ChromaDB ids must be under 512 chars
         if len(prop_id) > 500:
             prop_id = prop_id[:500]
@@ -604,7 +683,7 @@ def extract_schema_entries(
             "metadata": {
                 "type": "property",
                 "kind": kind,
-                "path": f"data.{path}",
+                "path": path,
             },
         })
 
