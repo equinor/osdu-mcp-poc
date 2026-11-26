@@ -1,10 +1,9 @@
 [project]
 name = "osdu-discovery-poc"
 version = "0.1.0"
-description = "Semantic search over OSDU OpenAPI specs and schema files"
+description = "Discovery tools (MCP) over OSDU OpenAPI specs, schema files and the LinkML data model"
 requires-python = ">=3.11"
 dependencies = [
-    "chromadb>=0.5.0",
     "pyyaml>=6.0",
     "jsonschema>=4.0",
     "rich>=13.0",
@@ -13,7 +12,6 @@ dependencies = [
 ]
 
 [project.scripts]
-osdu-index = "osdu_discovery.indexer:main"
 osdu-query = "osdu_discovery.query:main"
 osdu-mcp   = "osdu_discovery.mcp_server:main"
 
@@ -27,4 +25,8 @@ build-backend = "setuptools.build_meta"
 [dependency-groups]
 dev = [
     "pytest>=9.2.0",
+]
+# Only for re-running the embedding comparison in eval/ (eval/dense_index.py).
+eval = [
+    "chromadb>=0.5.0",
 ]

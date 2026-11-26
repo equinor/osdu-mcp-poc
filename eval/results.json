@@ -537,7 +537,7 @@
   ]
  },
  "bm25": {
-  "setup_seconds": 1.8,
+  "setup_seconds": 1.4,
   "rows": [
    {
     "id": "api-upload-url",
@@ -802,7 +802,7 @@
      "work-product-component--StimulationStage data.FormationTopTrueVerticalDepth",
      "master-data--EvaluationPlan data.FormationEvaluationCorings[].MeasuredDepthTop"
     ],
-    "seconds": 0.006,
+    "seconds": 0.004,
     "error": null
    },
    {
@@ -816,7 +816,7 @@
      "master-data--WellSiteStructure data.FacilityOperators[].FacilityOperatorOrganisationID",
      "master-data--Rig data.FacilityOperators[].FacilityOperatorOrganisationID"
     ],
-    "seconds": 0.008,
+    "seconds": 0.005,
     "error": null
    },
    {
@@ -830,7 +830,7 @@
      "work-product-component--WellLog data.WellboreID",
      "master-data--WellLogAcquisition data.LogRuns[].LogPasses[].WellboreFluidTypeID"
     ],
-    "seconds": 0.006,
+    "seconds": 0.005,
     "error": null
    },
    {
@@ -858,7 +858,7 @@
      "work-product-component--WellPressureTestRawMeasurement data.Curves[].CurveUnitID",
      "work-product-component--WellLog data.Curves[].DateStamp"
     ],
-    "seconds": 0.016,
+    "seconds": 0.011,
     "error": null
    },
    {
@@ -872,7 +872,7 @@
      "dataset--File.Image.WorldFile data.DatasetProperties.FileSourceInfo.Checksum",
      "dataset--File.EML data.DatasetProperties.FileSourceInfo.Checksum"
     ],
-    "seconds": 0.003,
+    "seconds": 0.002,
     "error": null
    },
    {
@@ -886,7 +886,7 @@
      "dataset--File.EML data.DatasetProperties.FileSourceInfo",
      "dataset--File.Generic data.DatasetProperties.FileSourceInfo"
     ],
-    "seconds": 0.004,
+    "seconds": 0.003,
     "error": null
    },
    {
@@ -900,7 +900,7 @@
      "master-data--Sample data.SampleAcquisition.SampleAcquisitionDetail.MeasuredGasRate",
      "master-data--Sample data.SampleAcquisition.SampleAcquisitionDetail.MeasuredWaterRate"
     ],
-    "seconds": 0.013,
+    "seconds": 0.011,
     "error": null
    },
    {
@@ -914,7 +914,7 @@
      "master-data--Wellbore data.DefinitiveTrajectoryID",
      "master-data--SurveyProgram data.SurveySections[].WellboreTrajectoryID"
     ],
-    "seconds": 0.004,
+    "seconds": 0.003,
     "error": null
    },
    {
@@ -928,7 +928,7 @@
      "master-data--RigCoilTubingReel data.InjectorStackUpHeight",
      "master-data--ReferenceLevel data.VerticalMeasurementPathID"
     ],
-    "seconds": 0.025,
+    "seconds": 0.023,
     "error": null
    },
    {
@@ -942,7 +942,7 @@
      "master-data--SeismicAcquisitionSurvey data.CableSpacingDistance",
      "work-product-component--WellLog data.Curves[].TopDepth"
     ],
-    "seconds": 0.006,
+    "seconds": 0.005,
     "error": null
    },
    {
@@ -984,7 +984,7 @@
      "work-product-component--WellboreMarkerSet",
      "master-data--Wellbore"
     ],
-    "seconds": 0.042,
+    "seconds": 0.038,
     "error": null
    },
    {
@@ -998,7 +998,7 @@
      "work-product-component--ReservoirSimulationEquilibriumModel",
      "work-product-component--FluidBoundaryInterpretation"
     ],
-    "seconds": 0.044,
+    "seconds": 0.04,
     "error": null
    },
    {
@@ -1011,7 +1011,7 @@
      "work-product-component--CementJob",
      "master-data--PlannedCementJob"
     ],
-    "seconds": 0.041,
+    "seconds": 0.039,
     "error": null
    },
    {
@@ -1025,7 +1025,7 @@
      "master-data--Rig",
      "master-data--WellActivityProgram"
     ],
-    "seconds": 0.04,
+    "seconds": 0.037,
     "error": null
    },
    {
@@ -1053,7 +1053,7 @@
      "master-data--SurveyProgram",
      "master-data--SeismicAcquisitionSurvey"
     ],
-    "seconds": 0.042,
+    "seconds": 0.038,
     "error": null
    },
    {
@@ -1067,7 +1067,7 @@
      "work-product-component--CementJob",
      "master-data--HoleSection"
     ],
-    "seconds": 0.005,
+    "seconds": 0.004,
     "error": null
    }
   ]

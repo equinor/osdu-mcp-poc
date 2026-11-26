@@ -1,15 +1,17 @@
 # OSDU Discovery PoC
 
-Semantic search over OSDU OpenAPI specs and schema files.
-Validates indexing quality before building a full MCP server.
+An MCP server that helps AI assistants find their way around OSDU: which API
+operation to call, which kind and property hold a piece of data, and how
+records link to each other. It works from local copies of the OSDU OpenAPI
+specs, the JSON Schemas and the LinkML Logical Data Model, and builds
+everything it needs in memory at startup, in a few seconds. There is no index
+to build.
 
 ## Setup
 
 ```bash
 uv sync
 ```
-
-ChromaDB will download a local embedding model on first run (~90MB, once only).
 
 ## Folder layout
 
@@ -18,7 +20,8 @@ osdu-mcp-poc/
 ├── src/
 │   └── osdu_discovery/
 │       ├── __init__.py
-│       ├── indexer.py      # builds the ChromaDB index from specs/ and schemas/
+│       ├── indexer.py      # turns specs/ and schemas/ into text documents
+│       ├── search.py       # keyword search (BM25) behind search_osdu
 │       ├── query.py        # interactive query CLI
 │       ├── graph.py        # relationship graph from the LinkML model
 │       ├── catalog.py      # compact operation, kind and property lists
@@ -27,71 +30,67 @@ osdu-mcp-poc/
 ├── schemas/                # OSDU JSON Schemas, data-definitions Generated/
 ├── model/
 │   └── osdu_latest.yaml    # OSDU LinkML Logical Data Model (see Model provenance)
+├── eval/                   # retrieval evaluation (see eval/README.md)
 ├── tests/                  # pytest suite: uv run pytest
 ├── pyproject.toml
 └── README.md
 ```
 
-## Index
-
-```bash
-# Index both specs and schemas
-osdu-index --specs ./specs --schemas ./schemas --db ./chroma_db
-
-# Specs only
-osdu-index --specs ./specs --db ./chroma_db
-
-# Schemas only
-osdu-index --schemas ./schemas --db ./chroma_db
-
-# Re-index from scratch (drop existing collections first)
-osdu-index --specs ./specs --schemas ./schemas --db ./chroma_db --reset
-```
-
-The index is persisted to `./chroma_db` and survives between runs.
-You only need to re-index when specs/schemas change.
-
 ## Query
 
+`osdu-query` is an interactive way to try `search_osdu`'s keyword search. It
+builds the index from `./specs` and `./schemas` in a few seconds.
+
 ```bash
-# Query both collections (default)
-osdu-query --db ./chroma_db
+# Query both API operations and schemas (default)
+osdu-query
 
 # Show more results
-osdu-query --db ./chroma_db --top 8
+osdu-query --top 8
 
 # API operations only
-osdu-query --db ./chroma_db --mode api
+osdu-query --mode api
 
-# Schema properties only
-osdu-query --db ./chroma_db --mode schema
+# Schema kinds and properties only
+osdu-query --mode schema
+
+# Other folders
+osdu-query --specs ./specs --schemas ./schemas
 ```
 
 ### Example queries to try
 
 ```
-find seismic surveys within a spatial polygon
-get wireline log curves for a wellbore
-retrieve measured depth of wellbore markers
-search for wells by basin and spud date
-download a dataset file
-check entitlements for a user
+validate legal tags
+wellbore marker measured depth
+seismic trace data sample interval
+file checksum
 register a new schema kind
-get the trajectory stations for a directional well
+wellbore trajectory azimuth reference
+query with cursor
 ```
 
-Inside the query session, type `stats` to see index counts or `quit` to exit.
+Inside the query session, type `stats` to see document counts or `quit` to exit.
 
-## Interpreting results
+## How search works
 
-| Relevance label | Distance range | Meaning                        |
-|-----------------|----------------|--------------------------------|
-| strong          | < 0.30         | Very likely what you need      |
-| good            | 0.30 – 0.50    | Probably relevant, worth checking |
-| weak            | 0.50 – 0.70    | Tangentially related           |
-| poor            | > 0.70         | Likely noise                   |
+`search_osdu` is a BM25 keyword search over about 107,000 documents: one per
+API operation, one per kind, and one per schema property of every schema
+version. Names are split at camelCase boundaries, so "marker measured depth"
+matches `MarkerMeasuredDepth`. Results for older versions of the same kind and
+property are collapsed into one, with a note of how many versions matched.
 
-Distance is cosine distance (0 = identical meaning, 2 = opposite).
+Scores are BM25 scores: higher is better, but they are only comparable within
+one query.
+
+Keyword search finds names and near-exact wording well. It can't map domain
+words to OSDU names ("history of edits" to `/records/versions`). For those,
+the catalog tools (`list_operations`, `list_kinds`, `list_properties`) let the
+agent read a compact list and pick, which the
+[retrieval evaluation](eval/README.md) found far more reliable. The same
+evaluation found this keyword search level with or ahead of the embedding
+index it replaced (ChromaDB with all-MiniLM-L6-v2, which took about 26 minutes
+to build and 1.7 GB on disk) on every question type.
 
 ## Schema resolution
 
@@ -167,16 +166,16 @@ report).
   more) are tuned by eye on a dozen known questions. They are constants at
   the top of `graph.py`.
 
-- ChromaDB's default embedding model (all-MiniLM-L6-v2) is fast and good enough
-  for a PoC. For production, consider switching to a larger model or an API-based
-  embedder for better semantic accuracy on domain-specific OSDU terminology.
+- `search_osdu` is keyword search: it does not map domain words to OSDU
+  names (see [How search works](#how-search-works)). The catalog tools cover
+  that case. The index uses about 350 MB of memory.
 
 ## MCP server
 
 The MCP server exposes OSDU discovery tools for AI assistants (Claude Desktop, VS Code Copilot, etc.) via stdio transport.
 
 ```bash
-osdu-mcp --db ./chroma_db --specs ./specs --schemas ./schemas --model ./model/osdu_latest.yaml
+osdu-mcp --specs ./specs --schemas ./schemas --model ./model/osdu_latest.yaml
 ```
 
 Each flag enables its own tools, and a tool whose flag is missing is still
@@ -184,22 +183,24 @@ listed but returns a message saying which flag to add:
 
 | Flag | Enables | Needs |
 |---|---|---|
-| `--db` | `search_osdu` | the index built by `osdu-index` (about 26 min, 1.7 GB) |
-| `--specs` | `list_operations` | the `specs/` folder, loads in under a second |
-| `--schemas` | `get_schema`, `list_kinds`, `list_properties` | the `schemas/` folder, loads in about a second |
+| `--specs` | `list_operations`, API search in `search_osdu` | the `specs/` folder, loads in under a second |
+| `--schemas` | `get_schema`, `list_kinds`, `list_properties`, schema search in `search_osdu` | the `schemas/` folder, loads in about a second |
 | `--model` | `get_relationships`, `find_path`, `get_deprecations` | `model/osdu_latest.yaml`, loads in under a second |
 
-The index is no longer required: if `--db` points at a missing folder, the
-server starts with `search_osdu` disabled, as long as another flag is given.
-That makes the server usable where building the index isn't practical, such
-as cloud agents.
+`search_osdu`'s keyword index is built from `--specs` and `--schemas` in a
+background thread at startup, in about 3 seconds, so the server answers the
+client straight away. A search sent before it is ready waits for it.
+
+`--db` is accepted and ignored, so configs written for the old embedding
+index still start. Your old `chroma_db/` folder can be deleted.
 
 ### Catalog tools: `list_operations`, `list_kinds`, `list_properties`
 
 Compact lists the agent reads and picks from. In the
 [retrieval evaluation](eval/README.md), a model picking from these lists got
-the right answer first for 82% of questions, against 26% for `search_osdu`,
-and for all 18 API questions. They work best for questions in domain words
+the right answer first for 82% of questions, against 39% for the keyword
+search in `search_osdu` (and 26% for the embedding index it replaced), and
+for all 18 API questions. They work best for questions in domain words
 ("see the history of edits", "formation tops") that search misses.
 
 | Tool | Returns | Size |
@@ -223,13 +224,14 @@ listed but return `Relationship graph unavailable`.
 
 ### Tool: `search_osdu`
 
-Semantic search — finds *candidate* operations and properties for a need.
+Keyword search — finds *candidate* operations and properties for a need.
 Best for exact or near-exact names; for questions in domain words, the
-catalog tools above are more reliable. Requires `--db`.
+catalog tools above are more reliable. Needs `--specs` (API operations) and
+`--schemas` (kinds and properties). See [How search works](#how-search-works).
 
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
-| `query` | string | required | Natural language description, e.g. *"get wireline log curves for a wellbore"* |
+| `query` | string | required | What you are looking for, e.g. *"wellbore trajectory azimuth"* |
 | `mode` | string | `"both"` | `"api"`, `"schema"`, or `"both"` |
 | `top_k` | integer | `5` | Results returned per collection |
 
@@ -249,7 +251,7 @@ still listed, but returns `Schema lookup unavailable`.
 
 ### Relationship tools (LinkML Logical Data Model)
 
-Semantic search finds *a* property; it cannot follow references between
+Search finds *a* property; it cannot follow references between
 records. These three tools answer structural questions from the LinkML model
 (`model/osdu_latest.yaml`) instead: every attribute carrying a
 `relationship_targets` annotation is rolled up from the abstract schemas and
@@ -393,7 +395,7 @@ these files usually hold other servers too.
   "mcpServers": {
     "osdu-discovery": {
       "command": "/opt/homebrew/bin/uv",
-      "args": ["run", "--project", "/path/to/osdu-mcp-poc", "osdu-mcp", "--db", "/path/to/osdu-mcp-poc/chroma_db", "--specs", "/path/to/osdu-mcp-poc/specs", "--schemas", "/path/to/osdu-mcp-poc/schemas", "--model", "/path/to/osdu-mcp-poc/model/osdu_latest.yaml"]
+      "args": ["run", "--project", "/path/to/osdu-mcp-poc", "osdu-mcp", "--specs", "/path/to/osdu-mcp-poc/specs", "--schemas", "/path/to/osdu-mcp-poc/schemas", "--model", "/path/to/osdu-mcp-poc/model/osdu_latest.yaml"]
     }
   }
 }
@@ -414,7 +416,7 @@ or run **MCP: Add Server** from the Command Palette.
     "osdu-discovery": {
       "type": "stdio",
       "command": "/opt/homebrew/bin/uv",
-      "args": ["run", "--project", "/path/to/osdu-mcp-poc", "osdu-mcp", "--db", "/path/to/osdu-mcp-poc/chroma_db", "--specs", "/path/to/osdu-mcp-poc/specs", "--schemas", "/path/to/osdu-mcp-poc/schemas", "--model", "/path/to/osdu-mcp-poc/model/osdu_latest.yaml"]
+      "args": ["run", "--project", "/path/to/osdu-mcp-poc", "osdu-mcp", "--specs", "/path/to/osdu-mcp-poc/specs", "--schemas", "/path/to/osdu-mcp-poc/schemas", "--model", "/path/to/osdu-mcp-poc/model/osdu_latest.yaml"]
     }
   }
 }
@@ -423,7 +425,7 @@ or run **MCP: Add Server** from the Command Palette.
 #### Claude Code
 
 ```bash
-claude mcp add osdu-discovery -- /opt/homebrew/bin/uv run --project /path/to/osdu-mcp-poc osdu-mcp --db /path/to/osdu-mcp-poc/chroma_db --specs /path/to/osdu-mcp-poc/specs --schemas /path/to/osdu-mcp-poc/schemas --model /path/to/osdu-mcp-poc/model/osdu_latest.yaml
+claude mcp add osdu-discovery -- /opt/homebrew/bin/uv run --project /path/to/osdu-mcp-poc osdu-mcp --specs /path/to/osdu-mcp-poc/specs --schemas /path/to/osdu-mcp-poc/schemas --model /path/to/osdu-mcp-poc/model/osdu_latest.yaml
 ```
 
 Everything after `--` is the command to launch. Add `-s user` to make it
@@ -445,7 +447,7 @@ Copy `opencode.example.json` to `opencode.json` in the project root (or merge in
   "mcp": {
     "osdu-discovery": {
       "type": "local",
-      "command": ["/opt/homebrew/bin/uv", "run", "--project", "/path/to/osdu-mcp-poc", "osdu-mcp", "--db", "/path/to/osdu-mcp-poc/chroma_db", "--specs", "/path/to/osdu-mcp-poc/specs", "--schemas", "/path/to/osdu-mcp-poc/schemas", "--model", "/path/to/osdu-mcp-poc/model/osdu_latest.yaml"],
+      "command": ["/opt/homebrew/bin/uv", "run", "--project", "/path/to/osdu-mcp-poc", "osdu-mcp", "--specs", "/path/to/osdu-mcp-poc/specs", "--schemas", "/path/to/osdu-mcp-poc/schemas", "--model", "/path/to/osdu-mcp-poc/model/osdu_latest.yaml"],
       "enabled": true
     }
   }
@@ -464,7 +466,7 @@ To check the server independently of any client, run the same command from
 your terminal:
 
 ```bash
-/opt/homebrew/bin/uv run --project /path/to/osdu-mcp-poc osdu-mcp --db /path/to/osdu-mcp-poc/chroma_db --specs /path/to/osdu-mcp-poc/specs --schemas /path/to/osdu-mcp-poc/schemas --model /path/to/osdu-mcp-poc/model/osdu_latest.yaml
+/opt/homebrew/bin/uv run --project /path/to/osdu-mcp-poc osdu-mcp --specs /path/to/osdu-mcp-poc/specs --schemas /path/to/osdu-mcp-poc/schemas --model /path/to/osdu-mcp-poc/model/osdu_latest.yaml
 ```
 
 A healthy start prints these lines to stderr and then waits on stdin without
@@ -472,8 +474,9 @@ returning to the prompt:
 
 ```
 Operation list: 366 operations from '/path/to/osdu-mcp-poc/specs' — list_operations enabled.
-Schema index: 1450 files, 824 kinds from '/path/to/osdu-mcp-poc/schemas' — get_schema, list_kinds and list_properties enabled.
+Schema index: 1450 files, 826 kinds from '/path/to/osdu-mcp-poc/schemas' — get_schema, list_kinds and list_properties enabled.
 Relationship graph: 818 kinds, 22270 reference links from '/path/to/osdu-mcp-poc/model/osdu_latest.yaml' — relationship tools enabled.
+Search index: 366 operations, 106493 schema documents — search_osdu ready.
 ```
 
 If you passed `--specs`, `--schemas` or `--model` and don't see the matching line, the
@@ -487,8 +490,8 @@ one the client is hitting.
 | Symptom | Cause and fix |
 |---|---|
 | Server fails to start, `ENOENT` / `command not found` | `command` is a bare `uv` or the wrong absolute path. Use the output of `which uv` / `where.exe uv`. |
-| Exits immediately, `ERROR: nothing loaded` (exit code 1) | No index at `--db`, and `--specs`, `--schemas` and `--model` were missing, empty or failed to load, so no tool would work. Pass those folders, or run `osdu-index` first — see [Index](#index). `chroma_db/` is generated, not shipped in the repo. |
-| `search_osdu` returns `No ChromaDB collections loaded` | The index has not been built, or `--db` points at the wrong folder. The catalog tools work without it. |
+| Exits immediately, `ERROR: nothing loaded` (exit code 1) | `--specs`, `--schemas` and `--model` were all missing, empty or failed to load, so no tool would work. Check the paths. |
+| `search_osdu` returns `Search unavailable` | The server was started without `--specs` or `--schemas`, or the index build failed; the stderr `WARNING` says why. |
 | `list_operations` / `list_kinds` return `... unavailable` | The server was started without `--specs` / `--schemas`, or the path didn't exist. |
 | Server connects but no tools appear | Server name contains a space or other unsupported character. Rename it to `osdu-discovery`. |
 | `get_schema` returns `Schema lookup unavailable` | The server was started without `--schemas`, or the path given didn't exist. The tool is always registered, so this is a runtime message rather than a missing tool. |

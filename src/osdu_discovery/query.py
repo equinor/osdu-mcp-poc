@@ -1,29 +1,32 @@
 """
 OSDU Discovery PoC — Query CLI
 
-Interactive query tool for testing semantic search quality against
-the indexed ChromaDB collections produced by the indexer.
+Interactive tool for trying `search_osdu`'s keyword search. The index is
+built in memory from the spec and schema folders in a few seconds.
 
 Usage:
-    uv run -m osdu_discovery.query --db ./chroma_db
-    uv run -m osdu_discovery.query --db ./chroma_db --top 8
-    uv run -m osdu_discovery.query --db ./chroma_db --mode api
-    uv run -m osdu_discovery.query --db ./chroma_db --mode schema
+    uv run -m osdu_discovery.query
+    uv run -m osdu_discovery.query --top 8
+    uv run -m osdu_discovery.query --mode api
+    uv run -m osdu_discovery.query --specs ./specs --schemas ./schemas
 
 Or via the installed script entry point:
-    osdu-query --db ./chroma_db
+    osdu-query
 """
 
 import argparse
+import os
 import sys
+import time
 from itertools import zip_longest
 
-import chromadb
 from rich.console import Console
 from rich.panel import Panel
 from rich.rule import Rule
 from rich.table import Table
 from rich import box
+
+from osdu_discovery.search import SearchIndex
 
 console = Console()
 
@@ -40,44 +43,6 @@ MODE_LABELS = {
 }
 
 
-def score_label(distance: float) -> str:
-    """
-    ChromaDB cosine distance: 0 = identical, 2 = opposite.
-    Convert to a rough relevance label.
-    """
-    if distance < 0.3:
-        return "[bold green]strong[/bold green]"
-    if distance < 0.5:
-        return "[green]good[/green]"
-    if distance < 0.7:
-        return "[yellow]weak[/yellow]"
-    return "[red]poor[/red]"
-
-
-def query_collection(
-    collection: chromadb.Collection,
-    query: str,
-    top_k: int,
-    source_tag: str,
-) -> list[dict]:
-    try:
-        results = collection.query(query_texts=[query], n_results=top_k)
-    except Exception as e:
-        console.print(f"[red]Query error ({source_tag}): {e}[/red]")
-        return []
-
-    hits = []
-    for i in range(len(results["ids"][0])):
-        hits.append({
-            "source":   source_tag,
-            "id":       results["ids"][0][i],
-            "text":     results["documents"][0][i],
-            "distance": results["distances"][0][i],
-            "metadata": results["metadatas"][0][i],
-        })
-    return hits
-
-
 def render_results(hits: list[dict], query: str, top_k: int) -> None:
     if not hits:
         console.print("[yellow]No results returned.[/yellow]")
@@ -91,7 +56,6 @@ def render_results(hits: list[dict], query: str, top_k: int) -> None:
     for rank, hit in enumerate(hits, start=1):
         source = hit["source"]
         meta = hit["metadata"]
-        distance = hit["distance"]
         color = RESULT_COLORS.get(meta.get("type", source), "white")
 
         # Build header line depending on result type
@@ -112,10 +76,8 @@ def render_results(hits: list[dict], query: str, top_k: int) -> None:
             header = f"[{color}][SCHEMA / property][/{color}]  [{color}]{path}[/{color}]"
             subtitle = f"from kind: {kind}"
 
-        relevance = score_label(distance)
-        distance_str = f"{distance:.3f}"
-
-        panel_title = f"[bold]#{rank}[/bold]  {header}   relevance: {relevance} ({distance_str})"
+        versions = f"  [dim](+{hit['versions'] - 1} older versions)[/dim]" if hit["versions"] > 1 else ""
+        panel_title = f"[bold]#{rank}[/bold]  {header}   score: {hit['score']:.1f}{versions}"
         panel_body_lines = []
         if subtitle:
             panel_body_lines.append(f"[dim]{subtitle}[/dim]")
@@ -138,73 +100,52 @@ def render_results(hits: list[dict], query: str, top_k: int) -> None:
     console.print()
 
 
-def print_stats(api_col, schema_col, mode: str) -> None:
+def print_stats(index: SearchIndex, mode: str) -> None:
     table = Table(box=box.SIMPLE, show_header=True, header_style="bold")
-    table.add_column("Collection")
+    table.add_column("Documents")
     table.add_column("Entries", justify="right")
     table.add_column("Active")
-
-    if api_col:
-        table.add_row(
-            "osdu_api_operations",
-            str(api_col.count()),
-            "✓" if mode in ("both", "api") else "—",
-        )
-    if schema_col:
-        table.add_row(
-            "osdu_schema_properties",
-            str(schema_col.count()),
-            "✓" if mode in ("both", "schema") else "—",
-        )
-
+    if index.api:
+        table.add_row("API operations", str(len(index.api.docs)), "✓" if mode in ("both", "api") else "—")
+    if index.schema:
+        table.add_row("Schema kinds and properties", str(len(index.schema.docs)), "✓" if mode in ("both", "schema") else "—")
     console.print(table)
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Query the OSDU semantic index")
-    parser.add_argument("--db",   default="./chroma_db", help="ChromaDB persistence folder")
-    parser.add_argument("--top",  type=int, default=5,   help="Number of results to return (default: 5)")
+    parser = argparse.ArgumentParser(description="Query the OSDU keyword search")
+    parser.add_argument("--specs", default="./specs", help="OpenAPI spec folder (default: ./specs)")
+    parser.add_argument("--schemas", default="./schemas", help="OSDU schema folder (default: ./schemas)")
+    parser.add_argument("--top", type=int, default=5, help="Number of results to return (default: 5)")
     parser.add_argument(
         "--mode",
         choices=["both", "api", "schema"],
         default="both",
-        help="Which collection(s) to query (default: both)",
+        help="Which documents to query (default: both)",
     )
     args = parser.parse_args()
 
-    client = chromadb.PersistentClient(path=args.db)
-
-    # Load collections that exist
-    existing = {c.name for c in client.list_collections()}
-
-    api_col = None
-    schema_col = None
-
-    if args.mode in ("both", "api"):
-        if "osdu_api_operations" in existing:
-            api_col = client.get_collection("osdu_api_operations")
-        else:
-            console.print("[yellow]Collection 'osdu_api_operations' not found — run osdu-index --specs first.[/yellow]")
-
-    if args.mode in ("both", "schema"):
-        if "osdu_schema_properties" in existing:
-            schema_col = client.get_collection("osdu_schema_properties")
-        else:
-            console.print("[yellow]Collection 'osdu_schema_properties' not found — run osdu-index --schemas first.[/yellow]")
-
-    if not api_col and not schema_col:
-        console.print("[red]No collections available. Exiting.[/red]")
+    specs = args.specs if args.mode in ("both", "api") and os.path.isdir(args.specs) else None
+    schemas = args.schemas if args.mode in ("both", "schema") and os.path.isdir(args.schemas) else None
+    if not specs and not schemas:
+        console.print("[red]No spec or schema folder found. Pass --specs and/or --schemas.[/red]")
         sys.exit(1)
+
+    t0 = time.time()
+    with console.status("Building the search index..."):
+        index = SearchIndex.build(specs, schemas)
+    for err in index.errors:
+        console.print(f"[yellow]Skipped {err}[/yellow]")
 
     console.print()
     console.print(Panel(
-        f"[bold]OSDU Discovery — Semantic Search[/bold]\n"
-        f"Mode: {MODE_LABELS[args.mode]}   Top-K: {args.top}\n\n"
-        "Type a natural language need and see which endpoints/schemas match.\n"
+        f"[bold]OSDU Discovery — Keyword Search[/bold]\n"
+        f"Mode: {MODE_LABELS[args.mode]}   Top-K: {args.top}   Built in {time.time() - t0:.1f}s\n\n"
+        "Type what you need and see which endpoints/schemas match.\n"
         "Commands:  [bold]stats[/bold] — show index counts   [bold]quit[/bold] / [bold]exit[/bold] — exit",
         border_style="cyan",
     ))
-    print_stats(api_col, schema_col, args.mode)
+    print_stats(index, args.mode)
 
     while True:
         try:
@@ -216,30 +157,18 @@ def main():
 
         if not query:
             continue
-
         if query.lower() in ("quit", "exit", "q"):
             console.print("[dim]Bye.[/dim]")
             break
-
         if query.lower() == "stats":
-            print_stats(api_col, schema_col, args.mode)
+            print_stats(index, args.mode)
             continue
 
-        hits = []
-        if api_col and schema_col:
-            # Both collections active: guarantee representation from each.
-            # Fetch top_k from each independently, then interleave by rank
-            # so neither collection drowns the other out by volume.
-            api_hits    = query_collection(api_col,    query, args.top, source_tag="api")
-            schema_hits = query_collection(schema_col, query, args.top, source_tag="schema")
-            # Interleave: api[0], schema[0], api[1], schema[1], ...
-            for pair in zip_longest(api_hits, schema_hits):
-                hits.extend(h for h in pair if h is not None)
-        elif api_col:
-            hits = query_collection(api_col, query, args.top, source_tag="api")
-        elif schema_col:
-            hits = query_collection(schema_col, query, args.top, source_tag="schema")
-
+        # Fetch top_k from each collection, then interleave by rank so
+        # neither drowns the other out by volume.
+        api_hits = index.search(query, "api", args.top) if specs else []
+        schema_hits = index.search(query, "schema", args.top) if schemas else []
+        hits = [h for pair in zip_longest(api_hits, schema_hits) for h in pair if h is not None]
         render_results(hits, query, top_k=args.top)
 
 

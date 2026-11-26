@@ -4,9 +4,9 @@
     uv run python eval/run_eval.py --methods bm25   # just one
 
 Methods
-  dense    the current search_osdu backend: ChromaDB + all-MiniLM-L6-v2
-           (needs a finished ./chroma_db)
-  bm25     keyword search (BM25, camelCase-aware) over the same documents
+  dense    the former search_osdu backend: ChromaDB + all-MiniLM-L6-v2
+           (needs `uv sync --group eval` and eval/dense_index.py first)
+  bm25     today's search_osdu: keyword search (BM25, camelCase-aware)
   hybrid   dense and bm25 merged by reciprocal-rank fusion
   catalog  an LLM picks from a compact catalog, as an agent would with a
            list_kinds / list_operations tool (needs the `claude` CLI logged in)
@@ -22,20 +22,20 @@ from __future__ import annotations
 import argparse
 import fnmatch
 import json
-import math
 import re
 import subprocess
 import sys
 import tempfile
 import time
 from concurrent.futures import ThreadPoolExecutor
-from collections import Counter, defaultdict
+from collections import defaultdict
 from pathlib import Path
 
 import yaml
 
 sys.path.insert(0, str(Path(__file__).parent))
 import corpus as corpus_mod  # noqa: E402
+from osdu_discovery.search import BM25 as SearchBM25  # noqa: E402
 
 HERE = Path(__file__).parent
 ROOT = HERE.parent
@@ -110,50 +110,18 @@ class Dense:
         return r["metadatas"][0]
 
 
-_TOKEN = re.compile(r"[A-Z]+(?=[A-Z][a-z])|[A-Z]?[a-z]+|[A-Z]+|\d+")
-_STOP = set(
-    "a an the of to for in on at by is are was be it its this that with from as "
-    "and or how do does i my me we what which where when who can into one all "
-    "get".split()
-)
-
-
-def tokens(text: str) -> list[str]:
-    return [t.lower() for t in _TOKEN.findall(text) if t.lower() not in _STOP]
-
-
 class BM25:
+    """The keyword search behind `search_osdu` (osdu_discovery.search.BM25),
+    one index per collection."""
+
     name = "bm25"
 
-    def __init__(self, corpus: dict, k1: float = 1.5, b: float = 0.75):
-        self.k1, self.b = k1, b
-        self.idx = {"api": self._build(corpus["api"]), "schema": self._build(corpus["schema"])}
-
-    def _build(self, docs: list[dict]):
-        postings: dict[str, list[tuple[int, int]]] = defaultdict(list)
-        lengths = []
-        for i, d in enumerate(docs):
-            tf = Counter(tokens(d["text"]))
-            lengths.append(sum(tf.values()))
-            for t, n in tf.items():
-                postings[t].append((i, n))
-        avg = sum(lengths) / max(len(lengths), 1)
-        return docs, postings, lengths, avg
+    def __init__(self, corpus: dict):
+        self.idx = {"api": SearchBM25(corpus["api"]), "schema": SearchBM25(corpus["schema"])}
 
     def search(self, q: str, qtype: str) -> list[dict]:
-        docs, postings, lengths, avg = self.idx["api" if qtype == "api" else "schema"]
-        n = len(docs)
-        scores: dict[int, float] = defaultdict(float)
-        for t in set(tokens(q)):
-            plist = postings.get(t)
-            if not plist:
-                continue
-            idf = math.log(1 + (n - len(plist) + 0.5) / (len(plist) + 0.5))
-            for i, tf in plist:
-                denom = tf + self.k1 * (1 - self.b + self.b * lengths[i] / avg)
-                scores[i] += idf * tf * (self.k1 + 1) / denom
-        best = sorted(scores, key=scores.get, reverse=True)[: K * 3]
-        return [docs[i] for i in best]
+        hits = self.idx["api" if qtype == "api" else "schema"].search(q, K * 3)
+        return [doc for doc, _ in hits]
 
 
 class Hybrid:
