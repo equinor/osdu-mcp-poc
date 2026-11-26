@@ -9,8 +9,6 @@
         "--project",
         "/path/to/osdu-mcp-poc",
         "osdu-mcp",
-        "--db",
-        "/path/to/osdu-mcp-poc/chroma_db",
         "--specs",
         "/path/to/osdu-mcp-poc/specs",
         "--schemas",

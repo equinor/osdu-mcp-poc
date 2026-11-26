@@ -1166,7 +1166,6 @@ name = "osdu-discovery-poc"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
-    { name = "chromadb" },
     { name = "jsonschema" },
     { name = "mcp", extra = ["cli"] },
     { name = "pyyaml" },
@@ -1177,10 +1176,12 @@ dependencies = [
 dev = [
     { name = "pytest" },
 ]
+eval = [
+    { name = "chromadb" },
+]
 
 [package.metadata]
 requires-dist = [
-    { name = "chromadb", specifier = ">=0.5.0" },
     { name = "jsonschema", specifier = ">=4.0" },
     { name = "mcp", extras = ["cli"], specifier = ">=1.0" },
     { name = "mcp", extras = ["cli"], specifier = ">=1.27.1" },
@@ -1190,6 +1191,7 @@ requires-dist = [
 
 [package.metadata.requires-dev]
 dev = [{ name = "pytest", specifier = ">=9.2.0" }]
+eval = [{ name = "chromadb", specifier = ">=0.5.0" }]
 
 [[package]]
 name = "overrides"

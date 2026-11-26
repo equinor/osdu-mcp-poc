@@ -1,19 +1,13 @@
 """
 OSDU Discovery — MCP Server
 
-Exposes OSDU semantic search as an MCP tool for use with AI assistants
-(Claude Desktop, VS Code Copilot, etc.) via stdio transport.
-
-`search_osdu` needs a pre-built ChromaDB index. Run the indexer first:
-    osdu-index --specs ./specs --schemas ./schemas --db ./chroma_db
-
-The list tools need only the spec and schema folders, so the server can also
-run without an index (`--db` pointing at a missing folder just disables
-`search_osdu`).
+Exposes OSDU discovery tools for AI assistants (Claude Desktop, VS Code
+Copilot, etc.) via stdio transport. Everything is built from the spec and
+schema folders and the LinkML model at startup; there is no index to build.
 
 Start the server:
-    osdu-mcp --db ./chroma_db --specs ./specs --schemas ./schemas
-    uv run -m osdu_discovery.mcp_server --db ./chroma_db
+    osdu-mcp --specs ./specs --schemas ./schemas --model ./model/osdu_latest.yaml
+    uv run -m osdu_discovery.mcp_server --specs ./specs --schemas ./schemas
 """
 
 import argparse
@@ -22,21 +16,25 @@ import json
 import os
 import re
 import sys
+import threading
 from itertools import zip_longest
 
-import chromadb
 from mcp.server.fastmcp import FastMCP
 
 from osdu_discovery.catalog import Catalog
 from osdu_discovery.graph import OsduGraph
 from osdu_discovery.indexer import SchemaResolver, load_file
-from osdu_discovery.query import query_collection
+from osdu_discovery.search import SearchIndex
 
 mcp = FastMCP("osdu-discovery")
 
-# Collections loaded once at startup, shared across all tool calls.
-_api_col: chromadb.Collection | None = None
-_schema_col: chromadb.Collection | None = None
+# Keyword index for search_osdu, built in a background thread at startup
+# (about 3 s) so the server answers the client's handshake straight away.
+_search: SearchIndex | None = None
+_search_ready = threading.Event()
+_search_error: str | None = None
+_search_started = False
+SEARCH_WAIT_SECONDS = 120
 
 # Schema-file lookup, populated at startup when --schemas is given.
 # Maps lookup keys (full kind id, versioned stem, bare name) → file path.
@@ -70,7 +68,10 @@ def _build_schema_index(schemas_dir: str) -> int:
                 kind = ""
             if kind:
                 _schema_index[kind.lower()] = path
-                _catalog.add_schema(path, doc)
+                # abstract/ schemas are building blocks, not record kinds:
+                # get_schema serves them, list_kinds doesn't list them.
+                if os.path.basename(dirpath) != "abstract":
+                    _catalog.add_schema(path, doc)
             m = re.match(r"^(.*)\.(\d+)\.(\d+)\.(\d+)$", stem)
             if m:
                 bare = m.group(1).lower()
@@ -88,35 +89,50 @@ def _build_schema_index(schemas_dir: str) -> int:
 
 def _format_hit(hit: dict, rank: int) -> str:
     meta = hit["metadata"]
-    distance = hit["distance"]
-    source = hit["source"]
+    lines = [f"## Result {rank}  [score {hit['score']:.1f}]"]
 
-    relevance = (
-        "strong" if distance < 0.3
-        else "good" if distance < 0.5
-        else "weak" if distance < 0.7
-        else "poor"
-    )
-
-    lines = [f"## Result {rank}  [{relevance}, distance={distance:.3f}]"]
-
-    if source == "api":
-        lines.append(f"**Type:** API operation")
+    if hit["source"] == "api":
+        lines.append("**Type:** API operation")
         lines.append(f"**Service:** {meta.get('service', '')}")
         lines.append(f"**Endpoint:** {meta.get('method', '')} {meta.get('path', '')}")
         if meta.get("summary"):
             lines.append(f"**Summary:** {meta['summary']}")
     elif meta.get("type") == "kind":
-        lines.append(f"**Type:** Schema kind")
+        lines.append("**Type:** Schema kind")
         lines.append(f"**Kind:** {meta.get('kind', '')}")
     else:
-        lines.append(f"**Type:** Schema property")
+        lines.append("**Type:** Schema property")
         lines.append(f"**Property path:** {meta.get('path', '')}")
         lines.append(f"**Kind:** {meta.get('kind', '')}")
+    if hit["versions"] > 1:
+        lines.append(f"_Also matched in {hit['versions'] - 1} other version(s) of this kind; shown: best match._")
 
     # Include the full indexed text so the assistant can read field details
     lines.append(f"\n**Indexed content:**\n```\n{hit['text']}\n```")
     return "\n".join(lines)
+
+
+def _build_search(specs: str | None, schemas: str | None) -> None:
+    global _search, _search_error
+    try:
+        _search = SearchIndex.build(specs, schemas)
+        for err in _search.errors:
+            print(f"WARNING: search skipped {err}", file=sys.stderr)
+        n_api = len(_search.api.docs) if _search.api else 0
+        n_schema = len(_search.schema.docs) if _search.schema else 0
+        print(f"Search index: {n_api} operations, {n_schema} schema documents — search_osdu ready.", file=sys.stderr)
+    except Exception as exc:  # noqa: BLE001
+        _search_error = str(exc)
+        print(f"WARNING: could not build the search index: {exc} — search_osdu unavailable.", file=sys.stderr)
+    finally:
+        _search_ready.set()
+
+
+def start_search_build(specs: str | None, schemas: str | None) -> None:
+    """Build the keyword index in a background thread."""
+    global _search_started
+    _search_started = True
+    threading.Thread(target=_build_search, args=(specs, schemas), daemon=True).start()
 
 
 @mcp.tool()
@@ -125,47 +141,47 @@ def search_osdu(
     mode: str = "both",
     top_k: int = 5,
 ) -> str:
-    """Search OSDU API operations and/or schema properties using natural language.
+    """Keyword search over OSDU API operations and schema properties.
 
-    Best for exact or near-exact names. For a question in domain words
+    Matches the words of the query against operation paths, summaries and
+    parameters, and against kind and property names and descriptions
+    (camelCase names are split, so "marker depth" finds MarkerMeasuredDepth).
+    Best for names or near-exact wording. For a question in domain words
     ("history of edits", "formation tops"), reading `list_operations` or
     `list_kinds` and picking is usually more reliable.
 
+    Older versions of the same kind and property are collapsed into one result.
+
     Args:
-        query: Natural language description of what you are looking for.
-               Examples: "get wireline log curves for a wellbore",
-               "register a new schema kind", "download a dataset file"
-        mode: Which index to search. One of: "api" (OpenAPI operations only),
-              "schema" (OSDU schema properties only), "both" (default).
+        query: What you are looking for, e.g. "wellbore trajectory azimuth",
+               "register a new schema kind", "download a dataset file".
+        mode: Which documents to search. One of: "api" (OpenAPI operations only),
+              "schema" (OSDU kinds and schema properties only), "both" (default).
         top_k: Number of results to return per collection (default 5).
     """
     if mode not in ("api", "schema", "both"):
         return f"Invalid mode '{mode}'. Use 'api', 'schema', or 'both'."
-
-    if not _api_col and not _schema_col:
+    if not _search_started:
         return (
-            "No ChromaDB collections loaded. "
-            "Run `osdu-index --specs ./specs --schemas ./schemas --db ./chroma_db` first, "
-            "or use list_operations / list_kinds / list_properties instead."
+            "Search unavailable: the server was started without --specs or --schemas. "
+            "Restart with `osdu-mcp --specs ./specs --schemas ./schemas`."
         )
+    if not _search_ready.wait(SEARCH_WAIT_SECONDS):
+        return "The search index is still being built. Try again in a few seconds."
+    if _search is None:
+        return f"Search unavailable: the index could not be built ({_search_error})."
 
-    if mode == "api" and not _api_col:
-        return "Collection 'osdu_api_operations' not found. Run `osdu-index --specs ./specs --db ./chroma_db` first."
-    if mode == "schema" and not _schema_col:
-        return "Collection 'osdu_schema_properties' not found. Run `osdu-index --schemas ./schemas --db ./chroma_db` first."
+    top_k = max(1, min(top_k, 25))
+    want_api = mode in ("api", "both")
+    want_schema = mode in ("schema", "both")
+    if want_api and not _search.api and not want_schema:
+        return "No API operations loaded: the server was started without --specs."
+    if want_schema and not _search.schema and not want_api:
+        return "No schema documents loaded: the server was started without --schemas."
 
-    hits: list[dict] = []
-
-    if mode == "both" and _api_col and _schema_col:
-        api_hits = query_collection(_api_col, query, top_k, source_tag="api")
-        schema_hits = query_collection(_schema_col, query, top_k, source_tag="schema")
-        for pair in zip_longest(api_hits, schema_hits):
-            hits.extend(h for h in pair if h is not None)
-    elif mode == "api" or (mode == "both" and _api_col):
-        hits = query_collection(_api_col, query, top_k, source_tag="api")
-    elif mode == "schema" or (mode == "both" and _schema_col):
-        hits = query_collection(_schema_col, query, top_k, source_tag="schema")
-
+    api_hits = _search.search(query, "api", top_k) if want_api else []
+    schema_hits = _search.search(query, "schema", top_k) if want_schema else []
+    hits = [h for pair in zip_longest(api_hits, schema_hits) for h in pair if h is not None]
     if not hits:
         return "No results found."
 
@@ -547,18 +563,18 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="OSDU Discovery MCP server (stdio)")
     parser.add_argument(
         "--db",
-        default="./chroma_db",
-        help="Path to ChromaDB persistence folder (default: ./chroma_db)",
+        default=None,
+        help="Ignored. search_osdu no longer uses a ChromaDB index; kept so older configs still start.",
     )
     parser.add_argument(
         "--specs",
         default=None,
-        help="Path to the OpenAPI spec folder. Enables the `list_operations` tool.",
+        help="Path to the OpenAPI spec folder. Enables list_operations, and API search in search_osdu.",
     )
     parser.add_argument(
         "--schemas",
         default=None,
-        help="Path to the OSDU schema folder. Enables get_schema, list_kinds and list_properties.",
+        help="Path to the OSDU schema folder. Enables get_schema, list_kinds, list_properties, and schema search in search_osdu.",
     )
     parser.add_argument(
         "--model",
@@ -567,28 +583,10 @@ def main() -> None:
     )
     args = parser.parse_args()
 
-    global _api_col, _schema_col, _graph
+    global _graph
 
-    existing: set[str] = set()
-    client = None
-    if os.path.isdir(args.db):
-        try:
-            client = chromadb.PersistentClient(path=args.db)
-            existing = {c.name for c in client.list_collections()}
-        except Exception as e:
-            print(f"WARNING: Could not open ChromaDB at '{args.db}': {e}", file=sys.stderr)
-    else:
-        print(f"WARNING: no ChromaDB folder at '{args.db}' — search_osdu unavailable.", file=sys.stderr)
-
-    if "osdu_api_operations" in existing:
-        _api_col = client.get_collection("osdu_api_operations")
-    elif client:
-        print("WARNING: 'osdu_api_operations' collection not found — API search unavailable.", file=sys.stderr)
-
-    if "osdu_schema_properties" in existing:
-        _schema_col = client.get_collection("osdu_schema_properties")
-    elif client:
-        print("WARNING: 'osdu_schema_properties' collection not found — schema search unavailable.", file=sys.stderr)
+    if args.db:
+        print("NOTE: --db is ignored; search_osdu builds its index from --specs and --schemas.", file=sys.stderr)
 
     if args.specs:
         if os.path.isdir(args.specs):
@@ -634,14 +632,18 @@ def main() -> None:
             )
 
     # Checked after loading, so an empty folder or a failed load counts as missing.
-    if not (_api_col or _schema_col or _catalog.operations or _schema_index or _graph):
+    if not (_catalog.operations or _schema_index or _graph):
         print(
-            "ERROR: nothing loaded, so no tool would work: no index at "
-            f"'{args.db}' and no usable --specs, --schemas or --model. "
-            "Run osdu-index first, or pass those folders.",
+            "ERROR: nothing loaded, so no tool would work: no usable --specs, "
+            "--schemas or --model. Pass at least one of those folders or files.",
             file=sys.stderr,
         )
         sys.exit(1)
+
+    specs = args.specs if _catalog.operations else None
+    schemas = args.schemas if _schema_index else None
+    if specs or schemas:
+        start_search_build(specs, schemas)
 
     mcp.run(transport="stdio")
 

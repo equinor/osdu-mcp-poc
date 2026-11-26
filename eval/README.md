@@ -1,19 +1,25 @@
 # Retrieval evaluation
 
-Does the embedding index behind `search_osdu` earn its 26-minute build and
-1.7 GB footprint? This folder measures it against cheaper alternatives on
-38 realistic questions.
+Did the embedding index behind `search_osdu` earn its 26-minute build and
+1.7 GB footprint? This folder measured it against cheaper alternatives on
+38 realistic questions. It didn't, and `search_osdu` now uses the `bm25`
+method below, with older schema versions collapsed. Scored on its own top 5,
+it gets 39% hit@1 and 61% hit@5 overall, against 26% and 42% for the
+embedding search it replaced.
 
 ```bash
+uv run python eval/run_eval.py --methods bm25,catalog  # no index needed
+uv sync --group eval                                   # chromadb, for dense and hybrid
+uv run python eval/dense_index.py                      # ~26 min, writes ./chroma_db
 uv run python eval/run_eval.py                         # all methods
-uv run python eval/run_eval.py --methods bm25,hybrid   # a subset
 ```
 
 - `questions.yaml` holds the questions and their gold answers: 18 API operations,
   13 schema properties and 7 record kinds. It uses mostly paraphrased wording,
   and every gold answer is checked to exist before a run.
-- `corpus.py` rebuilds the exact documents `osdu-index` embeds in about 3 s,
-  without embedding them, so every method searches the same text.
+- `corpus.py` builds the documents `search_osdu` searches, in about 3 s, so
+  every method searches the same text. `dense_index.py` embeds the same
+  documents into ChromaDB for the `dense` and `hybrid` methods.
 - `run_eval.py` runs the methods and prints hit@1, hit@5 and MRR@10 per
   question type. Per-question ranks go to `results.json`.
 
@@ -21,8 +27,8 @@ uv run python eval/run_eval.py --methods bm25,hybrid   # a subset
 
 | Method | What it is | Build | Query |
 |---|---|---|---|
-| `dense` | Today's `search_osdu`: ChromaDB with all-MiniLM-L6-v2 | ~26 min, 1.7 GB | ~70 ms |
-| `bm25` | Keyword search that splits camelCase names, over the same documents | ~2 s, in memory | ~1 ms |
+| `dense` | The former `search_osdu`: ChromaDB with all-MiniLM-L6-v2 | ~26 min, 1.7 GB | ~70 ms |
+| `bm25` | Today's `search_osdu`: keyword search that splits camelCase names, over the same documents | ~3 s, in memory | ~1 ms |
 | `hybrid` | `dense` and `bm25` merged by reciprocal-rank fusion | the index | ~60 ms |
 | `catalog` | An LLM picks from a compact list of operations or kinds, then from that kind's properties, as an agent would with list and describe tools | none | an LLM call or two |
 
@@ -30,16 +36,21 @@ uv run python eval/run_eval.py --methods bm25,hybrid   # a subset
 
 Two scorings, because the schema index holds every version of every kind:
 
-- **Raw**: the first five results exactly as returned. This is what today's
-  `search_osdu` gives an agent with its default `top_k=5`, so the `dense`
-  row here is the baseline for the tool as shipped.
+- **Raw**: the first five results exactly as returned. This is what
+  `search_osdu` gave an agent with its default `top_k=5` while it used the
+  embedding index, so the raw `dense` row is the baseline for that tool.
 - **Deduplicated**: each method retrieves 30 rows, repeated results from older
   versions of the same kind are collapsed, then the top five are scored. This
   is an *oversampled* comparison: it credits answers the default tool never
   returns, such as `dense` finding the definitive-trajectory answer at raw rank
-  7, deduplicated rank 2. It shows what a version-aware search could do.
+  7, deduplicated rank 2. It shows what a version-aware search could do, and
+  today's `search_osdu` is one: it reads 30 results for 5 and collapses
+  versions of the same kind and property. Scored on its own output it matches
+  the deduplicated `bm25` row except kind hit@5, 71% instead of 86%. For kind
+  questions this scoring also collapses different properties of one kind,
+  which the tool keeps as separate results.
 
-Raw (as the tools return results today):
+Raw:
 
 | Method | API hit@1 | API hit@5 | Property hit@1 | Property hit@5 | Kind hit@1 | Kind hit@5 | **All hit@1** | **All hit@5** | All MRR |
 |---|---|---|---|---|---|---|---|---|---|
@@ -140,6 +151,9 @@ the picking, so a lookup is just one more tool call and its output.
    cheap way to look up exact names. It's level with or better than the index,
    builds in seconds, and removes the 1.7 GB, 26-minute build. That would also
    make the server practical for cloud agents.
+   *Done:* `src/osdu_discovery/search.py`, built in memory at startup, with
+   older schema versions collapsed. `chromadb` is now only an `eval` group
+   dependency, for `dense_index.py`.
 3. **Re-run this evaluation with new questions** after building 1 and 2. The
    reference-data fix was found by studying these misses, so measuring it on
    the same 38 questions would overstate it.

@@ -76,6 +76,10 @@ def test_server_tools_and_get_schema_accept_listed_names(catalog, monkeypatch):
     assert "--schemas" in mcp_server.list_kinds()
     mcp_server._build_schema_index(str(ROOT / "schemas"))
     assert "master-data--Wellbore" in mcp_server.list_kinds()
+    # The server's kind list matches the catalog's: abstract/ schemas aren't kinds.
+    assert len(mcp_server._catalog.kinds) == len(catalog.kinds)
+    assert "AbstractCommonResources" not in mcp_server.list_kinds()
+    assert mcp_server.get_schema("AbstractCommonResources", resolved=False).startswith("# Schema:")
     # The "group--Name" form list_kinds prints must work in get_schema too.
     assert mcp_server.get_schema("master-data--Wellbore", resolved=False).startswith(
         "# Schema: master-data--Wellbore\n"
