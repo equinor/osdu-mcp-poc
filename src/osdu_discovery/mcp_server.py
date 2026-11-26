@@ -590,18 +590,15 @@ def main() -> None:
     elif client:
         print("WARNING: 'osdu_schema_properties' collection not found — schema search unavailable.", file=sys.stderr)
 
-    if not (_api_col or _schema_col or args.specs or args.schemas or args.model):
-        print(
-            f"ERROR: No collections found in '{args.db}' and no --specs, --schemas or "
-            "--model given, so no tool would work. Run osdu-index first, or pass a folder.",
-            file=sys.stderr,
-        )
-        sys.exit(1)
-
     if args.specs:
         if os.path.isdir(args.specs):
             n = _catalog.load_specs(args.specs)
-            print(f"Operation list: {n} operations from '{args.specs}' — list_operations enabled.", file=sys.stderr)
+            for err in _catalog.spec_errors:
+                print(f"WARNING: skipped spec {err}", file=sys.stderr)
+            if n:
+                print(f"Operation list: {n} operations from '{args.specs}' — list_operations enabled.", file=sys.stderr)
+            else:
+                print(f"WARNING: no operations found in '{args.specs}' — list_operations unavailable.", file=sys.stderr)
         else:
             print(f"WARNING: --specs path '{args.specs}' not found — list_operations unavailable.", file=sys.stderr)
 
@@ -635,6 +632,16 @@ def main() -> None:
                 "relationship tools unavailable.",
                 file=sys.stderr,
             )
+
+    # Checked after loading, so an empty folder or a failed load counts as missing.
+    if not (_api_col or _schema_col or _catalog.operations or _schema_index or _graph):
+        print(
+            "ERROR: nothing loaded, so no tool would work: no index at "
+            f"'{args.db}' and no usable --specs, --schemas or --model. "
+            "Run osdu-index first, or pass those folders.",
+            file=sys.stderr,
+        )
+        sys.exit(1)
 
     mcp.run(transport="stdio")
 

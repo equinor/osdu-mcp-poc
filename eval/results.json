@@ -1,6 +1,6 @@
 {
  "dense": {
-  "setup_seconds": 0.0,
+  "setup_seconds": 0.1,
   "rows": [
    {
     "id": "api-upload-url",
@@ -13,7 +13,7 @@
      "GET /utility/upload-connection-string",
      "GET /utility/download-connection-string"
     ],
-    "seconds": 0.281,
+    "seconds": 0.401,
     "error": null
    },
    {
@@ -27,7 +27,7 @@
      "GET /v2/files/{id}/metadata",
      "GET /v2/files/uploadURL"
     ],
-    "seconds": 0.062,
+    "seconds": 0.064,
     "error": null
    },
    {
@@ -41,7 +41,7 @@
      "GET /ddms/v3/ppfgdataset/{record_id}",
      "GET /records/{id}/{version}"
     ],
-    "seconds": 0.061,
+    "seconds": 0.088,
     "error": null
    },
    {
@@ -55,7 +55,7 @@
      "GET /ddms/v3/wellbores/{record_id}/versions",
      "GET /ddms/v3/wellboreintervalsets/{record_id}/versions"
     ],
-    "seconds": 0.061,
+    "seconds": 0.08,
     "error": null
    },
    {
@@ -83,7 +83,7 @@
      "POST /v4/convert",
      "GET /v3/coordinate-transformation"
     ],
-    "seconds": 0.062,
+    "seconds": 0.07,
     "error": null
    },
    {
@@ -97,7 +97,7 @@
      "PUT /legaltags",
      "GET /legaltags"
     ],
-    "seconds": 0.062,
+    "seconds": 0.075,
     "error": null
    },
    {
@@ -139,7 +139,7 @@
      "PUT /schema",
      "PUT /schemas/system"
     ],
-    "seconds": 0.06,
+    "seconds": 0.059,
     "error": null
    },
    {
@@ -153,7 +153,7 @@
      "POST /v3/catalog/search",
      "POST /reindex/records"
     ],
-    "seconds": 0.061,
+    "seconds": 0.06,
     "error": null
    },
    {
@@ -167,7 +167,7 @@
      "POST /ddms/v3/ppfgdataset/{record_id}/sessions",
      "PATCH /ddms/v3/ppfgdataset/{record_id}/sessions/{session_id}"
     ],
-    "seconds": 0.062,
+    "seconds": 0.058,
     "error": null
    },
    {
@@ -181,7 +181,7 @@
      "POST /v3/conversion/scale",
      "POST /v4/convertTrajectory"
     ],
-    "seconds": 0.063,
+    "seconds": 0.059,
     "error": null
    },
    {
@@ -195,7 +195,7 @@
      "DELETE /records/{id}",
      "DELETE /ddms/v3/wellboretrajectories/{record_id}"
     ],
-    "seconds": 0.061,
+    "seconds": 0.059,
     "error": null
    },
    {
@@ -209,7 +209,7 @@
      "PATCH /ddms/v3/wellboretrajectories/{record_id}/sessions/{session_id}",
      "GET /records"
     ],
-    "seconds": 0.058,
+    "seconds": 0.057,
     "error": null
    },
    {
@@ -223,7 +223,7 @@
      "GET /ddms/v3/welllogs/{record_id}/versions/{version}/data/statistics",
      "POST /ddms/v3/welllogs/{record_id}/versions/{version}/data/statistics"
     ],
-    "seconds": 0.059,
+    "seconds": 0.06,
     "error": null
    },
    {
@@ -237,7 +237,7 @@
      "GET /jobs/updateLegalTagStatus",
      "POST /legaltags:batchRetrieve"
     ],
-    "seconds": 0.061,
+    "seconds": 0.058,
     "error": null
    },
    {
@@ -251,7 +251,7 @@
      "GET /records",
      "POST /query_with_cursor"
     ],
-    "seconds": 0.068,
+    "seconds": 0.059,
     "error": null
    },
    {
@@ -265,7 +265,7 @@
      "master-data--EvaluationPlan data.ReservoirEvaluations[].MaximumDepthTestStart",
      "master-data--RigUtilization data.StartHoleDepth"
     ],
-    "seconds": 0.268,
+    "seconds": 0.256,
     "error": null
    },
    {
@@ -279,7 +279,7 @@
      "master-data--Well data.BusinessIntentionID",
      "work-product-component--WellOperationsReport "
     ],
-    "seconds": 0.075,
+    "seconds": 0.082,
     "error": null
    },
    {
@@ -293,7 +293,7 @@
      "master-data--WellLogAcquisition data.WellboreID",
      "work-product-component--WellLog data.WellLogAcquisitionDetails.WellLogAcquisitionID"
     ],
-    "seconds": 0.067,
+    "seconds": 0.068,
     "error": null
    },
    {
@@ -307,7 +307,7 @@
      "work-product-component--WellPressureTestRawMeasurement data.Curves[].Mnemonic",
      "work-product-component--WellLog data.Curves[].LogCurveTypeID"
     ],
-    "seconds": 0.064,
+    "seconds": 0.065,
     "error": null
    },
    {
@@ -321,7 +321,7 @@
      "work-product-component--WellPressureTestRawMeasurement data.Curves[].CurveUnitID",
      "work-product-component--WellLog data.SamplingInterval"
     ],
-    "seconds": 0.061,
+    "seconds": 0.062,
     "error": null
    },
    {
@@ -349,7 +349,7 @@
      "dataset--FileCollection.SEGY data.StorageFacilityID",
      "dataset--File.CompressedVectorHeaders data.DatasetProperties.FileSourceInfo"
     ],
-    "seconds": 0.067,
+    "seconds": 0.068,
     "error": null
    },
    {
@@ -363,7 +363,7 @@
      "work-product-component--SeismicPreStackTrace3DVolume data.TraceLength",
      "work-product-component--SeismicFieldTraceData data.TraceLength"
     ],
-    "seconds": 0.069,
+    "seconds": 0.073,
     "error": null
    },
    {
@@ -391,7 +391,7 @@
      "master-data--WellLicense data.VerticalMeasurement",
      "master-data--HoleSection data.MeasuredDepthBase"
     ],
-    "seconds": 0.067,
+    "seconds": 0.078,
     "error": null
    },
    {
@@ -405,7 +405,7 @@
      "master-data--Sample data.SampleAcquisition.SampleAcquisitionDetail.TopDepth",
      "master-data--Sample data.SampleAcquisition.SampleAcquisitionDetail.BaseDepth"
     ],
-    "seconds": 0.066,
+    "seconds": 0.068,
     "error": null
    },
    {
@@ -419,7 +419,7 @@
      "work-product-component--FaultSystem data.Artefacts",
      "work-product-component--FormationIntegrityTest data.Artefacts"
     ],
-    "seconds": 0.072,
+    "seconds": 0.069,
     "error": null
    },
    {
@@ -433,7 +433,7 @@
      "work-product-component--WellboreTrajectory data.AzimuthReferenceType",
      "work-product-component--FaultInterpretation data.RepresentativeDipDirection.NorthKind"
     ],
-    "seconds": 0.068,
+    "seconds": 0.076,
     "error": null
    },
    {
@@ -447,7 +447,7 @@
      "work-product-component--WellboreMarkerSet",
      "master-data--OperationsReport"
     ],
-    "seconds": 0.063,
+    "seconds": 0.066,
     "error": null
    },
    {
@@ -489,7 +489,7 @@
      "master-data--Rig",
      "master-data--WellActivityProgram"
     ],
-    "seconds": 0.069,
+    "seconds": 0.067,
     "error": null
    },
    {
@@ -503,7 +503,7 @@
      "master-data--RockSample",
      "reference-data--ConventionalCoreType"
     ],
-    "seconds": 0.065,
+    "seconds": 0.069,
     "error": null
    },
    {
@@ -517,7 +517,7 @@
      "master-data--SurveyProgram",
      "work-product-component--WellboreTrajectory"
     ],
-    "seconds": 0.095,
+    "seconds": 0.063,
     "error": null
    },
    {
@@ -531,7 +531,7 @@
      "master-data--Wellbore",
      "master-data--WellPressureTestAcquisitionJob"
     ],
-    "seconds": 0.088,
+    "seconds": 0.066,
     "error": null
    }
   ]
@@ -802,7 +802,7 @@
      "work-product-component--StimulationStage data.FormationTopTrueVerticalDepth",
      "master-data--EvaluationPlan data.FormationEvaluationCorings[].MeasuredDepthTop"
     ],
-    "seconds": 0.006,
+    "seconds": 0.005,
     "error": null
    },
    {
@@ -816,7 +816,7 @@
      "master-data--WellSiteStructure data.FacilityOperators[].FacilityOperatorOrganisationID",
      "master-data--Rig data.FacilityOperators[].FacilityOperatorOrganisationID"
     ],
-    "seconds": 0.007,
+    "seconds": 0.006,
     "error": null
    },
    {
@@ -858,7 +858,7 @@
      "work-product-component--WellPressureTestRawMeasurement data.Curves[].CurveUnitID",
      "work-product-component--WellLog data.Curves[].CurveID"
     ],
-    "seconds": 0.008,
+    "seconds": 0.006,
     "error": null
    },
    {
@@ -886,7 +886,7 @@
      "dataset--File.EML data.DatasetProperties.FileSourceInfo",
      "dataset--File.Generic data.DatasetProperties.FileSourceInfo"
     ],
-    "seconds": 0.004,
+    "seconds": 0.003,
     "error": null
    },
    {
@@ -914,7 +914,7 @@
      "master-data--Wellbore data.DefinitiveTrajectoryID",
      "master-data--SurveyProgram data.SurveySections[].WellboreTrajectoryID"
     ],
-    "seconds": 0.004,
+    "seconds": 0.003,
     "error": null
    },
    {
@@ -942,7 +942,7 @@
      "master-data--SeismicAcquisitionSurvey data.CableSpacingDistance",
      "work-product-component--WellLog data.Curves[].TopDepth"
     ],
-    "seconds": 0.006,
+    "seconds": 0.005,
     "error": null
    },
    {
@@ -984,7 +984,7 @@
      "work-product-component--WellboreMarkerSet",
      "master-data--Wellbore"
     ],
-    "seconds": 0.038,
+    "seconds": 0.037,
     "error": null
    },
    {
@@ -998,7 +998,7 @@
      "work-product-component--ReservoirSimulationEquilibriumModel",
      "work-product-component--FluidBoundaryInterpretation"
     ],
-    "seconds": 0.039,
+    "seconds": 0.038,
     "error": null
    },
    {
@@ -1079,28 +1079,28 @@
     "id": "api-upload-url",
     "type": "api",
     "vocab": false,
-    "rank": 2,
-    "rank_dedup": 2,
+    "rank": 1,
+    "rank_dedup": 1,
     "top3": [
-     "GET /info",
      "GET /v2/files/uploadURL",
-     "GET /utility/upload-connection-string"
+     "GET /utility/upload-connection-string",
+     "GET /v2/files/{id}/downloadURL"
     ],
-    "seconds": 0.067,
+    "seconds": 0.06,
     "error": null
    },
    {
     "id": "api-download-url",
     "type": "api",
     "vocab": false,
-    "rank": 6,
-    "rank_dedup": 6,
+    "rank": 5,
+    "rank_dedup": 5,
     "top3": [
-     "GET /info",
      "POST /v2/files/metadata",
-     "GET /v2/files/{id}/metadata"
+     "GET /v2/files/{id}/metadata",
+     "DELETE /v2/files/{id}/metadata"
     ],
-    "seconds": 0.064,
+    "seconds": 0.062,
     "error": null
    },
    {
@@ -1114,7 +1114,7 @@
      "GET /records",
      "GET /records/{id}/{version}"
     ],
-    "seconds": 0.062,
+    "seconds": 0.057,
     "error": null
    },
    {
@@ -1142,7 +1142,7 @@
      "POST /query",
      "DELETE /query_with_cursor/{cursor}"
     ],
-    "seconds": 0.058,
+    "seconds": 0.059,
     "error": null
    },
    {
@@ -1156,7 +1156,7 @@
      "POST /v4/convert",
      "GET /v3/coordinate-reference-system"
     ],
-    "seconds": 0.062,
+    "seconds": 0.059,
     "error": null
    },
    {
@@ -1170,7 +1170,7 @@
      "PUT /legaltags",
      "GET /legaltags/{name}"
     ],
-    "seconds": 0.061,
+    "seconds": 0.059,
     "error": null
    },
    {
@@ -1184,7 +1184,7 @@
      "PUT /user",
      "GET /groups/{group_email}/members"
     ],
-    "seconds": 0.062,
+    "seconds": 0.059,
     "error": null
    },
    {
@@ -1194,11 +1194,11 @@
     "rank": null,
     "rank_dedup": null,
     "top3": [
-     "GET /info",
-     "GET /admin/loadSessions",
-     "PUT /log-recognition/upload-catalog"
+     "PUT /log-recognition/upload-catalog",
+     "POST /ddms/v3/welllogs/{record_id}/sessions/{session_id}/data",
+     "POST /ddms/v3/wellpressuretestrawmeasurement/{record_id}/sessions"
     ],
-    "seconds": 0.061,
+    "seconds": 0.059,
     "error": null
    },
    {
@@ -1212,7 +1212,7 @@
      "PUT /schema",
      "PUT /schemas/system"
     ],
-    "seconds": 0.06,
+    "seconds": 0.057,
     "error": null
    },
    {
@@ -1226,7 +1226,7 @@
      "POST /reindex/records",
      "POST /query_with_cursor"
     ],
-    "seconds": 0.059,
+    "seconds": 0.058,
     "error": null
    },
    {
@@ -1240,7 +1240,7 @@
      "PATCH /ddms/v3/ppfgdataset/{record_id}/sessions/{session_id}",
      "PATCH /ddms/v3/wellboretrajectories/{record_id}/sessions/{session_id}"
     ],
-    "seconds": 0.076,
+    "seconds": 0.058,
     "error": null
    },
    {
@@ -1254,7 +1254,7 @@
      "GET /v3/conversion/scale",
      "POST /v3/conversion/scale"
     ],
-    "seconds": 0.117,
+    "seconds": 0.058,
     "error": null
    },
    {
@@ -1268,7 +1268,7 @@
      "DELETE /ddms/v3/wellpressuretestrawmeasurement/{record_id}",
      "DELETE /ddms/v3/ppfgdataset/{record_id}"
     ],
-    "seconds": 0.07,
+    "seconds": 0.059,
     "error": null
    },
    {
@@ -1296,21 +1296,21 @@
      "POST /ddms/v3/welllogs/{record_id}/versions/{version}/data/statistics",
      "GET /ddms/v3/welllogs/{record_id}/data"
     ],
-    "seconds": 0.06,
+    "seconds": 0.059,
     "error": null
    },
    {
     "id": "api-validate-legaltags",
     "type": "api",
     "vocab": false,
-    "rank": 6,
-    "rank_dedup": 6,
+    "rank": 3,
+    "rank_dedup": 3,
     "top3": [
-     "GET /liveness_check",
-     "GET /_ah/liveness_check",
-     "GET /_ah/readiness_check"
+     "GET /legaltags",
+     "GET /jobs/updateLegalTagStatus",
+     "POST /legaltags:validate"
     ],
-    "seconds": 0.058,
+    "seconds": 0.059,
     "error": null
    },
    {
@@ -1324,7 +1324,7 @@
      "POST /query/records:batch",
      "GET /records"
     ],
-    "seconds": 0.076,
+    "seconds": 0.058,
     "error": null
    },
    {
@@ -1336,37 +1336,37 @@
     "top3": [
      "work-product-component--RockImage data.TopDepthMeasuredDepth",
      "master-data--Wellbore data.TargetFormation",
-     "master-data--PlannedCementJob data.CementStages[].IntervalTopMeasuredDepth"
+     "work-product-component--StimulationStage data.FormationTopMeasuredDepth"
     ],
-    "seconds": 0.086,
+    "seconds": 0.064,
     "error": null
    },
    {
     "id": "prop-current-operator",
     "type": "property",
     "vocab": false,
-    "rank": 1,
-    "rank_dedup": 1,
+    "rank": 2,
+    "rank_dedup": 2,
     "top3": [
-     "master-data--Wellbore data.FacilityOperators[].FacilityOperatorOrganisationID",
-     "master-data--Wellbore data.BusinessIntentionID",
-     "master-data--Well data.FacilityOperators[].FacilityOperatorOrganisationID"
+     "master-data--WellPlanningWell ",
+     "master-data--Well data.FacilityOperators[].FacilityOperatorOrganisationID",
+     "master-data--Well data.BusinessIntentionID"
     ],
-    "seconds": 0.085,
+    "seconds": 0.063,
     "error": null
    },
    {
     "id": "prop-log-wellbore",
     "type": "property",
     "vocab": false,
-    "rank": 1,
-    "rank_dedup": 1,
+    "rank": null,
+    "rank_dedup": null,
     "top3": [
-     "work-product-component--WellLog data.WellboreID",
-     "master-data--WellPressureTestAcquisitionJob data.ReferencePressureProcessedLogID",
-     "work-product-component--WellLog data.TopMeasuredDepth"
+     "master-data--WellLogAcquisition data.WellboreID",
+     "work-product-component--WellLog data.WellLogAcquisitionDetails.WellLogAcquisitionID",
+     "work-product-component--WellLog data.WellLogAcquisitionDetails"
     ],
-    "seconds": 0.07,
+    "seconds": 0.068,
     "error": null
    },
    {
@@ -1380,7 +1380,7 @@
      "work-product-component--WellLog data.Curves[].LogCurveTypeID",
      "work-product-component--WellLog data.Curves[].CurveDescription"
     ],
-    "seconds": 0.063,
+    "seconds": 0.06,
     "error": null
    },
    {
@@ -1391,24 +1391,24 @@
     "rank_dedup": 1,
     "top3": [
      "work-product-component--WellLog data.Curves[].CurveUnit",
-     "work-product-component--WellLog data.Curves[].CurveQuality",
-     "work-product-component--WellLog data.Curves[].CurveID"
+     "work-product-component--WellPressureTestRawMeasurement data.Curves[].CurveUnitID",
+     "work-product-component--WellLog data.Curves[].CurveQuality"
     ],
-    "seconds": 0.067,
+    "seconds": 0.066,
     "error": null
    },
    {
     "id": "prop-file-size",
     "type": "property",
     "vocab": false,
-    "rank": 5,
-    "rank_dedup": 5,
+    "rank": 1,
+    "rank_dedup": 1,
     "top3": [
-     "dataset--FileCollection.EPC data.DatasetProperties.EPCFile.FileSize",
-     "dataset--FileCollection.EPC data.DatasetProperties.EPCFile.Checksum",
-     "dataset--FileCollection.EPC data.DatasetProperties.EPCExternalParts[].FileSize"
+     "dataset--File.PRODML data.DatasetProperties.FileSourceInfo.FileSize",
+     "dataset--File.Image.WorldFile data.Endian",
+     "dataset--File.OGC.GeoTIFF data.DatasetProperties.FileSourceInfo.FileSize"
     ],
-    "seconds": 0.087,
+    "seconds": 0.06,
     "error": null
    },
    {
@@ -1418,11 +1418,11 @@
     "rank": null,
     "rank_dedup": null,
     "top3": [
-     "dataset--FileCollection.EPC data.ExistenceKind",
-     "dataset--FileCollection.Bluware.OpenVDS data.ExistenceKind",
-     "dataset--FileCollection.SEGA data.StorageFacilityID"
+     "dataset--FileCollection.SEGA data.StorageFacilityID",
+     "dataset--File.Image.WorldFile data.DatasetProperties.FileSourceInfo",
+     "dataset--FileCollection.SEGY data.StorageFacilityID"
     ],
-    "seconds": 0.081,
+    "seconds": 0.073,
     "error": null
    },
    {
@@ -1432,11 +1432,11 @@
     "rank": null,
     "rank_dedup": null,
     "top3": [
-     "work-product-component--SeismicTraceData data.TraceLength",
-     "work-product-component--SeismicTraceData data.StartDepth",
-     "work-product-component--SeismicTraceData data.EndDepth"
+     "work-product-component--SeismicPostStackTrace3DVolume data.TraceLength",
+     "work-product-component--SeismicPreStackTrace3DVolume data.TraceLength",
+     "work-product-component--SeismicPreStackTrace3DVolume data.StartVerticalIndex"
     ],
-    "seconds": 0.07,
+    "seconds": 0.082,
     "error": null
    },
    {
@@ -1446,25 +1446,25 @@
     "rank": 1,
     "rank_dedup": 1,
     "top3": [
+     "work-product-component--WellboreTrajectory data.IsDefinitive",
      "master-data--Wellbore data.DefinitiveTrajectoryID",
-     "master-data--Wellbore data.TrajectoryTypeID",
      "master-data--Wellbore data.WellboreTrajectoryTypeID"
     ],
-    "seconds": 0.07,
+    "seconds": 0.064,
     "error": null
    },
    {
     "id": "prop-kelly-bushing",
     "type": "property",
     "vocab": false,
-    "rank": 1,
-    "rank_dedup": 1,
+    "rank": null,
+    "rank_dedup": 10,
     "top3": [
-     "master-data--Wellbore data.VerticalMeasurements[].VerticalMeasurement",
-     "master-data--WellPlanningWellbore data.VerticalMeasurement.VerticalMeasurement",
-     "master-data--HoleSection data.MeasuredDepthTop"
+     "master-data--PerforationInterval data.VerticalMeasurement",
+     "master-data--RigDerrick data.RotarySystemDescription",
+     "master-data--WellLicense data.VerticalMeasurement"
     ],
-    "seconds": 0.084,
+    "seconds": 0.08,
     "error": null
    },
    {
@@ -1474,39 +1474,39 @@
     "rank": null,
     "rank_dedup": null,
     "top3": [
+     "work-product-component--DepthShift data.DepthShiftedSamples",
      "work-product-component--WellLog data.BottomMeasuredDepth",
-     "work-product-component--WellLog data.TopMeasuredDepth",
-     "master-data--SeismicAcquisitionSurvey data.CableSpacingDistance"
+     "work-product-component--WellLog data.TopMeasuredDepth"
     ],
-    "seconds": 0.072,
+    "seconds": 0.063,
     "error": null
    },
    {
     "id": "prop-file-checksum",
     "type": "property",
     "vocab": true,
-    "rank": 7,
-    "rank_dedup": 7,
+    "rank": 2,
+    "rank_dedup": 2,
     "top3": [
-     "work-product-component--FaultSystem data.Artefacts",
-     "work-product-component--FaultInterpretation data.Artefacts",
-     "work-product-component--StratigraphicColumnRankInterpretation data.Artefacts"
+     "work-product-component--WellFluidsReport ",
+     "dataset--File.Image.WorldFile data.Checksum",
+     "work-product-component--FaultSystem data.Artefacts"
     ],
-    "seconds": 0.064,
+    "seconds": 0.06,
     "error": null
    },
    {
     "id": "prop-azimuth-reference",
     "type": "property",
     "vocab": false,
-    "rank": 2,
-    "rank_dedup": 2,
+    "rank": 9,
+    "rank_dedup": 3,
     "top3": [
      "work-product-component--WellboreTrajectory data.SurveyType",
-     "work-product-component--WellboreTrajectory data.AzimuthReferenceType",
-     "work-product-component--WellboreTrajectory data.TopDepthMeasuredDepth"
+     "work-product-component--WellboreTrajectory data.SurfaceGridConvergence",
+     "work-product-component--WellboreTrajectory data.AzimuthReferenceType"
     ],
-    "seconds": 0.063,
+    "seconds": 0.059,
     "error": null
    },
    {
@@ -1518,9 +1518,9 @@
     "top3": [
      "master-data--Wellbore",
      "work-product-component--WellboreMarkerSet",
-     "master-data--EvaluationPlan"
+     "work-product-component--HorizonControlPoints"
     ],
-    "seconds": 0.101,
+    "seconds": 0.095,
     "error": null
    },
    {
@@ -1530,11 +1530,11 @@
     "rank": null,
     "rank_dedup": null,
     "top3": [
-     "master-data--Sample",
+     "work-product-component--ReservoirSimulationEquilibriumModel",
      "master-data--OperationsReport",
-     "work-product-component--ReservoirSimulationEquilibriumModel"
+     "master-data--Sample"
     ],
-    "seconds": 0.102,
+    "seconds": 0.098,
     "error": null
    },
    {
@@ -1548,21 +1548,21 @@
      "master-data--PlannedCementJob",
      "reference-data--CementStageType"
     ],
-    "seconds": 0.1,
+    "seconds": 0.098,
     "error": null
    },
    {
     "id": "kind-rig",
     "type": "kind",
     "vocab": false,
-    "rank": 1,
-    "rank_dedup": 1,
+    "rank": 3,
+    "rank_dedup": 3,
     "top3": [
-     "master-data--Rig",
+     "master-data--WellActivityProgram",
      "master-data--RigSpecifications",
-     "master-data--WellActivityProgram"
+     "master-data--Rig"
     ],
-    "seconds": 0.11,
+    "seconds": 0.096,
     "error": null
    },
    {
@@ -1572,11 +1572,11 @@
     "rank": 1,
     "rank_dedup": 1,
     "top3": [
+     "master-data--Coring",
      "master-data--RockSample",
-     "work-product-component--RockSampleAnalysis",
-     "master-data--Coring"
+     "work-product-component--RockSampleAnalysis"
     ],
-    "seconds": 0.065,
+    "seconds": 0.06,
     "error": null
    },
    {
@@ -1587,24 +1587,24 @@
     "rank_dedup": 1,
     "top3": [
      "work-product-component--WellboreTrajectory",
-     "master-data--Wellbore",
+     "reference-data--CalculationMethodType",
      "master-data--SurveyProgram"
     ],
-    "seconds": 0.101,
+    "seconds": 0.095,
     "error": null
    },
    {
     "id": "kind-drilling-permit",
     "type": "kind",
     "vocab": false,
-    "rank": 10,
-    "rank_dedup": 10,
+    "rank": null,
+    "rank_dedup": 9,
     "top3": [
-     "master-data--Wellbore",
-     "master-data--BHARun",
-     "work-product-component--WellOperationsReport"
+     "master-data--WellSiteStructure",
+     "work-product-component--WellOperationsReport",
+     "master-data--Wellbore"
     ],
-    "seconds": 0.071,
+    "seconds": 0.072,
     "error": null
    }
   ]

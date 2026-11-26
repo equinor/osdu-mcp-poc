@@ -80,3 +80,56 @@ def test_server_tools_and_get_schema_accept_listed_names(catalog, monkeypatch):
     assert mcp_server.get_schema("master-data--Wellbore", resolved=False).startswith(
         "# Schema: master-data--Wellbore\n"
     )
+
+
+# ------------------------------------------------ fixes from the PR 12 review
+
+
+def test_generic_spec_title_falls_back_to_filename(catalog):
+    assert "## Geospatial" in catalog.list_operations(service="geospatial")
+    assert "OpenAPI definition" not in catalog.list_operations()
+
+
+def test_bad_spec_file_is_skipped(tmp_path):
+    (tmp_path / "Broken.yaml").write_text("paths: [unclosed\n")
+    (tmp_path / "Ok.yaml").write_text(
+        "info: {title: Ok Service}\npaths:\n  /ping:\n    get: {summary: Ping}\n"
+    )
+    c = Catalog()
+    assert c.load_specs(str(tmp_path)) == 1
+    assert c.spec_errors and c.spec_errors[0].startswith("Broken.yaml")
+
+
+def test_kinds_without_a_group(catalog):
+    assert "## (no group)" in catalog.list_kinds()
+    assert "- Manifest" in catalog.list_kinds(group="(no group)")
+    assert catalog.list_properties("Manifest").startswith("# Properties of osdu:wks:Manifest:1.0.0")
+    assert catalog.find_kind("osdu:wks:DataCollection:1.0.0").name == "DataCollection"
+
+
+def test_content_kinds_have_no_data_prefix(catalog):
+    text = catalog.list_properties("content--SeismicTraceNavigation")
+    assert "\n- Name (string)" in text and "data.Name" not in text
+
+
+def test_contains_matches_the_displayed_path(catalog):
+    assert "- data.WellboreID (string)" in catalog.list_properties("WellLog", contains="data.WellboreID")
+
+
+def test_oneof_branches_are_listed_and_marked(catalog):
+    coring = catalog.list_properties("Coring", contains="CoreTypeID")
+    assert "data.ConventionalCoring.CoreTypeID" in coring
+    assert "data.SidewallCoring.CoreTypeID" in coring and "one of]" in coring
+    geo = catalog.list_properties("Wellbore", contains="GeoContexts[].FieldID")
+    assert "→ master-data--Field; one of" in geo
+
+
+def test_relationships_on_array_items_and_group_only(catalog):
+    region = catalog.list_properties("WellLog", contains="ResourceHostRegionIDs")
+    assert "→ reference-data--OSDURegion" in region
+    artefact = catalog.list_properties("WellLog", contains="Artefacts[].ResourceID")
+    assert "→ any dataset record" in artefact
+
+
+def test_frame_of_reference_units(catalog):
+    assert "unit: UOM:length" in catalog.list_properties("WellLog", contains="data.TopMeasuredDepth")

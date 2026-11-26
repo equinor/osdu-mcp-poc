@@ -19,14 +19,19 @@ from osdu_discovery.indexer import (
     SchemaResolver,
     extract_api_operations,
     extract_service_name,
-    flatten_schema_properties,
     is_spec_file,
     load_file,
+    merged_properties,
 )
 
 REFERENCE_GROUP = "reference-data"
+NO_GROUP = "(no group)"  # kinds such as osdu:wks:Manifest:1.0.0
 
-_KIND_RE = re.compile(r"^[^:]+:[^:]+:(?P<group>[a-z-]+)--(?P<name>[^:]+):(?P<ver>\d+\.\d+\.\d+)$")
+# The group is optional: a few shipped kinds (Manifest, DataCollection) have none.
+_KIND_RE = re.compile(
+    r"^[^:]+:[^:]+:(?:(?P<group>[a-z-]+)--)?(?P<name>[^:]+):(?P<ver>\d+\.\d+\.\d+)$",
+    re.IGNORECASE,
+)
 
 
 def first_sentence(text: str, limit: int) -> str:
@@ -55,8 +60,74 @@ class Kind:
 
     @property
     def short(self) -> str:
-        """'master-data--Wellbore', the form the other tools accept."""
-        return f"{self.group}--{self.name}"
+        """'master-data--Wellbore' (or 'Manifest' for a kind with no group),
+        the form the other tools accept."""
+        return f"{self.group}--{self.name}" if self.group else self.name
+
+
+@dataclass
+class Prop:
+    path: str  # as displayed and filtered: "data.Curves[].Mnemonic"
+    type: str
+    description: str
+    targets: list[str]  # "master-data--Wellbore", or "any dataset record"
+    unit: str  # x-osdu-frame-of-reference, e.g. "UOM:length"
+    alternative: bool  # inside a oneOf/anyOf branch: present in only some records
+
+
+def _relationships(prop: dict) -> list[dict]:
+    """x-osdu-relationship on the property, or on its array items."""
+    rels = prop.get("x-osdu-relationship") or []
+    items = prop.get("items")
+    if not rels and isinstance(items, dict):
+        rels = items.get("x-osdu-relationship") or []
+    return [r for r in rels if isinstance(r, dict)]
+
+
+def _frame_of_reference(prop: dict) -> str:
+    unit = prop.get("x-osdu-frame-of-reference", "")
+    items = prop.get("items")
+    if not unit and isinstance(items, dict):
+        unit = items.get("x-osdu-frame-of-reference", "")
+    return unit if isinstance(unit, str) else ""
+
+
+def _branches(schema: dict) -> list[dict]:
+    """oneOf/anyOf branches of a schema, including those inside its allOf
+    members (Coring's ConventionalCoring / SidewallCoring sit there)."""
+    out = [b for key in ("oneOf", "anyOf") for b in schema.get(key, []) if isinstance(b, dict)]
+    for sub in schema.get("allOf", []):
+        if isinstance(sub, dict):
+            out += _branches(sub)
+    return out
+
+
+def _has_children(schema: dict) -> bool:
+    return any(k in schema for k in ("properties", "allOf", "oneOf", "anyOf"))
+
+
+def walk_properties(
+    schema: dict, prefix: str, alternative: bool = False, depth: int = 0, max_depth: int = 8
+) -> list[tuple[str, dict, bool]]:
+    """(path, property schema, in-alternative) for every property, following
+    allOf, oneOf/anyOf branches and array items. Expects resolved $refs."""
+    if depth > max_depth:
+        return []
+    found: list[tuple[str, dict, bool]] = []
+    groups = [(merged_properties(schema), alternative)]
+    groups += [(merged_properties(b), True) for b in _branches(schema)]
+    for props, alt in groups:
+        for name, prop in props.items():
+            if not isinstance(prop, dict):
+                continue
+            path = f"{prefix}.{name}" if prefix else name
+            found.append((path, prop, alt))
+            if _has_children(prop):
+                found += walk_properties(prop, path, alt, depth + 1, max_depth)
+            items = prop.get("items")
+            if isinstance(items, dict) and _has_children(items):
+                found += walk_properties(items, f"{path}[]", alt, depth + 1, max_depth)
+    return found
 
 
 @dataclass
@@ -68,12 +139,21 @@ class Catalog:
     # ----------------------------------------------------------- loading
 
     def load_specs(self, specs_dir: str) -> int:
+        """Load every spec in the folder. A file that fails to parse is
+        skipped and its name kept in `spec_errors`, so one bad file doesn't
+        stop the server."""
+        self.spec_errors: list[str] = []
         for fn in sorted(os.listdir(specs_dir)):
             if not is_spec_file(fn):
                 continue
-            spec = load_file(os.path.join(specs_dir, fn))
-            service = extract_service_name(spec, fn)
-            for op in extract_api_operations(spec, service):
+            try:
+                spec = load_file(os.path.join(specs_dir, fn))
+                service = extract_service_name(spec, fn)
+                ops = extract_api_operations(spec, service)
+            except Exception as exc:  # noqa: BLE001 - same tolerance as the indexer
+                self.spec_errors.append(f"{fn}: {exc}")
+                continue
+            for op in ops:
                 m = op["metadata"]
                 self.operations.append(Operation(m["service"], m["method"], m["path"], m["summary"]))
         return len(self.operations)
@@ -84,7 +164,7 @@ class Catalog:
         if not m:
             return
         ver = tuple(int(x) for x in m["ver"].split("."))
-        kind = Kind(m["group"], m["name"], ver, m[0], doc.get("description", ""), path)
+        kind = Kind(m["group"] or "", m["name"], ver, m[0], doc.get("description", ""), path)
         key = kind.short.lower()
         if key not in self.kinds or ver > self.kinds[key].version:
             self.kinds[key] = kind
@@ -133,14 +213,15 @@ class Catalog:
     def groups(self) -> dict[str, int]:
         counts: dict[str, int] = {}
         for k in self.kinds.values():
-            counts[k.group] = counts.get(k.group, 0) + 1
+            label = k.group or NO_GROUP
+            counts[label] = counts.get(label, 0) + 1
         return dict(sorted(counts.items()))
 
     def list_kinds(self, group: str = "", contains: str = "", include_reference_data: bool = False) -> str:
         kinds = list(self.kinds.values())
         group = group.strip().lower()
         if group:
-            kinds = [k for k in kinds if k.group == group]
+            kinds = [k for k in kinds if (k.group or NO_GROUP) == group]
             if not kinds:
                 listed = ", ".join(f"{g} ({n})" for g, n in self.groups().items())
                 return f"No group '{group}'. Groups: {listed}."
@@ -157,7 +238,7 @@ class Catalog:
         for k in sorted(kinds, key=lambda k: (k.group, k.name.lower())):
             if k.group != current:
                 current = k.group
-                lines.append(f"\n## {current}")
+                lines.append(f"\n## {current or NO_GROUP}")
             desc = first_sentence(k.description, 110)
             lines.append(f"- {k.short}" + (f" — {desc}" if desc else ""))
         hidden = self.groups().get(REFERENCE_GROUP, 0)
@@ -174,7 +255,7 @@ class Catalog:
         key = kind.strip().lower()
         m = _KIND_RE.match(key)
         if m:
-            key = f"{m['group']}--{m['name']}"
+            key = f"{m['group']}--{m['name']}" if m["group"] else m["name"]
         if key in self.kinds:
             return self.kinds[key]
         bare = [k for k in self.kinds.values() if k.name.lower() == key]
@@ -184,10 +265,41 @@ class Catalog:
             return sorted(k.short for k in bare)
         return sorted(k.short for k in self.kinds.values() if key and key in k.short.lower())[:15]
 
-    def _target_name(self, related: str) -> str:
-        """'master-data/wellbore' (lower-cased by the indexer) -> 'master-data--Wellbore'."""
-        key = related.replace("/", "--", 1)
-        return self.kinds[key].short if key in self.kinds else key
+    def _targets(self, prop: dict) -> list[str]:
+        out = []
+        for r in _relationships(prop):
+            group, entity = r.get("GroupType", ""), r.get("EntityType", "")
+            if entity:
+                key = f"{group}--{entity}" if group else entity
+                out.append(self.kinds[key.lower()].short if key.lower() in self.kinds else key)
+            elif group:
+                out.append(f"any {group} record")
+        return list(dict.fromkeys(out))
+
+    def properties(self, kind: Kind) -> list[Prop]:
+        doc = load_file(kind.path)
+        resolved = self._resolver.resolve(
+            doc, base_dir=os.path.dirname(os.path.abspath(kind.path)), root=doc
+        )
+        if not isinstance(resolved, dict):
+            resolved = doc
+        # Most kinds wrap their model in "data"; content kinds have it at the root.
+        data = resolved.get("properties", {}).get("data")
+        schema, prefix = (data, "data") if isinstance(data, dict) else (resolved, "")
+        props: dict[str, Prop] = {}
+        for path, p, alt in walk_properties(schema, prefix):
+            if path in props:  # the same path from several oneOf branches
+                props[path].alternative &= alt
+                continue
+            props[path] = Prop(
+                path=path,
+                type=str(p.get("type", "object")),
+                description=(p.get("description") or "").strip(),
+                targets=self._targets(p),
+                unit=_frame_of_reference(p),
+                alternative=alt,
+            )
+        return list(props.values())
 
     def list_properties(self, kind: str, contains: str = "") -> str:
         found = self.find_kind(kind)
@@ -197,27 +309,25 @@ class Catalog:
             listed = "\n".join(f"  - {s}" for s in found)
             return f"No single kind matches '{kind}'. Did you mean:\n{listed}"
 
-        doc = load_file(found.path)
-        resolved = self._resolver.resolve(
-            doc, base_dir=os.path.dirname(os.path.abspath(found.path)), root=doc
-        )
-        if not isinstance(resolved, dict):
-            resolved = doc
-        props = flatten_schema_properties(resolved.get("properties", {}).get("data", resolved))
+        props = self.properties(found)
         if contains:
             needle = contains.strip().lower()
-            props = [p for p in props if needle in f"{p['path']} {p['description']}".lower()]
+            props = [p for p in props if needle in f"{p.path} {p.description}".lower()]
 
         lines = [f"# Properties of {found.kind_id} ({len(props)})"]
+        if any(p.alternative for p in props):
+            lines.append("_`one of` marks properties in a oneOf/anyOf branch: present in only some records._")
         for p in props:
             extra = []
-            if p["related_types"]:
-                extra.append("→ " + ", ".join(self._target_name(t) for t in p["related_types"]))
-            if p["units"]:
-                extra.append(f"unit: {p['units']}")
-            desc = first_sentence(p["description"], 80)
+            if p.targets:
+                extra.append("→ " + ", ".join(p.targets))
+            if p.unit:
+                extra.append(f"unit: {p.unit}")
+            if p.alternative:
+                extra.append("one of")
+            desc = first_sentence(p.description, 80)
             tail = f" [{'; '.join(extra)}]" if extra else ""
-            lines.append(f"- data.{p['path']} ({p['type']})" + (f" — {desc}" if desc else "") + tail)
+            lines.append(f"- {p.path} ({p.type})" + (f" — {desc}" if desc else "") + tail)
         if not props:
             lines.append(f"\nNo properties match '{contains}'." if contains else "\nNo data properties.")
         return "\n".join(lines)

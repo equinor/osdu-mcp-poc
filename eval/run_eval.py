@@ -26,6 +26,7 @@ import math
 import re
 import subprocess
 import sys
+import tempfile
 import time
 from concurrent.futures import ThreadPoolExecutor
 from collections import Counter, defaultdict
@@ -60,6 +61,13 @@ def result_key(doc: dict, qtype: str) -> str:
     if qtype == "property":
         return f"{kind_name(doc['kind'])} {doc['path']}"
     return kind_name(doc["kind"])
+
+
+def doc_id(doc: dict) -> str:
+    """Full identity of a retrieved document, before any version collapsing."""
+    if "service" in doc:
+        return f"{doc['service']} {doc['method']} {doc['path']}"
+    return f"{doc['kind']} {doc.get('path', '')}"
 
 
 def is_gold(key: str, gold: list[str]) -> bool:
@@ -158,11 +166,15 @@ class Hybrid:
         self.dense, self.bm25, self.k = dense, bm25, k
 
     def search(self, q: str, qtype: str) -> list[dict]:
+        # Fuse on the full document identity (service-qualified operation,
+        # versioned kind and property), so one retriever returning several
+        # versions of the same answer can't out-vote a document both rank
+        # first. Collapsing versions is left to scoring.
         fused: dict[str, float] = defaultdict(float)
         docs: dict[str, dict] = {}
         for results in (self.dense.search(q, qtype), self.bm25.search(q, qtype)):
             for rank, d in enumerate(results, 1):
-                key = result_key(d, qtype)
+                key = doc_id(d)
                 fused[key] += 1 / (self.k + rank)
                 docs.setdefault(key, d)
         return [docs[k] for k in sorted(fused, key=fused.get, reverse=True)]
@@ -214,7 +226,7 @@ class Catalog:
                 "--system-prompt",
                 "You pick items from catalogs. Reply with a JSON array of strings only, no prose.",
             ],
-            input=prompt, capture_output=True, text=True, timeout=300, cwd="/tmp",
+            input=prompt, capture_output=True, text=True, timeout=300, cwd=tempfile.gettempdir(),
         )
         res = json.loads(out.stdout)
         if res.get("is_error"):
@@ -313,13 +325,17 @@ def main() -> int:
     args = ap.parse_args()
 
     questions = yaml.safe_load((HERE / "questions.yaml").read_text())["questions"]
-    corpus = corpus_mod.load()
+    # Rebuilt every run (about 3 s) so it always matches specs/, schemas/
+    # and the extraction code; the cache is only for interactive use.
+    corpus = corpus_mod.build()
     bad = check_gold(questions, corpus)
     if bad:
         print("Gold answers not found in the corpus:\n  " + "\n  ".join(bad))
         return 1
 
-    results = {}
+    # Keep results of methods not re-run this time (the catalog run is slow).
+    out = Path(args.out)
+    results = json.loads(out.read_text()) if out.exists() else {}
     cache: dict[str, object] = {}
 
     def get(name):
@@ -339,8 +355,14 @@ def main() -> int:
             raise SystemExit(f"unknown method {name}")
         setup = time.time() - t0
         rows = evaluate(method, questions, args.workers if name == "catalog" else 1)
-        results[name] = {"setup_seconds": round(setup, 1), "rows": rows}
         errors = [r for r in rows if r["error"]]
+        if errors:
+            # An operational failure (no CLI, expired login, timeout) is not a
+            # retrieval miss: don't score it, and don't overwrite results.
+            print(f"\n{name}: {len(errors)} of {len(rows)} questions failed; aborting, {out} unchanged.")
+            print("  first error:", errors[0]["error"])
+            return 1
+        results[name] = {"setup_seconds": round(setup, 1), "rows": rows}
         print(f"\n== {name}  (setup {setup:.1f}s{', ' + str(len(errors)) + ' errors' if errors else ''})")
         print(f"{'type':10} {'n':>3} {'hit@1':>6} {'hit@5':>6} {'mrr':>6} | dedup: {'hit@1':>6} {'hit@5':>6} {'mrr':>6}")
         for t in ("api", "property", "kind", "all"):
@@ -350,11 +372,9 @@ def main() -> int:
                 f"{t:10} {a['n']:>3} {a['hit@1']:>6.0%} {a['hit@5']:>6.0%} {a['mrr']:>6.2f} |"
                 f"        {d['hit@1']:>6.0%} {d['hit@5']:>6.0%} {d['mrr']:>6.2f}"
             )
-        if errors:
-            print("  first error:", errors[0]["error"])
 
-    Path(args.out).write_text(json.dumps(results, indent=1))
-    print(f"\nPer-question results: {args.out}")
+    out.write_text(json.dumps(results, indent=1))
+    print(f"\nPer-question results: {out}")
     return 0
 
 

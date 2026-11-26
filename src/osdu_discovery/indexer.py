@@ -186,9 +186,13 @@ def merged_properties(schema: dict) -> dict:
 # OpenAPI spec extraction
 # ---------------------------------------------------------------------------
 
+# Generator default titles that don't name the service; fall back to the filename.
+_GENERIC_TITLES = {"openapi definition", "api", "openapi"}
+
+
 def extract_service_name(spec: dict, filename: str) -> str:
-    title = spec.get("info", {}).get("title", "")
-    if title:
+    title = spec.get("info", {}).get("title", "").strip()
+    if title and title.lower() not in _GENERIC_TITLES:
         return title
     # Fall back to filename without extension
     return re.sub(r"\.(yaml|yml|json)$", "", filename, flags=re.IGNORECASE)

@@ -193,7 +193,7 @@ and for all 18 API questions. They work best for questions in domain words
 |---|---|---|
 | `list_operations(service="", contains="")` | one line per API operation: method, path, summary, grouped by service | ~6,500 tokens for all 366 |
 | `list_kinds(group="", contains="", include_reference_data=false)` | one line per kind (latest version): `group--Name` and the first sentence of its description | ~7,500 tokens; ~25,000 with reference data |
-| `list_properties(kind, contains="")` | one line per data property, including inherited and nested ones: path, type, description, linked kinds, unit | usually 1,000–7,000 tokens |
+| `list_properties(kind, contains="")` | one line per data property, including inherited and nested ones: path, type, description, linked kinds, unit (`x-osdu-frame-of-reference`); `oneOf` branches marked `one of` | median ~5,000 tokens, 90% under ~7,500; use `contains` for the largest (up to ~17,500) |
 
 `list_kinds` hides the 594 reference-data kinds (code lists such as units,
 CRS and type values) unless you pass `group="reference-data"` or
@@ -474,7 +474,7 @@ one the client is hitting.
 | Symptom | Cause and fix |
 |---|---|
 | Server fails to start, `ENOENT` / `command not found` | `command` is a bare `uv` or the wrong absolute path. Use the output of `which uv` / `where.exe uv`. |
-| Exits immediately, `No collections found` (exit code 1) | No index at `--db` and no `--specs`, `--schemas` or `--model` either, so no tool would work. Pass those folders, or run `osdu-index` first — see [Index](#index). `chroma_db/` is generated, not shipped in the repo. |
+| Exits immediately, `ERROR: nothing loaded` (exit code 1) | No index at `--db`, and `--specs`, `--schemas` and `--model` were missing, empty or failed to load, so no tool would work. Pass those folders, or run `osdu-index` first — see [Index](#index). `chroma_db/` is generated, not shipped in the repo. |
 | `search_osdu` returns `No ChromaDB collections loaded` | The index has not been built, or `--db` points at the wrong folder. The catalog tools work without it. |
 | `list_operations` / `list_kinds` return `... unavailable` | The server was started without `--specs` / `--schemas`, or the path didn't exist. |
 | Server connects but no tools appear | Server name contains a space or other unsupported character. Rename it to `osdu-discovery`. |

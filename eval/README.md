@@ -28,24 +28,46 @@ uv run python eval/run_eval.py --methods bm25,hybrid   # a subset
 
 ## Results (2026-11-25, data-definitions v0.30.1, specs from `main`)
 
-Scored with repeated results from older versions of the same kind collapsed
-("dedup" in the script's output). That is what an agent effectively sees.
+Two scorings, because the schema index holds every version of every kind:
+
+- **Raw**: the first five results exactly as returned. This is what today's
+  `search_osdu` gives an agent with its default `top_k=5`, so the `dense`
+  row here is the baseline for the tool as shipped.
+- **Deduplicated**: each method retrieves 30 rows, repeated results from older
+  versions of the same kind are collapsed, then the top five are scored. This
+  is an *oversampled* comparison: it credits answers the default tool never
+  returns, such as `dense` finding the definitive-trajectory answer at raw rank
+  7, deduplicated rank 2. It shows what a version-aware search could do.
+
+Raw (as the tools return results today):
+
+| Method | API hit@1 | API hit@5 | Property hit@1 | Property hit@5 | Kind hit@1 | Kind hit@5 | **All hit@1** | **All hit@5** | All MRR |
+|---|---|---|---|---|---|---|---|---|---|
+| `dense` (current) | 33% | 61% | 23% | 23% | 14% | 43% | **26%** | **45%** | 0.35 |
+| `bm25` | 44% | 61% | 38% | 46% | 29% | 57% | **39%** | **55%** | 0.47 |
+| `hybrid` | 33% | 72% | 31% | 46% | 43% | 71% | **34%** | **63%** | 0.46 |
+| `catalog` (Haiku) | 100% | 100% | 62% | 69% | 71% | 86% | **82%** | **87%** | 0.84 |
+
+Deduplicated (oversampled, version-aware):
 
 | Method | API hit@1 | API hit@5 | Property hit@1 | Property hit@5 | Kind hit@1 | Kind hit@5 | **All hit@1** | **All hit@5** | All MRR |
 |---|---|---|---|---|---|---|---|---|---|
 | `dense` (current) | 33% | 61% | 23% | 38% | 14% | 71% | **26%** | **55%** | 0.39 |
 | `bm25` | 44% | 61% | 38% | 54% | 29% | 71% | **39%** | **61%** | 0.48 |
-| `hybrid` | 28% | 61% | 46% | 62% | 57% | 71% | **39%** | **63%** | 0.50 |
+| `hybrid` | 33% | 72% | 31% | 54% | 43% | 71% | **34%** | **66%** | 0.47 |
 | `catalog` (Haiku) | 100% | 100% | 62% | 69% | 71% | 86% | **82%** | **87%** | 0.84 |
 
-Without dedup, `dense` drops to 45% hit@5 overall, because the index holds every
-version of every kind and older versions crowd out other results.
+The catalog picks distinct kinds, so it scores the same either way. hit@1 is
+also the same either way for every method. The `dense`, `bm25` and `hybrid`
+rows were re-run on 2026-11-26, after fixing the hybrid to fuse on full
+document ids instead of collapsed answer keys; `dense` and `bm25` didn't change.
+The `catalog` row is from the original run.
 
 ### What this shows
 
 - **Letting the model choose from a catalog wins by a wide margin.** It
   scores 82% hit@1 against 26% for today's search, and 100% on API questions.
-  This uses Haiku, the smallest current model. It gets all 10 of the
+  This uses Haiku, the smallest current model. It gets all 11 of the
   questions every search method missed into its top 5, such as "history of edits" →
   `GET /records/versions/{id}`, and "monthly oil and gas volumes" →
   `ProductionValues`.
@@ -63,12 +85,13 @@ version of every kind and older versions crowd out other results.
   Reference data makes up 594 of the 828 kinds, and about 70% of the kind
   catalog.
 - **The embedding index is the weakest method, not the strongest.** Keyword
-  search with no index at all ties or beats it on every question type. It
-  builds in 2 seconds instead of 28 minutes.
-- **The hybrid helps for schema questions** (property hit@1 46% vs 23%, kind
-  hit@1 57% vs 14%) but not for API questions. It still needs the index.
-- **All three methods miss the same questions.** 10 of the 38 are missed by
-  every method in the top 5, for example:
+  search with no index at all ties or beats it on every question type, in both
+  scorings. It builds in 2 seconds instead of 28 minutes.
+- **The hybrid has the best top 5 of the searches** (63% raw, against 45% for
+  `dense`), but its top 1 is below plain keyword search (34% vs 39%). It still
+  needs the index.
+- **All three methods miss the same questions.** 11 of the 38 are missed by
+  every method in the deduplicated top 5, for example:
   - "see the history of edits to a record" (`GET /records/versions/{id}`);
   - "be notified when records change" (`POST /subscription`);
   - "monthly oil and gas volumes" (`ProductionValues`);
@@ -119,8 +142,9 @@ the picking, so a lookup is just one more tool call and its output.
 
 - 38 questions is small: one question moves a type's score by 5–14 points
   and the overall score by about 2.6. Treat differences of one or two questions
-  as noise. The main finding holds on every question type: `bm25` is level with
-  or ahead of `dense` on hit@1 and hit@5 for API, property and kind questions.
+  as noise. The main finding holds on every question type and in both
+  scorings: `bm25` is level with or ahead of `dense` on hit@1 and hit@5 for
+  API, property and kind questions.
 - The questions were written by the same person who chose the gold answers.
   They are paraphrased on purpose, which favours methods that understand
   meaning over exact keywords, so this setup if anything favours `dense`.
